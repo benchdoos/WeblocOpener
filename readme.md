@@ -1,7 +1,7 @@
 # WeblocOpener
 
 ## Introduction:
-WeblocOpener is a simple way to open .webloc files on Windows.
+WeblocOpener is a simple way to open `.webloc` files on Windows.
 
 ## Download:
 Windows:
