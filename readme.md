@@ -1,7 +1,7 @@
 # WeblocOpener
 
 ## Introduction:
-WeblocOpener is a simple way to open MacOS Safari `.webloc` files on Windows.
+WeblocOpener is a simple way to open, edit, create MacOS Safari `.webloc` files on Windows.
 
 ## Download:
 Windows:
