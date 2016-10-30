@@ -1,12 +1,18 @@
-package com.doos.Service;
+package com.doos.service;
 
-import com.dd.plist.*;
+import com.dd.plist.NSDictionary;
+import com.dd.plist.PropertyListParser;
+import com.doos.gui.EditDialog;
 import org.apache.log4j.Logger;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-import static com.doos.Service.Logging.getCurrentClassName;
+import static com.doos.service.Logging.getCurrentClassName;
 
 /**
  * Created by Eugene Zrazhevsky on 30.10.2016.
@@ -18,10 +24,36 @@ public class Analyzer {
 
     public Analyzer(String[] args) {
         log.debug("Starting analyze");
+        log.debug("Got arguments: " + Arrays.toString(args));
 
         ArrayList<File> file = getFile(args);
+        if (args.length > 1) {
+            urls = takeUrls(file);
+        } else if (args.length == 1) {
+            String url = "";
+            try {
+                url = takeUrl(file.get(0)).toString();
+                ArrayList<String> ss = new ArrayList<>();
+                ss.add(url);
+                urls = ss;
+            } catch (Exception e) {
+                log.warn("URL in file [" + file.get(0) + "] is corrupt.", e);
+                JOptionPane.showMessageDialog(new Frame(), "URL in file [" + file.get(0) + "] is corrupt.", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                new EditDialog(file.get(0).getAbsolutePath()).setVisible(true);
+            }
+        }
 
-        urls = takeUrls(file);
+    }
+
+    public static URL takeUrl(File file) throws Exception {
+
+        log.debug("Got file: " + file.getAbsolutePath());
+        NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(file);
+        String url = rootDict.objectForKey("URL").toString();
+        log.info("Got url: " + url);
+
+        return new URL(url);
     }
 
     private ArrayList<File> getFile(String[] args) {
@@ -56,7 +88,8 @@ public class Analyzer {
                 log.debug("Got url: " + url);
                 urls.add(url);
             } catch (Exception ex) {
-                ex.printStackTrace();
+                log.warn("Can not take url from: " + file.getAbsolutePath());
+                new EditDialog(file.getAbsolutePath()).setVisible(true);
             }
         }
         log.info("Total url count: " + urls.size());

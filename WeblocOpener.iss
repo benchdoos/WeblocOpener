@@ -29,10 +29,19 @@ SolidCompression=yes
 ChangesAssociations=yes
 
 [Registry]
+; File association
 Root: HKCR; Subkey: ".webloc"; ValueType: string; ValueName: ""; ValueData: "Webloc"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc"; ValueType: string; ValueName: ""; ValueData: "Webloc link"; Flags: uninsdeletekey
 Root: HKCR; Subkey: "Webloc\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\WeblocOpener.EXE,0"
 Root: HKCR; Subkey: "Webloc\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\WeblocOpener.EXE"" ""%1"""
+
+; Add new file .webloc
+Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "ItemName"; ValueData: """{app}\WeblocOpener.EXE"" ""%1"""
+Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "NullFile"; ValueData: ""
+
+; Add edit file menu
+Root: HKCR; Subkey: "Webloc\shell\edit\command"; ValueType: string; ValueName: ""; ValueData: """{app}\WeblocOpener.EXE"" ""-edit"" ""%1"""
+
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"

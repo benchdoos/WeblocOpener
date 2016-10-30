@@ -1,4 +1,4 @@
-package com.doos.Service;
+package com.doos.service;
 
 import com.doos.ApplicationConstants;
 
@@ -11,6 +11,20 @@ public class Logging {
     public Logging() {
         checkFolders();
         startLogging();
+    }
+
+    /**
+     * Returns the name of called class. Made for usage in static methods.
+     * Created to minimize hardcoded code.
+     *
+     * @return a name of called class.
+     */
+    public static String getCurrentClassName() {
+        try {
+            throw new RuntimeException();
+        } catch (RuntimeException e) {
+            return e.getStackTrace()[1].getClassName();
+        }
     }
 
     private void checkFolders() {
@@ -50,20 +64,6 @@ public class Logging {
     private void startLogging() {
         System.setProperty(ApplicationConstants.AppLogProperty, ApplicationConstants.AppLogFolderPath);
         System.out.println("Logging starts at: " + ApplicationConstants.AppLogFolderPath);
-    }
-
-    /**
-     * Returns the name of called class. Made for usage in static methods.
-     * Created to minimize hardcoded code.
-     *
-     * @return a name of called class.
-     */
-    public static String getCurrentClassName() {
-        try {
-            throw new RuntimeException();
-        } catch (RuntimeException e) {
-            return e.getStackTrace()[1].getClassName();
-        }
     }
 
 }
