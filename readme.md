@@ -1,4 +1,5 @@
-<img src="src/resources/icon64.png" align="right" />
+<img src="WeblocOpenerIntro.png" align="right" />
+
 # WeblocOpener
 
 ## Introduction:
