@@ -97,7 +97,7 @@ public class EditDialog extends JDialog {
         setPreferredSize(getSize());
         setResizable(false); //TODO fix setMaximumSize
 
-        setLocation(FrameUtils.setFrameOnCenter(getSize()));
+        setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
 
         log.debug("Got path path: [" + path + "]");
     }
@@ -123,7 +123,8 @@ public class EditDialog extends JDialog {
     @Override
     public void dispose() {
         super.dispose();
-        System.exit(0);
+        UrlsProceed.shutdownLogout();
+        System.exit(0); //fixes non-shutdown issue.
     }
 
 }

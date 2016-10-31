@@ -8,8 +8,6 @@ import org.apache.log4j.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import static com.doos.service.Logging.getCurrentClassName;
 
@@ -19,38 +17,43 @@ import static com.doos.service.Logging.getCurrentClassName;
 public class Analyzer {
     private static final Logger log = Logger.getLogger(getCurrentClassName());
 
-    ArrayList<String> urls = new ArrayList<>();
+    String url = "";
 
-    public Analyzer(String[] args) {
+    public Analyzer(String arg) {
         log.debug("Starting analyze");
-        log.debug("Got arguments: " + Arrays.toString(args));
+        log.debug("Got argument: " + arg);
 
-        ArrayList<File> file = getFile(args);
-        if (args.length > 1) {
-            urls = takeUrls(file);
-        } else if (args.length == 1) {
-            String url = "";
-            try {
-                url = takeUrl(file.get(0));
-                if (url.equals("")) {
-                    throw new NullPointerException("Url is empty, just editing");
-                }
-                ArrayList<String> ss = new ArrayList<>();
-                ss.add(url);
-                urls = ss;
-            } catch (NullPointerException e) {
-                log.warn("URL in file [" + file.get(0) + "] has empty link.", e);
-                new EditDialog(file.get(0).getAbsolutePath()).setVisible(true);
-            } catch (Exception e) {
-                log.warn("URL in file [" + file.get(0) + "] is corrupt.", e);
-                JOptionPane.showMessageDialog(new Frame(), "URL in file [" + file.get(0) + "] is corrupt.", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-                new EditDialog(file.get(0).getAbsolutePath()).setVisible(true);
+        File file = getWeblocFile(arg);
+        String url = "";
+        try {
+            url = takeUrl(file);
+            if (url.equals("")) {
+                throw new NullPointerException("Url is empty, just editing");
             }
+            this.url = url;
+        } catch (NullPointerException e) {
+            log.warn("URL in file [" + file + "] has empty link.", e);
+            assert file != null;
+            new EditDialog(file.getAbsolutePath()).setVisible(true);
+        } catch (Exception e) {
+            log.warn("URL in file [" + file + "] is corrupt.", e);
+            JOptionPane.showMessageDialog(new Frame(), "URL in file [" + file + "] is corrupt.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            assert file != null;
+            new EditDialog(file.getAbsolutePath()).setVisible(true);
         }
+
 
     }
 
+
+    /**
+     * Takes URL from <code>.webloc</code> file
+     *
+     * @param file File <code>.webloc</code>
+     * @return String - URL in file
+     * @see java.io.File
+     */
     public static String takeUrl(File file) throws Exception {
 
         log.debug("Got file: " + file.getAbsolutePath());
@@ -61,51 +64,46 @@ public class Analyzer {
         return url;
     }
 
-    private ArrayList<File> getFile(String[] args) {
-        ArrayList<File> list = new ArrayList<>();
-        if (args.length > 0) {
-            log.debug("Arguments count: " + args.length);
-            for (String arg : args) {
-                File currentFile = new File(arg);
-                if (currentFile.isFile() && currentFile.exists()) {
-                    if (getFileExtension(currentFile).equals("webloc")) {
-                        list.add(currentFile);
-                        log.info("File added to proceed: " + currentFile.getAbsolutePath());
-                    } else {
-                        log.warn("Wrong argument. File extension is not webloc: " + currentFile.getAbsolutePath());
-                    }
-                } else {
-                    log.warn("Wrong argument. Invalid file path or file not exist: " + currentFile.getAbsolutePath());
-                }
+    /**
+     * Returns a <code>.webloc</code> file from path.
+     *
+     * @param arg File path.
+     * @return <code>.webloc</code> file.
+     */
+    private File getWeblocFile(String arg) {
+
+
+        File currentFile = new File(arg);
+        if (currentFile.isFile() && currentFile.exists()) {
+            if (getFileExtension(currentFile).equals("webloc")) {
+                log.info("File added to proceed: " + currentFile.getAbsolutePath());
+                return currentFile;
+            } else {
+                log.warn("Wrong argument. File extension is not webloc: " + currentFile.getAbsolutePath());
             }
+        } else {
+            log.warn("Wrong argument. Invalid file path or file not exist: " + currentFile.getAbsolutePath());
         }
-        log.info("Files added to proceed: " + list.size());
-        return list;
+
+        return null;
     }
 
-    private ArrayList<String> takeUrls(ArrayList<File> files) {
-        ArrayList<String> urls = new ArrayList<>();
-        for (File file : files) {
-            try {
-                log.debug("Got file: " + file.getAbsolutePath());
-                NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(file);
-                String url = rootDict.objectForKey("URL").toString();
-                log.debug("Got url: " + url);
-                urls.add(url);
-            } catch (Exception ex) {
-                log.warn("Can not take url from: " + file.getAbsolutePath());
-                new EditDialog(file.getAbsolutePath()).setVisible(true);
-            }
-        }
-        log.info("Total url count: " + urls.size());
-        return urls;
+    public String getUrl() {
+        return url;
     }
 
-    public ArrayList<String> getUrls() {
-        return urls;
-    }
-
-
+    /**
+     * Returns file extension
+     * Examples:
+     * <blockquote><pre>
+     * "hello.exe" returns "exe"
+     * "picture.gif" returns "gif"
+     * "document.txt" returns "txt"
+     * </pre></blockquote>
+     *
+     * @param file to get extension.
+     * @return String name of file extension
+     */
     private String getFileExtension(File file) {
         String name = file.getName();
         try {

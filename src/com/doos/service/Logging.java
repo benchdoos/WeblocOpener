@@ -27,6 +27,9 @@ public class Logging {
         }
     }
 
+    /**
+     * Checks folders for Log4j, creates them, if needed.
+     */
     private void checkFolders() {
         File logFolder = new File(ApplicationConstants.AppLogFolderPath);
         File infoLogFolder = new File(ApplicationConstants.AppLogFolderPath + File.separator + "INFO");
@@ -61,6 +64,10 @@ public class Logging {
 
     }
 
+    /**
+     * Creates a property for Log4j
+     * Warning! Run this before any log implementation.
+     */
     private void startLogging() {
         System.setProperty(ApplicationConstants.AppLogProperty, ApplicationConstants.AppLogFolderPath);
         System.out.println("Logging starts at: " + ApplicationConstants.AppLogFolderPath);

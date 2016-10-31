@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
 
 import static com.doos.service.Logging.getCurrentClassName;
 
@@ -20,30 +19,43 @@ import static com.doos.service.Logging.getCurrentClassName;
 public class UrlsProceed {
     private static final Logger log = Logger.getLogger(getCurrentClassName());
 
-    public static void openUrls(ArrayList<String> urls) {
+
+    /**
+     * Opens url on default browser.
+     *
+     * @param url Url to open.
+     */
+    public static void openUrl(String url) {
         if (!Desktop.isDesktopSupported()) {
             log.warn("Desktop is not supported");
             return;
         }
         Desktop desktop = Desktop.getDesktop();
 
-
-        log.debug("Got urls to open: " + urls.size());
-
-        for (String url : urls) {
-            try {
-                desktop.browse(URI.create(url));
-            } catch (IOException e) {
-                log.warn("Can not open url: " + url, e);
-                JOptionPane.showMessageDialog(new Frame(), "URL is corrupt: " + url);
-            }
+        try {
+            desktop.browse(URI.create(url));
+        } catch (IOException e) {
+            log.warn("Can not open url: " + url, e);
+            JOptionPane.showMessageDialog(new Frame(), "URL is corrupt: " + url);
         }
+
     }
 
+
+    /**
+     * Log before program shutdown.
+     * */
     public static void shutdownLogout() {
         log.debug("Goodbye!");
     }
 
+
+    /**
+     * Creates <code>.webloc</code> file on given path.
+     *
+     * @param url URL to create.
+     * @param path Path of creating file.
+     * */
     public static void createWebloc(URL url, String path) {
         log.info("Creating .webloc at [" + path + "] URL: [" + url + "]");
         NSDictionary root = new NSDictionary();
@@ -52,16 +64,6 @@ public class UrlsProceed {
 
         try {
             File file = new File(path);
-            //File file = new File(location + "untitled.webloc");
-            //TODO uncomment
-            /*if (file.exists()) {
-                for (int i = 1; i < Integer.MAX_VALUE; i++) {
-                    if (file.exists()) {
-                        file = new File(location + "untitled (" + i + ").webloc");
-                    } else i = Integer.MAX_VALUE-1;
-                }
-            }*/
-
             PropertyListParser.saveAsXML(root, file);
         } catch (IOException e) {
             log.warn("Can not create .webloc file", e);

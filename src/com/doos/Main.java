@@ -7,7 +7,6 @@ import com.doos.service.UrlsProceed;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class Main {
     public static String[] args;
@@ -16,13 +15,17 @@ public class Main {
         Main.args = args;
         new Logging();
 
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        enableLookAndFeel();
 
+        manageArguments(args);
+    }
 
+    /**
+     * Manages incoming arguments
+     *
+     * @param args
+     */
+    private static void manageArguments(String[] args) {
         if (args.length > 0) {
             if (!args[0].isEmpty()) {
                 switch (args[0]) {
@@ -37,12 +40,25 @@ public class Main {
                         }
                         break;
                     default:
-                        ArrayList<String> urls = new Analyzer(args).getUrls();
-                        UrlsProceed.openUrls(urls);
+                        String url = new Analyzer(args[0]).getUrl();
+                        UrlsProceed.openUrl(url);
                         UrlsProceed.shutdownLogout();
                         break;
                 }
             }
+        }
+    }
+
+    /**
+     * Enables LookAndFeel for current OS.
+     *
+     * @see javax.swing.UIManager.LookAndFeelInfo
+     */
+    private static void enableLookAndFeel() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

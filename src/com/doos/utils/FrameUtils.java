@@ -1,38 +1,50 @@
 package com.doos.utils;
 
-import org.apache.log4j.Logger;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import static com.doos.service.Logging.getCurrentClassName;
-
 /**
  * Created by Eugene Zrazhevsky on 30.10.2016.
  */
 public class FrameUtils {
-    private static final Logger log = Logger.getLogger(getCurrentClassName());
-
     private static final Timer timer = new Timer(60, null);
 
-    public static Point setFrameOnCenter(Dimension size) {
+    /**
+     * Returns the location of point of window, when it should be on center of the screen.
+     *
+     * @return Point of <code>Window</code> that is moved to center of the screen.
+     * @see java.awt.Component#getLocation
+     */
+    public static Point getFrameOnCenterLocationPoint(Window window) {
+        Dimension size = window.getSize();
         int width = (int) ((Toolkit.getDefaultToolkit().getScreenSize().width / 2) - (size.getWidth() / 2));
         int height = (int) ((Toolkit.getDefaultToolkit().getScreenSize().height / 2) - (size.getHeight() / 2));
         return new Point(width, height);
     }
 
-    private static Window findWindow(Component c) {
-        if (c == null) {
+    /**
+     * Finds window on component given.
+     *
+     * @param component Component where window is located.
+     * @return Window that is searched.
+     **/
+    private static Window findWindow(Component component) {
+        if (component == null) {
             return JOptionPane.getRootFrame();
-        } else if (c instanceof Window) {
-            return (Window) c;
+        } else if (component instanceof Window) {
+            return (Window) component;
         } else {
-            return findWindow(c.getParent());
+            return findWindow(component.getParent());
         }
     }
 
+    /**
+     * Shakes window like in MacOS.
+     *
+     * @param component Component to shake
+     */
     public static void shakeFrame(final Component component) {
         final Window window = findWindow(component);
 
