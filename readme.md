@@ -1,4 +1,4 @@
-<img src="WeblocOpenerIntro.png" align="right" />
+<img src="WeblocOpenerIntro.png" align="right" width="400" height="225" />
 
 # WeblocOpener
 
