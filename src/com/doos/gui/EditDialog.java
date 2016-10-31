@@ -85,7 +85,7 @@ public class EditDialog extends JDialog {
         textField1.setFont(font.deriveFont(attributes));
 
         try {
-            URL url = Analyzer.takeUrl(new File(path));
+            URL url = new URL(Analyzer.takeUrl(new File(path)));
             textField1.setText(url.toString());
         } catch (Exception e) {
             log.warn("Can not read url from : " + path);

@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "WeblocOpener"
-#define MyAppVersion "1.0"
+#define MyAppVersion "1.1.1"
 #define MyAppPublisher "Eugene Zrazhevsky"
 #define MyAppURL "https://github.com/benchdoos/WeblocOpener/"
 #define MyAppExeName "WeblocOpener.exe"
@@ -37,6 +37,7 @@ Root: HKCR; Subkey: "Webloc\shell\open\command"; ValueType: string; ValueName: "
 
 ; Add new file .webloc
 Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "ItemName"; ValueData: """{app}\WeblocOpener.EXE"" ""%1"""
+Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "FileName"; ValueData: "{app}\Template.webloc"
 Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "NullFile"; ValueData: ""
 
 ; Add edit file menu
@@ -73,6 +74,7 @@ Name: "ukrainian"; MessagesFile: "compiler:Languages\Ukrainian.isl"
 
 [Files]
 Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\WeblocOpener\WeblocOpener.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\WeblocOpener\Template.webloc"; DestDir: "{app}"; Flags: ignoreversion
 Source: "F:\Developer\JAVA\WeblocOpener\readme.rtf"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 

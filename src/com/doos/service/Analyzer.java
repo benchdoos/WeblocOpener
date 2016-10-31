@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -32,10 +31,16 @@ public class Analyzer {
         } else if (args.length == 1) {
             String url = "";
             try {
-                url = takeUrl(file.get(0)).toString();
+                url = takeUrl(file.get(0));
+                if (url.equals("")) {
+                    throw new NullPointerException("Url is empty, just editing");
+                }
                 ArrayList<String> ss = new ArrayList<>();
                 ss.add(url);
                 urls = ss;
+            } catch (NullPointerException e) {
+                log.warn("URL in file [" + file.get(0) + "] has empty link.", e);
+                new EditDialog(file.get(0).getAbsolutePath()).setVisible(true);
             } catch (Exception e) {
                 log.warn("URL in file [" + file.get(0) + "] is corrupt.", e);
                 JOptionPane.showMessageDialog(new Frame(), "URL in file [" + file.get(0) + "] is corrupt.", "Error",
@@ -46,14 +51,14 @@ public class Analyzer {
 
     }
 
-    public static URL takeUrl(File file) throws Exception {
+    public static String takeUrl(File file) throws Exception {
 
         log.debug("Got file: " + file.getAbsolutePath());
         NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(file);
         String url = rootDict.objectForKey("URL").toString();
         log.info("Got url: " + url);
 
-        return new URL(url);
+        return url;
     }
 
     private ArrayList<File> getFile(String[] args) {
