@@ -8,6 +8,8 @@ import com.doos.service.UrlsProceed;
 import javax.swing.*;
 import java.awt.*;
 
+import static java.awt.Frame.MAXIMIZED_HORIZ;
+
 public class Main {
     public static String[] args;
 
@@ -31,7 +33,10 @@ public class Main {
                 switch (args[0]) {
                     case "-edit":
                         if (args.length > 1) {
-                            new EditDialog(args[1]).setVisible(true);
+                            EditDialog d = new EditDialog(args[1]);
+                            d.setVisible(true);
+                            d.setMaximumSize(new Dimension(MAXIMIZED_HORIZ, d.getHeight()));
+                            d.setLocationRelativeTo(null);
                         } else {
                             JOptionPane.showMessageDialog(new Frame(), "Argument '-edit' should have " +
                                             "location path parameter.", "Error",
