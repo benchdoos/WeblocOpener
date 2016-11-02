@@ -4,6 +4,8 @@ import com.doos.ApplicationConstants;
 import com.doos.Main;
 import com.doos.service.Analyzer;
 import com.doos.service.UrlsProceed;
+import com.doos.service.gui.ClickListener;
+import com.doos.service.gui.WindowFocusRequester;
 import com.doos.utils.FrameUtils;
 import org.apache.log4j.Logger;
 
@@ -19,8 +21,9 @@ import java.util.Map;
 
 import static com.doos.service.Logging.getCurrentClassName;
 
-public class EditDialog extends JDialog {
+public class EditDialog extends JFrame {
     private static final Logger log = Logger.getLogger(getCurrentClassName());
+    //JDialog dialog = this;
 
     String path = "";
 
@@ -31,13 +34,14 @@ public class EditDialog extends JDialog {
     private JTextPane createWeblocFileTextPane;
     private JLabel iconLabel;
 
+    @SuppressWarnings("unchecked")
     public EditDialog(String path) {
 
         log.debug("Got arguments: " + Arrays.toString(Main.args));
 
         this.path = path;
         setContentPane(contentPane);
-        setModal(true);
+        //setModal(true);
         setTitle("WeblocOpener - Edit .webloc link");
         getRootPane().setDefaultButton(buttonOK);
 
@@ -84,6 +88,13 @@ public class EditDialog extends JDialog {
         attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
         textField1.setFont(font.deriveFont(attributes));
 
+        textField1.addMouseListener(new ClickListener() {
+            @Override
+            public void doubleClick(MouseEvent e) {
+                textField1.selectAll();
+            }
+        });
+
         try {
             URL url = new URL(Analyzer.takeUrl(new File(path)));
             textField1.setText(url.toString());
@@ -124,7 +135,18 @@ public class EditDialog extends JDialog {
     public void dispose() {
         super.dispose();
         UrlsProceed.shutdownLogout();
-        System.exit(0); //fixes non-shutdown issue.
+        System.exit(0); //FIXME non-shutdown issue. Find out the shutdown issue mistake
     }
 
+
+    @Override
+    public void setVisible(boolean b) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                WindowFocusRequester.runScript(WindowFocusRequester.requestFocusOnWindowScript(getTitle()));
+            }
+        });
+        super.setVisible(b);
+    }
 }

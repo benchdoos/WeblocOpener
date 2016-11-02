@@ -88,10 +88,10 @@
               <editable value="false"/>
               <enabled value="true"/>
               <focusable value="false"/>
-              <font name="Courier New"/>
+              <font name="Inconsolata"/>
               <opaque value="false"/>
               <requestFocusEnabled value="true"/>
-              <text value="&lt;html&gt;&#13;&#10;  &lt;head&gt;&#13;&#10;    &#13;&#10;  &lt;/head&gt;&#13;&#10;  &lt;body&gt;&#13;&#10;    Edit &lt;b&gt;.webloc&lt;/b&gt; link:&#13;&#10;  &lt;/body&gt;&#13;&#10;&lt;/html&gt;&#13;&#10;"/>
+              <text value="&lt;html&gt;&#13;&#10;  &lt;head&gt;&#13;&#10;&#13;&#10;  &lt;/head&gt;&#13;&#10;  &lt;body&gt;&#13;&#10;    &lt;p style=&quot;margin-top: 0&quot;&gt;&#13;&#10;      &#13;&#10;    &lt;/p&gt;&#13;&#10;  &lt;/body&gt;&#13;&#10;&lt;/html&gt;&#13;&#10;"/>
               <verifyInputWhenFocusTarget value="false"/>
               <visible value="true"/>
             </properties>
@@ -113,7 +113,7 @@
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <font name="Courier New" style="1"/>
+              <font name="Inconsolata" style="1"/>
               <text value="Url:"/>
             </properties>
           </component>
