@@ -11,4 +11,4 @@ Watch [Youtube](https://youtu.be/Z-bT-VWMDsQ) video
 ## Download:
 Windows:
 
-[Latest version](https://github.com/benchdoos/WeblocOpener/releases/tag/1.1.1) 1.1.1
+[Latest version](https://github.com/benchdoos/WeblocOpener/releases/tag/v1.1.1) 1.1.1
