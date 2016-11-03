@@ -1,6 +1,7 @@
 package com.doos;
 
 import com.doos.gui.EditDialog;
+import com.doos.gui.SettingsDialog;
 import com.doos.service.Analyzer;
 import com.doos.service.Logging;
 import com.doos.service.UrlsProceed;
@@ -51,6 +52,9 @@ public class Main {
                         break;
                 }
             }
+        } else {
+            SettingsDialog settingsDialog = new SettingsDialog();
+            settingsDialog.setVisible(true);
         }
     }
 

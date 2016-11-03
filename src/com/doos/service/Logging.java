@@ -31,10 +31,10 @@ public class Logging {
      * Checks folders for Log4j, creates them, if needed.
      */
     private void checkFolders() {
-        File logFolder = new File(ApplicationConstants.AppLogFolderPath);
-        File infoLogFolder = new File(ApplicationConstants.AppLogFolderPath + File.separator + "INFO");
-        File warnLogFolder = new File(ApplicationConstants.AppLogFolderPath + File.separator + "WARN");
-        File debugLogFolder = new File(ApplicationConstants.AppLogFolderPath + File.separator + "DEBUG");
+        File logFolder = new File(ApplicationConstants.APP_LOG_FOLDER_PATH);
+        File infoLogFolder = new File(ApplicationConstants.APP_LOG_FOLDER_PATH + File.separator + "INFO");
+        File warnLogFolder = new File(ApplicationConstants.APP_LOG_FOLDER_PATH + File.separator + "WARN");
+        File debugLogFolder = new File(ApplicationConstants.APP_LOG_FOLDER_PATH + File.separator + "DEBUG");
         if (!logFolder.exists()) {
             boolean success = logFolder.mkdirs();
             if (!success) {
@@ -69,8 +69,8 @@ public class Logging {
      * Warning! Run this before any log implementation.
      */
     private void startLogging() {
-        System.setProperty(ApplicationConstants.AppLogProperty, ApplicationConstants.AppLogFolderPath);
-        System.out.println("Logging starts at: " + ApplicationConstants.AppLogFolderPath);
+        System.setProperty(ApplicationConstants.APP_LOG_PROPERTY, ApplicationConstants.APP_LOG_FOLDER_PATH);
+        System.out.println("Logging starts at: " + ApplicationConstants.APP_LOG_FOLDER_PATH);
     }
 
 }

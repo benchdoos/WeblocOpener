@@ -1,4 +1,4 @@
-package com.doos;
+package utils;
 
 import java.io.File;
 
@@ -11,4 +11,5 @@ public interface ApplicationConstants {
     String APP_LOG_FOLDER_PATH = System.getProperty("java.io.tmpdir") + APP_NAME + File.separator + "Log";
     String APP_LOG_PROPERTY = "WeblocOpener.log.folder";
     String SETTINGS_FILE_PATH = System.getProperty("java.io.tmpdir") + APP_NAME + File.separator + "settings.prop";
+    String UPDATE_PATH_FILE = System.getProperty("java.io.tmpdir") + APP_NAME + File.separator;
 }

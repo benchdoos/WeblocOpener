@@ -73,7 +73,7 @@ public class EditDialog extends JFrame {
                                            }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                 JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-        iconLabel.setToolTipText("Application version: " + ApplicationConstants.AppVersion);
+        iconLabel.setToolTipText("Application version: " + ApplicationConstants.APP_VERSION);
 
         createWeblocFileTextPane.setBackground(new Color(232, 232, 232));
         createWeblocFileTextPane.setText(
