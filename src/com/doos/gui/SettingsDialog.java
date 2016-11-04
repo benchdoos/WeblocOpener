@@ -74,7 +74,7 @@ public class SettingsDialog extends JFrame {
     }
 
     private void onUpdateNow() {
-        //TODO add here run of update module.
+        //TODO add here run of com.doos.update module.
     }
 
     private void loadSettings() {

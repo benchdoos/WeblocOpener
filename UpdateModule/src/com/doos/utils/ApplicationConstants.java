@@ -1,4 +1,4 @@
-package utils;
+package com.doos.utils;
 
 import java.io.File;
 

@@ -1,4 +1,4 @@
-package utils;
+package com.doos.utils;
 
 import javax.swing.*;
 import java.awt.*;

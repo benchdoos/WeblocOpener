@@ -1,4 +1,4 @@
-package utils;
+package com.doos.utils;
 
 /**
  * Created by Eugene Zrazhevsky on 03.11.2016.

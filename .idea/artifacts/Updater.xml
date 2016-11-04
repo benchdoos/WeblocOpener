@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Updater">
+    <output-path>$PROJECT_DIR$/out/artifacts/Updater</output-path>
+    <root id="archive" name="Updater.jar">
+      <element id="module-output" name="UpdateModule" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/UpdateModule/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/gson-2.8.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/commons-io-2.5.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

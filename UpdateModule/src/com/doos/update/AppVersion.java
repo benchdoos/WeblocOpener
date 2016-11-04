@@ -1,4 +1,4 @@
-package update;
+package com.doos.update;
 
 import java.util.Date;
 

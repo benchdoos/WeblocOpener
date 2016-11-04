@@ -1,11 +1,11 @@
-package update;
+package com.doos.update;
 
 
+import com.doos.utils.ApplicationConstants;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import utils.ApplicationConstants;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.swing.*;
@@ -28,8 +28,13 @@ public class Updater {
     public Updater() {
         try {
             getConnection();
-            connection.setDoOutput(true);
-            connection.setDoInput(true);
+            if (!connection.getDoOutput()) {
+                connection.setDoOutput(true);
+            }
+            if (!connection.getDoInput()) {
+                connection.setDoInput(true);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -151,9 +156,9 @@ public class Updater {
 
     public HttpsURLConnection getConnection() throws IOException {
         url = new URL(githubUrl);
-        if (connection == null) {
+        //if (connection == null) {
             connection = (HttpsURLConnection) url.openConnection();
-        }
+        //}
         return connection;
     }
 

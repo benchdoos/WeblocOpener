@@ -1,11 +1,11 @@
-package gui;
+package com.doos.gui;
 
-import core.Main;
-import update.AppVersion;
-import update.Updater;
-import utils.ApplicationConstants;
-import utils.FrameUtils;
-import utils.Internal;
+import com.doos.core.Main;
+import com.doos.update.AppVersion;
+import com.doos.update.Updater;
+import com.doos.utils.ApplicationConstants;
+import com.doos.utils.FrameUtils;
+import com.doos.utils.Internal;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +16,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import static core.Main.*;
+import static com.doos.core.Main.*;
 
 public class UpdateDialog extends JFrame {
     AppVersion serverAppVersion;
@@ -58,7 +58,7 @@ public class UpdateDialog extends JFrame {
         });
 
         // call onCancel() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 onCancel();
@@ -101,7 +101,7 @@ public class UpdateDialog extends JFrame {
         //TODO DELETE THIS AFTER TESTS
         if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
             buttonOK.setText("Version is up to date");
-            /*buttonOK.setEnabled(true);*/
+            //buttonOK.setEnabled(true);
         }////
     }
 
@@ -121,9 +121,9 @@ public class UpdateDialog extends JFrame {
 
 
     private void onOK() {
+        buttonOK.setEnabled(false);
         int successUpdate = Updater.startUpdate(serverAppVersion, progressBar1);
-        JFrame optionPaneFrame = new JFrame();
-        optionPaneFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        buttonOK.setEnabled(true);
 
         switch (successUpdate) {
             case 0: //Normal state, app updated
@@ -135,23 +135,22 @@ public class UpdateDialog extends JFrame {
                     System.out.println("PROP:>" + pname + " " + properties.getProperty(pname));
                 }
                 Main.updateProperties();
-                JOptionPane.showMessageDialog(optionPaneFrame, "WeblocOpener successfully updated to version: "
-                                + serverAppVersion.getVersion(), "Success", JOptionPane.INFORMATION_MESSAGE,
-                        UIManager.getIcon("OptionPane.informationIcon"));
+                JOptionPane.showMessageDialog(this, "WeblocOpener successfully updated to version: "
+                        + serverAppVersion.getVersion(), "Success", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
                 break;
             case 1: //Installation was cancelled or Incorrect function.
-                JOptionPane.showMessageDialog(optionPaneFrame,
+                JOptionPane.showMessageDialog(this,
                         "Installation cancelled by User during installation",
                         "Installation cancelled", JOptionPane.WARNING_MESSAGE);
                 break;
             case 2: //The system cannot find the file specified. OR! User gave no permissions.
-                JOptionPane.showMessageDialog(optionPaneFrame,
+                JOptionPane.showMessageDialog(this,
                         "Installation can not be run, because it has no permissions.",
                         "Installation cancelled", JOptionPane.WARNING_MESSAGE);
                 break;
             default:
-                JOptionPane.showMessageDialog(optionPaneFrame,
+                JOptionPane.showMessageDialog(this,
                         "Installation cancelled by Error (unhandled error),"
                                 + "\ncode: " + successUpdate
                                 + "\nvisit https://github.com/benchdoos/WeblocOpener for more info.",

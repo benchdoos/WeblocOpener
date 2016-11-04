@@ -27,6 +27,7 @@ SetupIconFile=F:\Developer\JAVA\WeblocOpener\icon.ico
 Compression=lzma
 SolidCompression=yes
 ChangesAssociations=yes
+PrivilegesRequired=admin
 
 [Registry]
 ; File association
@@ -42,6 +43,10 @@ Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "NullFile"
 
 ; Add edit file menu
 Root: HKCR; Subkey: "Webloc\shell\edit\command"; ValueType: string; ValueName: ""; ValueData: """{app}\WeblocOpener.EXE"" ""-edit"" ""%1"""
+
+; Add updater autorun
+Root: HKCU; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "WeblocOpenerUpdater"; ValueData: """{app}\Updater.jar"" ""-s"""; Flags: uninsdeletevalue
+
 
 
 [Languages]
@@ -75,10 +80,10 @@ Name: "ukrainian"; MessagesFile: "compiler:Languages\Ukrainian.isl"
 [Files]
 Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\WeblocOpener\WeblocOpener.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\WeblocOpener\Template.webloc"; DestDir: "{app}"; Flags: ignoreversion
+Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\Updater\Updater.jar"; DestDir: "{app}"; Flags: ignoreversion
 Source: "F:\Developer\JAVA\WeblocOpener\readme.rtf"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
-
