@@ -1,25 +1,21 @@
 package com.doos.gui;
 
 import com.doos.ApplicationConstants;
+import com.doos.Main;
 import com.doos.utils.FrameUtils;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Properties;
 
+import static com.doos.Main.*;
 import static com.doos.service.Logging.getCurrentClassName;
 
 public class SettingsDialog extends JFrame {
     private static final Logger log = Logger.getLogger(getCurrentClassName());
-    final String UPDATE_ACTIVE = "UPDATE_ACTIVE";
-    final String LAST_UPDATED = "LAST_UPDATED";
-    final String CURRENT_APP_VERSION = "CURRENT_APP_VERSION";
-    Properties properties = new Properties();
+
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -80,21 +76,14 @@ public class SettingsDialog extends JFrame {
     private void loadSettings() {
         log.info("Loading settings from: " + ApplicationConstants.SETTINGS_FILE_PATH);
         try {
-            properties.load(new FileInputStream(ApplicationConstants.SETTINGS_FILE_PATH));
+            Main.loadProperties();
             autoUpdateEnabledCheckBox.setSelected(properties.getProperty(UPDATE_ACTIVE).equals("true"));
             lastUpdateDateLable.setText(properties.getProperty(LAST_UPDATED));
         } catch (FileNotFoundException e) {
             log.warn("Can not load property file: " + ApplicationConstants.SETTINGS_FILE_PATH, e);
             log.info("Creating a new property file");
-            properties.setProperty(UPDATE_ACTIVE, "true");
-            properties.setProperty(LAST_UPDATED, "none");
-            properties.setProperty(CURRENT_APP_VERSION, ApplicationConstants.APP_VERSION);
-            try {
-                properties.store(new FileOutputStream(ApplicationConstants.SETTINGS_FILE_PATH), "Created new");
-                loadSettings();
-            } catch (IOException e1) {
-                log.warn("Can not create a settings file", e1);
-            }
+            Main.createNewFileProperties();
+            loadSettings();
         } catch (IOException e) {
             e.getStackTrace();
         }
@@ -105,7 +94,7 @@ public class SettingsDialog extends JFrame {
         properties.setProperty(UPDATE_ACTIVE, autoUpdateEnabledCheckBox.isSelected() + "");
         try {
             properties.setProperty(CURRENT_APP_VERSION, ApplicationConstants.APP_VERSION);
-            properties.store(new FileOutputStream(ApplicationConstants.SETTINGS_FILE_PATH), "Updated");
+            Main.saveProperties();
         } catch (IOException e) {
             log.warn("Can not save settings file", e);
             JOptionPane.showMessageDialog(new JFrame(), "Error", "Can not save settings!\n" + e.getMessage(),

@@ -8,15 +8,32 @@ import com.doos.service.UrlsProceed;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 import static java.awt.Frame.MAXIMIZED_HORIZ;
 
 public class Main {
+    public static final String UPDATE_ACTIVE = "UPDATE_ACTIVE";
+    public static final String LAST_UPDATED = "LAST_UPDATED";
+    public static final String CURRENT_APP_VERSION = "CURRENT_APP_VERSION";
     public static String[] args;
+    public static Properties properties = new Properties();
 
     public static void main(String[] args) {
         Main.args = args;
         new Logging();
+        try {
+            loadProperties();
+            if (!properties.getProperty(CURRENT_APP_VERSION).equals(ApplicationConstants.APP_VERSION)) {
+                properties.setProperty(CURRENT_APP_VERSION, ApplicationConstants.APP_VERSION);
+                saveProperties();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         enableLookAndFeel();
 
@@ -68,6 +85,27 @@ public class Main {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void loadProperties() throws IOException {
+        properties.load(new FileInputStream(ApplicationConstants.SETTINGS_FILE_PATH));
+    }
+
+    public static void saveProperties() throws IOException {
+        properties.store(new FileOutputStream(ApplicationConstants.SETTINGS_FILE_PATH), "WeblocOpener Settings");
+
+    }
+
+
+    public static void createNewFileProperties() {
+        properties.setProperty(UPDATE_ACTIVE, "true");
+        properties.setProperty(LAST_UPDATED, "none");
+        properties.setProperty(CURRENT_APP_VERSION, ApplicationConstants.APP_VERSION);
+        try {
+            saveProperties();
+        } catch (IOException e1) {
+            e1.getStackTrace();
         }
     }
 

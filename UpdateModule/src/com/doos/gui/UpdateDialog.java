@@ -91,18 +91,16 @@ public class UpdateDialog extends JFrame {
 
         String str = properties.getProperty(CURRENT_APP_VERSION);
         if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
+            //Need to update
             buttonOK.setEnabled(true);
-        }
-        //TODO DELETE THIS AFTER TESTS
-       /* if (Internal.versionCompare(str, serverAppVersion.getVersion()) > 0) {
-            buttonOK.setEnabled(true);
-        }*/////
-
-        //TODO DELETE THIS AFTER TESTS
-        if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
+        } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) > 0) {
+            //App version is bigger then on server
+            buttonOK.setText("Hello, dev!");
+            buttonOK.setEnabled(false);
+        } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
+            //No reason to update
             buttonOK.setText("Version is up to date");
-            //buttonOK.setEnabled(true);
-        }////
+        }
     }
 
     private void loadProperties() {
