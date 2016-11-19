@@ -11,9 +11,12 @@ import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.*;
 import java.awt.font.TextAttribute;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
@@ -25,7 +28,7 @@ public class EditDialog extends JFrame {
     private static final Logger log = Logger.getLogger(getCurrentClassName());
     //JDialog dialog = this;
 
-    String path = "";
+    private String path = "";
 
     private JPanel contentPane;
     private JButton buttonOK;
@@ -35,11 +38,11 @@ public class EditDialog extends JFrame {
     private JLabel iconLabel;
 
     @SuppressWarnings("unchecked")
-    public EditDialog(String path) {
+    public EditDialog(String pathToEditingFile) {
 
         log.debug("Got arguments: " + Arrays.toString(Main.args));
 
-        this.path = path;
+        this.path = pathToEditingFile;
         setContentPane(contentPane);
         //setModal(true);
         setTitle("WeblocOpener - Edit .webloc link");
@@ -95,13 +98,8 @@ public class EditDialog extends JFrame {
             }
         });
 
-        try {
-            URL url = new URL(Analyzer.takeUrl(new File(path)));
-            textField1.setText(url.toString());
-        } catch (Exception e) {
-            log.warn("Can not read url from : " + path);
-            textField1.setText("");
-        }
+        fillTextField(pathToEditingFile);
+
         pack();
 
         setMinimumSize(getSize());
@@ -110,7 +108,29 @@ public class EditDialog extends JFrame {
 
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
 
-        log.debug("Got path path: [" + path + "]");
+        log.debug("Got path path: [" + pathToEditingFile + "]");
+    }
+
+    private void fillTextField(String pathToEditingFile) {
+        try {
+            URL url = new URL(Analyzer.takeUrl(new File(pathToEditingFile)));
+            textField1.setText(url.toString());
+        } catch (Exception e) {
+            log.warn("Can not read url from : " + pathToEditingFile);
+
+            fillTextFieldWithClipboard();
+        }
+    }
+
+    private void fillTextFieldWithClipboard() {
+        try {
+            String data = (String) Toolkit.getDefaultToolkit()
+                    .getSystemClipboard().getData(DataFlavor.stringFlavor);
+            URL url = new URL(data);
+            textField1.setText(url.toString());
+        } catch (UnsupportedFlavorException | IOException ex) {
+            textField1.setText("");
+        }
     }
 
     private void onOK() {
