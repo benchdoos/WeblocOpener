@@ -42,6 +42,8 @@ public class EditDialog extends JFrame {
 
         log.debug("Got arguments: " + Arrays.toString(Main.args));
 
+        setIconImage(Toolkit.getDefaultToolkit().getImage(EditDialog.class.getResource("/icon64.png")));
+
         this.path = pathToEditingFile;
         setContentPane(contentPane);
         //setModal(true);

@@ -8,6 +8,7 @@ import com.doos.utils.registry.RegistryManager;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +30,8 @@ public class SettingsDialog extends JFrame {
         setContentPane(contentPane);
         setTitle("WeblocOpener - Settings");
         getRootPane().setDefaultButton(buttonOK);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(EditDialog.class.getResource("/icon64.png")));
+
         loadSettings();
 
         buttonOK.addActionListener(new ActionListener() {
