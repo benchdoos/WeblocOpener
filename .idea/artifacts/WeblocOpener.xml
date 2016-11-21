@@ -8,6 +8,8 @@
       </element>
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/log4j-1.2.8.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/dd-plist.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jna-4.2.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jna-platform-4.2.2.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
