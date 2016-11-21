@@ -155,7 +155,6 @@ public class EditDialog extends JFrame {
     public void dispose() {
         super.dispose();
         UrlsProceed.shutdownLogout();
-        System.exit(0); //FIXME non-shutdown issue. Find out the shutdown issue mistake
     }
 
 
