@@ -12,7 +12,11 @@ import java.util.Properties;
 public class SettingsManager {
 
     public static void updateInfo(Properties properties) {
-        RegistryManager.setAutoUpdateActive(Boolean.parseBoolean(properties.getProperty(RegistryManager.KEY_AUTO_UPDATE)));
+        try {
+            RegistryManager.setAutoUpdateActive(Boolean.parseBoolean(properties.getProperty(RegistryManager.KEY_AUTO_UPDATE)));
+        } catch (RegistryCanNotWriteInfoException e) {
+            e.printStackTrace();
+        }
     }
 
     public static Properties loadInfo() throws RegistryCanNotReadInfoException, RegistryCanNotWriteInfoException {

@@ -16,10 +16,10 @@ public class RegistryManager {
     public static final String KEY_INSTALL_LOCATION = "InstallLocation";
     public static final String KEY_CURRENT_VERSION = "CurrentVersion";
     public static final String KEY_AUTO_UPDATE = "AutoUpdateEnabled";
-    static final WinReg.HKEY APP_ROOT_HKEY = HKEY_CURRENT_USER;
+    private static final WinReg.HKEY APP_ROOT_HKEY = HKEY_CURRENT_USER;
     private final static String REGISTRY_APP_PATH = "SOFTWARE\\" + ApplicationConstants.APP_NAME + "\\";
 
-    public static String getInstallLocationValue() throws Win32Exception { //TODO create normal exception handlers
+    public static String getInstallLocationValue() throws RegistryCanNotReadInfoException {
         String value = null;
         value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
                 REGISTRY_APP_PATH,
@@ -35,7 +35,7 @@ public class RegistryManager {
                     REGISTRY_APP_PATH,
                     KEY_CURRENT_VERSION);
         } catch (Win32Exception e) {
-            throw new RegistryCanNotReadInfoException();
+            throw new RegistryCanNotReadInfoException("Can not get app version value", e);
         }
 
         return result;
@@ -55,24 +55,30 @@ public class RegistryManager {
 
         } catch (Win32Exception e) {
             //fixes
-            setAutoUpdateActive(true);
+            try {
+                setAutoUpdateActive(true);
+            } catch (RegistryCanNotWriteInfoException ignore) {/*NOP*/}
         }
 
 
         return result;
     }
 
-    public static void setAutoUpdateActive(boolean autoUpdateActive) {
+    public static void setAutoUpdateActive(boolean autoUpdateActive) throws RegistryCanNotWriteInfoException {
 
-        Advapi32Util.registrySetStringValue(APP_ROOT_HKEY, REGISTRY_APP_PATH, KEY_AUTO_UPDATE,
-                Boolean.toString(autoUpdateActive));
+        try {
+            Advapi32Util.registrySetStringValue(APP_ROOT_HKEY, REGISTRY_APP_PATH, KEY_AUTO_UPDATE,
+                    Boolean.toString(autoUpdateActive));
+        } catch (Win32Exception e) {
+            throw new RegistryCanNotWriteInfoException("Can not set autoUpdateActive value", e);
+        }
     }
 
     public static void createRegistryEntry(String valueName, String value) throws RegistryCanNotWriteInfoException {
         try {
             Advapi32Util.registrySetStringValue(APP_ROOT_HKEY, REGISTRY_APP_PATH, valueName, value);
         } catch (Win32Exception e) {
-            throw new RegistryCanNotWriteInfoException("Can not create registry entry at: "
+            throw new RegistryCanNotWriteInfoException("Can not create entry at: "
                     + APP_ROOT_HKEY + "\\" + REGISTRY_APP_PATH + valueName + " With value [" + value + "]", e);
         }
     }
