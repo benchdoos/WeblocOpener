@@ -3,6 +3,7 @@ package com.doos.core;
 import com.doos.gui.UpdateDialog;
 import com.doos.nongui.NonGuiUpdater;
 import com.doos.utils.SettingsManager;
+import com.doos.utils.registry.RegistryCanNotReadInfoException;
 import com.doos.utils.registry.RegistryException;
 import com.doos.utils.registry.RegistryManager;
 import org.apache.commons.io.FileUtils;
@@ -57,7 +58,9 @@ public class Main {
         } else {
             mode = Mode.NORMAL;
             /*-----*/
-            System.out.println("Installation folder: " + RegistryManager.getInstallLocationValue());
+            try {
+                System.out.println("Installation folder: " + RegistryManager.getInstallLocationValue());
+            } catch (RegistryCanNotReadInfoException ignore) {/*NOP*/}
             /*-----*/
 
 
