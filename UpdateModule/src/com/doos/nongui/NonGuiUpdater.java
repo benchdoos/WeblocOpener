@@ -19,9 +19,10 @@ import static com.doos.core.Main.properties;
 
 
 public class NonGuiUpdater {
-    private static AppVersion serverAppVersion = null;
-    private final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit()
-            .getImage(getClass().getResource("/icon.png")));
+    public static final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit()
+            .getImage(NonGuiUpdater.class.getResource("/icon.png")));
+    public static final SystemTray tray = SystemTray.getSystemTray();
+    public static AppVersion serverAppVersion = null;
 
 
     public NonGuiUpdater() {
@@ -46,7 +47,6 @@ public class NonGuiUpdater {
     }
 
     private void createTrayIcon() {
-        final SystemTray tray = SystemTray.getSystemTray();
 
         PopupMenu trayMenu = new PopupMenu();
 
@@ -83,31 +83,30 @@ public class NonGuiUpdater {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == 1) {
-
-
                     trayIcon.removeMouseListener(this);
                     Main.initUpdateJar();
-                    /*if (updateDialog == null) {
-                        updateDialog = new UpdateDialog();
-                    }
-                    updateDialog.addWindowListener(new WindowAdapter() {
-                        @Override
-                        public void windowClosed(WindowEvent e) {
-                            try {
-                                Main.loadProperties();
-                            } catch (RegistryException e1) {
-                                e1.printStackTrace();
-                            }
-                            String str = properties.getProperty(RegistryManager.KEY_CURRENT_VERSION);
+                    tray.remove(trayIcon);
+                    /*if (updateDialog != null) {
+                        updateDialog.addWindowListener(new WindowAdapter() {
+                            @Override
+                            public void windowClosed(WindowEvent e) {
+                                try {
+                                    Main.loadProperties();
+                                } catch (RegistryException e1) {
+                                    e1.printStackTrace();
+                                }
+                                String str = properties.getProperty(RegistryManager.KEY_CURRENT_VERSION);
 
-                            if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
-                                tray.remove(trayIcon);
-                                System.exit(0);
-                            }
-                            super.windowClosing(e);
+                                if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
+                                    tray.remove(trayIcon);
+                                    System.exit(0);
+                                }
+                                super.windowClosing(e);
 
-                        }
-                    });*/
+                            }
+
+                        });
+                    }*/
 
                     /*updateDialog.setVisible(true);
                     updateDialog.checkForUpdates();*/
