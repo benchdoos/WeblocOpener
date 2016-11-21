@@ -20,10 +20,14 @@ public class RegistryManager {
     private final static String REGISTRY_APP_PATH = "SOFTWARE\\" + ApplicationConstants.APP_NAME + "\\";
 
     public static String getInstallLocationValue() throws RegistryCanNotReadInfoException {
-        String value = null;
-        value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
-                REGISTRY_APP_PATH,
-                KEY_INSTALL_LOCATION);
+        String value;
+        try {
+            value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
+                    REGISTRY_APP_PATH,
+                    KEY_INSTALL_LOCATION);
+        } catch (Win32Exception e) {
+            throw new RegistryCanNotReadInfoException("Can not read Installed Location value", e);
+        }
 
         return value;
     }
