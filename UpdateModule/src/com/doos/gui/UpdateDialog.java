@@ -34,6 +34,8 @@ public class UpdateDialog extends JFrame {
         setTitle("Update - WeblocOpener");
         getRootPane().setDefaultButton(buttonOK);
 
+        setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/icon.png")));
+
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
