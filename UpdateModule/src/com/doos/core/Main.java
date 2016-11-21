@@ -21,7 +21,7 @@ import static com.doos.utils.ApplicationConstants.UPDATE_PATH_FILE;
 public class Main {
     public static Properties properties = new Properties();
     public static boolean isAppAfterUpdate = false;
-    public static Mode mode = Mode.Normal;
+    public static Mode mode = Mode.NORMAL;
 
     public static void main(String[] args) {
         try {
@@ -37,25 +37,25 @@ public class Main {
 
             switch (args[0]) {
                 case "-s":
-                    mode = Mode.Silent;
+                    mode = Mode.SILENT;
                     System.out.println("Prop:" + properties.getProperty(RegistryManager.KEY_AUTO_UPDATE));
                     if (Boolean.parseBoolean(properties.getProperty(RegistryManager.KEY_AUTO_UPDATE))) {
                         new NonGuiUpdater();
                     }
                     break;
                 case "-afterUpdate":
-                    mode = Mode.AfterUpdate;
+                    mode = Mode.AFTER_UPDATE;
                     isAppAfterUpdate = true;
                     new File(UPDATE_PATH_FILE + "Updater_.jar").delete();
                     createUpdateDialog();
                     break;
                 default:
-                    mode = Mode.Normal;
+                    mode = Mode.ERROR;
                     System.out.println("No such argument: " + args[0]);
                     break;
             }
         } else {
-            mode = Mode.Normal;
+            mode = Mode.NORMAL;
             /*-----*/
             System.out.println("Installation folder: " + RegistryManager.getInstallLocationValue());
             /*-----*/
@@ -107,5 +107,5 @@ public class Main {
         }
     }
 
-    public static enum Mode {Normal, Silent, AfterUpdate}
+    public enum Mode {NORMAL, SILENT, AFTER_UPDATE, ERROR}
 }

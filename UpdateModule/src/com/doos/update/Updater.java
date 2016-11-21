@@ -65,7 +65,7 @@ public class Updater {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            
+
             showErrorMessage();
         }
     }
@@ -207,7 +207,7 @@ public class Updater {
             }
         });
         jEditorPane.setText(msg);
-        if (Main.mode == Main.Mode.Normal) {
+        if (Main.mode == Main.Mode.NORMAL) {
             JOptionPane.showMessageDialog(null,
                     jEditorPane,
                     "Can not Update", JOptionPane.ERROR_MESSAGE);

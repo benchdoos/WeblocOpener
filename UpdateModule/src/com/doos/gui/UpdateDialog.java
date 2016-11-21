@@ -119,7 +119,7 @@ public class UpdateDialog extends JFrame {
 
             if (!Thread.currentThread().isInterrupted()) {
                 switch (successUpdate) {
-                    case 0: //Normal state, app updated
+                    case 0: //NORMAL state, app updated
                         properties.setProperty(RegistryManager.KEY_CURRENT_VERSION, serverAppVersion.getVersion());
 
                         for (String pname : properties.stringPropertyNames()) {
