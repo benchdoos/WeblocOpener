@@ -19,8 +19,8 @@ public class FrameUtils {
      */
     public static Point getFrameOnCenterLocationPoint(Window window) {
         Dimension size = window.getSize();
-        int width = (int) ((Toolkit.getDefaultToolkit().getScreenSize().width / 2) - (size.getWidth() / 2));
-        int height = (int) ((Toolkit.getDefaultToolkit().getScreenSize().height / 2) - (size.getHeight() / 2));
+        int width = (int) ((Toolkit.getDefaultToolkit().getScreenSize().width / (double) 2) - (size.getWidth() / (double) 2));
+        int height = (int) ((Toolkit.getDefaultToolkit().getScreenSize().height / (double) 2) - (size.getHeight() / (double) 2));
         return new Point(width, height);
     }
 
@@ -50,8 +50,8 @@ public class FrameUtils {
 
         if (!timer.isRunning()) {
             timer.addActionListener(new ActionListener() {
-                final Point location = window.getLocation();
-                final int maxCounter = 6;
+                final static int maxCounter = 6;
+                Point location = window.getLocation();
                 int counter = 0;
                 int step = 14;
 
@@ -65,22 +65,29 @@ public class FrameUtils {
                         step = 3;
                     }
 
-                    if (counter <= maxCounter) {
-                        counter++;
-                        if (counter % 2 == 1) {
-                            Point newLocation = new Point(location.x + step, location.y);
-                            window.setLocation(newLocation);
-                        } else {
-                            Point newLocation = new Point(location.x - step, location.y);
-                            window.setLocation(newLocation);
-                        }
-                    } else {
-                        Point newLocation = new Point(location.x, location.y);
-                        window.setLocation(newLocation);
+                    if (counter >= 0) {
+                        if (counter <= maxCounter) {
+                            counter++;
 
-                        counter = 0;
-                        timer.removeActionListener(timer.getActionListeners()[0]);
-                        timer.stop();
+                            if (location.x < 0 || location.y < 0) {
+                                window.setLocation(getFrameOnCenterLocationPoint(window));
+                                location = window.getLocation();
+                            }
+                            if (counter % 2 != 0) {
+                                Point newLocation = new Point(location.x + step, location.y);
+                                window.setLocation(newLocation);
+                            } else {
+                                Point newLocation = new Point(location.x - step, location.y);
+                                window.setLocation(newLocation);
+                            }
+                        } else {
+                            Point newLocation = new Point(location.x, location.y);
+                            window.setLocation(newLocation);
+
+                            counter = 0;
+                            timer.removeActionListener(timer.getActionListeners()[0]);
+                            timer.stop();
+                        }
                     }
                 }
             });
