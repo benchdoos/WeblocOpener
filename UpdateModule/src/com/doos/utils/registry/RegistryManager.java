@@ -1,7 +1,8 @@
-package com.doos.utils;
+package com.doos.utils.registry;
 
 //import com.sun.deploy.util.WinRegistry;
 
+import com.doos.utils.ApplicationConstants;
 import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.jna.platform.win32.Win32Exception;
 import com.sun.jna.platform.win32.WinReg;
@@ -27,14 +28,20 @@ public class RegistryManager {
         return value;
     }
 
-    public static String getAppVersionValue() {
+    public static String getAppVersionValue() throws RegistryCanNotReadInfoException {
+        String result = null;
+        try {
+            result = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
+                    REGISTRY_APP_PATH,
+                    KEY_CURRENT_VERSION);
+        } catch (Win32Exception e) {
+            throw new RegistryCanNotReadInfoException();
+        }
 
-        return Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
-                REGISTRY_APP_PATH,
-                KEY_CURRENT_VERSION);
+        return result;
     }
 
-    public static void setAppVersionValue(String version) {
+    public static void setAppVersionValue(String version) throws RegistryCanNotWriteInfoException {
         createRegistryEntry(KEY_CURRENT_VERSION, version);
     }
 
@@ -61,8 +68,13 @@ public class RegistryManager {
                 Boolean.toString(autoUpdateActive));
     }
 
-    public static void createRegistryEntry(String valueName, String value) {
-        Advapi32Util.registrySetStringValue(APP_ROOT_HKEY, REGISTRY_APP_PATH, valueName, value);
+    public static void createRegistryEntry(String valueName, String value) throws RegistryCanNotWriteInfoException {
+        try {
+            Advapi32Util.registrySetStringValue(APP_ROOT_HKEY, REGISTRY_APP_PATH, valueName, value);
+        } catch (Win32Exception e) {
+            throw new RegistryCanNotWriteInfoException("Can not create registry entry at: "
+                    + APP_ROOT_HKEY + "\\" + REGISTRY_APP_PATH + valueName + " With value [" + value + "]", e);
+        }
     }
 }
 

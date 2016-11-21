@@ -1,5 +1,9 @@
 package com.doos.utils;
 
+import com.doos.utils.registry.RegistryCanNotReadInfoException;
+import com.doos.utils.registry.RegistryCanNotWriteInfoException;
+import com.doos.utils.registry.RegistryManager;
+
 import java.util.Properties;
 
 /**
@@ -11,7 +15,7 @@ public class SettingsManager {
         RegistryManager.setAutoUpdateActive(Boolean.parseBoolean(properties.getProperty(RegistryManager.KEY_AUTO_UPDATE)));
     }
 
-    public static Properties loadInfo() {
+    public static Properties loadInfo() throws RegistryCanNotReadInfoException, RegistryCanNotWriteInfoException {
         Properties result = new Properties();
         result.setProperty(RegistryManager.KEY_AUTO_UPDATE,
                 Boolean.toString(RegistryManager.isAutoUpdateActive()));
