@@ -6,11 +6,13 @@ import com.doos.update.AppVersion;
 import com.doos.update.Updater;
 import com.doos.utils.ApplicationConstants;
 import com.doos.utils.Internal;
+import com.doos.utils.registry.RegistryException;
+import com.doos.utils.registry.RegistryManager;
 
 import java.awt.*;
 import java.awt.event.*;
 
-import static com.doos.core.Main.*;
+import static com.doos.core.Main.properties;
 
 /**
  * Created by Eugene Zrazhevsky on 04.11.2016.
@@ -19,7 +21,7 @@ import static com.doos.core.Main.*;
 
 public class NonGuiUpdater {
     private static AppVersion serverAppVersion = null;
-    TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit()
+    private final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit()
             .getImage(getClass().getResource("/icon.png")));
 
 
@@ -31,7 +33,7 @@ public class NonGuiUpdater {
     }
 
     private void compareVersions(AppVersion appVersion) {
-        String str = properties.getProperty(CURRENT_APP_VERSION);
+        String str = properties.getProperty(RegistryManager.KEY_CURRENT_VERSION);
         if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
             //create trayicon and show pop-up
             createTrayIcon();
@@ -39,24 +41,24 @@ public class NonGuiUpdater {
                     "There is a new version of application:" + serverAppVersion.getVersion(),
                     TrayIcon.MessageType.INFO);
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
-            System.exit(0);
+            //System.exit(0);
 
         }
     }
 
     private void createTrayIcon() {
-        SystemTray tray = SystemTray.getSystemTray();
+        final SystemTray tray = SystemTray.getSystemTray();
 
         PopupMenu trayMenu = new PopupMenu();
 
-        CheckboxMenuItem autoUpdateCheckBox = new CheckboxMenuItem("Auto-update");
-        System.out.println(">>" + properties.getProperty(UPDATE_ACTIVE));
-        autoUpdateCheckBox.setState(properties.getProperty(UPDATE_ACTIVE).equals("true"));
+        final CheckboxMenuItem autoUpdateCheckBox = new CheckboxMenuItem("Auto-update");
+        System.out.println(">>" + properties.getProperty(RegistryManager.KEY_AUTO_UPDATE));
+        autoUpdateCheckBox.setState(Boolean.parseBoolean(properties.getProperty(RegistryManager.KEY_AUTO_UPDATE)));
         autoUpdateCheckBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 System.out.println(">>>" + autoUpdateCheckBox.getState());
-                properties.setProperty(UPDATE_ACTIVE, autoUpdateCheckBox.getState() + "");
+                properties.setProperty(RegistryManager.KEY_AUTO_UPDATE, autoUpdateCheckBox.getState() + "");
                 Main.updateProperties();
             }
         });
@@ -68,7 +70,7 @@ public class NonGuiUpdater {
             @Override
             public void actionPerformed(ActionEvent e) {
                 tray.remove(trayIcon);
-                System.exit(0);
+                System.exit(0); //FIXME
             }
         });
         trayMenu.add(exit);
@@ -89,8 +91,12 @@ public class NonGuiUpdater {
                     updateDialog.addWindowListener(new WindowAdapter() {
                         @Override
                         public void windowClosed(WindowEvent e) {
-                            Main.loadProperties();
-                            String str = properties.getProperty(CURRENT_APP_VERSION);
+                            try {
+                                Main.loadProperties();
+                            } catch (RegistryException e1) {
+                                e1.printStackTrace();
+                            }
+                            String str = properties.getProperty(RegistryManager.KEY_CURRENT_VERSION);
 
                             if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
                                 tray.remove(trayIcon);
@@ -107,7 +113,6 @@ public class NonGuiUpdater {
 
                 }
                 super.mouseClicked(e);
-
             }
         });
         try {
