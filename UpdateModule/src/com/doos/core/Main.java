@@ -29,6 +29,9 @@ public class Main {
     public static Mode mode = Mode.NORMAL;
 
     public static void main(String[] args) {
+        try {
+            loadProperties();
+        } catch (RegistryException e) {/*NOP*/}
         enableLookAndFeel();
         System.out.println("Updater args: " + Arrays.toString(args));
         if (args.length > 0) {
