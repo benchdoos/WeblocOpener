@@ -111,40 +111,6 @@
               <grid row="1" column="4" row-span="1" col-span="2" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
           </hspacer>
-          <component id="d2d3e" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="1" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Updated:"/>
-            </properties>
-          </component>
-          <component id="893f" class="javax.swing.JLabel" binding="newVersionReleaseDateLabel">
-            <constraints>
-              <grid row="1" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <font style="1"/>
-              <text value=""/>
-            </properties>
-          </component>
-          <component id="7d7ee" class="javax.swing.JLabel">
-            <constraints>
-              <grid row="0" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text value="Last updated"/>
-            </properties>
-          </component>
-          <component id="29dd6" class="javax.swing.JLabel" binding="lastUpdatedLabel">
-            <constraints>
-              <grid row="0" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <font style="1"/>
-              <text value=""/>
-            </properties>
-          </component>
           <component id="f770b" class="javax.swing.JLabel" binding="newVersionSizeLable">
             <constraints>
               <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
