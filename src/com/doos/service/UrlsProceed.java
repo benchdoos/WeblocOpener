@@ -33,7 +33,9 @@ public class UrlsProceed {
         Desktop desktop = Desktop.getDesktop();
 
         try {
-            desktop.browse(URI.create(url));
+            if (!url.isEmpty() || !url.equals("")) {
+                desktop.browse(URI.create(url));
+            }
         } catch (IOException e) {
             log.warn("Can not open url: " + url, e);
             JOptionPane.showMessageDialog(new Frame(), "URL is corrupt: " + url);
