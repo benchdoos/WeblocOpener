@@ -14,7 +14,12 @@ public class SettingsManager {
 
     public static void updateInfo(Properties properties) {
         try {
-            RegistryManager.setAutoUpdateActive(Boolean.parseBoolean(properties.getProperty(RegistryManager.KEY_AUTO_UPDATE)));
+            final String property = properties.getProperty(RegistryManager.KEY_AUTO_UPDATE);
+            if (property != null) {
+                RegistryManager.setAutoUpdateActive(Boolean.parseBoolean(property));
+            } else {
+                RegistryManager.setAutoUpdateActive(true);
+            }
             RegistryManager.setAppVersionValue(ApplicationConstants.APP_VERSION);
         } catch (RegistryCanNotWriteInfoException e) {
             e.printStackTrace();
