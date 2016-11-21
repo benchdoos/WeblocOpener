@@ -30,7 +30,7 @@ public class SettingsDialog extends JFrame {
         setContentPane(contentPane);
         setTitle("WeblocOpener - Settings");
         getRootPane().setDefaultButton(buttonOK);
-        setIconImage(Toolkit.getDefaultToolkit().getImage(EditDialog.class.getResource("/icon64.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(SettingsDialog.class.getResource("/icon64.png")));
 
         loadSettings();
 
