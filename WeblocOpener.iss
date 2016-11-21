@@ -49,16 +49,16 @@ Root: HKCR; Subkey: "Webloc\shell\edit\command"; ValueType: string; ValueName: "
 Root: HKCU; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "WeblocOpenerUpdater"; ValueData: """{app}\Updater.jar"" ""-s"""; Flags: uninsdeletevalue
 
 ; Add app info
-Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: ""; ValueData: ""; Flags: uninsdeletevalue
-Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "Name"; ValueData: "{#MyAppName}"
-Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "URLUpdateInfo"; ValueData: "{#MyAppURL}"
-Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "CurrentVersion"; ValueData: "{#MyAppVersion}"
-Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "InstallLocation"; ValueData: "{app}"
-;Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "ProductId"; ValueData: ""
-Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "AutoUpdateEnabled"; ValueData: "true"
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: ""; ValueData: ""; Flags: uninsdeletevalue  
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "Name"; ValueData: "{#MyAppName}"; Flags: uninsdeletevalue 
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "URLUpdateInfo"; ValueData: "{#MyAppURL}"; Flags: uninsdeletevalue 
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "CurrentVersion"; ValueData: "{#MyAppVersion}"; Flags: uninsdeletevalue 
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "InstallLocation"; ValueData: "{app}"; Flags: uninsdeletevalue 
+;Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "ProductId"; ValueData: ""; Flags: uninsdeletevalue 
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "AutoUpdateEnabled"; ValueData: "true"; Flags: uninsdeletevalue 
 
-Root: HKCU; Subkey: "SOFTWARE\WeblocOpener\Capabilities"; ValueType: string; ValueName: "ApplicationDescription"; ValueData: "Open, edit and create .webloc links on Windows"
-Root: HKCU; Subkey: "SOFTWARE\WeblocOpener\Capabilities\FileAssociations"; ValueType: string; ValueName: ".webloc"; ValueData: "Webloc link"
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener\Capabilities"; ValueType: string; ValueName: "ApplicationDescription"; ValueData: "Open, edit and create .webloc links on Windows"; Flags: uninsdeletevalue 
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener\Capabilities\FileAssociations"; ValueType: string; ValueName: ".webloc"; ValueData: "Webloc link"; Flags: uninsdeletevalue 
 
 
 
