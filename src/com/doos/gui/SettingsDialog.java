@@ -3,10 +3,12 @@ package com.doos.gui;
 import com.doos.ApplicationConstants;
 import com.doos.Main;
 import com.doos.utils.FrameUtils;
+import com.doos.utils.registry.RegistryManager;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -70,7 +72,17 @@ public class SettingsDialog extends JFrame {
     }
 
     private void onUpdateNow() {
-        //TODO add here run of com.doos.update module.
+        /*final File JAR_FILE = new File(SettingsDialog.class.getProtectionDomain()
+                .getCodeSource().getLocation().getPath());*/
+        String run = "java -jar \"" + RegistryManager.getInstallLocationValue()
+                + File.separator + "Updater.jar\"";
+        System.out.println(">>>> " + run);
+        try {
+            Runtime.getRuntime().exec(run);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        dispose();
     }
 
     private void loadSettings() {
