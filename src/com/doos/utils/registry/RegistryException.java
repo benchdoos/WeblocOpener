@@ -9,10 +9,10 @@ public class RegistryException extends Exception {
     }
 
     public RegistryException(String message) {
-        super(message);
+        super("[Registry] " + message);
     }
 
     public RegistryException(String message, Throwable cause) {
-        super(message, cause);
+        super("[Registry] " + message, cause);
     }
 }
