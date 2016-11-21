@@ -33,19 +33,33 @@ PrivilegesRequired=admin
 ; File association
 Root: HKCR; Subkey: ".webloc"; ValueType: string; ValueName: ""; ValueData: "Webloc"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc"; ValueType: string; ValueName: ""; ValueData: "Webloc link"; Flags: uninsdeletekey
-Root: HKCR; Subkey: "Webloc\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\WeblocOpener.EXE,0"
-Root: HKCR; Subkey: "Webloc\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\WeblocOpener.EXE"" ""%1"""
+Root: HKCR; Subkey: "Webloc\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppExeName},0"; Flags: uninsdeletevalue 
+Root: HKCR; Subkey: "Webloc\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
 
 ; Add new file .webloc
-Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "ItemName"; ValueData: """{app}\WeblocOpener.EXE"" ""%1"""
-Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "FileName"; ValueData: "{app}\Template.webloc"
-Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "NullFile"; ValueData: ""
+Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "ItemName"; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
+Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "FileName"; ValueData: "{app}\Template.webloc"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "NullFile"; ValueData: ""; Flags: uninsdeletevalue
 
 ; Add edit file menu
-Root: HKCR; Subkey: "Webloc\shell\edit\command"; ValueType: string; ValueName: ""; ValueData: """{app}\WeblocOpener.EXE"" ""-edit"" ""%1"""
+Root: HKCR; Subkey: "Webloc\shell\edit\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-edit"" ""%1"""; Flags: uninsdeletevalue
 
 ; Add updater autorun
 Root: HKCU; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "WeblocOpenerUpdater"; ValueData: """{app}\Updater.jar"" ""-s"""; Flags: uninsdeletevalue
+
+; Add app info
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: ""; ValueData: ""; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "Name"; ValueData: "{#MyAppName}"
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "URLUpdateInfo"; ValueData: "{#MyAppURL}"
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "CurrentVersion"; ValueData: "{#MyAppVersion}"
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "InstallLocation"; ValueData: "{app}"
+;Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "ProductId"; ValueData: ""
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "AutoUpdateEnabled"; ValueData: "true"
+
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener\Capabilities"; ValueType: string; ValueName: "ApplicationDescription"; ValueData: "Open, edit and create .webloc links on Windows"
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener\Capabilities\FileAssociations"; ValueType: string; ValueName: ".webloc"; ValueData: "Webloc link"
+
+
 
 
 
