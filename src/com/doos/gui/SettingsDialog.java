@@ -23,6 +23,7 @@ public class SettingsDialog extends JFrame {
     private JButton buttonCancel;
     private JCheckBox autoUpdateEnabledCheckBox;
     private JButton updateNowButton;
+    private JLabel versionLabel;
 
     public SettingsDialog() {
         setContentPane(contentPane);
@@ -63,6 +64,12 @@ public class SettingsDialog extends JFrame {
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        try {
+            versionLabel.setText(RegistryManager.getAppVersionValue());
+        } catch (RegistryCanNotReadInfoException e) {
+            versionLabel.setText("Unknown");
+        }
 
         pack();
         setSize(350, 200);
