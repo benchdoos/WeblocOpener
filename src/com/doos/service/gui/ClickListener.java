@@ -14,15 +14,14 @@ import java.awt.event.MouseEvent;
 public class ClickListener extends MouseAdapter implements ActionListener {
     private final static int clickInterval = (Integer) Toolkit.getDefaultToolkit().
             getDesktopProperty("awt.multiClickInterval");
-
-    MouseEvent lastEvent;
-    Timer timer;
+    private final Timer timer;
+    private MouseEvent lastEvent;
 
     public ClickListener() {
         this(clickInterval);
     }
 
-    public ClickListener(int delay) {
+    private ClickListener(int delay) {
         timer = new Timer(delay, this);
     }
 
@@ -44,7 +43,7 @@ public class ClickListener extends MouseAdapter implements ActionListener {
         singleClick(lastEvent);
     }
 
-    public void singleClick(MouseEvent e) {
+    private void singleClick(MouseEvent e) {
     }
 
     public void doubleClick(MouseEvent e) {
