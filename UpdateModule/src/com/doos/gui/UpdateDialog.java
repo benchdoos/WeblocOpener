@@ -3,32 +3,29 @@ package com.doos.gui;
 import com.doos.core.Main;
 import com.doos.update.AppVersion;
 import com.doos.update.Updater;
-import com.doos.utils.ApplicationConstants;
 import com.doos.utils.FrameUtils;
 import com.doos.utils.Internal;
+import com.doos.utils.registry.RegistryException;
+import com.doos.utils.registry.RegistryManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
-import static com.doos.core.Main.*;
+import static com.doos.core.Main.isAppAfterUpdate;
+import static com.doos.core.Main.properties;
 
 public class UpdateDialog extends JFrame {
-    AppVersion serverAppVersion;
+    private AppVersion serverAppVersion;
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JProgressBar progressBar1;
     private JLabel currentVersionLabel;
     private JLabel availableVersionLabel;
-    private JLabel newVersionReleaseDateLabel;
-    private JLabel lastUpdatedLabel;
     private JLabel newVersionSizeLable;
+
+    private Thread updateThread;
 
     public UpdateDialog() {
         serverAppVersion = new AppVersion();
@@ -40,13 +37,14 @@ public class UpdateDialog extends JFrame {
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                new Thread(new Runnable() {
+                updateThread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         onOK();
                     }
 
-                }).start();
+                });
+                updateThread.start();
             }
 
         });
@@ -85,11 +83,8 @@ public class UpdateDialog extends JFrame {
         progressBar1.setIndeterminate(false);
         availableVersionLabel.setText(serverAppVersion.getVersion());
         newVersionSizeLable.setText(serverAppVersion.getSize() / 1024 + "");
-        DateFormat dateFormatter = new SimpleDateFormat("dd.MM.yyyy");
-        newVersionReleaseDateLabel.setText(dateFormatter.format(serverAppVersion.getUpdateDate()));
 
-
-        String str = properties.getProperty(CURRENT_APP_VERSION);
+        String str = properties.getProperty(RegistryManager.KEY_CURRENT_VERSION);
         if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
             //Need to update
             buttonOK.setEnabled(true);
@@ -104,63 +99,84 @@ public class UpdateDialog extends JFrame {
     }
 
     private void loadProperties() {
+
         try {
-            properties.load(new FileInputStream(ApplicationConstants.SETTINGS_FILE_PATH));
-            lastUpdatedLabel.setText(properties.getProperty(Main.LAST_UPDATED));
-            currentVersionLabel.setText(properties.getProperty(CURRENT_APP_VERSION));
-        } catch (IOException e) {
+            Main.loadProperties();
+            currentVersionLabel.setText(properties.getProperty(RegistryManager.KEY_CURRENT_VERSION));
+        } catch (RegistryException e) {
             e.getStackTrace();
-            lastUpdatedLabel.setText("Unknown");
             currentVersionLabel.setText("Unknown");
         }
         availableVersionLabel.setText("Unknown");
-        newVersionReleaseDateLabel.setText("Unknown");
     }
 
 
     private void onOK() {
         buttonOK.setEnabled(false);
-        int successUpdate = Updater.startUpdate(serverAppVersion, progressBar1);
-        buttonOK.setEnabled(true);
+        if (!Thread.currentThread().isInterrupted()) {
+            int successUpdate = Updater.startUpdate(serverAppVersion, progressBar1);
+            buttonOK.setEnabled(true);
 
-        switch (successUpdate) {
-            case 0: //Normal state, app updated
-                properties.setProperty(CURRENT_APP_VERSION, serverAppVersion.getVersion());
-                DateFormat dateFormatter = new SimpleDateFormat("dd.MM.yyyy");
-                properties.setProperty(LAST_UPDATED, dateFormatter.format(Calendar.getInstance().getTime()));
+            if (!Thread.currentThread().isInterrupted()) {
+                switch (successUpdate) {
+                    case 0: //Normal state, app updated
+                        properties.setProperty(RegistryManager.KEY_CURRENT_VERSION, serverAppVersion.getVersion());
 
-                for (String pname : properties.stringPropertyNames()) {
-                    System.out.println("PROP:>" + pname + " " + properties.getProperty(pname));
+                        for (String pname : properties.stringPropertyNames()) {
+                            System.out.println("PROP:>" + pname + " " + properties.getProperty(pname));
+                        }
+                        Main.updateProperties();
+                        JOptionPane.showMessageDialog(this, "WeblocOpener successfully updated to version: "
+                                + serverAppVersion.getVersion(), "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                        if (!isAppAfterUpdate) {
+                            try {
+                                String value = RegistryManager.getInstallLocationValue();
+                                Runtime.getRuntime().exec("java -jar \"" + value + "Updater.jar\" -afterUpdate");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        dispose();
+                        break;
+                    case 1: //Installation was cancelled or Incorrect function or corrupt file
+                        JOptionPane.showMessageDialog(this,
+                                "Installation cancelled by User during installation",
+                                "Installation cancelled", JOptionPane.WARNING_MESSAGE);
+                        Updater.installerFile.delete();
+                        break;
+                    case 2: //The system cannot find the file specified. OR! User gave no permissions.
+                        JOptionPane.showMessageDialog(this,
+                                "Installation can not be run, because it has no permissions.",
+                                "Installation cancelled", JOptionPane.WARNING_MESSAGE);
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(this,
+                                "Installation cancelled by Error (unhandled error),"
+                                        + "\ncode: " + successUpdate
+                                        + "\nvisit https://github.com/benchdoos/WeblocOpener for more info.",
+                                "Installation cancelled", JOptionPane.ERROR_MESSAGE);
+                        break;
                 }
-                Main.updateProperties();
-                JOptionPane.showMessageDialog(this, "WeblocOpener successfully updated to version: "
-                        + serverAppVersion.getVersion(), "Success", JOptionPane.INFORMATION_MESSAGE);
-                dispose();
-                break;
-            case 1: //Installation was cancelled or Incorrect function.
-                JOptionPane.showMessageDialog(this,
-                        "Installation cancelled by User during installation",
-                        "Installation cancelled", JOptionPane.WARNING_MESSAGE);
-                break;
-            case 2: //The system cannot find the file specified. OR! User gave no permissions.
-                JOptionPane.showMessageDialog(this,
-                        "Installation can not be run, because it has no permissions.",
-                        "Installation cancelled", JOptionPane.WARNING_MESSAGE);
-                break;
-            default:
-                JOptionPane.showMessageDialog(this,
-                        "Installation cancelled by Error (unhandled error),"
-                                + "\ncode: " + successUpdate
-                                + "\nvisit https://github.com/benchdoos/WeblocOpener for more info.",
-                        "Installation cancelled", JOptionPane.ERROR_MESSAGE);
-                break;
+            }
+        } else {
+            buttonOK.setEnabled(false);
         }
 
         //dispose();
     }
 
+
     private void onCancel() {
         // add your code here if necessary
+        if (updateThread != null) {
+            if (!updateThread.isInterrupted()) {
+                updateThread.interrupt();
+                System.out.println(updateThread.isInterrupted());
+            }
+        }
         dispose();
+        // System.exit(0);
     }
 }
