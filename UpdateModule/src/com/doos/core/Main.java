@@ -2,15 +2,13 @@ package com.doos.core;
 
 import com.doos.gui.UpdateDialog;
 import com.doos.nongui.NonGuiUpdater;
-import com.doos.utils.ApplicationConstants;
+import com.doos.utils.SettingsManager;
+import com.doos.utils.registry.RegistryException;
+import com.doos.utils.registry.RegistryManager;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Properties;
@@ -21,30 +19,59 @@ import static com.doos.utils.ApplicationConstants.UPDATE_PATH_FILE;
  * Created by Eugene Zrazhevsky on 02.11.2016.
  */
 public class Main {
-    final public static String UPDATE_ACTIVE = "UPDATE_ACTIVE";
-    final public static String LAST_UPDATED = "LAST_UPDATED";
-    final public static String CURRENT_APP_VERSION = "CURRENT_APP_VERSION";
     public static Properties properties = new Properties();
+    public static boolean isAppAfterUpdate = false;
+    public static Mode mode = Mode.Normal;
 
     public static void main(String[] args) {
-        loadProperties();
+        try {
+            loadProperties();
+        } catch (RegistryException e) {
+            String message = "Can not read data from registry.";
+            System.out.println(message);
+            JOptionPane.showMessageDialog(null, message, message, JOptionPane.ERROR_MESSAGE);
+        }
         enableLookAndFeel();
         System.out.println("Updater args: " + Arrays.toString(args));
         if (args.length > 0) {
-            if (args[0].equals("-s")) {
-                System.out.println("Prop:" + properties.getProperty(UPDATE_ACTIVE));
-                if (properties.getProperty(UPDATE_ACTIVE).equals("true")) {
-                    new NonGuiUpdater();
-                }
-            } else {
-                System.out.println("No such argument: " + args[0]);
+
+            switch (args[0]) {
+                case "-s":
+                    mode = Mode.Silent;
+                    System.out.println("Prop:" + properties.getProperty(RegistryManager.KEY_AUTO_UPDATE));
+                    if (Boolean.parseBoolean(properties.getProperty(RegistryManager.KEY_AUTO_UPDATE))) {
+                        new NonGuiUpdater();
+                    }
+                    break;
+                case "-afterUpdate":
+                    mode = Mode.AfterUpdate;
+                    isAppAfterUpdate = true;
+                    new File(UPDATE_PATH_FILE + "Updater_.jar").delete();
+                    createUpdateDialog();
+                    break;
+                default:
+                    mode = Mode.Normal;
+                    System.out.println("No such argument: " + args[0]);
+                    break;
             }
         } else {
+            mode = Mode.Normal;
+            /*-----*/
+            System.out.println("Installation folder: " + RegistryManager.getInstallLocationValue());
+            /*-----*/
+
+
             final File JAR_FILE = new File(UpdateDialog.class.getProtectionDomain()
                     .getCodeSource().getLocation().getPath());
-            if (JAR_FILE.getName().equals("Updater.jar")) {
-                System.out.println("Creating itself");
+            final File JAR_FILE_DEFAULT_LOCATION = new File(properties.getProperty(RegistryManager.KEY_INSTALL_LOCATION)
+                    + File.separator + "Updater.jar");
+
+            System.out.println("Jar: " + JAR_FILE.getAbsolutePath() + " def: " + JAR_FILE_DEFAULT_LOCATION.getAbsolutePath());
+
+            if (JAR_FILE.getAbsolutePath().replace("%20", " ").equals(
+                    JAR_FILE_DEFAULT_LOCATION.getAbsolutePath().replace("%20", " "))) {
                 try {
+                    System.out.println("Creating itself at: " + new File(UPDATE_PATH_FILE + "Updater_.jar").getAbsolutePath());
                     FileUtils.copyFile(new File(JAR_FILE.getAbsolutePath().replace("%20", " ")),
                             new File(UPDATE_PATH_FILE + "Updater_.jar"));
                     Runtime.getRuntime().exec("java -jar " + UPDATE_PATH_FILE + "Updater_.jar");
@@ -53,45 +80,32 @@ public class Main {
                     e.printStackTrace();
                 }
             } else {
-                UpdateDialog updateDialog = new UpdateDialog();
-
-                updateDialog.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosed(WindowEvent e) {
-                        System.out.println("deleteOnExit:" + JAR_FILE.getAbsolutePath());
-                        JAR_FILE.deleteOnExit();
-                        System.exit(0);
-                    }
-                });
-                updateDialog.setVisible(true);
-                updateDialog.checkForUpdates();
-                System.out.println("current jar: " + JAR_FILE.getAbsolutePath());
+                createUpdateDialog();
             }
         }
     }
 
+    private static void createUpdateDialog() {
+        UpdateDialog updateDialog = new UpdateDialog();
+        updateDialog.setVisible(true);
+        updateDialog.checkForUpdates();
+    }
 
     public static void updateProperties() {
-        try {
-            properties.store(new FileOutputStream(ApplicationConstants.SETTINGS_FILE_PATH), "");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        SettingsManager.updateInfo(properties);
     }
 
-    public static void loadProperties() {
-        try {
-            properties.load(new FileInputStream(ApplicationConstants.SETTINGS_FILE_PATH));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public static void loadProperties() throws RegistryException {
+        properties = SettingsManager.loadInfo();
     }
 
-    public static void enableLookAndFeel() {
+    private static void enableLookAndFeel() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    public static enum Mode {Normal, Silent, AfterUpdate}
 }
