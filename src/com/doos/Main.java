@@ -5,20 +5,17 @@ import com.doos.gui.SettingsDialog;
 import com.doos.service.Analyzer;
 import com.doos.service.Logging;
 import com.doos.service.UrlsProceed;
+import com.doos.utils.SettingsManager;
+import com.doos.utils.registry.RegistryException;
+import com.doos.utils.registry.RegistryManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Properties;
 
 import static java.awt.Frame.MAXIMIZED_HORIZ;
 
 public class Main {
-    public static final String UPDATE_ACTIVE = "UPDATE_ACTIVE";
-    public static final String LAST_UPDATED = "LAST_UPDATED";
-    public static final String CURRENT_APP_VERSION = "CURRENT_APP_VERSION";
     public static String[] args;
     public static Properties properties = new Properties();
 
@@ -27,11 +24,11 @@ public class Main {
         new Logging();
         try {
             loadProperties();
-            if (!properties.getProperty(CURRENT_APP_VERSION).equals(ApplicationConstants.APP_VERSION)) {
-                properties.setProperty(CURRENT_APP_VERSION, ApplicationConstants.APP_VERSION);
+            if (!properties.getProperty(RegistryManager.KEY_CURRENT_VERSION).equals(ApplicationConstants.APP_VERSION)) {
+                properties.setProperty(RegistryManager.KEY_CURRENT_VERSION, ApplicationConstants.APP_VERSION);
                 saveProperties();
             }
-        } catch (IOException e) {
+        } catch (RegistryException e) {
             e.printStackTrace();
         }
 
@@ -88,24 +85,22 @@ public class Main {
         }
     }
 
-    public static void loadProperties() throws IOException {
-        properties.load(new FileInputStream(ApplicationConstants.SETTINGS_FILE_PATH));
+    public static void loadProperties() throws RegistryException {
+        properties = SettingsManager.loadInfo();
     }
 
-    public static void saveProperties() throws IOException {
-        properties.store(new FileOutputStream(ApplicationConstants.SETTINGS_FILE_PATH), "WeblocOpener Settings");
-
+    public static void saveProperties() throws RegistryException {
+        SettingsManager.updateInfo(properties);
     }
 
 
-    public static void createNewFileProperties() {
-        properties.setProperty(UPDATE_ACTIVE, "true");
-        properties.setProperty(LAST_UPDATED, "none");
-        properties.setProperty(CURRENT_APP_VERSION, ApplicationConstants.APP_VERSION);
+    public static void useDefaultAppProperties() {
+        properties.setProperty(RegistryManager.KEY_AUTO_UPDATE, Boolean.toString(true));
+        properties.setProperty(RegistryManager.KEY_CURRENT_VERSION, ApplicationConstants.APP_VERSION);
         try {
             saveProperties();
-        } catch (IOException e1) {
-            e1.getStackTrace();
+        } catch (RegistryException e) {
+            e.getStackTrace();
         }
     }
 
