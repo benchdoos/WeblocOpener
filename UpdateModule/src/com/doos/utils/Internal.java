@@ -18,6 +18,12 @@ public class Internal {
      * @note It does not work if "1.10" is supposed to be equal to "1.10.0".
      */
     public static int versionCompare(String str1, String str2) {
+        if (str1 == null) {
+            str1 = "0.0";
+        }
+        if (str2 == null) {
+            str2 = "0.0";
+        }
         String[] vals1 = str1.split("\\.");
         String[] vals2 = str2.split("\\.");
         int i = 0;
