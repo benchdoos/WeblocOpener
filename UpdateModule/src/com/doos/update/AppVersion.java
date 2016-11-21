@@ -1,7 +1,5 @@
 package com.doos.update;
 
-import java.util.Date;
-
 /**
  * Created by Eugene Zrazhevsky on 03.11.2016.
  */
@@ -9,7 +7,6 @@ public class AppVersion {
     private String version;
     private String downloadUrl;
     private int size;
-    private Date updateDate;
 
     public String getDownloadUrl() {
         return downloadUrl;
@@ -38,14 +35,7 @@ public class AppVersion {
 
     @Override
     public String toString() {
-        return "AppVersion: {" + version + " " + updateDate.toString() + "\ndownload:[" + downloadUrl + "], size: " + size / 1024 + "kb}";
+        return "AppVersion: {" + version + "\ndownload:[" + downloadUrl + "], size: " + size / 1024 + "kb}";
     }
 
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
 }
