@@ -17,7 +17,7 @@ import static com.doos.service.Logging.getCurrentClassName;
 public class Analyzer {
     private static final Logger log = Logger.getLogger(getCurrentClassName());
 
-    String url = "";
+    private String url = "";
 
     public Analyzer(String arg) {
         log.debug("Starting analyze");
