@@ -64,31 +64,35 @@ public class Main {
             /*-----*/
 
 
-            final File JAR_FILE = new File(UpdateDialog.class.getProtectionDomain()
-                    .getCodeSource().getLocation().getPath());
-            final File JAR_FILE_DEFAULT_LOCATION = new File(properties.getProperty(RegistryManager.KEY_INSTALL_LOCATION)
-                    + File.separator + "Updater.jar");
-
-            System.out.println("Jar: " + JAR_FILE.getAbsolutePath() + " def: " + JAR_FILE_DEFAULT_LOCATION.getAbsolutePath());
-
-            if (JAR_FILE.getAbsolutePath().replace("%20", " ").equals(
-                    JAR_FILE_DEFAULT_LOCATION.getAbsolutePath().replace("%20", " "))) {
-                try {
-                    System.out.println("Creating itself at: " + new File(UPDATE_PATH_FILE + "Updater_.jar").getAbsolutePath());
-                    FileUtils.copyFile(new File(JAR_FILE.getAbsolutePath().replace("%20", " ")),
-                            new File(UPDATE_PATH_FILE + "Updater_.jar"));
-                    Runtime.getRuntime().exec("java -jar " + UPDATE_PATH_FILE + "Updater_.jar");
-                    System.exit(0);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                createUpdateDialog();
-            }
+            initUpdateJar();
         }
     }
 
-    private static void createUpdateDialog() {
+    public static void initUpdateJar() {
+        final File JAR_FILE = new File(UpdateDialog.class.getProtectionDomain()
+                .getCodeSource().getLocation().getPath());
+        final File JAR_FILE_DEFAULT_LOCATION = new File(properties.getProperty(RegistryManager.KEY_INSTALL_LOCATION)
+                + File.separator + "Updater.jar");
+
+        System.out.println("Jar: " + JAR_FILE.getAbsolutePath() + " def: " + JAR_FILE_DEFAULT_LOCATION.getAbsolutePath());
+
+        if (JAR_FILE.getAbsolutePath().replace("%20", " ").equals(
+                JAR_FILE_DEFAULT_LOCATION.getAbsolutePath().replace("%20", " "))) {
+            try {
+                System.out.println("Creating itself at: " + new File(UPDATE_PATH_FILE + "Updater_.jar").getAbsolutePath());
+                FileUtils.copyFile(new File(JAR_FILE.getAbsolutePath().replace("%20", " ")),
+                        new File(UPDATE_PATH_FILE + "Updater_.jar"));
+                Runtime.getRuntime().exec("java -jar " + UPDATE_PATH_FILE + "Updater_.jar");
+                System.exit(0);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Main.createUpdateDialog();
+        }
+    }
+
+    public static void createUpdateDialog() {
         UpdateDialog updateDialog = new UpdateDialog();
         updateDialog.setVisible(true);
         updateDialog.checkForUpdates();

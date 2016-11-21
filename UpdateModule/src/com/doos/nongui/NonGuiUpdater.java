@@ -6,7 +6,6 @@ import com.doos.update.AppVersion;
 import com.doos.update.Updater;
 import com.doos.utils.ApplicationConstants;
 import com.doos.utils.Internal;
-import com.doos.utils.registry.RegistryException;
 import com.doos.utils.registry.RegistryManager;
 
 import java.awt.*;
@@ -84,8 +83,11 @@ public class NonGuiUpdater {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == 1) {
-                    //trayIcon.removeMouseListener(this);
-                    if (updateDialog == null) {
+
+
+                    trayIcon.removeMouseListener(this);
+                    Main.initUpdateJar();
+                    /*if (updateDialog == null) {
                         updateDialog = new UpdateDialog();
                     }
                     updateDialog.addWindowListener(new WindowAdapter() {
@@ -105,10 +107,10 @@ public class NonGuiUpdater {
                             super.windowClosing(e);
 
                         }
-                    });
+                    });*/
 
-                    updateDialog.setVisible(true);
-                    updateDialog.checkForUpdates();
+                    /*updateDialog.setVisible(true);
+                    updateDialog.checkForUpdates();*/
 
 
                 }
