@@ -25,7 +25,6 @@ import static com.doos.utils.ApplicationConstants.UPDATE_PATH_FILE;
  */
 public class Main {
     public static Properties properties = new Properties();
-    public static boolean isAppAfterUpdate = false;
     public static Mode mode = Mode.NORMAL;
 
     public static void main(String[] args) {
@@ -52,9 +51,8 @@ public class Main {
                     break;
                 case "-afterUpdate":
                     mode = Mode.AFTER_UPDATE;
-                    isAppAfterUpdate = true;
                     new File(UPDATE_PATH_FILE + "Updater_.jar").delete();
-                    createUpdateDialog();
+                    //createUpdateDialog();
                     break;
                 default:
                     mode = Mode.ERROR;
@@ -126,6 +124,9 @@ public class Main {
                 }
                 String str = properties.getProperty(RegistryManager.KEY_CURRENT_VERSION);
 
+                if (str == null) {
+                    str = "0.0";
+                }
                 if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
                     tray.remove(trayIcon);
                     System.exit(0);

@@ -12,7 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-import static com.doos.core.Main.isAppAfterUpdate;
+import static com.doos.core.Main.mode;
 import static com.doos.core.Main.properties;
 
 public class UpdateDialog extends JFrame {
@@ -131,7 +131,7 @@ public class UpdateDialog extends JFrame {
                         JOptionPane.showMessageDialog(this, "WeblocOpener successfully updated to version: "
                                 + serverAppVersion.getVersion(), "Success", JOptionPane.INFORMATION_MESSAGE);
 
-                        if (!isAppAfterUpdate) {
+                        if (mode != Main.Mode.AFTER_UPDATE) {
                             try {
                                 String value = RegistryManager.getInstallLocationValue();
                                 Runtime.getRuntime().exec("java -jar \"" + value + "Updater.jar\" -afterUpdate");
