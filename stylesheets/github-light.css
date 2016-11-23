@@ -43,7 +43,7 @@ SOFTWARE.
 }
 
 .pl-ent /* entity.name.tag */ {
-  color: #63a35c;
+  color: #c1d8f7;
 }
 
 .pl-k /* keyword, storage, storage.type */ {
@@ -75,7 +75,7 @@ SOFTWARE.
 
 .pl-sr .pl-cce /* string.regexp constant.character.escape */ {
   font-weight: bold;
-  color: #63a35c;
+  color: #c1d8f7;
 }
 
 .pl-ml /* markup.list */ {
