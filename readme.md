@@ -25,6 +25,29 @@ So that's why this application was created - for these users.
 ## Have questions? 
 Watch [Youtube](https://youtu.be/Z-bT-VWMDsQ) video
 
+
+## System Requirements
+
+<style>
+.SystemRequirements li {
+list-style-type: none;
+}
+</style>
+<ul class="SystemRequirements">
+    <li><b>Operating system:</b></li>
+    <li>Windows 7 (SP1), 8, 10</li>
+    <li><b>CPU:</b></li>
+    <li>Pentium 2 266MHz or better</li>
+    <li><b>Memory:</b></li>
+    <li>128 MB RAM</li>
+    <li><b>Hard drive:</b></li>
+    <li>25 MB free hard disk space</li>
+    <br>
+    <li><b>Additional software:</b></li>
+<li>Java 8 required - <a href="https://java.com/download/">Download</a></li>
+</ul>
+
+
 ## Download:
 Windows:
 
