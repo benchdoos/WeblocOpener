@@ -1,7 +1,6 @@
 package com.doos.webloc_opener.gui;
 
 import com.doos.settings_manager.ApplicationConstants;
-import com.doos.webloc_opener.core.Main;
 import com.doos.webloc_opener.service.Analyzer;
 import com.doos.webloc_opener.service.UrlsProceed;
 import com.doos.webloc_opener.service.gui.ClickListener;
@@ -19,7 +18,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Map;
 
 import static com.doos.webloc_opener.service.Logging.getCurrentClassName;
@@ -39,8 +37,6 @@ public class EditDialog extends JFrame {
 
     @SuppressWarnings("unchecked")
     public EditDialog(String pathToEditingFile) {
-
-        log.debug("Got arguments: " + Arrays.toString(Main.args));
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(EditDialog.class.getResource("/icon64.png")));
 

@@ -20,21 +20,11 @@ import static com.doos.settings_manager.core.SettingsManager.showErrorMessage;
 import static java.awt.Frame.MAXIMIZED_HORIZ;
 
 public class Main {
-    public static String[] args;
     public static Properties properties = new Properties();
 
     public static void main(String[] args) {
-        Main.args = args;
         new Logging();
-        /*try {
-            loadProperties();
-            if (!properties.getProperty(RegistryManager.KEY_CURRENT_VERSION).equals(com.doos.settings_manager.ApplicationConstants.APP_VERSION)) {
-                properties.setProperty(RegistryManager.KEY_CURRENT_VERSION, com.doos.settings_manager.ApplicationConstants.APP_VERSION);
-                saveProperties();
-            }
-        } catch (RegistryException e) {
-            e.printStackTrace();
-        }*/
+
         tryLoadProperties();
 
         enableLookAndFeel();
