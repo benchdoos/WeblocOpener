@@ -21,6 +21,7 @@ public class UpdateDialog extends JFrame {
     private JLabel currentVersionLabel;
     private JLabel availableVersionLabel;
     private JLabel newVersionSizeLable;
+    private JLabel unitLabel;
 
     private Thread updateThread;
 
@@ -81,7 +82,18 @@ public class UpdateDialog extends JFrame {
         serverAppVersion = updater.getAppVersion();
         progressBar1.setIndeterminate(false);
         availableVersionLabel.setText(serverAppVersion.getVersion());
-        newVersionSizeLable.setText(serverAppVersion.getSize() / 1024 + "");
+
+        if (serverAppVersion.getSize() > 1024 * 1024) {
+            double size = serverAppVersion.getSize() / 1024 / (double) 1024;
+            size = size * 100;
+            int i = (int) Math.round(size);
+            size = (double) i / 100;
+            newVersionSizeLable.setText(Double.toString(size));
+            unitLabel.setText("MB");
+        } else {
+            newVersionSizeLable.setText(serverAppVersion.getSize() / 1024 + "");
+            unitLabel.setText("KB");
+        }
 
         String str = Main.properties.getProperty(RegistryManager.KEY_CURRENT_VERSION);
         if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
@@ -141,21 +153,21 @@ public class UpdateDialog extends JFrame {
                         break;
                     case 1: //Installation was cancelled or Incorrect function or corrupt file
                         JOptionPane.showMessageDialog(this,
-                                "Installation cancelled by User during installation",
-                                "Installation cancelled", JOptionPane.WARNING_MESSAGE);
+                                                      "Installation cancelled by User during installation",
+                                                      "Installation cancelled", JOptionPane.WARNING_MESSAGE);
                         Updater.installerFile.delete();
                         break;
                     case 2: //The system cannot find the file specified. OR! User gave no permissions.
                         JOptionPane.showMessageDialog(this,
-                                "Installation can not be run, because it has no permissions.",
-                                "Installation cancelled", JOptionPane.WARNING_MESSAGE);
+                                                      "Installation can not be run, because it has no permissions.",
+                                                      "Installation cancelled", JOptionPane.WARNING_MESSAGE);
                         break;
                     default:
                         JOptionPane.showMessageDialog(this,
-                                "Installation cancelled by Error (unhandled error),"
-                                        + "\ncode: " + successUpdate
-                                        + "\nvisit https://github.com/benchdoos/WeblocOpener for more info.",
-                                "Installation cancelled", JOptionPane.ERROR_MESSAGE);
+                                                      "Installation cancelled by Error (unhandled error),"
+                                                              + "\ncode: " + successUpdate
+                                                              + "\nvisit https://github.com/benchdoos/WeblocOpener for more info.",
+                                                      "Installation cancelled", JOptionPane.ERROR_MESSAGE);
                         break;
                 }
             }
