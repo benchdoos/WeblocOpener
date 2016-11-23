@@ -10,8 +10,6 @@ import com.google.gson.JsonParser;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 import java.awt.*;
 import java.io.*;
 import java.net.MalformedURLException;
@@ -43,7 +41,8 @@ public class Updater {
 
         try {
             String input = null;
-            try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            try (BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()))) {
                 input = bufferedReader.readLine();
 
                 JsonParser parser = new JsonParser();
@@ -66,13 +65,13 @@ public class Updater {
         } catch (IOException e) {
             e.printStackTrace();
 
-            showErrorMessage();
+            Main.showErrorMessage("Can not Update", "Can not connect to api.github.com");
         }
     }
 
     public static int startUpdate(AppVersion appVersion, JProgressBar progressBar) {
         installerFile = new File(ApplicationConstants.UPDATE_PATH_FILE
-                + "WeblocOpenerSetupV" + appVersion.getVersion() + ".exe");
+                                         + "WeblocOpenerSetupV" + appVersion.getVersion() + ".exe");
         if (!Thread.currentThread().isInterrupted()) {
             if (!installerFile.exists()) {
                 installerFile = downloadNewVersionInstaller(appVersion, progressBar);
@@ -174,7 +173,7 @@ public class Updater {
         return installerFile;
     }
 
-    private static void openUrl(String url) {
+    public static void openUrl(String url) {
         if (!Desktop.isDesktopSupported()) {
             return;
         }
@@ -186,32 +185,6 @@ public class Updater {
             JOptionPane.showMessageDialog(new Frame(), "URL is corrupt: " + url);
         }
 
-    }
-
-    private void showErrorMessage() {
-        String msg = "<HTML><BODY><P>Can not connect to api.github.com <br>Please visit <a href=\"https://github.com/benchdoos/WeblocOpener\">https://github.com/benchdoos/WeblocOpener</P></BODY></HTML>";
-        JEditorPane jEditorPane = new JEditorPane();
-        jEditorPane.setContentType("text/html");
-        jEditorPane.setEditable(false);
-        jEditorPane.setHighlighter(null);
-        jEditorPane.setEditable(false);
-        jEditorPane.getCaret().deinstall(jEditorPane);
-        jEditorPane.setBackground(Color.getColor("#EEEEEE"));
-        jEditorPane.addHyperlinkListener(new HyperlinkListener() {
-            @Override
-            public void hyperlinkUpdate(HyperlinkEvent e) {
-                if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
-                    openUrl("https://github.com/benchdoos/WeblocOpener");
-                }
-
-            }
-        });
-        jEditorPane.setText(msg);
-        if (Main.mode == Main.Mode.NORMAL) {
-            JOptionPane.showMessageDialog(null,
-                    jEditorPane,
-                    "Can not Update", JOptionPane.ERROR_MESSAGE);
-        }
     }
 
     private HttpsURLConnection getConnection() throws IOException {

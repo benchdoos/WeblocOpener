@@ -5,7 +5,7 @@ package com.doos.utils.registry;
  */
 public class RegistryException extends Exception {
     public RegistryException() {
-        super();
+        super("[Registry] ");
     }
 
     public RegistryException(String message) {

@@ -32,6 +32,10 @@ public class RegistryManager {
         return value;
     }
 
+    public static void setInstallLocationValue(String location) throws RegistryCanNotWriteInfoException {
+        RegistryManager.createRegistryEntry(KEY_INSTALL_LOCATION, location);
+    }
+
     public static String getAppVersionValue() throws RegistryCanNotReadInfoException {
         String result = null;
         try {
@@ -49,7 +53,7 @@ public class RegistryManager {
         createRegistryEntry(KEY_CURRENT_VERSION, version);
     }
 
-    public static boolean isAutoUpdateActive() {
+    public static boolean isAutoUpdateActive() throws RegistryCanNotReadInfoException {
         boolean result = true;
         String value = null;
 
@@ -58,10 +62,7 @@ public class RegistryManager {
             result = Boolean.parseBoolean(value);
 
         } catch (Win32Exception e) {
-            //fixes
-            try {
-                setAutoUpdateActive(true);
-            } catch (RegistryCanNotWriteInfoException ignore) {/*NOP*/}
+            throw new RegistryCanNotReadInfoException("Can not read " + RegistryManager.KEY_AUTO_UPDATE + " value", e);
         }
 
 
@@ -74,7 +75,7 @@ public class RegistryManager {
             Advapi32Util.registrySetStringValue(APP_ROOT_HKEY, REGISTRY_APP_PATH, KEY_AUTO_UPDATE,
                     Boolean.toString(autoUpdateActive));
         } catch (Win32Exception e) {
-            throw new RegistryCanNotWriteInfoException("Can not set autoUpdateActive value", e);
+            throw new RegistryCanNotWriteInfoException("Can not set " + RegistryManager.KEY_AUTO_UPDATE + " value", e);
         }
     }
 
