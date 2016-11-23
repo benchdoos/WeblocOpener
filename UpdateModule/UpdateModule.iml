@@ -40,7 +40,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="deploy" level="project" />
     <orderEntry type="library" name="jna-4.2.2" level="project" />
     <orderEntry type="library" name="commons-io-2.5" level="project" />
   </component>

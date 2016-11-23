@@ -29,7 +29,6 @@ public class NonGuiUpdater {
         Updater updater = new Updater();
         serverAppVersion = updater.getAppVersion();
         compareVersions(serverAppVersion);
-        System.out.println("hello");
     }
 
     private void compareVersions(AppVersion appVersion) {
@@ -51,12 +50,12 @@ public class NonGuiUpdater {
         PopupMenu trayMenu = new PopupMenu();
 
         final CheckboxMenuItem autoUpdateCheckBox = new CheckboxMenuItem("Auto-update");
-        System.out.println(">>" + properties.getProperty(RegistryManager.KEY_AUTO_UPDATE));
+        System.out.println(RegistryManager.KEY_AUTO_UPDATE + ": " + properties.getProperty(RegistryManager.KEY_AUTO_UPDATE));
         autoUpdateCheckBox.setState(Boolean.parseBoolean(properties.getProperty(RegistryManager.KEY_AUTO_UPDATE)));
         autoUpdateCheckBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
-                System.out.println(">>>" + autoUpdateCheckBox.getState());
+                System.out.println(RegistryManager.KEY_AUTO_UPDATE + ": " + autoUpdateCheckBox.getState());
                 properties.setProperty(RegistryManager.KEY_AUTO_UPDATE, autoUpdateCheckBox.getState() + "");
                 Main.updateProperties();
             }

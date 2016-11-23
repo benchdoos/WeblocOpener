@@ -2,6 +2,7 @@ package com.doos.core;
 
 import com.doos.gui.UpdateDialog;
 import com.doos.nongui.NonGuiUpdater;
+import com.doos.utils.ApplicationConstants;
 import com.doos.utils.Internal;
 import com.doos.utils.SettingsManager;
 import com.doos.utils.registry.RegistryCanNotReadInfoException;
@@ -17,7 +18,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Properties;
 
-import static com.doos.nongui.NonGuiUpdater.*;
+import static com.doos.nongui.NonGuiUpdater.tray;
+import static com.doos.nongui.NonGuiUpdater.trayIcon;
 import static com.doos.utils.ApplicationConstants.UPDATE_PATH_FILE;
 
 /**
@@ -39,7 +41,7 @@ public class Main {
                 case "-s":
                     mode = Mode.SILENT;
                     final String autoUpdateString = properties.getProperty(RegistryManager.KEY_AUTO_UPDATE);
-                    System.out.println("Prop:" + autoUpdateString);
+                    System.out.println(RegistryManager.KEY_AUTO_UPDATE + ": " + autoUpdateString);
                     if (autoUpdateString != null) {
                         if (Boolean.parseBoolean(autoUpdateString)) {
                             new NonGuiUpdater();
@@ -81,7 +83,14 @@ public class Main {
             JAR_FILE_DEFAULT_LOCATION = new File(property
                     + File.separator + "Updater.jar");
         } else {
-            JAR_FILE_DEFAULT_LOCATION = new File("C:\\Program Files (x86)\\WeblocOpener\\Updater.jar");
+            File file = JAR_FILE.getParentFile();
+            System.out.println("Parent file is: " + file.getAbsolutePath());
+            if (file.getName().equals(ApplicationConstants.APP_NAME)) {
+                JAR_FILE_DEFAULT_LOCATION = new File(file.getAbsolutePath() + File.separator + "Updater.jar");
+            } else {
+                JAR_FILE_DEFAULT_LOCATION = new File("C:\\Program Files (x86)\\WeblocOpener\\Updater.jar"); //TODO find better solution
+            }
+            ;
         }
 
 
@@ -112,7 +121,7 @@ public class Main {
     }
 
     public static void createUpdateDialog() {
-        UpdateDialog updateDialog = new UpdateDialog();
+        final UpdateDialog updateDialog = new UpdateDialog();
 
         updateDialog.addWindowListener(new WindowAdapter() {
             @Override
@@ -123,15 +132,17 @@ public class Main {
                     e1.printStackTrace();
                 }
                 String str = properties.getProperty(RegistryManager.KEY_CURRENT_VERSION);
-
                 if (str == null) {
-                    str = "0.0";
+                    //str = serverAppVersion.getVersion(); //why????
+                    str = ApplicationConstants.APP_VERSION;
+                } else if (str.isEmpty()) {
+                    str = ApplicationConstants.APP_VERSION;
                 }
-                if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
+                if (Internal.versionCompare(str, updateDialog.getAppVersion().getVersion()) == 0) {
                     tray.remove(trayIcon);
                     System.exit(0);
                 }
-                super.windowClosing(e);
+                super.windowClosed(e);
 
             }
 
@@ -151,9 +162,7 @@ public class Main {
     private static void enableLookAndFeel() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception ignore) {/*NOP*/}
     }
 
     public enum Mode {NORMAL, SILENT, AFTER_UPDATE, ERROR}

@@ -58,7 +58,7 @@ public class UpdateDialog extends JFrame {
         });
 
         // call onCancel() when cross is clicked
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 onCancel();
@@ -179,6 +179,9 @@ public class UpdateDialog extends JFrame {
             }
         }
         dispose();
-        // System.exit(0);
+    }
+
+    public AppVersion getAppVersion() {
+        return serverAppVersion;
     }
 }
