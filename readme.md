@@ -9,7 +9,7 @@ WeblocOpener is a simple way to open, edit, create MacOS Safari `.webloc` files 
 
 - Get full access to `.webloc` files on Windows: open, edit and create.
 - Created files does not differ from MacOS original files.
-- Easy to install and easy to work.
+- Easy to install and easy to use.
 - Easy to update with auto-update app. 
 Updater will help you to find out when new version is available, download and install the update.
 
