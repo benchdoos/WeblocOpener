@@ -1,12 +1,12 @@
 package com.doos.gui;
 
+import com.doos.SettingsManager.registry.RegistryException;
+import com.doos.SettingsManager.registry.RegistryManager;
 import com.doos.core.Main;
 import com.doos.update.AppVersion;
 import com.doos.update.Updater;
 import com.doos.utils.FrameUtils;
 import com.doos.utils.Internal;
-import com.doos.utils.registry.RegistryException;
-import com.doos.utils.registry.RegistryManager;
 
 import javax.swing.*;
 import java.awt.*;

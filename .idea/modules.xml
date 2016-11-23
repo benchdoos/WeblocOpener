@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/SettingsManager/SettingsManager.iml" filepath="$PROJECT_DIR$/SettingsManager/SettingsManager.iml" />
       <module fileurl="file://$PROJECT_DIR$/UpdateModule/UpdateModule.iml" filepath="$PROJECT_DIR$/UpdateModule/UpdateModule.iml" />
       <module fileurl="file://$PROJECT_DIR$/WeblocOpener.iml" filepath="$PROJECT_DIR$/WeblocOpener.iml" />
     </modules>

@@ -1,7 +1,7 @@
 package com.doos.gui;
 
-import com.doos.ApplicationConstants;
 import com.doos.Main;
+import com.doos.SettingsManager.ApplicationConstants;
 import com.doos.service.Analyzer;
 import com.doos.service.UrlsProceed;
 import com.doos.service.gui.ClickListener;

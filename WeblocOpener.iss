@@ -53,7 +53,7 @@ Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: ""; V
 Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "Name"; ValueData: "{#MyAppName}"; Flags: uninsdeletevalue 
 Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "URLUpdateInfo"; ValueData: "{#MyAppURL}"; Flags: uninsdeletevalue 
 Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "CurrentVersion"; ValueData: "{#MyAppVersion}"; Flags: uninsdeletevalue 
-Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "InstallLocation"; ValueData: "{app}"; Flags: uninsdeletevalue 
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "InstallLocation"; ValueData: "{app}\"; Flags: uninsdeletevalue 
 ;Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "ProductId"; ValueData: ""; Flags: uninsdeletevalue 
 Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "AutoUpdateEnabled"; ValueData: "true"; Flags: uninsdeletevalue 
 

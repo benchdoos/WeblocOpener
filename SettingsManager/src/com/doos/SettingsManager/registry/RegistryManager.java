@@ -1,13 +1,11 @@
-package com.doos.utils.registry;
+package com.doos.SettingsManager.registry;
 
 //import com.sun.deploy.util.WinRegistry;
 
-import com.doos.utils.ApplicationConstants;
+import com.doos.SettingsManager.ApplicationConstants;
 import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.jna.platform.win32.Win32Exception;
 import com.sun.jna.platform.win32.WinReg;
-
-import static com.sun.jna.platform.win32.WinReg.HKEY_CURRENT_USER;
 
 /**
  * Created by Eugene Zrazhevsky on 19.11.2016.
@@ -16,8 +14,48 @@ public class RegistryManager {
     public static final String KEY_INSTALL_LOCATION = "InstallLocation";
     public static final String KEY_CURRENT_VERSION = "CurrentVersion";
     public static final String KEY_AUTO_UPDATE = "AutoUpdateEnabled";
-    private static final WinReg.HKEY APP_ROOT_HKEY = HKEY_CURRENT_USER;
-    private final static String REGISTRY_APP_PATH = "SOFTWARE\\" + ApplicationConstants.APP_NAME + "\\";
+    public static final String KEY_APP_NAME = "Name";
+    public static final String KEY_URL_UPDATE_LINK = "URLUpdateInfo";
+    public static final WinReg.HKEY APP_ROOT_HKEY = WinReg.HKEY_CURRENT_USER;
+    public final static String REGISTRY_APP_PATH = "SOFTWARE\\" + ApplicationConstants.APP_NAME + "\\";
+
+
+    public static String getAppNameValue() throws RegistryCanNotReadInfoException {
+        String value;
+        try {
+            value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
+                                                        REGISTRY_APP_PATH,
+                                                        KEY_APP_NAME);
+        } catch (Win32Exception e) {
+            throw new RegistryCanNotReadInfoException("Can not read Installed Location value : " +
+                                                              "HKLM\\" + REGISTRY_APP_PATH + "" + KEY_APP_NAME, e);
+        }
+
+        return value;
+    }
+
+    public static void setAppNameValue(String name) throws RegistryCanNotWriteInfoException {
+        RegistryManager.createRegistryEntry(KEY_APP_NAME, name);
+    }
+
+    public static String getURLUpdateValue() throws RegistryCanNotReadInfoException {
+        String value;
+        try {
+            value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
+                                                        REGISTRY_APP_PATH,
+                                                        KEY_URL_UPDATE_LINK);
+        } catch (Win32Exception e) {
+            throw new RegistryCanNotReadInfoException("Can not read Installed Location value : " +
+                                                              "HKLM\\" + REGISTRY_APP_PATH + "" + KEY_URL_UPDATE_LINK,
+                                                      e);
+        }
+
+        return value;
+    }
+
+    public static void setURLUpdateValue(String name) throws RegistryCanNotWriteInfoException {
+        RegistryManager.createRegistryEntry(KEY_URL_UPDATE_LINK, name);
+    }
 
     public static String getInstallLocationValue() throws RegistryCanNotReadInfoException {
         String value;
@@ -26,7 +64,9 @@ public class RegistryManager {
                     REGISTRY_APP_PATH,
                     KEY_INSTALL_LOCATION);
         } catch (Win32Exception e) {
-            throw new RegistryCanNotReadInfoException("Can not read Installed Location value", e);
+            throw new RegistryCanNotReadInfoException("Can not read Installed Location value : " +
+                                                              "HKLM\\" + REGISTRY_APP_PATH + "" + KEY_INSTALL_LOCATION,
+                                                      e);
         }
 
         return value;

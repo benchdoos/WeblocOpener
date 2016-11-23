@@ -1,11 +1,11 @@
-package com.doos.utils.registry;
+package com.doos.SettingsManager.registry;
 
 /**
  * Created by Eugene Zrazhevsky on 21.11.2016.
  */
 public class RegistryException extends Exception {
     public RegistryException() {
-        super();
+        super("[Registry] ");
     }
 
     public RegistryException(String message) {

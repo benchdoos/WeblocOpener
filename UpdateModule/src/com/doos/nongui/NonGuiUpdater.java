@@ -1,12 +1,12 @@
 package com.doos.nongui;
 
+import com.doos.SettingsManager.ApplicationConstants;
+import com.doos.SettingsManager.registry.RegistryManager;
 import com.doos.core.Main;
 import com.doos.gui.UpdateDialog;
 import com.doos.update.AppVersion;
 import com.doos.update.Updater;
-import com.doos.utils.ApplicationConstants;
 import com.doos.utils.Internal;
-import com.doos.utils.registry.RegistryManager;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -37,8 +37,8 @@ public class NonGuiUpdater {
             //create trayicon and show pop-up
             createTrayIcon();
             trayIcon.displayMessage(ApplicationConstants.APP_NAME + " - Updater",
-                    "There is a new version of application:" + serverAppVersion.getVersion(),
-                    TrayIcon.MessageType.INFO);
+                                    "There is a new version of application:" + serverAppVersion.getVersion(),
+                                    TrayIcon.MessageType.INFO);
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
             //System.exit(0);
 

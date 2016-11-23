@@ -1,6 +1,6 @@
-package com.doos.utils.registry.fixer;
+package com.doos.SettingsManager.registry.fixer;
 
-import com.doos.utils.registry.RegistryManager;
+import com.doos.SettingsManager.registry.RegistryManager;
 
 /**
  * Created by Eugene Zrazhevsky on 23.11.2016.

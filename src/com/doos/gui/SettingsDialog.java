@@ -1,10 +1,10 @@
 package com.doos.gui;
 
 import com.doos.Main;
+import com.doos.SettingsManager.registry.RegistryCanNotReadInfoException;
+import com.doos.SettingsManager.registry.RegistryException;
+import com.doos.SettingsManager.registry.RegistryManager;
 import com.doos.utils.FrameUtils;
-import com.doos.utils.registry.RegistryCanNotReadInfoException;
-import com.doos.utils.registry.RegistryException;
-import com.doos.utils.registry.RegistryManager;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
@@ -105,7 +105,7 @@ public class SettingsDialog extends JFrame {
             Main.loadProperties();
             autoUpdateEnabledCheckBox.setSelected(Boolean.parseBoolean(properties.getProperty(RegistryManager.KEY_AUTO_UPDATE)));
         } catch (RegistryException e) {
-            log.warn("Can not load data from registry", e);
+            log.warn("Can not load data from com.doos.com.doos.SettingsManager.core.SettingsManager.registry", e);
             Main.useDefaultAppProperties(); //To prevent crash
         }
     }
@@ -117,8 +117,9 @@ public class SettingsDialog extends JFrame {
             Main.saveProperties();
         } catch (RegistryException e) {
             log.warn("Can not save settings change", e);
-            JOptionPane.showMessageDialog(new JFrame(), "Error", "Can not save settings to registry.",
-                    JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(new JFrame(), "Error",
+                                          "Can not save settings to com.doos.com.doos.SettingsManager.core.SettingsManager.registry.",
+                                          JOptionPane.ERROR_MESSAGE);
         }
         dispose();
     }

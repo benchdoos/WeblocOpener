@@ -1,4 +1,4 @@
-package com.doos.utils.registry;
+package com.doos.SettingsManager.registry;
 
 /**
  * Created by Eugene Zrazhevsky on 21.11.2016.

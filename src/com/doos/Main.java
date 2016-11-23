@@ -1,18 +1,22 @@
 package com.doos;
 
+import com.doos.SettingsManager.ApplicationConstants;
+import com.doos.SettingsManager.core.SettingsManager;
+import com.doos.SettingsManager.registry.RegistryException;
+import com.doos.SettingsManager.registry.RegistryManager;
 import com.doos.gui.EditDialog;
 import com.doos.gui.SettingsDialog;
 import com.doos.service.Analyzer;
 import com.doos.service.Logging;
 import com.doos.service.UrlsProceed;
-import com.doos.utils.SettingsManager;
-import com.doos.utils.registry.RegistryException;
-import com.doos.utils.registry.RegistryManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileNotFoundException;
 import java.util.Properties;
 
+import static com.doos.SettingsManager.core.SettingsManager.fixRegistry;
+import static com.doos.SettingsManager.core.SettingsManager.showErrorMessage;
 import static java.awt.Frame.MAXIMIZED_HORIZ;
 
 public class Main {
@@ -22,14 +26,30 @@ public class Main {
     public static void main(String[] args) {
         Main.args = args;
         new Logging();
-        try {
+        /*try {
             loadProperties();
-            if (!properties.getProperty(RegistryManager.KEY_CURRENT_VERSION).equals(ApplicationConstants.APP_VERSION)) {
-                properties.setProperty(RegistryManager.KEY_CURRENT_VERSION, ApplicationConstants.APP_VERSION);
+            if (!properties.getProperty(RegistryManager.KEY_CURRENT_VERSION).equals(com.doos.SettingsManager.ApplicationConstants.APP_VERSION)) {
+                properties.setProperty(RegistryManager.KEY_CURRENT_VERSION, com.doos.SettingsManager.ApplicationConstants.APP_VERSION);
                 saveProperties();
             }
         } catch (RegistryException e) {
             e.printStackTrace();
+        }*/
+        try {
+            loadProperties();
+        } catch (RegistryException e) {
+            e.printStackTrace();
+            try {
+                properties = fixRegistry();
+                System.out.println("hello>");
+            } catch (RegistryException | FileNotFoundException e1) {
+                e1.printStackTrace();
+                showErrorMessage("Can not fix com.doos.com.doos.SettingsManager.core.SettingsManager.registry",
+                                 "Registry application data is corrupt. " +
+                                         "Please re-install the " + "application.");
+                System.exit(-1);
+            }
+
         }
 
         enableLookAndFeel();

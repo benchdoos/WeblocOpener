@@ -1,6 +1,6 @@
 package com.doos.service;
 
-import com.doos.ApplicationConstants;
+import com.doos.SettingsManager.ApplicationConstants;
 
 import java.io.File;
 

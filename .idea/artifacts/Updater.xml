@@ -2,7 +2,6 @@
   <artifact type="jar" name="Updater">
     <output-path>$PROJECT_DIR$/out/artifacts/Updater</output-path>
     <root id="archive" name="Updater.jar">
-      <element id="module-output" name="UpdateModule" />
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/UpdateModule/META-INF/MANIFEST.MF" />
       </element>
@@ -11,6 +10,12 @@
       <element id="extracted-dir" path="C:/Program Files (x86)/Java/jre1.8.0_111/lib/deploy.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/jna-4.2.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/jna-platform-4.2.2.jar" path-in-jar="/" />
+      <element id="module-output" name="SettingsManager" />
+      <element id="library" level="project" name="jna-4.2.2" />
+      <element id="module-output" name="UpdateModule" />
+      <element id="library" level="project" name="com.google.code.gson:gson:2.8.0" />
+      <element id="library" level="module" name="testng" module-name="UpdateModule" />
+      <element id="library" level="project" name="commons-io-2.5" />
     </root>
   </artifact>
 </component>

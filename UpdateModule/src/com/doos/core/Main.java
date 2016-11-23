@@ -1,20 +1,16 @@
 package com.doos.core;
 
+import com.doos.SettingsManager.ApplicationConstants;
+import com.doos.SettingsManager.core.SettingsManager;
+import com.doos.SettingsManager.registry.RegistryCanNotReadInfoException;
+import com.doos.SettingsManager.registry.RegistryException;
+import com.doos.SettingsManager.registry.RegistryManager;
 import com.doos.gui.UpdateDialog;
 import com.doos.nongui.NonGuiUpdater;
-import com.doos.update.Updater;
-import com.doos.utils.ApplicationConstants;
 import com.doos.utils.Internal;
-import com.doos.utils.SettingsManager;
-import com.doos.utils.registry.RegistryCanNotReadInfoException;
-import com.doos.utils.registry.RegistryException;
-import com.doos.utils.registry.RegistryManager;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -23,9 +19,10 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Properties;
 
+import static com.doos.SettingsManager.ApplicationConstants.UPDATE_PATH_FILE;
+import static com.doos.SettingsManager.core.SettingsManager.showErrorMessage;
 import static com.doos.nongui.NonGuiUpdater.tray;
 import static com.doos.nongui.NonGuiUpdater.trayIcon;
-import static com.doos.utils.ApplicationConstants.UPDATE_PATH_FILE;
 
 /**
  * Created by Eugene Zrazhevsky on 02.11.2016.
@@ -45,7 +42,8 @@ public class Main {
                 fixProperties();
             } catch (RegistryException | FileNotFoundException e1) {
                 e1.printStackTrace();
-                showErrorMessage("Can not fix registry", "Registry application data is corrupt. " +
+                showErrorMessage("Can not fix com.doos.com.doos.SettingsManager.core.SettingsManager.registry",
+                                 "Registry application data is corrupt. " +
                         "Please re-install the " + "application.");
                 System.exit(-1);
             }
@@ -91,8 +89,9 @@ public class Main {
         }
     }
 
-    private static void fixProperties() throws RegistryException, FileNotFoundException {
+    public static void fixProperties() throws RegistryException, FileNotFoundException {
         properties = SettingsManager.fixRegistry();
+
     }
 
     public static void initUpdateJar() {
@@ -135,7 +134,8 @@ public class Main {
             try {
                 loadProperties();
             } catch (RegistryException e) {
-                String message = "Can not read data from registry.";
+                String message
+                        = "Can not read data from com.doos.com.doos.SettingsManager.core.SettingsManager.registry.";
                 System.out.println(message);
                 JOptionPane.showMessageDialog(null, message, message, JOptionPane.ERROR_MESSAGE);
 
@@ -187,33 +187,6 @@ public class Main {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ignore) {/*NOP*/}
-    }
-
-    public static void showErrorMessage(String title, String message) {
-        String msg = "<HTML><BODY><P>" + message + " <br>Please visit " +
-                "<a href=\"https://github.com/benchdoos/WeblocOpener\">https://github.com/benchdoos/WeblocOpener</P></BODY></HTML>";
-        JEditorPane jEditorPane = new JEditorPane();
-        jEditorPane.setContentType("text/html");
-        jEditorPane.setEditable(false);
-        jEditorPane.setHighlighter(null);
-        jEditorPane.setEditable(false);
-        jEditorPane.getCaret().deinstall(jEditorPane);
-        jEditorPane.setBackground(Color.getColor("#EEEEEE"));
-        jEditorPane.addHyperlinkListener(new HyperlinkListener() {
-            @Override
-            public void hyperlinkUpdate(HyperlinkEvent e) {
-                if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
-                    Updater.openUrl("https://github.com/benchdoos/WeblocOpener/");
-                }
-
-            }
-        });
-        jEditorPane.setText(msg);
-        if (mode == Mode.NORMAL) {
-            JOptionPane.showMessageDialog(null,
-                                          jEditorPane,
-                                          "[WeblocOpener] " + title, JOptionPane.ERROR_MESSAGE);
-        }
     }
 
     public enum Mode {NORMAL, SILENT, AFTER_UPDATE, ERROR}

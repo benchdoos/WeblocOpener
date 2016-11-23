@@ -1,6 +1,6 @@
-package com.doos.utils;
 
-import com.doos.utils.registry.RegistryManager;
+import com.doos.SettingsManager.ApplicationConstants;
+import com.doos.SettingsManager.registry.RegistryManager;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.testng.annotations.Test;
 
@@ -15,7 +15,8 @@ public class RegistryManagerTest {
         final String expected = "C:\\Program Files (x86)\\WeblocOpener";
 
         String actual = RegistryManager.getInstallLocationValue();
-        assertEquals("Checking registry APP_ROOT_HKEY", expected, actual);
+        assertEquals("Checking com.doos.com.doos.SettingsManager.core.SettingsManager.registry APP_ROOT_HKEY", expected,
+                     actual);
     }
 
     @Test

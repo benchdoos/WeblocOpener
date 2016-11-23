@@ -1,8 +1,7 @@
 package com.doos.update;
 
 
-import com.doos.core.Main;
-import com.doos.utils.ApplicationConstants;
+import com.doos.SettingsManager.ApplicationConstants;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -15,6 +14,8 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+
+import static com.doos.SettingsManager.core.SettingsManager.showErrorMessage;
 
 /**
  * Created by Eugene Zrazhevsky on 03.11.2016.
@@ -65,7 +66,7 @@ public class Updater {
         } catch (IOException e) {
             e.printStackTrace();
 
-            Main.showErrorMessage("Can not Update", "Can not connect to api.github.com");
+            showErrorMessage("Can not Update", "Can not connect to api.github.com");
         }
     }
 
@@ -122,7 +123,7 @@ public class Updater {
     private static File downloadNewVersionInstaller(AppVersion appVersion, JProgressBar progressBar) {
                /*try {
             FileUtils.copyURLToFile(new URL(appVersion.getDownloadUrl()),
-                    new File(ApplicationConstants.UPDATE_PATH_FILE + appVersion.getVersion() + "setup.exe"));
+                    new File(com.doos.SettingsManager.ApplicationConstants.UPDATE_PATH_FILE + appVersion.getVersion() + "setup.exe"));
         } catch (IOException e) {
             e.printStackTrace();
         }*/
