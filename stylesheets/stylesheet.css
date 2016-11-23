@@ -350,3 +350,29 @@ a:hover {
         font-size: 0.9rem;
     }
 }
+
+#youtubeDefault iframe {
+    width: 560px;
+    height: 315px;
+}
+
+@media screen and (min-width: 64em) {
+    #youtubeDefault iframe {
+        width: 560px;
+        height: 315px;
+    }
+}
+
+@media screen and (min-width: 42em) and (max-width: 64em) {
+    #youtubeDefault iframe {
+        width: 560px;
+        height: 315px;
+    }
+}
+
+@media screen and (max-width: 42em) {
+    #youtubeDefault iframe {
+        width: 560px;
+        height: 315px;
+    }
+}
