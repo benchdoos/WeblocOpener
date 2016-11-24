@@ -4,6 +4,10 @@ import com.doos.settings_manager.ApplicationConstants;
 import com.doos.settings_manager.core.SettingsManager;
 import com.doos.settings_manager.registry.RegistryException;
 import com.doos.settings_manager.registry.RegistryManager;
+import com.doos.settings_manager.registry.fixer.RegistryFixer;
+import com.doos.settings_manager.registry.fixer.RegistryFixerAppVersionKeyFailException;
+import com.doos.settings_manager.registry.fixer.RegistryFixerAutoUpdateKeyFailException;
+import com.doos.settings_manager.registry.fixer.RegistryFixerInstallPathKeyFailException;
 import com.doos.webloc_opener.gui.EditDialog;
 import com.doos.webloc_opener.gui.SettingsDialog;
 import com.doos.webloc_opener.service.Analyzer;
@@ -15,7 +19,6 @@ import java.awt.*;
 import java.io.FileNotFoundException;
 import java.util.Properties;
 
-import static com.doos.settings_manager.core.SettingsManager.fixRegistry;
 import static com.doos.settings_manager.core.SettingsManager.showErrorMessage;
 import static java.awt.Frame.MAXIMIZED_HORIZ;
 
@@ -38,11 +41,15 @@ public class Main {
         } catch (RegistryException e) {
             e.printStackTrace();
             try {
-                properties = fixRegistry();
-                System.out.println("hello>");
-            } catch (RegistryException | FileNotFoundException e1) {
+                properties = RegistryFixer.fixRegistry();
+            } catch (RegistryFixerAutoUpdateKeyFailException e1) {
+                properties.setProperty(RegistryManager.KEY_AUTO_UPDATE,
+                                       Boolean.toString(ApplicationConstants.APP_AUTO_UPDATE_DEFAULT_VALUE));
+            } catch (RegistryFixerAppVersionKeyFailException e1) {
+                properties.setProperty(RegistryManager.KEY_CURRENT_VERSION, ApplicationConstants.APP_VERSION);
+            } catch (RegistryFixerInstallPathKeyFailException | FileNotFoundException e1) {
                 e1.printStackTrace();
-                showErrorMessage("Can not fix com.doos.com.doos.settings_manager.core.settings_manager.registry",
+                showErrorMessage("Can not fix registry",
                                  "Registry application data is corrupt. " +
                                          "Please re-install the " + "application.");
                 System.exit(-1);

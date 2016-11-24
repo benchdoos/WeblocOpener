@@ -5,6 +5,10 @@ import com.doos.settings_manager.core.SettingsManager;
 import com.doos.settings_manager.registry.RegistryCanNotReadInfoException;
 import com.doos.settings_manager.registry.RegistryException;
 import com.doos.settings_manager.registry.RegistryManager;
+import com.doos.settings_manager.registry.fixer.RegistryFixer;
+import com.doos.settings_manager.registry.fixer.RegistryFixerAppVersionKeyFailException;
+import com.doos.settings_manager.registry.fixer.RegistryFixerAutoUpdateKeyFailException;
+import com.doos.settings_manager.registry.fixer.RegistryFixerInstallPathKeyFailException;
 import com.doos.update_module.gui.UpdateDialog;
 import com.doos.update_module.nongui.NonGuiUpdater;
 import com.doos.update_module.utils.Internal;
@@ -87,10 +91,15 @@ public class Main {
         } catch (RegistryException e) {
             e.printStackTrace();
             try {
-                fixProperties();
-            } catch (RegistryException | FileNotFoundException e1) {
+                properties = RegistryFixer.fixRegistry();
+            } catch (RegistryFixerAutoUpdateKeyFailException e1) {
+                properties.setProperty(RegistryManager.KEY_AUTO_UPDATE,
+                                       Boolean.toString(ApplicationConstants.APP_AUTO_UPDATE_DEFAULT_VALUE));
+            } catch (RegistryFixerAppVersionKeyFailException e1) {
+                properties.setProperty(RegistryManager.KEY_CURRENT_VERSION, ApplicationConstants.APP_VERSION);
+            } catch (RegistryFixerInstallPathKeyFailException | FileNotFoundException e1) {
                 e1.printStackTrace();
-                showErrorMessage("Can not fix com.doos.com.doos.settings_manager.core.settings_manager.registry",
+                showErrorMessage("Can not fix registry",
                                  "Registry application data is corrupt. " +
                                          "Please re-install the " + "application.");
                 System.exit(-1);
@@ -99,35 +108,22 @@ public class Main {
         }
     }
 
-    public static void fixProperties() throws RegistryException, FileNotFoundException {
-        properties = SettingsManager.fixRegistry();
-
-    }
 
     public static void initUpdateJar() {
         final File JAR_FILE = new File(UpdateDialog.class.getProtectionDomain()
                                                .getCodeSource().getLocation().getPath());
         final String property = properties.getProperty(RegistryManager.KEY_INSTALL_LOCATION);
         File JAR_FILE_DEFAULT_LOCATION = null;
-        if (property != null) {
-            JAR_FILE_DEFAULT_LOCATION = new File(property
-                                                         + File.separator + "Updater.jar");
-        } else {
-            File file = JAR_FILE.getParentFile();
-            System.out.println("Parent file is: " + file.getAbsolutePath());
-            if (file.getName().equals(ApplicationConstants.APP_NAME)) {
-                JAR_FILE_DEFAULT_LOCATION = new File(file.getAbsolutePath() + File.separator + "Updater.jar");
-            } else {
-                JAR_FILE_DEFAULT_LOCATION = new File(
-                        "C:\\Program Files (x86)\\WeblocOpener\\Updater.jar"); //TODO find better solution
-            }
-            ;
-        }
+        JAR_FILE_DEFAULT_LOCATION = getFileLocation(JAR_FILE, property);
 
 
         System.out
                 .println("Jar: " + JAR_FILE.getAbsolutePath() + " def: " + JAR_FILE_DEFAULT_LOCATION.getAbsolutePath());
 
+        runUpdater(JAR_FILE, JAR_FILE_DEFAULT_LOCATION);
+    }
+
+    private static void runUpdater(File JAR_FILE, File JAR_FILE_DEFAULT_LOCATION) {
         if (JAR_FILE.getAbsolutePath().replace("%20", " ").equals(
                 JAR_FILE_DEFAULT_LOCATION.getAbsolutePath().replace("%20", " "))) {
             try {
@@ -154,6 +150,25 @@ public class Main {
         }
     }
 
+    private static File getFileLocation(File JAR_FILE, String property) {
+        File JAR_FILE_DEFAULT_LOCATION;
+        if (property != null) {
+            JAR_FILE_DEFAULT_LOCATION = new File(property
+                                                         + File.separator + "Updater.jar");
+        } else {
+            File file = JAR_FILE.getParentFile();
+            System.out.println("Parent file is: " + file.getAbsolutePath());
+            if (file.getName().equals(ApplicationConstants.APP_NAME)) {
+                JAR_FILE_DEFAULT_LOCATION = new File(file.getAbsolutePath() + File.separator + "Updater.jar");
+            } else {
+                JAR_FILE_DEFAULT_LOCATION = new File(
+                        "C:\\Program Files (x86)\\WeblocOpener\\Updater.jar"); //TODO find better solution
+            }
+            ;
+        }
+        return JAR_FILE_DEFAULT_LOCATION;
+    }
+
     public static void createUpdateDialog() {
         final UpdateDialog updateDialog = new UpdateDialog();
 
@@ -161,7 +176,7 @@ public class Main {
             @Override
             public void windowClosed(WindowEvent e) {
                 try {
-                    Main.loadProperties();
+                    loadProperties();
                 } catch (RegistryException e1) {
                     e1.printStackTrace();
                 }
