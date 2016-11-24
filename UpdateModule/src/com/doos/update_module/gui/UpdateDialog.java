@@ -16,14 +16,16 @@ import java.io.File;
 import java.io.IOException;
 
 public class UpdateDialog extends JFrame {
+    public static UpdateDialog updateDialog = null;
+
     public JProgressBar progressBar1;
+    public JButton buttonOK;
+    public JButton buttonCancel;
     private AppVersion serverAppVersion;
     private JPanel contentPane;
-    private JButton buttonOK;
-    private JButton buttonCancel;
     private JLabel currentVersionLabel;
     private JLabel availableVersionLabel;
-    private JLabel newVersionSizeLable;
+    private JLabel newVersionSizeLabel;
     private JLabel unitLabel;
 
     private Thread updateThread;
@@ -77,6 +79,7 @@ public class UpdateDialog extends JFrame {
         setSize(new Dimension(400, 170));
         setResizable(false);
         loadProperties();
+        updateDialog = this;
     }
 
     public void checkForUpdates() {
@@ -91,10 +94,10 @@ public class UpdateDialog extends JFrame {
             size = size * 100;
             int i = (int) Math.round(size);
             size = (double) i / 100;
-            newVersionSizeLable.setText(Double.toString(size));
+            newVersionSizeLabel.setText(Double.toString(size));
             unitLabel.setText("MB");
         } else {
-            newVersionSizeLable.setText(serverAppVersion.getSize() / 1024 + "");
+            newVersionSizeLabel.setText(serverAppVersion.getSize() / 1024 + "");
             unitLabel.setText("KB");
         }
 
@@ -105,8 +108,8 @@ public class UpdateDialog extends JFrame {
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) > 0) {
             //App version is bigger then on server
             buttonOK.setText("Hello, dev!");
-//            buttonOK.setEnabled(true);
-            buttonOK.setEnabled(false); //TODO TURN BACK BEFORE RELEASE
+            buttonOK.setEnabled(true);
+//            buttonOK.setEnabled(false); //TODO TURN BACK BEFORE RELEASE
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
             //No reason to update
             buttonOK.setText("Version is up to date");
@@ -129,7 +132,7 @@ public class UpdateDialog extends JFrame {
     private void onOK() {
         buttonOK.setEnabled(false);
         if (!Thread.currentThread().isInterrupted()) {
-            int successUpdate = Updater.startUpdate(serverAppVersion, this);
+            int successUpdate = Updater.startUpdate(serverAppVersion);
             buttonOK.setEnabled(true);
 
             if (!Thread.currentThread().isInterrupted()) {

@@ -31,6 +31,7 @@ public class Updater {
     private static HttpsURLConnection connection = null;
     private AppVersion appVersion = null;
 
+
     public Updater() {
         try {
             getConnection();
@@ -75,12 +76,13 @@ public class Updater {
         }
     }
 
-    public static int startUpdate(AppVersion appVersion, UpdateDialog updateDialog) {
+
+    public static int startUpdate(AppVersion appVersion) {
         installerFile = new File(ApplicationConstants.UPDATE_PATH_FILE
                                          + "WeblocOpenerSetupV" + appVersion.getVersion() + ".exe");
         if (!Thread.currentThread().isInterrupted()) {
             if (!installerFile.exists()) {
-                installerFile = downloadNewVersionInstaller(appVersion, updateDialog);
+                installerFile = downloadNewVersionInstaller(appVersion);
             }
             int installationResult = 0;
 
@@ -91,7 +93,7 @@ public class Updater {
             } catch (IOException e) {
                 if (e.getMessage().contains("CreateProcess error=193")) {
                     installerFile.delete();
-                    installerFile = downloadNewVersionInstaller(appVersion, updateDialog); //Fixes corrupt file
+                    installerFile = downloadNewVersionInstaller(appVersion); //Fixes corrupt file
                 }
                 return 2;
             }
@@ -111,12 +113,16 @@ public class Updater {
 
     private static int update(File file) throws IOException {
         Runtime runtime = Runtime.getRuntime();
+        UpdateDialog.updateDialog.buttonCancel.setEnabled(false);
         Process updateProcess;
-        updateProcess = runtime.exec(file.getAbsolutePath() + "");
+        updateProcess = runtime.exec(file.getAbsolutePath() + ApplicationConstants.APP_INSTALL_SILENT_KEY);
 
-        int result;
+        int result = -1;
         try {
-            result = updateProcess.waitFor();
+            if (!Thread.currentThread().isInterrupted()) {
+                result = updateProcess.waitFor();
+            }
+            UpdateDialog.updateDialog.buttonCancel.setEnabled(true);
             return result;
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -125,14 +131,17 @@ public class Updater {
 
     }
 
-    private static File downloadNewVersionInstaller(AppVersion appVersion, UpdateDialog updateDialog) {
+    private static File downloadNewVersionInstaller(AppVersion appVersion) {
                /*try {
             FileUtils.copyURLToFile(new URL(appVersion.getDownloadUrl()),
                     new File(com.doos.settings_manager.ApplicationConstants.UPDATE_PATH_FILE + appVersion.getVersion() + "setup.exe"));
         } catch (IOException e) {
             e.printStackTrace();
         }*/
-        JProgressBar progressBar = updateDialog.progressBar1;
+        JProgressBar progressBar = null;
+        if (UpdateDialog.updateDialog != null) {
+            progressBar = UpdateDialog.updateDialog.progressBar1;
+        }
 
         ITaskbarList3 list = null;
         Pointer<?> hwnd;
@@ -143,11 +152,13 @@ public class Updater {
             e.printStackTrace();
         }
 
-        long hwndVal = JAWTUtils.getNativePeerHandle(updateDialog);
+        long hwndVal = JAWTUtils.getNativePeerHandle(UpdateDialog.updateDialog);
         hwnd = Pointer.pointerToAddress(hwndVal);
 
         try {
-            progressBar.setStringPainted(true);
+            if (progressBar != null) {
+                progressBar.setStringPainted(true);
+            }
             BufferedInputStream in = null;
             FileOutputStream fout = null;
             try {
@@ -155,6 +166,37 @@ public class Updater {
                 in = new BufferedInputStream(new URL(appVersion.getDownloadUrl()).openStream());
                 try {
                     fout = new FileOutputStream(installerFile);
+
+                    final byte data[] = new byte[1024];
+                    int count;
+                    int progress = 0;
+                    while ((count = in.read(data, 0, 1024)) != -1) {
+                        if (Thread.currentThread().isInterrupted()) {
+                            installerFile.delete();
+                            if (progressBar != null) {
+                                progressBar.setValue(0);
+                                if (list != null) {
+                                    list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
+                                                          progressBar.getMaximum());
+                                }
+                            }
+                            break;
+                        } else {
+                            fout.write(data, 0, count);
+                            progress += count;
+                            int prg = (int) (((double) progress / appVersion.getSize()) * 100);
+
+                            if (progressBar != null) {
+                                progressBar.setValue(prg);
+                                if (list != null) {
+                                    list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
+                                                          progressBar.getMaximum());
+                                }
+                            }
+
+                        }
+                    }
+
                 } catch (FileNotFoundException e) {
                     if (installerFile.exists() && installerFile.getName().contains("WeblocOpenerSetup")) { //TODO FIX
                         // HERE
@@ -162,33 +204,6 @@ public class Updater {
                         fout = new FileOutputStream(installerFile);
                     }
                 }
-
-
-                final byte data[] = new byte[1024];
-                int count;
-                int progress = 0;
-                while ((count = in.read(data, 0, 1024)) != -1) {
-                    if (Thread.currentThread().isInterrupted()) {
-                        installerFile.delete();
-                        progressBar.setValue(0);
-                        if (list != null) {
-                            list.SetProgressValue((Pointer) hwnd, progressBar.getValue(), progressBar.getMaximum());
-                        }
-                        break;
-                    } else {
-                        fout.write(data, 0, count);
-                        progress += count;
-                        int prg = (int) (((double) progress / appVersion.getSize()) * 100);
-
-                        progressBar.setValue(prg);
-                        if (list != null) {
-                            list.SetProgressValue((Pointer) hwnd, progressBar.getValue(), progressBar.getMaximum());
-                        }
-
-                    }
-                }
-
-
             } finally {
                 if (in != null) {
                     in.close();
