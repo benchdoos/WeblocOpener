@@ -108,8 +108,8 @@ public class UpdateDialog extends JFrame {
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) > 0) {
             //App version is bigger then on server
             buttonOK.setText("Hello, dev!");
-            buttonOK.setEnabled(true);
-//            buttonOK.setEnabled(false); //TODO TURN BACK BEFORE RELEASE
+//            buttonOK.setEnabled(true);
+            buttonOK.setEnabled(false); //TODO TURN BACK BEFORE RELEASE
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
             //No reason to update
             buttonOK.setText("Version is up to date");
