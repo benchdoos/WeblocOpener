@@ -16,8 +16,8 @@ public class RegistryManager {
     public static final String KEY_AUTO_UPDATE = "AutoUpdateEnabled";
     public static final String KEY_APP_NAME = "Name";
     public static final String KEY_URL_UPDATE_LINK = "URLUpdateInfo";
-    public static final WinReg.HKEY APP_ROOT_HKEY = WinReg.HKEY_CURRENT_USER;
-    public final static String REGISTRY_APP_PATH = "SOFTWARE\\" + ApplicationConstants.APP_NAME + "\\";
+    private static final WinReg.HKEY APP_ROOT_HKEY = WinReg.HKEY_CURRENT_USER;
+    private final static String REGISTRY_APP_PATH = "SOFTWARE\\" + ApplicationConstants.APP_NAME + "\\";
 
 
     public static String getAppNameValue() throws RegistryCanNotReadInfoException {
