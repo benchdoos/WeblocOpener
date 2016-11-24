@@ -2,10 +2,15 @@ package com.doos.update_module.update;
 
 
 import com.doos.settings_manager.ApplicationConstants;
+import com.doos.update_module.gui.UpdateDialog;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.bridj.Pointer;
+import org.bridj.cpp.com.COMRuntime;
+import org.bridj.cpp.com.shell.ITaskbarList3;
+import org.bridj.jawt.JAWTUtils;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.swing.*;
@@ -70,12 +75,12 @@ public class Updater {
         }
     }
 
-    public static int startUpdate(AppVersion appVersion, JProgressBar progressBar) {
+    public static int startUpdate(AppVersion appVersion, UpdateDialog updateDialog) {
         installerFile = new File(ApplicationConstants.UPDATE_PATH_FILE
                                          + "WeblocOpenerSetupV" + appVersion.getVersion() + ".exe");
         if (!Thread.currentThread().isInterrupted()) {
             if (!installerFile.exists()) {
-                installerFile = downloadNewVersionInstaller(appVersion, progressBar);
+                installerFile = downloadNewVersionInstaller(appVersion, updateDialog);
             }
             int installationResult = 0;
 
@@ -86,7 +91,7 @@ public class Updater {
             } catch (IOException e) {
                 if (e.getMessage().contains("CreateProcess error=193")) {
                     installerFile.delete();
-                    installerFile = downloadNewVersionInstaller(appVersion, progressBar); //Fixes corrupt file
+                    installerFile = downloadNewVersionInstaller(appVersion, updateDialog); //Fixes corrupt file
                 }
                 return 2;
             }
@@ -120,14 +125,26 @@ public class Updater {
 
     }
 
-    private static File downloadNewVersionInstaller(AppVersion appVersion, JProgressBar progressBar) {
+    private static File downloadNewVersionInstaller(AppVersion appVersion, UpdateDialog updateDialog) {
                /*try {
             FileUtils.copyURLToFile(new URL(appVersion.getDownloadUrl()),
                     new File(com.doos.settings_manager.ApplicationConstants.UPDATE_PATH_FILE + appVersion.getVersion() + "setup.exe"));
         } catch (IOException e) {
             e.printStackTrace();
         }*/
+        JProgressBar progressBar = updateDialog.progressBar1;
 
+        ITaskbarList3 list = null;
+        Pointer<?> hwnd;
+
+        try {
+            list = COMRuntime.newInstance(ITaskbarList3.class);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        long hwndVal = JAWTUtils.getNativePeerHandle(updateDialog);
+        hwnd = Pointer.pointerToAddress(hwndVal);
 
         try {
             progressBar.setStringPainted(true);
@@ -136,7 +153,16 @@ public class Updater {
             try {
 
                 in = new BufferedInputStream(new URL(appVersion.getDownloadUrl()).openStream());
-                fout = new FileOutputStream(installerFile);
+                try {
+                    fout = new FileOutputStream(installerFile);
+                } catch (FileNotFoundException e) {
+                    if (installerFile.exists() && installerFile.getName().contains("WeblocOpenerSetup")) { //TODO FIX
+                        // HERE
+                        installerFile.delete();
+                        fout = new FileOutputStream(installerFile);
+                    }
+                }
+
 
                 final byte data[] = new byte[1024];
                 int count;
@@ -145,6 +171,9 @@ public class Updater {
                     if (Thread.currentThread().isInterrupted()) {
                         installerFile.delete();
                         progressBar.setValue(0);
+                        if (list != null) {
+                            list.SetProgressValue((Pointer) hwnd, progressBar.getValue(), progressBar.getMaximum());
+                        }
                         break;
                     } else {
                         fout.write(data, 0, count);
@@ -152,8 +181,14 @@ public class Updater {
                         int prg = (int) (((double) progress / appVersion.getSize()) * 100);
 
                         progressBar.setValue(prg);
+                        if (list != null) {
+                            list.SetProgressValue((Pointer) hwnd, progressBar.getValue(), progressBar.getMaximum());
+                        }
+
                     }
                 }
+
+
             } finally {
                 if (in != null) {
                     in.close();
@@ -165,6 +200,7 @@ public class Updater {
                 if (Thread.currentThread().isInterrupted()) {
                     installerFile.delete();
                 }
+                list.Release();
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();

@@ -1,5 +1,6 @@
 package com.doos.update_module.gui;
 
+import com.doos.settings_manager.ApplicationConstants;
 import com.doos.settings_manager.registry.RegistryException;
 import com.doos.settings_manager.registry.RegistryManager;
 import com.doos.update_module.core.Main;
@@ -11,13 +12,15 @@ import com.doos.update_module.utils.Internal;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 
 public class UpdateDialog extends JFrame {
+    public JProgressBar progressBar1;
     private AppVersion serverAppVersion;
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JProgressBar progressBar1;
     private JLabel currentVersionLabel;
     private JLabel availableVersionLabel;
     private JLabel newVersionSizeLable;
@@ -102,7 +105,8 @@ public class UpdateDialog extends JFrame {
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) > 0) {
             //App version is bigger then on server
             buttonOK.setText("Hello, dev!");
-            buttonOK.setEnabled(false);
+//            buttonOK.setEnabled(true);
+            buttonOK.setEnabled(false); //TODO TURN BACK BEFORE RELEASE
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
             //No reason to update
             buttonOK.setText("Version is up to date");
@@ -125,7 +129,7 @@ public class UpdateDialog extends JFrame {
     private void onOK() {
         buttonOK.setEnabled(false);
         if (!Thread.currentThread().isInterrupted()) {
-            int successUpdate = Updater.startUpdate(serverAppVersion, progressBar1);
+            int successUpdate = Updater.startUpdate(serverAppVersion, this);
             buttonOK.setEnabled(true);
 
             if (!Thread.currentThread().isInterrupted()) {
@@ -184,8 +188,18 @@ public class UpdateDialog extends JFrame {
         if (updateThread != null) {
             if (!updateThread.isInterrupted()) {
                 updateThread.interrupt();
-                System.out.println(updateThread.isInterrupted());
+                System.out.println("Installation was interrupted: " + updateThread.isInterrupted());
+                new File(ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetup"
+                                 + serverAppVersion.getVersion() + "" + ".exe").delete();
             }
+        }
+        //TODO any fix???
+        File updateJar = new File(ApplicationConstants.UPDATE_PATH_FILE + "Updater_.jar");
+        if (updateJar.exists()) {
+            try {
+                Runtime.getRuntime().exec("java -jar \"" + Main.properties.getProperty(
+                        RegistryManager.KEY_INSTALL_LOCATION) + "\"Updater.jar -afterUpdate");
+            } catch (IOException ignore) {/*NOP*/}
         }
         dispose();
     }

@@ -43,5 +43,6 @@
     <orderEntry type="library" name="jna-4.2.2" level="project" />
     <orderEntry type="library" name="commons-io-2.5" level="project" />
     <orderEntry type="module" module-name="SettingsManager" exported="" />
+    <orderEntry type="library" name="com.nativelibs4java:bridj:0.7.0" level="project" />
   </component>
 </module>
