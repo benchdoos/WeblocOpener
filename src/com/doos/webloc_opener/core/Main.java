@@ -15,8 +15,8 @@ import java.awt.*;
 import java.io.FileNotFoundException;
 import java.util.Properties;
 
-import static com.doos.settings_manager.core.SettingsManager.fixRegistry;
 import static com.doos.settings_manager.core.SettingsManager.showErrorMessage;
+import static com.doos.settings_manager.registry.fixer.RegistryFixer.fixRegistry;
 import static java.awt.Frame.MAXIMIZED_HORIZ;
 
 public class Main {
