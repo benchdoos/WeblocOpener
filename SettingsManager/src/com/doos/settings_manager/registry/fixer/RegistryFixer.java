@@ -28,6 +28,7 @@ public class RegistryFixer {
         result = fixInstallLocationValue(result);
         fixAppNameValue();
         fixUpdateUrlValue();
+        /*Add here sub-directories if needed*/
         return result;
 
     }
@@ -52,8 +53,7 @@ public class RegistryFixer {
                 RegistryManager.setURLUpdateValue(ApplicationConstants.UPDATE_WEB_URL);
                 System.out.println(
                         "[REGISTRY FIXER] Successfully Fixed " + RegistryManager.KEY_URL_UPDATE_LINK);
-            } catch (RegistryCanNotWriteInfoException e2) {/*NOP*/
-            } finally {/*Add here sub-directories if needed*/}
+            } catch (RegistryCanNotWriteInfoException e2) {/*NOP*/}
         }
     }
 
