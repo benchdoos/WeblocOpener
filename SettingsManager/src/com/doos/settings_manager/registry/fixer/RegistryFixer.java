@@ -64,54 +64,71 @@ public class RegistryFixer {
         } catch (RegistryCanNotReadInfoException e) {
             String path;
             try {
-                try {
-                    path = WinReg.HKEY_LOCAL_MACHINE + "\\" +
-                            DEFAULT_INSTALLER_UNINSTALL_LOCATION_PATH + "\\" +
-                            RegistryManager.KEY_INSTALL_LOCATION;
-                    System.out.println("PPPPPP:" + path);
-                    path = Advapi32Util
-                            .registryGetStringValue(WinReg.HKEY_LOCAL_MACHINE,
-                                                    DEFAULT_INSTALLER_UNINSTALL_LOCATION_PATH,
-                                                    RegistryManager.KEY_INSTALL_LOCATION);
-
-                } catch (Exception e1) {
-                    throw new RegistryCanNotReadInfoException(
-                            "Can not read value from Windows UnInstaller: " + "HKLM\\" +
-                                    DEFAULT_INSTALLER_UNINSTALL_LOCATION_PATH, e);
-                }
+                path = getLocationFromInstallerValue(e);
 
                 if (!path.isEmpty()) {
-                    if (new File(path).exists() && new File(path).isDirectory()) {
-                        RegistryManager.setInstallLocationValue(path);
-                        result.setProperty(RegistryManager.KEY_INSTALL_LOCATION,
-                                           RegistryManager.getInstallLocationValue());
-                        System.out.println(
-                                "[REGISTRY FIXER] Successfully Fixed " + RegistryManager.KEY_INSTALL_LOCATION);
-                    } else {
-                        throw new FileNotFoundException(
-                                "It is not a directory or does not exist [WINDOWS UNINSTALL " +
-                                        "FOLDER]: " + path);
-                    }
+                    setAppInstallLocationToDefault(result, path);
                 } else {
-                    if (new File(path).exists() && new File(path).isDirectory() && new File(path).getName().equals
-                            (ApplicationConstants.APP_NAME)) {
-                        RegistryManager.setInstallLocationValue(path);
-                        result.setProperty(RegistryManager.KEY_INSTALL_LOCATION,
-                                           RegistryManager.getInstallLocationValue());
-                        System.out.println(
-                                "[REGISTRY FIXER] Successfully Fixed " + RegistryManager.KEY_INSTALL_LOCATION);
-
-                    } else {
-                        throw new FileNotFoundException(
-                                "It is not a directory or does not exist [WINDOWS UNINSTALL " +
-                                        "FOLDER]: [" + path + "]");
-                    }
+                    setAppInstallLocationToUserRoot(result, path);
                 }
             } catch (RegistryCanNotReadInfoException | RegistryCanNotWriteInfoException e1) {
                 throw new RegistryFixerInstallPathKeyFailException();
             }
         }
         return result;
+    }
+
+    private static void setAppInstallLocationToUserRoot(Properties result, String path)
+            throws RegistryCanNotWriteInfoException, RegistryCanNotReadInfoException, FileNotFoundException {
+        if (new File(path).exists() && new File(path).isDirectory() && new File(path).getName().equals
+                (ApplicationConstants.APP_NAME)) {
+            RegistryManager.setInstallLocationValue(path);
+            result.setProperty(RegistryManager.KEY_INSTALL_LOCATION,
+                               RegistryManager.getInstallLocationValue());
+            System.out.println(
+                    "[REGISTRY FIXER] Successfully Fixed " + RegistryManager.KEY_INSTALL_LOCATION);
+
+        } else {
+            throw new FileNotFoundException(
+                    "It is not a directory or does not exist [WINDOWS UNINSTALL " +
+                            "FOLDER]: [" + path + "]");
+        }
+    }
+
+    private static void setAppInstallLocationToDefault(Properties result, String path)
+            throws RegistryCanNotWriteInfoException, RegistryCanNotReadInfoException, FileNotFoundException {
+        if (new File(path).exists() && new File(path).isDirectory()) {
+            RegistryManager.setInstallLocationValue(path);
+            result.setProperty(RegistryManager.KEY_INSTALL_LOCATION,
+                               RegistryManager.getInstallLocationValue());
+            System.out.println(
+                    "[REGISTRY FIXER] Successfully Fixed " + RegistryManager.KEY_INSTALL_LOCATION);
+        } else {
+            throw new FileNotFoundException(
+                    "It is not a directory or does not exist [WINDOWS UNINSTALL " +
+                            "FOLDER]: " + path);
+        }
+    }
+
+    private static String getLocationFromInstallerValue(RegistryCanNotReadInfoException e)
+            throws RegistryCanNotReadInfoException {
+        String path;
+        try {
+            path = WinReg.HKEY_LOCAL_MACHINE + "\\" +
+                    DEFAULT_INSTALLER_UNINSTALL_LOCATION_PATH + "\\" +
+                    RegistryManager.KEY_INSTALL_LOCATION;
+            System.out.println("PPPPPP:" + path);
+            path = Advapi32Util
+                    .registryGetStringValue(WinReg.HKEY_LOCAL_MACHINE,
+                                            DEFAULT_INSTALLER_UNINSTALL_LOCATION_PATH,
+                                            RegistryManager.KEY_INSTALL_LOCATION);
+
+        } catch (Exception e1) {
+            throw new RegistryCanNotReadInfoException(
+                    "Can not read value from Windows UnInstaller: " + "HKLM\\" +
+                            DEFAULT_INSTALLER_UNINSTALL_LOCATION_PATH, e);
+        }
+        return path;
     }
 
     private static Properties fixAppVersionValue(Properties result)
