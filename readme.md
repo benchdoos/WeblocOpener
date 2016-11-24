@@ -28,11 +28,6 @@ Watch [Youtube](https://youtu.be/Z-bT-VWMDsQ) video
 
 ## System Requirements
 
-<style>
-.SystemRequirements li {
-list-style-type: none;
-}
-</style>
 <ul class="SystemRequirements">
     <li><b>Operating system:</b></li>
     <li>Windows 7 (SP1), 8, 10</li>
