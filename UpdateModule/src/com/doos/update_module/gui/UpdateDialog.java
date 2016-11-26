@@ -92,6 +92,10 @@ public class UpdateDialog extends JFrame {
         setNewVersionSizeInfo();
 
         String str = Main.properties.getProperty(RegistryManager.KEY_CURRENT_VERSION);
+        compareVersions(str);
+    }
+
+    private void compareVersions(String str) {
         if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
             //Need to update
             buttonOK.setEnabled(true);
@@ -169,6 +173,12 @@ public class UpdateDialog extends JFrame {
                         Updater.installerFile.delete();
                         break;
                     case 2: //The system cannot find the file specified. OR! User gave no permissions.
+                        JOptionPane.showMessageDialog(this,
+                                                      "Installation can not be run, because it has no permissions.",
+                                                      "Installation cancelled", JOptionPane.WARNING_MESSAGE);
+                        break;
+
+                    case 193: //Installation file is corrupt
                         JOptionPane.showMessageDialog(this,
                                                       "Installation can not be run, because it has no permissions.",
                                                       "Installation cancelled", JOptionPane.WARNING_MESSAGE);

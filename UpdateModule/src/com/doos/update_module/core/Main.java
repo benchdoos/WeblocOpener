@@ -141,7 +141,7 @@ public class Main {
                 loadProperties();
             } catch (RegistryException e) {
                 String message
-                        = "Can not read data from com.doos.com.doos.settings_manager.core.settings_manager.registry.";
+                        = "Can not read data from registry.";
                 System.out.println(message);
                 JOptionPane.showMessageDialog(null, message, message, JOptionPane.ERROR_MESSAGE);
 

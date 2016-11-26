@@ -16,7 +16,6 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 
@@ -92,10 +91,19 @@ public class Updater {
                 }
             } catch (IOException e) {
                 if (e.getMessage().contains("CreateProcess error=193")) {
-                    installerFile.delete();
-                    installerFile = downloadNewVersionInstaller(appVersion); //Fixes corrupt file
+                    try {
+                        if (!Thread.currentThread().isInterrupted()) {
+                            installerFile.delete();
+                            installerFile = downloadNewVersionInstaller(appVersion); //Fixes corrupt file
+                            installationResult = update(installerFile);
+                        }
+                    } catch (IOException e1) {
+                        if (e1.getMessage().contains("CreateProcess error=193")) {
+                            installerFile.delete();
+                            return 193;
+                        }
+                    }
                 }
-                return 2;
             }
             deleteFileIfSuccess(installationResult);
 
@@ -126,18 +134,13 @@ public class Updater {
             return result;
         } catch (InterruptedException e) {
             e.printStackTrace();
+            UpdateDialog.updateDialog.buttonCancel.setEnabled(true);
             return 1;
         }
 
     }
 
     private static File downloadNewVersionInstaller(AppVersion appVersion) {
-               /*try {
-            FileUtils.copyURLToFile(new URL(appVersion.getDownloadUrl()),
-                    new File(com.doos.settings_manager.ApplicationConstants.UPDATE_PATH_FILE + appVersion.getVersion() + "setup.exe"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
         JProgressBar progressBar = null;
         if (UpdateDialog.updateDialog != null) {
             progressBar = UpdateDialog.updateDialog.progressBar1;
@@ -167,10 +170,11 @@ public class Updater {
                 try {
                     fout = new FileOutputStream(installerFile);
 
-                    final byte data[] = new byte[1024 * 1024];
+                    final int bufferLength = 1024 * 1024;
+                    final byte data[] = new byte[bufferLength];
                     int count;
                     int progress = 0;
-                    while ((count = in.read(data, 0, 1024 * 1024)) != -1) {
+                    while ((count = in.read(data, 0, bufferLength)) != -1) {
                         if (Thread.currentThread().isInterrupted()) {
                             installerFile.delete();
                             if (progressBar != null) {
@@ -215,10 +219,10 @@ public class Updater {
                 if (Thread.currentThread().isInterrupted()) {
                     installerFile.delete();
                 }
-                list.Release();
+                if (list != null) {
+                    list.Release();
+                }
             }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

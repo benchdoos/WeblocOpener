@@ -31,7 +31,7 @@ public class UrlsProceed {
         Desktop desktop = Desktop.getDesktop();
 
         try {
-            if (!url.isEmpty() || !url.equals("")) {
+            if (!url.isEmpty()) {
                 desktop.browse(URI.create(url));
             }
         } catch (IOException e) {

@@ -118,7 +118,7 @@ public class SettingsDialog extends JFrame {
         } catch (RegistryException e) {
             log.warn("Can not save settings change", e);
             JOptionPane.showMessageDialog(new JFrame(), "Error",
-                                          "Can not save settings to com.doos.com.doos.settings_manager.core.settings_manager.registry.",
+                                          "Can not save settings to registry.",
                                           JOptionPane.ERROR_MESSAGE);
         }
         dispose();
