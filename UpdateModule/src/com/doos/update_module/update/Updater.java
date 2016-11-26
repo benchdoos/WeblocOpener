@@ -197,7 +197,6 @@ public class Updater {
                                                           progressBar.getMaximum());
                                 }
                             }
-
                         }
                     }
 
