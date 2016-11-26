@@ -89,17 +89,7 @@ public class UpdateDialog extends JFrame {
         progressBar1.setIndeterminate(false);
         availableVersionLabel.setText(serverAppVersion.getVersion());
 
-        if (serverAppVersion.getSize() > 1024 * 1024) {
-            double size = serverAppVersion.getSize() / 1024 / (double) 1024;
-            size = size * 100;
-            int i = (int) Math.round(size);
-            size = (double) i / 100;
-            newVersionSizeLabel.setText(Double.toString(size));
-            unitLabel.setText("MB");
-        } else {
-            newVersionSizeLabel.setText(serverAppVersion.getSize() / 1024 + "");
-            unitLabel.setText("KB");
-        }
+        setNewVersionSizeInfo();
 
         String str = Main.properties.getProperty(RegistryManager.KEY_CURRENT_VERSION);
         if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
@@ -113,6 +103,20 @@ public class UpdateDialog extends JFrame {
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
             //No reason to update
             buttonOK.setText("Version is up to date");
+        }
+    }
+
+    private void setNewVersionSizeInfo() {
+        if (serverAppVersion.getSize() > 1024 * 1024) {
+            double size = serverAppVersion.getSize() / 1024 / (double) 1024;
+            size = size * 100;
+            int i = (int) Math.round(size);
+            size = (double) i / 100;
+            newVersionSizeLabel.setText(Double.toString(size));
+            unitLabel.setText("MB");
+        } else {
+            newVersionSizeLabel.setText(serverAppVersion.getSize() / 1024 + "");
+            unitLabel.setText("KB");
         }
     }
 
