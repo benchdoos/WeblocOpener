@@ -167,10 +167,10 @@ public class Updater {
                 try {
                     fout = new FileOutputStream(installerFile);
 
-                    final byte data[] = new byte[1024];
+                    final byte data[] = new byte[1024 * 1024];
                     int count;
                     int progress = 0;
-                    while ((count = in.read(data, 0, 1024)) != -1) {
+                    while ((count = in.read(data, 0, 1024 * 1024)) != -1) {
                         if (Thread.currentThread().isInterrupted()) {
                             installerFile.delete();
                             if (progressBar != null) {
