@@ -42,7 +42,9 @@ public class WindowFocusRequester {
             return false;
         } finally {
             try {
-                fw.close();
+                if (fw != null) {
+                    fw.close();
+                }
             } catch (IOException ignore) {/*NOP*/}
         }
     }
