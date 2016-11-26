@@ -1,7 +1,6 @@
 package com.doos.webloc_opener.gui;
 
 import com.doos.settings_manager.ApplicationConstants;
-import com.doos.webloc_opener.service.Analyzer;
 import com.doos.webloc_opener.service.UrlsProceed;
 import com.doos.webloc_opener.service.gui.ClickListener;
 import com.doos.webloc_opener.service.gui.WindowFocusRequester;
@@ -111,7 +110,7 @@ public class EditDialog extends JFrame {
 
     private void fillTextField(String pathToEditingFile) {
         try {
-            URL url = new URL(Analyzer.takeUrl(new File(pathToEditingFile)));
+            URL url = new URL(UrlsProceed.takeUrl(new File(pathToEditingFile)));
             textField1.setText(url.toString());
         } catch (Exception e) {
             log.warn("Can not read url from : " + pathToEditingFile);

@@ -44,7 +44,7 @@ public class UrlsProceed {
 
     /**
      * Log before program shutdown.
-     * */
+     */
     public static void shutdownLogout() {
         log.debug("Goodbye!");
     }
@@ -53,9 +53,9 @@ public class UrlsProceed {
     /**
      * Creates <code>.webloc</code> file on given path.
      *
-     * @param url URL to create.
+     * @param url  URL to create.
      * @param path Path of creating file.
-     * */
+     */
     public static void createWebloc(URL url, String path) {
         log.info("Creating .webloc at [" + path + "] URL: [" + url + "]");
         NSDictionary root = new NSDictionary();
@@ -68,5 +68,28 @@ public class UrlsProceed {
         } catch (IOException e) {
             log.warn("Can not create .webloc file", e);
         }
+    }
+
+    /**
+     * Takes URL from <code>.webloc</code> file
+     *
+     * @param file File <code>.webloc</code>
+     * @return String - URL in file
+     * @see File
+     */
+    public static String takeUrl(File file) throws Exception {
+        if (!file.exists()) {
+            throw new IllegalArgumentException("File does not exist, path: " + file);
+        }
+        if (file.isDirectory()) {
+            throw new IllegalArgumentException("File can not be a directory, path: " + file);
+        }
+
+        log.debug("Got file: " + file);
+        NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(file);
+        String url = rootDict.objectForKey("URL").toString();
+        log.info("Got url: [" + url + "] from file: " + file);
+
+        return url;
     }
 }

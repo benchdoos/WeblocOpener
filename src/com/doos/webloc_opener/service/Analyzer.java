@@ -1,13 +1,12 @@
 package com.doos.webloc_opener.service;
 
-import com.dd.plist.NSDictionary;
-import com.dd.plist.PropertyListParser;
 import com.doos.webloc_opener.gui.EditDialog;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 
 import static com.doos.webloc_opener.service.Logging.getCurrentClassName;
 
@@ -19,15 +18,26 @@ public class Analyzer {
 
     private String url = "";
 
-    public Analyzer(String arg) {
+    public Analyzer(String filePath) {
         log.debug("Starting analyze");
-        log.debug("Got argument: " + arg);
+        log.debug("Got argument: " + filePath);
 
-        File file = getWeblocFile(arg);
-        String url = "";
+        if (filePath == null) {
+            throw new IllegalArgumentException("Argument can not be null.");
+        }
+
+        analizeFile(filePath);
+
+
+    }
+
+    private void analizeFile(String filePath) {
+        File file = null;
         try {
-            url = takeUrl(file);
-            if (url.equals("")) {
+            file = getWeblocFile(filePath);
+            String url = "";
+            url = UrlsProceed.takeUrl(file);
+            if (url.isEmpty()) {
                 throw new NullPointerException("Url is empty, just editing");
             }
             this.url = url;
@@ -35,34 +45,20 @@ public class Analyzer {
             log.warn("URL in file [" + file + "] has empty link.", e);
             assert file != null;
             new EditDialog(file.getAbsolutePath()).setVisible(true);
+        } catch (IOException e) {
+            String message = "Can not read file [" + file + "]";
+            log.warn(message, e);
+            JOptionPane.showMessageDialog(new Frame(), message, "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
-            log.warn("URL in file [" + file + "] is corrupt.", e);
-            JOptionPane.showMessageDialog(new Frame(), "URL in file [" + file + "] is corrupt.", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            assert file != null;
-            new EditDialog(file.getAbsolutePath()).setVisible(true);
+            final String message = "URL in file [" + file + "] is corrupt.";
+            log.warn(message, e);
+            JOptionPane.showMessageDialog(new Frame(), message, "Error", JOptionPane.ERROR_MESSAGE);
+            if (file != null) {
+                new EditDialog(file.getAbsolutePath()).setVisible(true);
+            }
         }
-
-
     }
 
-
-    /**
-     * Takes URL from <code>.webloc</code> file
-     *
-     * @param file File <code>.webloc</code>
-     * @return String - URL in file
-     * @see java.io.File
-     */
-    public static String takeUrl(File file) throws Exception {
-
-        log.debug("Got file: " + file.getAbsolutePath());
-        NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(file);
-        String url = rootDict.objectForKey("URL").toString();
-        log.info("Got url: " + url);
-
-        return url;
-    }
 
     /**
      * Returns a <code>.webloc</code> file from path.
@@ -71,7 +67,6 @@ public class Analyzer {
      * @return <code>.webloc</code> file.
      */
     private File getWeblocFile(String arg) {
-
 
         File currentFile = new File(arg);
         if (currentFile.isFile() && currentFile.exists()) {
@@ -105,6 +100,9 @@ public class Analyzer {
      * @return String name of file extension
      */
     private String getFileExtension(File file) {
+        if (file == null) {
+            throw new IllegalArgumentException("File can not be null");
+        }
         String name = file.getName();
         try {
             return name.substring(name.lastIndexOf(".") + 1);
