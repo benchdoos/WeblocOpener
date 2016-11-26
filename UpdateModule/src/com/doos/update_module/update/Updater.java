@@ -26,6 +26,7 @@ import static com.doos.settings_manager.core.SettingsManager.showErrorMessage;
  */
 public class Updater {
     private static final String githubUrl = "https://api.github.com/repos/benchdoos/WeblocOpener/releases/latest";
+    private static final String DEFAULT_ENCODING = "UTF-8";
     public static File installerFile = null;
     private static HttpsURLConnection connection = null;
     private AppVersion appVersion = null;
@@ -48,7 +49,7 @@ public class Updater {
         try {
             String input = null;
             try (BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream()))) {
+                    new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING))) {
                 input = bufferedReader.readLine();
 
                 JsonParser parser = new JsonParser();
