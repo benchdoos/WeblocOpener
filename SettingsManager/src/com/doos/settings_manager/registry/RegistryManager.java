@@ -77,7 +77,7 @@ public class RegistryManager {
     }
 
     public static String getAppVersionValue() throws RegistryCanNotReadInfoException {
-        String result = null;
+        String result;
         try {
             result = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
                     REGISTRY_APP_PATH,
@@ -94,8 +94,8 @@ public class RegistryManager {
     }
 
     public static boolean isAutoUpdateActive() throws RegistryCanNotReadInfoException {
-        boolean result = true;
-        String value = null;
+        boolean result;
+        String value;
 
         try {
             value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY, REGISTRY_APP_PATH, KEY_AUTO_UPDATE);

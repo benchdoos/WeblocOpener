@@ -24,21 +24,21 @@ public class Internal {
         if (str2 == null) {
             str2 = "0.0";
         }
-        String[] vals1 = str1.split("\\.");
-        String[] vals2 = str2.split("\\.");
+        String[] values1 = str1.split("\\.");
+        String[] values2 = str2.split("\\.");
         int i = 0;
         // set index to first non-equal ordinal or length of shortest version string
-        while (i < vals1.length && i < vals2.length && vals1[i].equals(vals2[i])) {
+        while (i < values1.length && i < values2.length && values1[i].equals(values2[i])) {
             i++;
         }
         // compare first non-equal ordinal number
-        if (i < vals1.length && i < vals2.length) {
-            int diff = Integer.valueOf(vals1[i]).compareTo(Integer.valueOf(vals2[i]));
+        if (i < values1.length && i < values2.length) {
+            int diff = Integer.valueOf(values1[i]).compareTo(Integer.valueOf(values2[i]));
             return Integer.signum(diff);
         }
         // the strings are equal or one string is a substring of the other
         // e.g. "1.2.3" = "1.2.3" or "1.2.3" < "1.2.3.4"
-        return Integer.signum(vals1.length - vals2.length);
+        return Integer.signum(values1.length - values2.length);
     }
 
 }

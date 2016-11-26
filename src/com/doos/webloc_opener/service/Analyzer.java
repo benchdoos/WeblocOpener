@@ -26,16 +26,16 @@ public class Analyzer {
             throw new IllegalArgumentException("Argument can not be null.");
         }
 
-        analizeFile(filePath);
+        analyzeFile(filePath);
 
 
     }
 
-    private void analizeFile(String filePath) {
+    private void analyzeFile(String filePath) {
         File file = null;
         try {
             file = getWeblocFile(filePath);
-            String url = "";
+            String url;
             url = UrlsProceed.takeUrl(file);
             if (url.isEmpty()) {
                 throw new NullPointerException("Url is empty, just editing");

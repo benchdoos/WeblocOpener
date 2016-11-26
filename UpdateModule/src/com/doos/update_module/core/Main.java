@@ -113,9 +113,7 @@ public class Main {
         final File JAR_FILE = new File(UpdateDialog.class.getProtectionDomain()
                                                .getCodeSource().getLocation().getPath());
         final String property = properties.getProperty(RegistryManager.KEY_INSTALL_LOCATION);
-        File JAR_FILE_DEFAULT_LOCATION = null;
-        JAR_FILE_DEFAULT_LOCATION = getFileLocation(JAR_FILE, property);
-
+        File JAR_FILE_DEFAULT_LOCATION = getFileLocation(JAR_FILE, property);
 
         System.out
                 .println("Jar: " + JAR_FILE.getAbsolutePath() + " def: " + JAR_FILE_DEFAULT_LOCATION.getAbsolutePath());

@@ -81,7 +81,7 @@ public class SettingsDialog extends JFrame {
     }
 
     private void onUpdateNow() {
-        String run = null;
+        String run;
         try {
             run = "java -jar \"" + RegistryManager.getInstallLocationValue()
                     + File.separator + "Updater.jar\"";

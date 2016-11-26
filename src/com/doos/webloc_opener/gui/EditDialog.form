@@ -91,7 +91,7 @@
               <font name="Inconsolata"/>
               <opaque value="false"/>
               <requestFocusEnabled value="true"/>
-              <text value="&lt;html&gt;&#13;&#10;  &lt;head&gt;&#13;&#10;&#13;&#10;  &lt;/head&gt;&#13;&#10;  &lt;body&gt;&#13;&#10;    &lt;p style=&quot;margin-top: 0&quot;&gt;&#13;&#10;      &#13;&#10;    &lt;/p&gt;&#13;&#10;  &lt;/body&gt;&#13;&#10;&lt;/html&gt;&#13;&#10;"/>
+              <text value="&lt;html&gt;&#13;&#10;  &lt;head&gt;&#13;&#10;    &#13;&#10;  &lt;/head&gt;&#13;&#10;  &lt;body&gt;&#13;&#10;  &lt;/body&gt;&#13;&#10;&lt;/html&gt;&#13;&#10;"/>
               <verifyInputWhenFocusTarget value="false"/>
               <visible value="true"/>
             </properties>
@@ -114,6 +114,7 @@
             </constraints>
             <properties>
               <font name="Inconsolata" style="1"/>
+              <labelFor value="9ea12"/>
               <text value="Url:"/>
             </properties>
           </component>

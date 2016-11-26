@@ -18,7 +18,8 @@ import java.awt.event.*;
 
 public class NonGuiUpdater {
     public static final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit()
-            .getImage(NonGuiUpdater.class.getResource("/icon.png")));
+                                                                 .getImage(
+                                                                         NonGuiUpdater.class.getResource("/icon.png")));
     public static final SystemTray tray = SystemTray.getSystemTray();
     private AppVersion serverAppVersion = null;
 
@@ -37,10 +38,10 @@ public class NonGuiUpdater {
             trayIcon.displayMessage(ApplicationConstants.APP_NAME + " - Updater",
                                     "There is a new version of application:" + serverAppVersion.getVersion(),
                                     TrayIcon.MessageType.INFO);
-        } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
+        } /*else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
             //System.exit(0);
 
-        }
+        }*/
     }
 
     private void createTrayIcon() {

@@ -47,7 +47,7 @@ public class Updater {
         }
 
         try {
-            String input = null;
+            String input;
             try (BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING))) {
                 input = bufferedReader.readLine();
