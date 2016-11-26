@@ -20,7 +20,7 @@ public class NonGuiUpdater {
     public static final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit()
             .getImage(NonGuiUpdater.class.getResource("/icon.png")));
     public static final SystemTray tray = SystemTray.getSystemTray();
-    public static AppVersion serverAppVersion = null;
+    private AppVersion serverAppVersion = null;
 
 
     public NonGuiUpdater() {
@@ -67,7 +67,7 @@ public class NonGuiUpdater {
             @Override
             public void actionPerformed(ActionEvent e) {
                 tray.remove(trayIcon);
-                System.exit(0); //FIXME
+                //System.exit(0); //FIXME
             }
         });
         trayMenu.add(exit);
