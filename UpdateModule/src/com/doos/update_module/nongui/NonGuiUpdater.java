@@ -98,32 +98,6 @@ public class NonGuiUpdater {
                     trayIcon.removeMouseListener(this);
                     Main.initUpdateJar();
                     tray.remove(trayIcon);
-                    /*if (updateDialog != null) {
-                        updateDialog.addWindowListener(new WindowAdapter() {
-                            @Override
-                            public void windowClosed(WindowEvent e) {
-                                try {
-                                    Main.loadProperties();
-                                } catch (RegistryException e1) {
-                                    e1.printStackTrace();
-                                }
-                                String str = properties.getProperty(RegistryManager.KEY_CURRENT_VERSION);
-
-                                if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
-                                    tray.remove(trayIcon);
-                                    System.exit(0);
-                                }
-                                super.windowClosing(e);
-
-                            }
-
-                        });
-                    }*/
-
-                    /*updateDialog.setVisible(true);
-                    updateDialog.checkForUpdates();*/
-
-
                 }
                 super.mouseClicked(e);
             }
