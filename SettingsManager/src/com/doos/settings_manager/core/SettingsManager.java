@@ -15,6 +15,8 @@ import java.util.Properties;
 
 /**
  * Created by Eugene Zrazhevsky on 20.11.2016.
+ *
+ * {@code SettingsManager} manages settings of application. It uses registry of Windows.
  */
 public class SettingsManager {
 

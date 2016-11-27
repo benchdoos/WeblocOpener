@@ -3,7 +3,6 @@ package com.doos.webloc_opener.gui;
 import com.doos.settings_manager.ApplicationConstants;
 import com.doos.webloc_opener.service.UrlsProceed;
 import com.doos.webloc_opener.service.gui.ClickListener;
-import com.doos.webloc_opener.service.gui.WindowFocusRequester;
 import com.doos.webloc_opener.utils.FrameUtils;
 import org.apache.log4j.Logger;
 
@@ -160,7 +159,7 @@ public class EditDialog extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                WindowFocusRequester.runScript(WindowFocusRequester.requestFocusOnWindowScript(getTitle()));
+                //WindowFocusRequester.runScript(WindowFocusRequester.requestFocusOnWindowScript(getTitle())); //FIXME
             }
         });
         super.setVisible(b);

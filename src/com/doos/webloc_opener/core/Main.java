@@ -28,13 +28,18 @@ public class Main {
     public static void main(String[] args) {
         new Logging();
 
-        tryLoadProperties();
 
         enableLookAndFeel();
 
         manageArguments(args);
     }
 
+
+    /**
+     * Loads registry info, trys to fix if can no load.
+     * If registryFixer crashes - uses  default properties.
+     * If registryFixer can not fix install location - calls System.exit(-1);
+     */
     private static void tryLoadProperties() {
         try {
             loadProperties();
@@ -42,13 +47,9 @@ public class Main {
             e.printStackTrace();
             try {
                 properties = RegistryFixer.fixRegistry();
-            } catch (RegistryFixerAutoUpdateKeyFailException e1) {
-                properties.setProperty(RegistryManager.KEY_AUTO_UPDATE,
-                                       Boolean.toString(ApplicationConstants.APP_AUTO_UPDATE_DEFAULT_VALUE));
-            } catch (RegistryFixerAppVersionKeyFailException e1) {
-                properties.setProperty(RegistryManager.KEY_CURRENT_VERSION, ApplicationConstants.APP_VERSION);
+            } catch (RegistryFixerAutoUpdateKeyFailException | RegistryFixerAppVersionKeyFailException e1) {
+                useDefaultAppProperties();
             } catch (RegistryFixerInstallPathKeyFailException | FileNotFoundException e1) {
-                e1.printStackTrace();
                 showErrorMessage("Can not fix registry",
                                  "Registry application data is corrupt. " +
                                          "Please re-install the " + "application.");
@@ -68,29 +69,64 @@ public class Main {
             if (!args[0].isEmpty()) {
                 switch (args[0]) {
                     case "-edit":
-                        if (args.length > 1) {
-                            EditDialog d = new EditDialog(args[1]);
-                            d.setVisible(true);
-                            d.setMaximumSize(new Dimension(MAXIMIZED_HORIZ, d.getHeight()));
-                            d.setLocationRelativeTo(null);
-                        } else {
-                            JOptionPane.showMessageDialog(new Frame(), "Argument '-edit' should have " +
-                                            "location path parameter.", "Error",
-                                    JOptionPane.ERROR_MESSAGE);
-                            System.exit(-1);
-                        }
+                        manageEditArgument(args);
+                        break;
+                    case "-settings":
+                        runSettingsDialog();
                         break;
                     default:
-                        String url = new Analyzer(args[0]).getUrl();
-                        UrlsProceed.openUrl(url);
-                        UrlsProceed.shutdownLogout();
+                        runAnalizer(args[0]);
                         break;
                 }
             }
         } else {
-            SettingsDialog settingsDialog = new SettingsDialog();
-            settingsDialog.setVisible(true);
+            runSettingsDialog();
         }
+    }
+
+    private static void runSettingsDialog() {
+        tryLoadProperties();
+        SettingsDialog settingsDialog = new SettingsDialog();
+        settingsDialog.setVisible(true);
+    }
+
+    /**
+     * Manages default incorrect argument (or url)
+     *
+     * @param arg main args
+     */
+    private static void runAnalizer(String arg) {
+        String url = new Analyzer(arg).getUrl();
+        UrlsProceed.openUrl(url);
+        UrlsProceed.shutdownLogout();
+    }
+
+    /**
+     * Manages edit argument, runs edit-mode to file in second argument
+     *
+     * @param args main args
+     */
+    private static void manageEditArgument(String[] args) {
+        if (args.length > 1) {
+            runEditDialog(args[1]);
+        } else {
+            JOptionPane.showMessageDialog(new Frame(), "Argument '-edit' should have " +
+                                                  "location path parameter.", "Error",
+                                          JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+
+    /**
+     * Runs EditDialog
+     *
+     * @param arg file path
+     */
+    private static void runEditDialog(String arg) {
+        EditDialog dialog = new EditDialog(arg);
+        dialog.setVisible(true);
+        dialog.setMaximumSize(new Dimension(MAXIMIZED_HORIZ, dialog.getHeight()));
+        dialog.setLocationRelativeTo(null);
     }
 
     /**
@@ -106,23 +142,33 @@ public class Main {
         }
     }
 
+    /**
+     * Loads Properties from Registry and sets to properties.
+     *
+     * @throws RegistryException if can not load something from Registry.
+     */
     public static void loadProperties() throws RegistryException {
         properties = SettingsManager.loadInfo();
     }
 
+    /**
+     * Updates Registry from current properties.
+     *
+     * @throws RegistryException if can not update registry.
+     */
     public static void saveProperties() throws RegistryException {
         SettingsManager.updateInfo(properties);
     }
 
-
+    /**
+     *
+     * */
     public static void useDefaultAppProperties() {
         properties.setProperty(RegistryManager.KEY_AUTO_UPDATE, Boolean.toString(true));
         properties.setProperty(RegistryManager.KEY_CURRENT_VERSION, ApplicationConstants.APP_VERSION);
         try {
             saveProperties();
-        } catch (RegistryException e) {
-            e.getStackTrace();
-        }
+        } catch (RegistryException ignore) {}
     }
 
 

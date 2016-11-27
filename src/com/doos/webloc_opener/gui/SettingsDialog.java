@@ -3,6 +3,10 @@ package com.doos.webloc_opener.gui;
 import com.doos.settings_manager.registry.RegistryCanNotReadInfoException;
 import com.doos.settings_manager.registry.RegistryException;
 import com.doos.settings_manager.registry.RegistryManager;
+import com.doos.settings_manager.registry.fixer.RegistryFixer;
+import com.doos.settings_manager.registry.fixer.RegistryFixerAppVersionKeyFailException;
+import com.doos.settings_manager.registry.fixer.RegistryFixerAutoUpdateKeyFailException;
+import com.doos.settings_manager.registry.fixer.RegistryFixerInstallPathKeyFailException;
 import com.doos.webloc_opener.core.Main;
 import com.doos.webloc_opener.utils.FrameUtils;
 import org.apache.log4j.Logger;
@@ -11,6 +15,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static com.doos.webloc_opener.core.Main.properties;
@@ -105,8 +110,14 @@ public class SettingsDialog extends JFrame {
             Main.loadProperties();
             autoUpdateEnabledCheckBox.setSelected(Boolean.parseBoolean(properties.getProperty(RegistryManager.KEY_AUTO_UPDATE)));
         } catch (RegistryException e) {
-            log.warn("Can not load data from com.doos.com.doos.settings_manager.core.settings_manager.registry", e);
-            Main.useDefaultAppProperties(); //To prevent crash
+            log.warn("Can not load data from registry", e);
+            try {
+                properties = RegistryFixer.fixRegistry();
+            } catch (FileNotFoundException | RegistryFixerAutoUpdateKeyFailException | RegistryFixerAppVersionKeyFailException e1) {
+                Main.useDefaultAppProperties(); //To prevent crash
+            } catch (RegistryFixerInstallPathKeyFailException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
