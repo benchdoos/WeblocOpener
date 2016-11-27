@@ -167,8 +167,9 @@ public class Main {
             if (file.getName().equals(ApplicationConstants.APP_NAME)) {
                 JAR_FILE_DEFAULT_LOCATION = new File(file.getAbsolutePath() + File.separator + "Updater.jar");
             } else {
+                String programFilesPath = System.getenv("ProgramFiles(X86)");
                 JAR_FILE_DEFAULT_LOCATION = new File(
-                        "C:\\Program Files (x86)\\WeblocOpener\\Updater.jar"); //TODO find better solution
+                        programFilesPath + "WeblocOpener" + File.separator + "Updater.jar"); //TODO find better solution
             }
             ;
         }
