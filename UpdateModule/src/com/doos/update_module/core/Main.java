@@ -3,6 +3,7 @@ package com.doos.update_module.core;
 import com.doos.settings_manager.ApplicationConstants;
 import com.doos.settings_manager.core.SettingsManager;
 import com.doos.settings_manager.registry.RegistryCanNotReadInfoException;
+import com.doos.settings_manager.registry.RegistryCanNotWriteInfoException;
 import com.doos.settings_manager.registry.RegistryException;
 import com.doos.settings_manager.registry.RegistryManager;
 import com.doos.settings_manager.registry.fixer.RegistryFixer;
@@ -21,10 +22,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Properties;
 
 import static com.doos.settings_manager.ApplicationConstants.UPDATE_PATH_FILE;
-import static com.doos.settings_manager.core.SettingsManager.showErrorMessage;
+import static com.doos.settings_manager.core.SettingsManager.showErrorMessageToUser;
 import static com.doos.update_module.nongui.NonGuiUpdater.tray;
 import static com.doos.update_module.nongui.NonGuiUpdater.trayIcon;
 
@@ -32,7 +32,6 @@ import static com.doos.update_module.nongui.NonGuiUpdater.trayIcon;
  * Created by Eugene Zrazhevsky on 02.11.2016.
  */
 public class Main {
-    public static Properties properties = new Properties();
     public static Mode mode = Mode.NORMAL;
 
     public static void main(String[] args) {
@@ -51,14 +50,19 @@ public class Main {
             switch (args[0]) {
                 case "-s":
                     mode = Mode.SILENT;
-                    final String autoUpdateString = properties.getProperty(RegistryManager.KEY_AUTO_UPDATE);
-                    System.out.println(RegistryManager.KEY_AUTO_UPDATE + " : " + autoUpdateString);
-                    if (autoUpdateString != null) {
-                        if (Boolean.parseBoolean(autoUpdateString)) {
-                            new NonGuiUpdater();
-                        }
-                    } else {
-                        properties.setProperty(RegistryManager.KEY_AUTO_UPDATE, Boolean.toString(true));
+                    boolean isAutoUpdate = ApplicationConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE;
+
+                    try {
+                        isAutoUpdate = RegistryManager.isAutoUpdateActive();
+                    } catch (RegistryCanNotReadInfoException e) {
+                        try {
+                            RegistryManager
+                                    .setAutoUpdateActive(ApplicationConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE);
+                        } catch (RegistryCanNotWriteInfoException ignore) {/*NOP*/}
+                    }
+
+                    System.out.println(RegistryManager.KEY_AUTO_UPDATE + " : " + isAutoUpdate);
+                    if (isAutoUpdate) {
                         new NonGuiUpdater();
                     }
                     break;
@@ -79,29 +83,23 @@ public class Main {
                 System.out.println("Installation folder: " + RegistryManager.getInstallLocationValue());
             } catch (RegistryCanNotReadInfoException ignore) {/*NOP*/}
             /*-----*/
-
-
             initUpdateJar();
         }
     }
 
     private static void tryLoadProperties() {
         try {
-            loadProperties();
+            SettingsManager.loadInfo();
         } catch (RegistryException e) {
             e.printStackTrace();
             try {
-                properties = RegistryFixer.fixRegistry();
-            } catch (RegistryFixerAutoUpdateKeyFailException e1) {
-                properties.setProperty(RegistryManager.KEY_AUTO_UPDATE,
-                                       Boolean.toString(ApplicationConstants.APP_AUTO_UPDATE_DEFAULT_VALUE));
-            } catch (RegistryFixerAppVersionKeyFailException e1) {
-                properties.setProperty(RegistryManager.KEY_CURRENT_VERSION, ApplicationConstants.APP_VERSION);
+                RegistryFixer.fixRegistry();
+            } catch (RegistryFixerAutoUpdateKeyFailException | RegistryFixerAppVersionKeyFailException e1) {
+                RegistryManager.setDefaultSettings();
             } catch (RegistryFixerInstallPathKeyFailException | FileNotFoundException e1) {
-                e1.printStackTrace();
-                showErrorMessage("Can not fix registry",
-                                 "Registry application data is corrupt. " +
-                                         "Please re-install the " + "application.");
+                showErrorMessageToUser("Can not fix registry",
+                                       "Registry application data is corrupt. " +
+                                               "Please re-install the " + "application.");
                 System.exit(-1);
             }
 
@@ -112,7 +110,12 @@ public class Main {
     public static void initUpdateJar() {
         final File JAR_FILE = new File(UpdateDialog.class.getProtectionDomain()
                                                .getCodeSource().getLocation().getPath());
-        final String property = properties.getProperty(RegistryManager.KEY_INSTALL_LOCATION);
+        String property = null;
+        try {
+            property = RegistryManager.getInstallLocationValue();
+        } catch (RegistryCanNotReadInfoException e) {
+            e.printStackTrace();
+        }
         File JAR_FILE_DEFAULT_LOCATION = getFileLocation(JAR_FILE, property);
 
         System.out
@@ -136,7 +139,7 @@ public class Main {
             }
         } else {
             try {
-                loadProperties();
+                SettingsManager.loadInfo();
             } catch (RegistryException e) {
                 String message
                         = "Can not read data from registry.";
@@ -174,11 +177,16 @@ public class Main {
             @Override
             public void windowClosed(WindowEvent e) {
                 try {
-                    loadProperties();
+                    SettingsManager.loadInfo();
                 } catch (RegistryException e1) {
                     e1.printStackTrace();
                 }
-                String str = properties.getProperty(RegistryManager.KEY_CURRENT_VERSION);
+                String str;
+                try {
+                    str = RegistryManager.getAppVersionValue();
+                } catch (RegistryCanNotReadInfoException e1) {
+                    str = ApplicationConstants.APP_VERSION;
+                }
                 if (str == null) {
                     //str = serverAppVersion.getVersion(); //why????
                     str = ApplicationConstants.APP_VERSION;
@@ -198,13 +206,6 @@ public class Main {
         updateDialog.checkForUpdates();
     }
 
-    public static void updateProperties() {
-        SettingsManager.updateInfo(properties);
-    }
-
-    public static void loadProperties() throws RegistryException {
-        properties = SettingsManager.loadInfo();
-    }
 
     private static void enableLookAndFeel() {
         try {

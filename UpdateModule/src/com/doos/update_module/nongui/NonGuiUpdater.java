@@ -1,6 +1,8 @@
 package com.doos.update_module.nongui;
 
 import com.doos.settings_manager.ApplicationConstants;
+import com.doos.settings_manager.registry.RegistryCanNotReadInfoException;
+import com.doos.settings_manager.registry.RegistryCanNotWriteInfoException;
 import com.doos.settings_manager.registry.RegistryManager;
 import com.doos.update_module.core.Main;
 import com.doos.update_module.gui.UpdateDialog;
@@ -27,11 +29,11 @@ public class NonGuiUpdater {
     public NonGuiUpdater() {
         Updater updater = new Updater();
         serverAppVersion = updater.getAppVersion();
-        compareVersions(serverAppVersion);
+        compareVersions();
     }
 
-    private void compareVersions(AppVersion appVersion) {
-        String str = Main.properties.getProperty(RegistryManager.KEY_CURRENT_VERSION);
+    private void compareVersions() {
+        String str = ApplicationConstants.APP_VERSION;
         if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
             //create trayicon and show pop-up
             createTrayIcon();
@@ -49,15 +51,26 @@ public class NonGuiUpdater {
         PopupMenu trayMenu = new PopupMenu();
 
         final CheckboxMenuItem autoUpdateCheckBox = new CheckboxMenuItem("Auto-update");
-        System.out.println(
-                RegistryManager.KEY_AUTO_UPDATE + ": " + Main.properties.getProperty(RegistryManager.KEY_AUTO_UPDATE));
-        autoUpdateCheckBox.setState(Boolean.parseBoolean(Main.properties.getProperty(RegistryManager.KEY_AUTO_UPDATE)));
+        try {
+            System.out.println(
+                    RegistryManager.KEY_AUTO_UPDATE + ": " + RegistryManager.isAutoUpdateActive());
+        } catch (RegistryCanNotReadInfoException ignore) {/*NOP*/}
+
+        try {
+            autoUpdateCheckBox.setState(RegistryManager.isAutoUpdateActive());
+        } catch (RegistryCanNotReadInfoException e) {
+            RegistryManager.setDefaultSettings();
+            autoUpdateCheckBox.setState(ApplicationConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE);
+        }
         autoUpdateCheckBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 System.out.println(RegistryManager.KEY_AUTO_UPDATE + ": " + autoUpdateCheckBox.getState());
-                Main.properties.setProperty(RegistryManager.KEY_AUTO_UPDATE, autoUpdateCheckBox.getState() + "");
-                Main.updateProperties();
+                try {
+                    RegistryManager.setAutoUpdateActive(autoUpdateCheckBox.getState());
+                } catch (RegistryCanNotWriteInfoException e1) {
+                    RegistryManager.setDefaultSettings();
+                }
             }
         });
         trayMenu.add(autoUpdateCheckBox);

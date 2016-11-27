@@ -19,7 +19,7 @@ import java.io.*;
 import java.net.URI;
 import java.net.URL;
 
-import static com.doos.settings_manager.core.SettingsManager.showErrorMessage;
+import static com.doos.settings_manager.core.SettingsManager.showErrorMessageToUser;
 
 /**
  * Created by Eugene Zrazhevsky on 03.11.2016.
@@ -72,7 +72,7 @@ public class Updater {
         } catch (IOException e) {
             e.printStackTrace();
 
-            showErrorMessage("Can not Update", "Can not connect to api.github.com");
+            showErrorMessageToUser("Can not Update", "Can not connect to api.github.com");
         }
     }
 

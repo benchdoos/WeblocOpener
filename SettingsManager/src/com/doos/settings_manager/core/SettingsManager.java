@@ -11,7 +11,6 @@ import javax.swing.event.HyperlinkListener;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Properties;
 
 /**
  * Created by Eugene Zrazhevsky on 20.11.2016.
@@ -20,35 +19,20 @@ import java.util.Properties;
  */
 public class SettingsManager {
 
-    public static void updateInfo(Properties properties) {
-        try {
-            final String property = properties.getProperty(RegistryManager.KEY_AUTO_UPDATE);
-            if (property != null) {
-                RegistryManager.setAutoUpdateActive(Boolean.parseBoolean(property));
-            } else {
-                RegistryManager.setAutoUpdateActive(true);
-            }
-            RegistryManager.setAppVersionValue(ApplicationConstants.APP_VERSION);
-        } catch (RegistryCanNotWriteInfoException e) {
-            e.printStackTrace();
-        }
-    }
+    //You can not call this, method can be deleted
+    public static void loadInfo() throws RegistryCanNotReadInfoException, RegistryCanNotWriteInfoException {
+        RegistryManager.getAppNameValue();
+        RegistryManager.getAppVersionValue();
+        RegistryManager.getInstallLocationValue();
+        RegistryManager.getURLUpdateValue();
 
-    public static Properties loadInfo() throws RegistryCanNotReadInfoException, RegistryCanNotWriteInfoException {
-        Properties result = new Properties();
-        result.setProperty(RegistryManager.KEY_AUTO_UPDATE, Boolean.toString(RegistryManager.isAutoUpdateActive()));
-
-        result.setProperty(RegistryManager.KEY_CURRENT_VERSION, RegistryManager.getAppVersionValue());
-
-        //Fixes com.doos.com.doos.settings_manager.core.settings_manager.registry after update (if needed)
+        //Fixes registry after update (if needed)
         if (!RegistryManager.getAppVersionValue().equals(ApplicationConstants.APP_VERSION)) {
             RegistryManager.setAppVersionValue(ApplicationConstants.APP_VERSION);
         }
-        result.setProperty(RegistryManager.KEY_INSTALL_LOCATION, RegistryManager.getInstallLocationValue());
-        return result;
     }
 
-    public static void showErrorMessage(String title, String message) {
+    public static void showErrorMessageToUser(String title, String message) {
         String msg = "<HTML><BODY><P>" + message + " <br>Please visit " +
                 "<a href=\"" + ApplicationConstants.UPDATE_WEB_URL + "\">" + ApplicationConstants.UPDATE_WEB_URL + "</P></BODY></HTML>";
         JEditorPane jEditorPane = new JEditorPane();

@@ -14,7 +14,7 @@ public interface ApplicationConstants {
     String UPDATE_PATH_FILE = System.getProperty("java.io.tmpdir") + APP_NAME + File.separator;
     String UPDATE_WEB_URL = "https://github.com/benchdoos/WeblocOpener/";
 
-    boolean APP_AUTO_UPDATE_DEFAULT_VALUE = true;
+    boolean IS_APP_AUTO_UPDATE_DEFAULT_VALUE = true;
 
     String APP_ID = "{F1300E10-BBB2-4695-AC2F-3D58DC0BC0A6}_is1";
     String APP_INSTALL_SILENT_KEY = " /VERYSILENT";

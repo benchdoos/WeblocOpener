@@ -7,7 +7,6 @@ import com.doos.settings_manager.registry.fixer.RegistryFixer;
 import com.doos.settings_manager.registry.fixer.RegistryFixerAppVersionKeyFailException;
 import com.doos.settings_manager.registry.fixer.RegistryFixerAutoUpdateKeyFailException;
 import com.doos.settings_manager.registry.fixer.RegistryFixerInstallPathKeyFailException;
-import com.doos.webloc_opener.core.Main;
 import com.doos.webloc_opener.utils.FrameUtils;
 import org.apache.log4j.Logger;
 
@@ -18,7 +17,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import static com.doos.webloc_opener.core.Main.properties;
 import static com.doos.webloc_opener.service.Logging.getCurrentClassName;
 
 public class SettingsDialog extends JFrame {
@@ -107,14 +105,17 @@ public class SettingsDialog extends JFrame {
 
     private void loadSettings() {
         try {
-            Main.loadProperties();
-            autoUpdateEnabledCheckBox.setSelected(Boolean.parseBoolean(properties.getProperty(RegistryManager.KEY_AUTO_UPDATE)));
+            autoUpdateEnabledCheckBox.setSelected(RegistryManager.isAutoUpdateActive());
         } catch (RegistryException e) {
             log.warn("Can not load data from registry", e);
             try {
-                properties = RegistryFixer.fixRegistry();
+                RegistryFixer.fixRegistry();
             } catch (FileNotFoundException | RegistryFixerAutoUpdateKeyFailException | RegistryFixerAppVersionKeyFailException e1) {
-                Main.useDefaultAppProperties(); //To prevent crash
+                RegistryManager.setDefaultSettings(); //To prevent crash
+                try {
+                    autoUpdateEnabledCheckBox.setSelected(RegistryManager.isAutoUpdateActive());
+                } catch (RegistryCanNotReadInfoException ignore) {
+                }
             } catch (RegistryFixerInstallPathKeyFailException e1) {
                 e1.printStackTrace();
             }
@@ -123,9 +124,8 @@ public class SettingsDialog extends JFrame {
 
 
     private void onOK() {
-        properties.setProperty(RegistryManager.KEY_AUTO_UPDATE, autoUpdateEnabledCheckBox.isSelected() + "");
         try {
-            Main.saveProperties();
+            RegistryManager.setAutoUpdateActive(autoUpdateEnabledCheckBox.isSelected());
         } catch (RegistryException e) {
             log.warn("Can not save settings change", e);
             JOptionPane.showMessageDialog(new JFrame(), "Error",
@@ -136,7 +136,6 @@ public class SettingsDialog extends JFrame {
     }
 
     private void onCancel() {
-        // add your code here if necessary
         dispose();
     }
 }

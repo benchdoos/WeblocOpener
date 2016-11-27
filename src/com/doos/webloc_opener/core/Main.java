@@ -1,6 +1,5 @@
 package com.doos.webloc_opener.core;
 
-import com.doos.settings_manager.ApplicationConstants;
 import com.doos.settings_manager.core.SettingsManager;
 import com.doos.settings_manager.registry.RegistryException;
 import com.doos.settings_manager.registry.RegistryManager;
@@ -17,17 +16,14 @@ import com.doos.webloc_opener.service.UrlsProceed;
 import javax.swing.*;
 import java.awt.*;
 import java.io.FileNotFoundException;
-import java.util.Properties;
 
-import static com.doos.settings_manager.core.SettingsManager.showErrorMessage;
+import static com.doos.settings_manager.core.SettingsManager.showErrorMessageToUser;
 import static java.awt.Frame.MAXIMIZED_HORIZ;
 
 public class Main {
-    public static Properties properties = new Properties();
 
     public static void main(String[] args) {
         new Logging();
-
 
         enableLookAndFeel();
 
@@ -42,17 +38,17 @@ public class Main {
      */
     private static void tryLoadProperties() {
         try {
-            loadProperties();
+            SettingsManager.loadInfo();
         } catch (RegistryException e) {
             e.printStackTrace();
             try {
-                properties = RegistryFixer.fixRegistry();
+                RegistryFixer.fixRegistry();
             } catch (RegistryFixerAutoUpdateKeyFailException | RegistryFixerAppVersionKeyFailException e1) {
-                useDefaultAppProperties();
+                RegistryManager.setDefaultSettings();
             } catch (RegistryFixerInstallPathKeyFailException | FileNotFoundException e1) {
-                showErrorMessage("Can not fix registry",
-                                 "Registry application data is corrupt. " +
-                                         "Please re-install the " + "application.");
+                showErrorMessageToUser("Can not fix registry",
+                                       "Registry application data is corrupt. " +
+                                               "Please re-install the " + "application.");
                 System.exit(-1);
             }
 
@@ -140,35 +136,6 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Loads Properties from Registry and sets to properties.
-     *
-     * @throws RegistryException if can not load something from Registry.
-     */
-    public static void loadProperties() throws RegistryException {
-        properties = SettingsManager.loadInfo();
-    }
-
-    /**
-     * Updates Registry from current properties.
-     *
-     * @throws RegistryException if can not update registry.
-     */
-    public static void saveProperties() throws RegistryException {
-        SettingsManager.updateInfo(properties);
-    }
-
-    /**
-     *
-     * */
-    public static void useDefaultAppProperties() {
-        properties.setProperty(RegistryManager.KEY_AUTO_UPDATE, Boolean.toString(true));
-        properties.setProperty(RegistryManager.KEY_CURRENT_VERSION, ApplicationConstants.APP_VERSION);
-        try {
-            saveProperties();
-        } catch (RegistryException ignore) {}
     }
 
 

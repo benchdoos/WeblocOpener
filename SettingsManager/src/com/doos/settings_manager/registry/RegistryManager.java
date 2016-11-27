@@ -7,6 +7,8 @@ import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.jna.platform.win32.Win32Exception;
 import com.sun.jna.platform.win32.WinReg;
 
+import java.util.Properties;
+
 /**
  * Created by Eugene Zrazhevsky on 19.11.2016.
  */
@@ -18,58 +20,23 @@ public class RegistryManager {
     public static final String KEY_URL_UPDATE_LINK = "URLUpdateInfo";
     private static final WinReg.HKEY APP_ROOT_HKEY = WinReg.HKEY_CURRENT_USER;
     private final static String REGISTRY_APP_PATH = "SOFTWARE\\" + ApplicationConstants.APP_NAME + "\\";
-
-
-    public static String getAppNameValue() throws RegistryCanNotReadInfoException {
-        String value;
-        try {
-            value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
-                                                        REGISTRY_APP_PATH,
-                                                        KEY_APP_NAME);
-        } catch (Win32Exception e) {
-            throw new RegistryCanNotReadInfoException("Can not read Installed Location value : " +
-                                                              "HKLM\\" + REGISTRY_APP_PATH + "" + KEY_APP_NAME, e);
-        }
-
-        return value;
-    }
-
-    public static void setAppNameValue(String name) throws RegistryCanNotWriteInfoException {
-        RegistryManager.createRegistryEntry(KEY_APP_NAME, name);
-    }
-
-    public static String getURLUpdateValue() throws RegistryCanNotReadInfoException {
-        String value;
-        try {
-            value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
-                                                        REGISTRY_APP_PATH,
-                                                        KEY_URL_UPDATE_LINK);
-        } catch (Win32Exception e) {
-            throw new RegistryCanNotReadInfoException("Can not read Installed Location value : " +
-                                                              "HKLM\\" + REGISTRY_APP_PATH + "" + KEY_URL_UPDATE_LINK,
-                                                      e);
-        }
-
-        return value;
-    }
-
-    public static void setURLUpdateValue(String name) throws RegistryCanNotWriteInfoException {
-        RegistryManager.createRegistryEntry(KEY_URL_UPDATE_LINK, name);
-    }
+    private static Properties settings = new Properties();
 
     public static String getInstallLocationValue() throws RegistryCanNotReadInfoException {
-        String value;
-        try {
-            value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
-                    REGISTRY_APP_PATH,
-                    KEY_INSTALL_LOCATION);
-        } catch (Win32Exception e) {
-            throw new RegistryCanNotReadInfoException("Can not read Installed Location value : " +
-                                                              "HKLM\\" + REGISTRY_APP_PATH + "" + KEY_INSTALL_LOCATION,
-                                                      e);
-        }
 
-        return value;
+        if (settings.getProperty(KEY_INSTALL_LOCATION) == null) {
+            try {
+                String value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
+                                                                   REGISTRY_APP_PATH,
+                                                                   KEY_INSTALL_LOCATION);
+                settings.setProperty(KEY_INSTALL_LOCATION, value);
+                return value;
+            } catch (Win32Exception e) {
+                throw new RegistryCanNotReadInfoException("Can not read Installed Location value : " +
+                                                                  "HKLM\\" + REGISTRY_APP_PATH + "" + KEY_INSTALL_LOCATION,
+                                                          e);
+            }
+        } else return settings.getProperty(KEY_INSTALL_LOCATION);
     }
 
     public static void setInstallLocationValue(String location) throws RegistryCanNotWriteInfoException {
@@ -77,16 +44,18 @@ public class RegistryManager {
     }
 
     public static String getAppVersionValue() throws RegistryCanNotReadInfoException {
-        String result;
-        try {
-            result = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
-                    REGISTRY_APP_PATH,
-                    KEY_CURRENT_VERSION);
-        } catch (Win32Exception e) {
-            throw new RegistryCanNotReadInfoException("Can not get app version value", e);
-        }
 
-        return result;
+        if (settings.getProperty(KEY_CURRENT_VERSION) == null) {
+            try {
+                String result = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
+                                                                    REGISTRY_APP_PATH,
+                                                                    KEY_CURRENT_VERSION);
+                settings.setProperty(KEY_CURRENT_VERSION, result);
+                return result;
+            } catch (Win32Exception e) {
+                throw new RegistryCanNotReadInfoException("Can not get app version value", e);
+            }
+        } else return settings.getProperty(KEY_CURRENT_VERSION);
     }
 
     public static void setAppVersionValue(String version) throws RegistryCanNotWriteInfoException {
@@ -94,38 +63,86 @@ public class RegistryManager {
     }
 
     public static boolean isAutoUpdateActive() throws RegistryCanNotReadInfoException {
-        boolean result;
-        String value;
+        if (settings.getProperty(KEY_AUTO_UPDATE) == null) {
+            try {
+                String value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY, REGISTRY_APP_PATH, KEY_AUTO_UPDATE);
 
-        try {
-            value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY, REGISTRY_APP_PATH, KEY_AUTO_UPDATE);
-            result = Boolean.parseBoolean(value);
-
-        } catch (Win32Exception e) {
-            throw new RegistryCanNotReadInfoException("Can not read " + RegistryManager.KEY_AUTO_UPDATE + " value", e);
-        }
-
-
-        return result;
+                boolean result = Boolean.parseBoolean(value); //prevents
+                settings.setProperty(KEY_AUTO_UPDATE, Boolean.toString(result));
+                return result;
+            } catch (Win32Exception e) {
+                throw new RegistryCanNotReadInfoException("Can not read " + RegistryManager.KEY_AUTO_UPDATE + " value",
+                                                          e);
+            }
+        } else return Boolean.parseBoolean(settings.getProperty(KEY_AUTO_UPDATE));
     }
 
     public static void setAutoUpdateActive(boolean autoUpdateActive) throws RegistryCanNotWriteInfoException {
+        createRegistryEntry(KEY_AUTO_UPDATE, Boolean.toString(autoUpdateActive));
+    }
 
-        try {
-            Advapi32Util.registrySetStringValue(APP_ROOT_HKEY, REGISTRY_APP_PATH, KEY_AUTO_UPDATE,
-                    Boolean.toString(autoUpdateActive));
-        } catch (Win32Exception e) {
-            throw new RegistryCanNotWriteInfoException("Can not set " + RegistryManager.KEY_AUTO_UPDATE + " value", e);
-        }
+    public static String getAppNameValue() throws RegistryCanNotReadInfoException {
+        if (settings.getProperty(KEY_APP_NAME) == null) {
+            try {
+                String value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
+                                                                   REGISTRY_APP_PATH,
+                                                                   KEY_APP_NAME);
+                settings.setProperty(KEY_APP_NAME, value);
+                return value;
+            } catch (Win32Exception e) {
+                throw new RegistryCanNotReadInfoException("Can not read Installed Location value : " +
+                                                                  "HKLM\\" + REGISTRY_APP_PATH + "" + KEY_APP_NAME, e);
+            }
+        } else return settings.getProperty(KEY_APP_NAME);
+
+    }
+
+    public static void setAppNameValue(String name) throws RegistryCanNotWriteInfoException {
+        RegistryManager.createRegistryEntry(KEY_APP_NAME, name);
+    }
+
+    public static String getURLUpdateValue() throws RegistryCanNotReadInfoException {
+
+        if (settings.getProperty(KEY_URL_UPDATE_LINK) == null) {
+            try {
+                String value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
+                                                                   REGISTRY_APP_PATH,
+                                                                   KEY_URL_UPDATE_LINK);
+                settings.setProperty(KEY_URL_UPDATE_LINK, value);
+                return value;
+            } catch (Win32Exception e) {
+                throw new RegistryCanNotReadInfoException(
+                        "Can not read Installed Location value : " +
+                                "HKLM\\" + REGISTRY_APP_PATH + "" + KEY_URL_UPDATE_LINK, e);
+            }
+        } else return settings.getProperty(KEY_URL_UPDATE_LINK);
+
+    }
+
+    public static void setURLUpdateValue(String name) throws RegistryCanNotWriteInfoException {
+        RegistryManager.createRegistryEntry(KEY_URL_UPDATE_LINK, name);
     }
 
     public static void createRegistryEntry(String valueName, String value) throws RegistryCanNotWriteInfoException {
         try {
+            settings.setProperty(valueName, value);
             Advapi32Util.registrySetStringValue(APP_ROOT_HKEY, REGISTRY_APP_PATH, valueName, value);
         } catch (Win32Exception e) {
             throw new RegistryCanNotWriteInfoException("Can not create entry at: "
-                    + APP_ROOT_HKEY + "\\" + REGISTRY_APP_PATH + valueName + " With value [" + value + "]", e);
+                                                               + APP_ROOT_HKEY + "\\" + REGISTRY_APP_PATH + valueName
+                                                               + " With value [" + value + "]", e);
         }
+    }
+
+    /**
+     * Sets default Settings if can not use registry;
+     * It will help to prevent app from crash (if install location is not currupt);
+     */
+    public static void setDefaultSettings() {
+        settings.setProperty(KEY_CURRENT_VERSION, ApplicationConstants.APP_VERSION);
+        settings.setProperty(KEY_AUTO_UPDATE, Boolean.toString(ApplicationConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE));
+        settings.setProperty(KEY_APP_NAME, ApplicationConstants.APP_NAME);
+        settings.setProperty(KEY_URL_UPDATE_LINK, ApplicationConstants.UPDATE_WEB_URL);
     }
 }
 

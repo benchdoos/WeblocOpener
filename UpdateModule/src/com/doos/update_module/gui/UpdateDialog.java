@@ -1,6 +1,9 @@
 package com.doos.update_module.gui;
 
 import com.doos.settings_manager.ApplicationConstants;
+import com.doos.settings_manager.core.SettingsManager;
+import com.doos.settings_manager.registry.RegistryCanNotReadInfoException;
+import com.doos.settings_manager.registry.RegistryCanNotWriteInfoException;
 import com.doos.settings_manager.registry.RegistryException;
 import com.doos.settings_manager.registry.RegistryManager;
 import com.doos.update_module.core.Main;
@@ -91,7 +94,13 @@ public class UpdateDialog extends JFrame {
 
         setNewVersionSizeInfo();
 
-        String str = Main.properties.getProperty(RegistryManager.KEY_CURRENT_VERSION);
+        String str;
+        try {
+            str = RegistryManager.getAppVersionValue();
+        } catch (RegistryCanNotReadInfoException e) {
+            RegistryManager.setDefaultSettings();
+            str = ApplicationConstants.APP_VERSION;
+        }
         compareVersions(str);
     }
 
@@ -127,11 +136,10 @@ public class UpdateDialog extends JFrame {
     private void loadProperties() {
 
         try {
-            Main.loadProperties();
-            currentVersionLabel.setText(Main.properties.getProperty(RegistryManager.KEY_CURRENT_VERSION));
+            SettingsManager.loadInfo();
+            currentVersionLabel.setText(RegistryManager.getAppVersionValue());
         } catch (RegistryException e) {
-            e.getStackTrace();
-            currentVersionLabel.setText("Unknown");
+            currentVersionLabel.setText(ApplicationConstants.APP_VERSION);
         }
         availableVersionLabel.setText("Unknown");
     }
@@ -146,12 +154,12 @@ public class UpdateDialog extends JFrame {
             if (!Thread.currentThread().isInterrupted()) {
                 switch (successUpdate) {
                     case 0: //NORMAL state, app updated
-                        Main.properties.setProperty(RegistryManager.KEY_CURRENT_VERSION, serverAppVersion.getVersion());
-
-                        for (String pname : Main.properties.stringPropertyNames()) {
-                            System.out.println("PROP:>" + pname + " " + Main.properties.getProperty(pname));
+                        try {
+                            SettingsManager.loadInfo();
+                        } catch (RegistryCanNotReadInfoException | RegistryCanNotWriteInfoException ignore) {
+                            /*NOP*/
                         }
-                        Main.updateProperties();
+
                         JOptionPane.showMessageDialog(this, "WeblocOpener successfully updated to version: "
                                 + serverAppVersion.getVersion(), "Success", JOptionPane.INFORMATION_MESSAGE);
 
@@ -214,9 +222,10 @@ public class UpdateDialog extends JFrame {
         File updateJar = new File(ApplicationConstants.UPDATE_PATH_FILE + "Updater_.jar");
         if (updateJar.exists()) {
             try {
-                Runtime.getRuntime().exec("java -jar \"" + Main.properties.getProperty(
-                        RegistryManager.KEY_INSTALL_LOCATION) + "\"Updater.jar -afterUpdate");
-            } catch (IOException ignore) {/*NOP*/}
+                Runtime.getRuntime().exec("java -jar \""
+                                                  + RegistryManager.getInstallLocationValue()
+                                                  + "\"Updater.jar -afterUpdate");
+            } catch (IOException | RegistryCanNotReadInfoException ignore) {/*NOP*/}
         }
         dispose();
     }
