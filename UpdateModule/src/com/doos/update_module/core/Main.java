@@ -106,9 +106,11 @@ public class Main {
         }
     }
 
-
+    /**
+     * Finds out, where app is located.
+     */
     public static void initUpdateJar() {
-        final File JAR_FILE = new File(UpdateDialog.class.getProtectionDomain()
+        final File JAR_FILE = new File(Main.class.getProtectionDomain()
                                                .getCodeSource().getLocation().getPath());
         String property = null;
         try {
@@ -124,6 +126,9 @@ public class Main {
         runUpdater(JAR_FILE, JAR_FILE_DEFAULT_LOCATION);
     }
 
+    /**
+     * Creates a copy of jar file in other location and runs it.
+     */
     private static void runUpdater(File JAR_FILE, File JAR_FILE_DEFAULT_LOCATION) {
         if (JAR_FILE.getAbsolutePath().replace("%20", " ").equals(
                 JAR_FILE_DEFAULT_LOCATION.getAbsolutePath().replace("%20", " "))) {
