@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "WeblocOpener"
-#define MyAppVersion "1.2"
+#define MyAppVersion "1.2.1"
 #define MyAppPublisher "Eugene Zrazhevsky"
 #define MyAppURL "https://github.com/benchdoos/WeblocOpener/"
 #define MyAppExeName "WeblocOpener.exe"
@@ -23,7 +23,8 @@ DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 OutputDir=F:\Developer\JAVA\WeblocOpener\out\setup
 OutputBaseFilename=WeblocOpenerSetup
-SetupIconFile=F:\Developer\JAVA\WeblocOpener\icon.ico
+SetupIconFile=F:\Developer\JAVA\WeblocOpener\balloonIcon256.ico
+UninstallDisplayIcon={app}\MyProg.exe,0
 Compression=lzma
 SolidCompression=yes
 ChangesAssociations=yes
@@ -33,7 +34,7 @@ PrivilegesRequired=admin
 ; File association
 Root: HKCR; Subkey: ".webloc"; ValueType: string; ValueName: ""; ValueData: "Webloc"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc"; ValueType: string; ValueName: ""; ValueData: "Webloc link"; Flags: uninsdeletekey
-Root: HKCR; Subkey: "Webloc\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppExeName},0"; Flags: uninsdeletevalue 
+Root: HKCR; Subkey: "Webloc\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppExeName},1"; Flags: uninsdeletevalue 
 Root: HKCR; Subkey: "Webloc\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
 
 ; Add new file .webloc
@@ -102,3 +103,6 @@ Source: "F:\Developer\JAVA\WeblocOpener\readme.rtf"; DestDir: "{app}"; Flags: ig
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
+
+[Run]
+Filename: https://benchdoos.github.io/; Description: "Visit WeblocOpener website"; Flags: postinstall shellexec  unchecked 
