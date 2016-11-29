@@ -1,4 +1,4 @@
-<img src="WeblocOpenerIntro.png" align="right" width="400" height="225" />
+[<img src="WeblocOpenerIntro.png" align="right" width="400" height="225" />](https://benchdoos.github.io/)
 
 # WeblocOpener
 
