@@ -17,6 +17,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.FileNotFoundException;
 
+import static com.doos.settings_manager.ApplicationConstants.OPENER_EDIT_ARGUMENT;
+import static com.doos.settings_manager.ApplicationConstants.OPENER_SETTINGS_ARGUMENT;
 import static com.doos.settings_manager.core.SettingsManager.showErrorMessageToUser;
 import static java.awt.Frame.MAXIMIZED_HORIZ;
 
@@ -64,10 +66,10 @@ public class Main {
         if (args.length > 0) {
             if (!args[0].isEmpty()) {
                 switch (args[0]) {
-                    case "-edit":
+                    case OPENER_EDIT_ARGUMENT:
                         manageEditArgument(args);
                         break;
-                    case "-settings":
+                    case OPENER_SETTINGS_ARGUMENT:
                         runSettingsDialog();
                         break;
                     default:

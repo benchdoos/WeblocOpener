@@ -165,14 +165,20 @@ public class UpdateDialog extends JFrame {
 
                         if (Main.mode != Main.Mode.AFTER_UPDATE) {
                             try {
+                                dispose();
                                 String value = RegistryManager.getInstallLocationValue();
-                                Runtime.getRuntime().exec("java -jar \"" + value + "Updater.jar\" -afterUpdate");
+                                final String command
+                                        = "java -jar \"" + value + "Updater.jar\" " + ApplicationConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT;
+                                System.out.println(
+                                        "running " + ApplicationConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT + " " +
+                                                "argument: " + command);
+                                Runtime.getRuntime().exec(command);
+                                System.exit(0);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
 
-                        dispose();
                         break;
                     case 1: //Installation was cancelled or Incorrect function or corrupt file
                         JOptionPane.showMessageDialog(this,
@@ -224,7 +230,7 @@ public class UpdateDialog extends JFrame {
             try {
                 Runtime.getRuntime().exec("java -jar \""
                                                   + RegistryManager.getInstallLocationValue()
-                                                  + "\"Updater.jar -afterUpdate");
+                                                  + "\"Updater.jar " + ApplicationConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT);
             } catch (IOException | RegistryCanNotReadInfoException ignore) {/*NOP*/}
         }
         dispose();

@@ -48,7 +48,7 @@ public class Main {
         if (args.length > 0) {
 
             switch (args[0]) {
-                case "-s":
+                case ApplicationConstants.UPDATE_SILENT_ARGUMENT:
                     mode = Mode.SILENT;
                     boolean isAutoUpdate = ApplicationConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE;
 
@@ -66,14 +66,14 @@ public class Main {
                         new NonGuiUpdater();
                     }
                     break;
-                case "-afterUpdate":
+                case ApplicationConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT:
                     mode = Mode.AFTER_UPDATE;
                     new File(UPDATE_PATH_FILE + "Updater_.jar").delete();
                     //createUpdateDialog();
                     break;
                 default:
                     mode = Mode.ERROR;
-                    System.out.println("No such argument: " + args[0]);
+                    System.out.println("No such argument: [" + args[0] + "]");
                     break;
             }
         } else {
