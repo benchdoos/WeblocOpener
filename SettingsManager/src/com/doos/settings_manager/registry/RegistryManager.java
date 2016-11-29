@@ -7,6 +7,7 @@ import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.jna.platform.win32.Win32Exception;
 import com.sun.jna.platform.win32.WinReg;
 
+import java.io.File;
 import java.util.Properties;
 
 /**
@@ -29,6 +30,9 @@ public class RegistryManager {
                 String value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
                                                                    REGISTRY_APP_PATH,
                                                                    KEY_INSTALL_LOCATION);
+                if (!value.endsWith(File.separator)) {
+                    value = value + File.separator;
+                }
                 settings.setProperty(KEY_INSTALL_LOCATION, value);
                 return value;
             } catch (Win32Exception e) {
