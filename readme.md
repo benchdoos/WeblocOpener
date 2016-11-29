@@ -46,4 +46,4 @@ Watch [Youtube](https://youtu.be/Z-bT-VWMDsQ) video
 ## Download:
 Windows:
 
-[Latest version](https://github.com/benchdoos/WeblocOpener/releases/tag/v1.2) v1.2
+[Latest version](https://github.com/benchdoos/WeblocOpener/releases/tag/v1.2.1) v1.2.1
