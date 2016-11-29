@@ -18,4 +18,11 @@ public interface ApplicationConstants {
 
     String APP_ID = "{F1300E10-BBB2-4695-AC2F-3D58DC0BC0A6}_is1";
     String APP_INSTALL_SILENT_KEY = " /VERYSILENT";
+
+    String UPDATE_SILENT_ARGUMENT = "-s";
+    String UPDATE_DELETE_TEMP_FILE_ARGUMENT = "-clean";
+
+    String OPENER_EDIT_ARGUMENT = "-edit";
+    String OPENER_SETTINGS_ARGUMENT = "-settings";
+
 }
