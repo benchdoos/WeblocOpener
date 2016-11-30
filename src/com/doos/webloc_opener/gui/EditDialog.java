@@ -57,7 +57,7 @@ public class EditDialog extends JFrame {
         });
 
         // call onCancel() when cross is clicked
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -146,7 +146,7 @@ public class EditDialog extends JFrame {
         } catch (MalformedURLException e) {
             log.warn("Can not parse URL: [" + textField1.getText() + "]", e);
             FrameUtils.shakeFrame(this);
-            JOptionPane.showMessageDialog(new Frame(), "Incorrect URL: [" + textField1.getText() + "]", "Error",
+            JOptionPane.showMessageDialog(this, "Incorrect URL: [" + textField1.getText() + "]", "Error",
                                           JOptionPane.ERROR_MESSAGE);
         }
 
