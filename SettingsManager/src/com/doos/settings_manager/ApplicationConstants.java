@@ -10,7 +10,6 @@ public interface ApplicationConstants {
     String APP_VERSION = "1.2.2";
     String APP_LOG_FOLDER_PATH = System.getProperty("java.io.tmpdir") + APP_NAME + File.separator + "Log";
     String APP_LOG_PROPERTY = "WeblocOpener.log.folder";
-    String SETTINGS_FILE_PATH = System.getProperty("java.io.tmpdir") + APP_NAME + File.separator + "settings.prop";
     String UPDATE_PATH_FILE = System.getProperty("java.io.tmpdir") + APP_NAME + File.separator;
     String UPDATE_WEB_URL = "https://github.com/benchdoos/WeblocOpener/";
 
