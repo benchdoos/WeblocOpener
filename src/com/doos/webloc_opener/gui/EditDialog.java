@@ -162,6 +162,7 @@ public class EditDialog extends JFrame {
                 //WindowFocusRequester.runScript(WindowFocusRequester.requestFocusOnWindowScript(getTitle())); //FIXME
             }
         });
+        FrameUtils.bringToFront(this);
         super.setVisible(b);
     }
 }
