@@ -165,13 +165,14 @@ public class EditDialog extends JFrame {
 
     @Override
     public void setVisible(boolean b) {
+        final EditDialog editDialog = this;
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 //WindowFocusRequester.runScript(WindowFocusRequester.requestFocusOnWindowScript(getTitle())); //FIXME
+                FrameUtils.bringToFront(editDialog);
             }
         });
-        FrameUtils.bringToFront(this);
         super.setVisible(b);
     }
 }
