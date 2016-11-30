@@ -67,8 +67,9 @@
               </grid>
             </constraints>
             <properties>
-              <font style="2"/>
-              <foreground color="-11175691"/>
+              <font/>
+              <foreground color="-14328075"/>
+              <text value=""/>
             </properties>
           </component>
           <vspacer id="a98f9">
