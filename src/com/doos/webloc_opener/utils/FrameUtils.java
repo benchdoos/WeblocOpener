@@ -95,4 +95,18 @@ public class FrameUtils {
         }
         Toolkit.getDefaultToolkit().beep();
     }
+
+
+    public static void bringToFront(final Window window) {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                window.toFront();
+                window.repaint();
+                window.requestFocus();
+                window.requestFocusInWindow();
+                window.toFront();
+            }
+        });
+    }
 }
