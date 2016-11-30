@@ -59,8 +59,17 @@ public class EditDialog extends JFrame {
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 onCancel();
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+                if (textField1.getText().isEmpty()) {
+                    fillTextFieldWithClipboard();
+                }
+                super.windowActivated(e);
             }
         });
 
@@ -70,7 +79,7 @@ public class EditDialog extends JFrame {
                                                    onCancel();
                                                }
                                            }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+                                           JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         iconLabel.setToolTipText("Application version: " + ApplicationConstants.APP_VERSION);
 
@@ -138,7 +147,7 @@ public class EditDialog extends JFrame {
             log.warn("Can not parse URL: [" + textField1.getText() + "]", e);
             FrameUtils.shakeFrame(this);
             JOptionPane.showMessageDialog(new Frame(), "Incorrect URL: [" + textField1.getText() + "]", "Error",
-                    JOptionPane.ERROR_MESSAGE);
+                                          JOptionPane.ERROR_MESSAGE);
         }
 
     }
