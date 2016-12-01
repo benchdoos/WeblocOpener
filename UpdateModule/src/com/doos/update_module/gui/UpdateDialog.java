@@ -114,6 +114,7 @@ public class UpdateDialog extends JFrame {
                 successUpdatedMessage = messages.getString("successUpdatedMessage");
                 installationCancelledTitle = messages.getString("installationCancelledTitle");
                 installationCancelledMessage = messages.getString("installationCancelledMessage");
+                noPermissionsMessage = messages.getString("noPermissionsMessage");
                 installationCancelledByErrorMessage1 = messages.getString("installationCancelledByErrorMessage1");
                 installationCancelledByErrorMessage2 = messages.getString("installationCancelledByErrorMessage2");
                 installationCancelledByErrorMessage3 = messages.getString("installationCancelledByErrorMessage3");
@@ -191,56 +192,7 @@ public class UpdateDialog extends JFrame {
 
             if (!Thread.currentThread().isInterrupted()) {
                 successUpdate = 1;
-                switch (successUpdate) {
-                    case 0: //NORMAL state, app updated
-                        try {
-                            SettingsManager.loadInfo();
-                        } catch (RegistryCanNotReadInfoException | RegistryCanNotWriteInfoException ignore) {
-                            /*NOP*/
-                        }
-
-
-                        JOptionPane.showMessageDialog(this, successUpdatedMessage
-                                + serverAppVersion.getVersion(), successTitle, JOptionPane.INFORMATION_MESSAGE);
-
-                        if (Main.mode != Main.Mode.AFTER_UPDATE) {
-                            try {
-                                dispose();
-                                String value = RegistryManager.getInstallLocationValue();
-                                final String command
-                                        = "java -jar \"" + value + "Updater.jar\" " + ApplicationConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT;
-                                System.out.println(
-                                        "running " + ApplicationConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT + " " +
-                                                "argument: " + command);
-                                Runtime.getRuntime().exec(command);
-                                System.exit(0);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        break;
-                    case 1: //Installation was cancelled or Incorrect function or corrupt file
-                        showErrorMessageToUser(this, installationCancelledTitle,
-                                               installationCancelledMessage);
-                        Updater.installerFile.delete();
-                        break;
-                    case 2: //The system cannot find the file specified. OR! User gave no permissions.
-                        showErrorMessageToUser(this, installationCancelledTitle, noPermissionsMessage);
-                        break;
-
-                    case 193: //Installation file is corrupt
-                        showErrorMessageToUser(this, installationCancelledTitle, noPermissionsMessage);
-                        break;
-                    default:
-                        String message = installationCancelledByErrorMessage1
-                                + "\n" + installationCancelledByErrorMessage2 +
-                                successUpdate
-                                + "\n" + installationCancelledByErrorMessage3;
-                        showErrorMessageToUser(this, installationCancelledTitle, message);
-
-                        break;
-                }
+                processUpdateResult(successUpdate);
             }
         } else {
             buttonOK.setEnabled(false);
@@ -249,6 +201,63 @@ public class UpdateDialog extends JFrame {
         //dispose();
     }
 
+    private void processUpdateResult(int successUpdate) {
+        switch (successUpdate) {
+            case 0: //NORMAL state, app updated
+                updateSuccessfullyInstalled();
+
+                break;
+            case 1: //Installation was cancelled or Incorrect function or corrupt file
+                showErrorMessageToUser(this, installationCancelledTitle,
+                                       installationCancelledMessage);
+                Updater.installerFile.delete();
+                break;
+            case 2: //The system cannot find the file specified. OR! User gave no permissions.
+                showErrorMessageToUser(this, installationCancelledTitle, noPermissionsMessage);
+                break;
+
+            case 193: //Installation file is corrupt
+                showErrorMessageToUser(this, installationCancelledTitle, noPermissionsMessage);
+                break;
+            default:
+                String message = installationCancelledByErrorMessage1
+                        + "\n" + installationCancelledByErrorMessage2 +
+                        successUpdate
+                        + "\n" + installationCancelledByErrorMessage3;
+                showErrorMessageToUser(this, installationCancelledTitle, message);
+
+                break;
+        }
+    }
+
+    private void updateSuccessfullyInstalled() {
+        try {
+            SettingsManager.loadInfo();
+        } catch (RegistryCanNotReadInfoException | RegistryCanNotWriteInfoException ignore) {
+            /*NOP*/
+        }
+
+
+        JOptionPane.showMessageDialog(this, successUpdatedMessage
+                + serverAppVersion.getVersion(), successTitle, JOptionPane.INFORMATION_MESSAGE);
+
+        if (Main.mode != Main.Mode.AFTER_UPDATE) {
+            try {
+                dispose();
+                String value = RegistryManager.getInstallLocationValue();
+                final String command
+                        = "java -jar \"" + value + "Updater.jar\" " + ApplicationConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT;
+                System.out.println(
+                        "running " + ApplicationConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT + " " +
+                                "argument: " + command);
+                Runtime.getRuntime().exec(command);
+                System.exit(0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 
     private void onCancel() {
         // add your code here if necessary
