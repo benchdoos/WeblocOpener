@@ -54,7 +54,6 @@ public class UpdateDialog extends JFrame {
         serverAppVersion = new AppVersion();
 
         setContentPane(contentPane);
-        translateDialog();
         getRootPane().setDefaultButton(buttonOK);
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/icon.png")));
@@ -95,6 +94,7 @@ public class UpdateDialog extends JFrame {
         setSize(new Dimension(400, 170));
         setResizable(false);
         loadProperties();
+        translateDialog();
         updateDialog = this;
     }
 
@@ -108,6 +108,7 @@ public class UpdateDialog extends JFrame {
 
                 currentVersionStringLabel.setText(messages.getString("currentVersionStringLabel"));
                 avaliableVersionStringLabel.setText(messages.getString("avaliableVersionStringLabel"));
+                availableVersionLabel.setText(messages.getString("availableVersionLabel"));
 
                 successTitle = messages.getString("successTitle");
                 successUpdatedMessage = messages.getString("successUpdatedMessage");
