@@ -1,6 +1,7 @@
 package com.doos.webloc_opener.gui;
 
 import com.doos.settings_manager.ApplicationConstants;
+import com.doos.settings_manager.Translatable;
 import com.doos.webloc_opener.core.Main;
 import com.doos.webloc_opener.service.UrlsProceed;
 import com.doos.webloc_opener.service.gui.ClickListener;
@@ -22,7 +23,7 @@ import java.util.ResourceBundle;
 
 import static com.doos.webloc_opener.service.Logging.getCurrentClassName;
 
-public class EditDialog extends JFrame {
+public class EditDialog extends JFrame implements Translatable {
     private static final Logger log = Logger.getLogger(getCurrentClassName());
     //JDialog dialog = this;
 
@@ -117,7 +118,7 @@ public class EditDialog extends JFrame {
         log.debug("Got path path: [" + pathToEditingFile + "]");
     }
 
-    private void initTranslations() {
+    public void initTranslations() {
         ResourceBundle messages = Main.getTranslation("translations/EditDialogBundle");
         setTitle(messages.getString("windowTitle"));
         urlLabel.setText(messages.getString("urlLabelText"));

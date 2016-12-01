@@ -1,5 +1,6 @@
 package com.doos.webloc_opener.gui;
 
+import com.doos.settings_manager.Translatable;
 import com.doos.settings_manager.registry.RegistryCanNotReadInfoException;
 import com.doos.settings_manager.registry.RegistryException;
 import com.doos.settings_manager.registry.RegistryManager;
@@ -7,6 +8,7 @@ import com.doos.settings_manager.registry.fixer.RegistryFixer;
 import com.doos.settings_manager.registry.fixer.RegistryFixerAppVersionKeyFailException;
 import com.doos.settings_manager.registry.fixer.RegistryFixerAutoUpdateKeyFailException;
 import com.doos.settings_manager.registry.fixer.RegistryFixerInstallPathKeyFailException;
+import com.doos.webloc_opener.core.Main;
 import com.doos.webloc_opener.utils.FrameUtils;
 import org.apache.log4j.Logger;
 
@@ -16,10 +18,11 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import static com.doos.webloc_opener.service.Logging.getCurrentClassName;
 
-public class SettingsDialog extends JFrame {
+public class SettingsDialog extends JFrame implements Translatable {
     private static final Logger log = Logger.getLogger(getCurrentClassName());
 
     private JPanel contentPane;
@@ -28,10 +31,19 @@ public class SettingsDialog extends JFrame {
     private JCheckBox autoUpdateEnabledCheckBox;
     private JButton updateNowButton;
     private JLabel versionLabel;
+    private JLabel versionStringLabel;
+
+
+    private String errorMessage = "Error";
+    private String canNotSaveSettingsToRegistryMessage = "Can not save settings to registry.";
+
 
     public SettingsDialog() {
         setContentPane(contentPane);
-        setTitle("WeblocOpener - Settings");
+
+        initTranslations();
+
+
         getRootPane().setDefaultButton(buttonOK);
         setIconImage(Toolkit.getDefaultToolkit().getImage(SettingsDialog.class.getResource("/balloonIcon64.png")));
 
@@ -92,7 +104,7 @@ public class SettingsDialog extends JFrame {
         } catch (RegistryCanNotReadInfoException e) {
             e.printStackTrace();
             run = new File(SettingsDialog.class.getProtectionDomain()
-                    .getCodeSource().getLocation().getPath()).getAbsolutePath().replace("%20", " ");
+                                   .getCodeSource().getLocation().getPath()).getAbsolutePath().replace("%20", " ");
         }
         System.out.println(">>>> " + run);
         try {
@@ -117,7 +129,7 @@ public class SettingsDialog extends JFrame {
                 } catch (RegistryCanNotReadInfoException ignore) {
                 }
             } catch (RegistryFixerInstallPathKeyFailException e1) {
-                e1.printStackTrace();
+                log.warn("Can not fix install key ", e1);
             }
         }
     }
@@ -128,8 +140,8 @@ public class SettingsDialog extends JFrame {
             RegistryManager.setAutoUpdateActive(autoUpdateEnabledCheckBox.isSelected());
         } catch (RegistryException e) {
             log.warn("Can not save settings change", e);
-            JOptionPane.showMessageDialog(new JFrame(), "Error",
-                                          "Can not save settings to registry.",
+            JOptionPane.showMessageDialog(new JFrame(), errorMessage,
+                                          canNotSaveSettingsToRegistryMessage,
                                           JOptionPane.ERROR_MESSAGE);
         }
         dispose();
@@ -137,5 +149,21 @@ public class SettingsDialog extends JFrame {
 
     private void onCancel() {
         dispose();
+    }
+
+    @Override
+    public void initTranslations() {
+        ResourceBundle messages = Main.getTranslation("translations/SettingsDialogBundle");
+        setTitle(messages.getString("windowTitle"));
+
+        buttonOK.setText(messages.getString("buttonOk"));
+        buttonCancel.setText(messages.getString("buttonCancel"));
+
+        versionStringLabel.setText(messages.getString("versionString"));
+        autoUpdateEnabledCheckBox.setText(messages.getString("autoUpdateEnabledCheckBox"));
+        updateNowButton.setText(messages.getString("updateNowButton"));
+
+        canNotSaveSettingsToRegistryMessage = messages.getString("canNotSaveSettingsToRegistryMessage");
+        errorMessage = messages.getString("errorMessage");
     }
 }
