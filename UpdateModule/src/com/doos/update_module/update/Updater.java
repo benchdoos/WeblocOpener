@@ -72,7 +72,7 @@ public class Updater {
         } catch (IOException e) {
             e.printStackTrace();
 
-            showErrorMessageToUser("Can not Update", "Can not connect to api.github.com");
+            showErrorMessageToUser(null, "Can not Update", "Can not connect to api.github.com");
         }
     }
 

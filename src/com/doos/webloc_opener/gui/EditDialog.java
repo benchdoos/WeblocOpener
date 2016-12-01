@@ -1,8 +1,7 @@
 package com.doos.webloc_opener.gui;
 
 import com.doos.settings_manager.ApplicationConstants;
-import com.doos.settings_manager.Translatable;
-import com.doos.webloc_opener.core.Main;
+import com.doos.settings_manager.Translation;
 import com.doos.webloc_opener.service.UrlsProceed;
 import com.doos.webloc_opener.service.gui.ClickListener;
 import com.doos.webloc_opener.utils.FrameUtils;
@@ -19,11 +18,10 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import static com.doos.webloc_opener.service.Logging.getCurrentClassName;
 
-public class EditDialog extends JFrame implements Translatable {
+public class EditDialog extends JFrame {
     private static final Logger log = Logger.getLogger(getCurrentClassName());
     //JDialog dialog = this;
 
@@ -49,7 +47,7 @@ public class EditDialog extends JFrame implements Translatable {
         this.path = pathToEditingFile;
         setContentPane(contentPane);
 
-        initTranslations();
+        translateDialog();
 
         getRootPane().setDefaultButton(buttonOK);
 
@@ -118,23 +116,28 @@ public class EditDialog extends JFrame implements Translatable {
         log.debug("Got path path: [" + pathToEditingFile + "]");
     }
 
-    public void initTranslations() {
-        ResourceBundle messages = Main.getTranslation("translations/EditDialogBundle");
-        setTitle(messages.getString("windowTitle"));
-        urlLabel.setText(messages.getString("urlLabelText"));
-        createWeblocFileTextPane.setText(
-                "<html>\n" +
-                        "  <body>\n" + "\t"
-                        + messages.getString("textPane1") + " <b>.webloc</b> "
-                        + messages.getString("textPane2") + ":\n"
-                        + "  </body>\n" +
-                        "</html>\n");
+    private void translateDialog() {
+        Translation translation = new Translation("translations/EditDialogBundle") {
+            @Override
+            public void initTranslations() {
+                setTitle(messages.getString("windowTitle"));
+                urlLabel.setText(messages.getString("urlLabelText"));
+                createWeblocFileTextPane.setText(
+                        "<html>\n" +
+                                "  <body>\n" + "\t"
+                                + messages.getString("textPane1") + " <b>.webloc</b> "
+                                + messages.getString("textPane2") + ":\n"
+                                + "  </body>\n" +
+                                "</html>\n");
 
-        buttonOK.setText(messages.getString("buttonOk"));
-        buttonCancel.setText(messages.getString("buttonCancel"));
-        iconLabel.setToolTipText(messages.getString("iconLabel") + ApplicationConstants.APP_VERSION);
-        incorrectUrlMessage = messages.getString("incorrectUrlMessage");
-        errorTitle = messages.getString("errorTitle");
+                buttonOK.setText(messages.getString("buttonOk"));
+                buttonCancel.setText(messages.getString("buttonCancel"));
+                iconLabel.setToolTipText(messages.getString("iconLabel") + ApplicationConstants.APP_VERSION);
+                incorrectUrlMessage = messages.getString("incorrectUrlMessage");
+                errorTitle = messages.getString("errorTitle");
+            }
+        };
+        translation.initTranslations();
     }
 
     private void fillTextField(String pathToEditingFile) {

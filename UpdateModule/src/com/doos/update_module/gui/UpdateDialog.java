@@ -1,6 +1,7 @@
 package com.doos.update_module.gui;
 
 import com.doos.settings_manager.ApplicationConstants;
+import com.doos.settings_manager.Translation;
 import com.doos.settings_manager.core.SettingsManager;
 import com.doos.settings_manager.registry.RegistryCanNotReadInfoException;
 import com.doos.settings_manager.registry.RegistryCanNotWriteInfoException;
@@ -18,26 +19,42 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
+import static com.doos.settings_manager.core.SettingsManager.showErrorMessageToUser;
+
 public class UpdateDialog extends JFrame {
     public static UpdateDialog updateDialog = null;
 
     public JProgressBar progressBar1;
     public JButton buttonOK;
     public JButton buttonCancel;
+    Translation translation;
     private AppVersion serverAppVersion;
     private JPanel contentPane;
     private JLabel currentVersionLabel;
     private JLabel availableVersionLabel;
     private JLabel newVersionSizeLabel;
     private JLabel unitLabel;
-
+    private JLabel currentVersionStringLabel;
+    private JLabel avaliableVersionStringLabel;
     private Thread updateThread;
+    private String successUpdatedMessage = "WeblocOpener successfully updated to version: ";
+    private String successTitle = "Success";
+
+    private String installationCancelledTitle = "Installation cancelled";
+    private String installationCancelledMessage = "Installation cancelled by User during installation";
+
+    private String noPermissionsMessage = "Installation can not be run, because it has no permissions.";
+
+    private String installationCancelledByErrorMessage1 = "Installation cancelled by Error (unhandled error),";
+    private String installationCancelledByErrorMessage2 = "code: ";
+    private String installationCancelledByErrorMessage3
+            = "visit https://github.com/benchdoos/WeblocOpener for more info.";
 
     public UpdateDialog() {
         serverAppVersion = new AppVersion();
 
         setContentPane(contentPane);
-        setTitle("Update - WeblocOpener");
+        translateDialog();
         getRootPane().setDefaultButton(buttonOK);
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/icon.png")));
@@ -57,11 +74,7 @@ public class UpdateDialog extends JFrame {
 
         });
 
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
+        buttonCancel.addActionListener(e -> onCancel());
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -83,6 +96,29 @@ public class UpdateDialog extends JFrame {
         setResizable(false);
         loadProperties();
         updateDialog = this;
+    }
+
+    private void translateDialog() {
+        translation = new Translation("translations/UpdateDialogBundle") {
+            @Override
+            public void initTranslations() {
+                setTitle(messages.getString("windowTitle"));
+                buttonOK.setText(messages.getString("buttonOk"));
+                buttonCancel.setText(messages.getString("buttonCancel"));
+
+                currentVersionStringLabel.setText(messages.getString("currentVersionStringLabel"));
+                avaliableVersionStringLabel.setText(messages.getString("avaliableVersionStringLabel"));
+
+                successTitle = messages.getString("successTitle");
+                successUpdatedMessage = messages.getString("successUpdatedMessage");
+                installationCancelledTitle = messages.getString("installationCancelledTitle");
+                installationCancelledMessage = messages.getString("installationCancelledMessage");
+                installationCancelledByErrorMessage1 = messages.getString("installationCancelledByErrorMessage1");
+                installationCancelledByErrorMessage2 = messages.getString("installationCancelledByErrorMessage2");
+                installationCancelledByErrorMessage3 = messages.getString("installationCancelledByErrorMessage3");
+            }
+        };
+        translation.initTranslations();
     }
 
     public void checkForUpdates() {
@@ -108,14 +144,15 @@ public class UpdateDialog extends JFrame {
         if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
             //Need to update
             buttonOK.setEnabled(true);
+            buttonOK.setText(translation.messages.getString("buttonOk"));
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) > 0) {
             //App version is bigger then on server
-            buttonOK.setText("Hello, dev!");
+            buttonOK.setText(translation.messages.getString("buttonOkDev"));
 //            buttonOK.setEnabled(true);
             buttonOK.setEnabled(false); //TODO TURN BACK BEFORE RELEASE
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
-            //No reason to update
-            buttonOK.setText("Version is up to date");
+            //No reason to update;
+            buttonOK.setText(translation.messages.getString("buttonOkUp2Date"));
         }
     }
 
@@ -152,6 +189,7 @@ public class UpdateDialog extends JFrame {
             buttonOK.setEnabled(true);
 
             if (!Thread.currentThread().isInterrupted()) {
+                successUpdate = 1;
                 switch (successUpdate) {
                     case 0: //NORMAL state, app updated
                         try {
@@ -160,8 +198,9 @@ public class UpdateDialog extends JFrame {
                             /*NOP*/
                         }
 
-                        JOptionPane.showMessageDialog(this, "WeblocOpener successfully updated to version: "
-                                + serverAppVersion.getVersion(), "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                        JOptionPane.showMessageDialog(this, successUpdatedMessage
+                                + serverAppVersion.getVersion(), successTitle, JOptionPane.INFORMATION_MESSAGE);
 
                         if (Main.mode != Main.Mode.AFTER_UPDATE) {
                             try {
@@ -181,28 +220,24 @@ public class UpdateDialog extends JFrame {
 
                         break;
                     case 1: //Installation was cancelled or Incorrect function or corrupt file
-                        JOptionPane.showMessageDialog(this,
-                                                      "Installation cancelled by User during installation",
-                                                      "Installation cancelled", JOptionPane.WARNING_MESSAGE);
+                        showErrorMessageToUser(this, installationCancelledTitle,
+                                               installationCancelledMessage);
                         Updater.installerFile.delete();
                         break;
                     case 2: //The system cannot find the file specified. OR! User gave no permissions.
-                        JOptionPane.showMessageDialog(this,
-                                                      "Installation can not be run, because it has no permissions.",
-                                                      "Installation cancelled", JOptionPane.WARNING_MESSAGE);
+                        showErrorMessageToUser(this, installationCancelledTitle, noPermissionsMessage);
                         break;
 
                     case 193: //Installation file is corrupt
-                        JOptionPane.showMessageDialog(this,
-                                                      "Installation can not be run, because it has no permissions.",
-                                                      "Installation cancelled", JOptionPane.WARNING_MESSAGE);
+                        showErrorMessageToUser(this, installationCancelledTitle, noPermissionsMessage);
                         break;
                     default:
-                        JOptionPane.showMessageDialog(this,
-                                                      "Installation cancelled by Error (unhandled error),"
-                                                              + "\ncode: " + successUpdate
-                                                              + "\nvisit https://github.com/benchdoos/WeblocOpener for more info.",
-                                                      "Installation cancelled", JOptionPane.ERROR_MESSAGE);
+                        String message = installationCancelledByErrorMessage1
+                                + "\n" + installationCancelledByErrorMessage2 +
+                                successUpdate
+                                + "\n" + installationCancelledByErrorMessage3;
+                        showErrorMessageToUser(this, installationCancelledTitle, message);
+
                         break;
                 }
             }
@@ -239,4 +274,5 @@ public class UpdateDialog extends JFrame {
     public AppVersion getAppVersion() {
         return serverAppVersion;
     }
+
 }

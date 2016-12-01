@@ -97,7 +97,7 @@ public class Main {
             } catch (RegistryFixerAutoUpdateKeyFailException | RegistryFixerAppVersionKeyFailException e1) {
                 RegistryManager.setDefaultSettings();
             } catch (RegistryFixerInstallPathKeyFailException | FileNotFoundException e1) {
-                showErrorMessageToUser("Can not fix registry",
+                showErrorMessageToUser(null, "Can not fix registry",
                                        "Registry application data is corrupt. " +
                                                "Please re-install the " + "application.");
                 System.exit(-1);

@@ -1,6 +1,6 @@
 package com.doos.webloc_opener.gui;
 
-import com.doos.settings_manager.Translatable;
+import com.doos.settings_manager.Translation;
 import com.doos.settings_manager.registry.RegistryCanNotReadInfoException;
 import com.doos.settings_manager.registry.RegistryException;
 import com.doos.settings_manager.registry.RegistryManager;
@@ -8,7 +8,6 @@ import com.doos.settings_manager.registry.fixer.RegistryFixer;
 import com.doos.settings_manager.registry.fixer.RegistryFixerAppVersionKeyFailException;
 import com.doos.settings_manager.registry.fixer.RegistryFixerAutoUpdateKeyFailException;
 import com.doos.settings_manager.registry.fixer.RegistryFixerInstallPathKeyFailException;
-import com.doos.webloc_opener.core.Main;
 import com.doos.webloc_opener.utils.FrameUtils;
 import org.apache.log4j.Logger;
 
@@ -18,11 +17,10 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 import static com.doos.webloc_opener.service.Logging.getCurrentClassName;
 
-public class SettingsDialog extends JFrame implements Translatable {
+public class SettingsDialog extends JFrame {
     private static final Logger log = Logger.getLogger(getCurrentClassName());
 
     private JPanel contentPane;
@@ -41,7 +39,7 @@ public class SettingsDialog extends JFrame implements Translatable {
     public SettingsDialog() {
         setContentPane(contentPane);
 
-        initTranslations();
+        translateDialog();
 
 
         getRootPane().setDefaultButton(buttonOK);
@@ -93,6 +91,26 @@ public class SettingsDialog extends JFrame implements Translatable {
         setSize(350, 200);
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
         setResizable(false);
+    }
+
+    private void translateDialog() {
+        Translation translation = new Translation("translations/SettingsDialogBundle") {
+            @Override
+            public void initTranslations() {
+                setTitle(messages.getString("windowTitle"));
+
+                buttonOK.setText(messages.getString("buttonOk"));
+                buttonCancel.setText(messages.getString("buttonCancel"));
+
+                versionStringLabel.setText(messages.getString("versionString"));
+                autoUpdateEnabledCheckBox.setText(messages.getString("autoUpdateEnabledCheckBox"));
+                updateNowButton.setText(messages.getString("updateNowButton"));
+
+                canNotSaveSettingsToRegistryMessage = messages.getString("canNotSaveSettingsToRegistryMessage");
+                errorMessage = messages.getString("errorMessage");
+            }
+        };
+        translation.initTranslations();
     }
 
     private void onUpdateNow() {
@@ -149,21 +167,5 @@ public class SettingsDialog extends JFrame implements Translatable {
 
     private void onCancel() {
         dispose();
-    }
-
-    @Override
-    public void initTranslations() {
-        ResourceBundle messages = Main.getTranslation("translations/SettingsDialogBundle");
-        setTitle(messages.getString("windowTitle"));
-
-        buttonOK.setText(messages.getString("buttonOk"));
-        buttonCancel.setText(messages.getString("buttonCancel"));
-
-        versionStringLabel.setText(messages.getString("versionString"));
-        autoUpdateEnabledCheckBox.setText(messages.getString("autoUpdateEnabledCheckBox"));
-        updateNowButton.setText(messages.getString("updateNowButton"));
-
-        canNotSaveSettingsToRegistryMessage = messages.getString("canNotSaveSettingsToRegistryMessage");
-        errorMessage = messages.getString("errorMessage");
     }
 }

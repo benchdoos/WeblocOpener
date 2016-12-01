@@ -32,7 +32,7 @@ public class SettingsManager {
         }
     }
 
-    public static void showErrorMessageToUser(String title, String message) {
+    public static void showErrorMessageToUser(Component parentComponent, String title, String message) {
         String msg = "<HTML><BODY><P>" + message + " <br>Please visit " +
                 "<a href=\"" + ApplicationConstants.UPDATE_WEB_URL + "\">" + ApplicationConstants.UPDATE_WEB_URL + "</P></BODY></HTML>";
         JEditorPane jEditorPane = new JEditorPane();
@@ -52,7 +52,7 @@ public class SettingsManager {
             }
         });
         jEditorPane.setText(msg);
-        JOptionPane.showMessageDialog(null,
+        JOptionPane.showMessageDialog(parentComponent,
                                       jEditorPane,
                                       "[WeblocOpener] " + title, JOptionPane.ERROR_MESSAGE);
     }

@@ -105,4 +105,4 @@ Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Run]
-Filename: https://benchdoos.github.io/; Description: "Visit WeblocOpener website"; Flags: postinstall shellexec  unchecked 
+Filename: https://benchdoos.github.io/; Description: "{cm:ProgramOnTheWeb,{#MyAppName}}"; Flags: postinstall shellexec  unchecked 
