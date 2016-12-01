@@ -16,6 +16,8 @@ import com.doos.webloc_opener.service.UrlsProceed;
 import javax.swing.*;
 import java.awt.*;
 import java.io.FileNotFoundException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import static com.doos.settings_manager.ApplicationConstants.OPENER_EDIT_ARGUMENT;
 import static com.doos.settings_manager.ApplicationConstants.OPENER_SETTINGS_ARGUMENT;
@@ -29,7 +31,18 @@ public class Main {
 
         enableLookAndFeel();
 
+
         manageArguments(args);
+    }
+
+    public static ResourceBundle getTranslation(String bundlePath) {
+        Locale currentLocale;// = Locale.getDefault();
+        currentLocale = new Locale("en", "US");
+        System.out.println("Locale: " + currentLocale.getCountry() + " " + currentLocale.getLanguage());
+        final ResourceBundle bundle = ResourceBundle.getBundle(bundlePath,
+                                                               currentLocale);
+        System.out.println("bundle: " + bundle.getBaseBundleName());
+        return bundle;
     }
 
 
