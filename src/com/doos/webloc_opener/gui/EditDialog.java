@@ -1,6 +1,7 @@
 package com.doos.webloc_opener.gui;
 
 import com.doos.settings_manager.ApplicationConstants;
+import com.doos.webloc_opener.core.Main;
 import com.doos.webloc_opener.service.UrlsProceed;
 import com.doos.webloc_opener.service.gui.ClickListener;
 import com.doos.webloc_opener.utils.FrameUtils;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import static com.doos.webloc_opener.service.Logging.getCurrentClassName;
 
@@ -32,6 +34,12 @@ public class EditDialog extends JFrame {
     private JTextField textField1;
     private JTextPane createWeblocFileTextPane;
     private JLabel iconLabel;
+    private JLabel urlLabel;
+
+    private String incorrectUrlMessage = "Incorrect URL";
+    private String errorTitle = "Error";
+
+
 
     @SuppressWarnings("unchecked")
     public EditDialog(String pathToEditingFile) {
@@ -40,8 +48,9 @@ public class EditDialog extends JFrame {
 
         this.path = pathToEditingFile;
         setContentPane(contentPane);
-        //setModal(true);
-        setTitle("WeblocOpener - Edit .webloc link");
+
+        initTranslations();
+
         getRootPane().setDefaultButton(buttonOK);
 
         buttonOK.addActionListener(new ActionListener() {
@@ -81,15 +90,8 @@ public class EditDialog extends JFrame {
                                            }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                                            JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-        iconLabel.setToolTipText("Application version: " + ApplicationConstants.APP_VERSION);
-
         createWeblocFileTextPane.setBackground(new Color(232, 232, 232));
-        createWeblocFileTextPane.setText(
-                "<html>\n" +
-                        "  <body>\n" +
-                        "\tEdit <b>.webloc</b> link:\n" +
-                        "  </body>\n" +
-                        "</html>\n");
+
 
         Font font = textField1.getFont();
         Map attributes = font.getAttributes();
@@ -116,6 +118,25 @@ public class EditDialog extends JFrame {
         log.debug("Got path path: [" + pathToEditingFile + "]");
     }
 
+    private void initTranslations() {
+        ResourceBundle messages = Main.getTranslation("translations/EditDialogBundle");
+        setTitle(messages.getString("windowTitle"));
+        urlLabel.setText(messages.getString("urlLabelText"));
+        createWeblocFileTextPane.setText(
+                "<html>\n" +
+                        "  <body>\n" + "\t"
+                        + messages.getString("textPane1") + " <b>.webloc</b> "
+                        + messages.getString("textPane2") + ":\n"
+                        + "  </body>\n" +
+                        "</html>\n");
+
+        buttonOK.setText(messages.getString("buttonOk"));
+        buttonCancel.setText(messages.getString("buttonCancel"));
+        iconLabel.setToolTipText(messages.getString("iconLabel") + ApplicationConstants.APP_VERSION);
+        incorrectUrlMessage = messages.getString("incorrectUrlMessage");
+        errorTitle = messages.getString("errorTitle");
+    }
+
     private void fillTextField(String pathToEditingFile) {
         try {
             URL url = new URL(UrlsProceed.takeUrl(new File(pathToEditingFile)));
@@ -129,11 +150,10 @@ public class EditDialog extends JFrame {
 
     private void fillTextFieldWithClipboard() {
         try {
-            String data = (String) Toolkit.getDefaultToolkit()
-                    .getSystemClipboard().getData(DataFlavor.stringFlavor);
+            String data = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
             URL url = new URL(data);
             textField1.setText(url.toString());
-        } catch (UnsupportedFlavorException | IOException ex) {
+        } catch (UnsupportedFlavorException | IllegalStateException | HeadlessException | IOException ex) {
             textField1.setText("");
         }
     }
@@ -146,7 +166,7 @@ public class EditDialog extends JFrame {
         } catch (MalformedURLException e) {
             log.warn("Can not parse URL: [" + textField1.getText() + "]", e);
             FrameUtils.shakeFrame(this);
-            JOptionPane.showMessageDialog(this, "Incorrect URL: [" + textField1.getText() + "]", "Error",
+            JOptionPane.showMessageDialog(this, incorrectUrlMessage + ": [" + textField1.getText() + "]", errorTitle,
                                           JOptionPane.ERROR_MESSAGE);
         }
 
