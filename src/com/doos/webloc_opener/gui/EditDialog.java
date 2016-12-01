@@ -40,7 +40,6 @@ public class EditDialog extends JFrame {
     private String errorTitle = "Error";
 
 
-
     @SuppressWarnings("unchecked")
     public EditDialog(String pathToEditingFile) {
 
@@ -141,9 +140,9 @@ public class EditDialog extends JFrame {
         try {
             URL url = new URL(UrlsProceed.takeUrl(new File(pathToEditingFile)));
             textField1.setText(url.toString());
+            log.debug("Got URL [" + url + "] from [" + pathToEditingFile + "]");
         } catch (Exception e) {
-            log.warn("Can not read url from : " + pathToEditingFile);
-
+            log.warn("Can not read url from: [" + pathToEditingFile + "]");
             fillTextFieldWithClipboard();
         }
     }
@@ -153,8 +152,10 @@ public class EditDialog extends JFrame {
             String data = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
             URL url = new URL(data);
             textField1.setText(url.toString());
-        } catch (UnsupportedFlavorException | IllegalStateException | HeadlessException | IOException ex) {
+            log.debug("Got URL from clipboard: " + url);
+        } catch (UnsupportedFlavorException | IllegalStateException | HeadlessException | IOException e) {
             textField1.setText("");
+            log.warn("Can not read URL from clipboard.", e);
         }
     }
 
@@ -184,7 +185,7 @@ public class EditDialog extends JFrame {
 
 
     @Override
-    public void setVisible(boolean b) {
+    public void setVisible(boolean b) { //FIXME does not work properly
         final EditDialog editDialog = this;
         SwingUtilities.invokeLater(new Runnable() {
             @Override
