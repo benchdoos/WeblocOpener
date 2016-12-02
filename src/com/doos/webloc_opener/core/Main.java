@@ -62,7 +62,7 @@ public class Main {
     /**
      * Manages incoming arguments
      *
-     * @param args
+     * @param args App start arguments
      */
     private static void manageArguments(String[] args) {
         if (args.length > 0) {

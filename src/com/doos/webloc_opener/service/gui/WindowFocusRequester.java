@@ -15,7 +15,7 @@ import static com.doos.webloc_opener.service.Logging.getCurrentClassName;
  */
 
 
-public class WindowFocusRequester {
+class WindowFocusRequester {
     private static final Logger log = Logger.getLogger(getCurrentClassName());
 
     public static String requestFocusOnWindowScript(String windowTitle) {

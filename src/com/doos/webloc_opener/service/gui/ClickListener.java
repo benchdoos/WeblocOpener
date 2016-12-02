@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+@SuppressWarnings("ALL")
 public class ClickListener extends MouseAdapter implements ActionListener {
     private final static int clickInterval = (Integer) Toolkit.getDefaultToolkit().
             getDesktopProperty("awt.multiClickInterval");

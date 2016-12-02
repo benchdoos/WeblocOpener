@@ -34,7 +34,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="OK"/>
+                  <text resource-bundle="translations/EditDialogBundle" key="buttonOk"/>
                 </properties>
                 <clientProperties>
                   <hideActionText class="java.lang.Boolean" value="false"/>
@@ -45,7 +45,7 @@
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Cancel"/>
+                  <text resource-bundle="translations/EditDialogBundle" key="buttonCancel"/>
                 </properties>
               </component>
             </children>
@@ -106,6 +106,7 @@
             </constraints>
             <properties>
               <icon value="icon64.png"/>
+              <labelFor value="a8715"/>
               <text value=""/>
             </properties>
           </component>
@@ -116,7 +117,7 @@
             <properties>
               <font style="1"/>
               <labelFor value="9ea12"/>
-              <text value="&amp;Url:"/>
+              <text resource-bundle="translations/EditDialogBundle" key="urlLabelText"/>
             </properties>
           </component>
         </children>

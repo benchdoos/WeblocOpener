@@ -11,7 +11,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.font.TextAttribute;
 import java.io.File;
 import java.io.IOException;
@@ -51,17 +54,9 @@ public class EditDialog extends JFrame {
 
         getRootPane().setDefaultButton(buttonOK);
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onOK();
-            }
-        });
+        buttonOK.addActionListener(e -> onOK());
 
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        });
+        buttonCancel.addActionListener(e -> onCancel());
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -81,11 +76,7 @@ public class EditDialog extends JFrame {
         });
 
         // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
-                                               public void actionPerformed(ActionEvent e) {
-                                                   onCancel();
-                                               }
-                                           }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                                            JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         createWeblocFileTextPane.setBackground(new Color(232, 232, 232));
@@ -191,12 +182,9 @@ public class EditDialog extends JFrame {
     @Override
     public void setVisible(boolean b) { //FIXME does not work properly
         final EditDialog editDialog = this;
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                //WindowFocusRequester.runScript(WindowFocusRequester.requestFocusOnWindowScript(getTitle())); //FIXME
-                FrameUtils.bringToFront(editDialog);
-            }
+        SwingUtilities.invokeLater(() -> {
+            //WindowFocusRequester.runScript(WindowFocusRequester.requestFocusOnWindowScript(getTitle())); //FIXME
+            FrameUtils.bringToFront(editDialog);
         });
         super.setVisible(b);
     }
