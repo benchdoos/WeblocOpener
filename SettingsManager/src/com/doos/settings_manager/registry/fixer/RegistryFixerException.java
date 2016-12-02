@@ -5,6 +5,7 @@ import com.doos.settings_manager.registry.RegistryException;
 /**
  * Created by Eugene Zrazhevsky on 23.11.2016.
  */
+@SuppressWarnings("WeakerAccess")
 public class RegistryFixerException extends RegistryException {
     public RegistryFixerException() {
         super("[REGISTRY FIXER]");

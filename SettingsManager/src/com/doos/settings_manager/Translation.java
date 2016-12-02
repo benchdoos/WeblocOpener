@@ -8,8 +8,8 @@ import java.util.ResourceBundle;
  */
 public abstract class Translation {
 
-    public ResourceBundle messages;
-    private String bundlePath;
+    public final ResourceBundle messages;
+    private final String bundlePath;
 
     public Translation(String bundlePath) {
         this.bundlePath = bundlePath;

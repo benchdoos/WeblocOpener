@@ -7,7 +7,6 @@ import com.doos.settings_manager.registry.RegistryManager;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
@@ -42,14 +41,11 @@ public class SettingsManager {
         jEditorPane.setEditable(false);
         jEditorPane.getCaret().deinstall(jEditorPane);
         jEditorPane.setBackground(Color.getColor("#EEEEEE"));
-        jEditorPane.addHyperlinkListener(new HyperlinkListener() {
-            @Override
-            public void hyperlinkUpdate(HyperlinkEvent e) {
-                if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
-                    openUrl(ApplicationConstants.UPDATE_WEB_URL);
-                }
-
+        jEditorPane.addHyperlinkListener(e -> {
+            if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
+                openAppGithubPage();
             }
+
         });
         jEditorPane.setText(msg);
         JOptionPane.showMessageDialog(parentComponent,
@@ -57,16 +53,16 @@ public class SettingsManager {
                                       "[WeblocOpener] " + title, JOptionPane.ERROR_MESSAGE);
     }
 
-    private static void openUrl(String url) {
+    private static void openAppGithubPage() {
         if (!Desktop.isDesktopSupported()) {
             return;
         }
         Desktop desktop = Desktop.getDesktop();
 
         try {
-            desktop.browse(URI.create(url));
+            desktop.browse(URI.create(ApplicationConstants.UPDATE_WEB_URL));
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(new Frame(), "URL is corrupt: " + url);
+            JOptionPane.showMessageDialog(new Frame(), "URL is corrupt: " + ApplicationConstants.UPDATE_WEB_URL);
         }
 
     }

@@ -35,7 +35,7 @@ public class RegistryFixer { //TODO Enable logging
             RegistryManager.getAppNameValue();
         } catch (RegistryCanNotReadInfoException e1) {
             try {
-                RegistryManager.setAppNameValue(ApplicationConstants.APP_NAME);
+                RegistryManager.setAppNameValue();
                 System.out.println(
                         "[REGISTRY FIXER] Successfully Fixed " + RegistryManager.KEY_APP_NAME);
             } catch (RegistryCanNotWriteInfoException ignore) {/*NOP*/}
@@ -47,7 +47,7 @@ public class RegistryFixer { //TODO Enable logging
             RegistryManager.getURLUpdateValue();
         } catch (RegistryCanNotReadInfoException e) {
             try {
-                RegistryManager.setURLUpdateValue(ApplicationConstants.UPDATE_WEB_URL);
+                RegistryManager.setURLUpdateValue();
                 System.out.println(
                         "[REGISTRY FIXER] Successfully Fixed " + RegistryManager.KEY_URL_UPDATE_LINK);
             } catch (RegistryCanNotWriteInfoException e2) {/*NOP*/}
@@ -75,7 +75,7 @@ public class RegistryFixer { //TODO Enable logging
     }
 
     private static void setAppInstallLocationToUserRoot(String path)
-            throws RegistryCanNotWriteInfoException, RegistryCanNotReadInfoException, FileNotFoundException {
+            throws RegistryCanNotWriteInfoException, FileNotFoundException {
         if (new File(path).exists() && new File(path).isDirectory() && new File(path).getName().equals
                 (ApplicationConstants.APP_NAME)) {
             RegistryManager.setInstallLocationValue(path);
@@ -89,7 +89,7 @@ public class RegistryFixer { //TODO Enable logging
     }
 
     private static void setAppInstallLocationToDefault(String path)
-            throws RegistryCanNotWriteInfoException, RegistryCanNotReadInfoException, FileNotFoundException {
+            throws RegistryCanNotWriteInfoException, FileNotFoundException {
         if (new File(path).exists() && new File(path).isDirectory()) {
             RegistryManager.setInstallLocationValue(path);
             System.out.println(

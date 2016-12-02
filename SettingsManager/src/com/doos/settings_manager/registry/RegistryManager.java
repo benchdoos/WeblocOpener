@@ -21,7 +21,7 @@ public class RegistryManager {
     public static final String KEY_URL_UPDATE_LINK = "URLUpdateInfo";
     private static final WinReg.HKEY APP_ROOT_HKEY = WinReg.HKEY_CURRENT_USER;
     private final static String REGISTRY_APP_PATH = "SOFTWARE\\" + ApplicationConstants.APP_NAME + "\\";
-    private static Properties settings = new Properties();
+    private static final Properties settings = new Properties();
 
     public static String getInstallLocationValue() throws RegistryCanNotReadInfoException {
 
@@ -85,6 +85,7 @@ public class RegistryManager {
         createRegistryEntry(KEY_AUTO_UPDATE, Boolean.toString(autoUpdateActive));
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static String getAppNameValue() throws RegistryCanNotReadInfoException {
         if (settings.getProperty(KEY_APP_NAME) == null) {
             try {
@@ -101,10 +102,11 @@ public class RegistryManager {
 
     }
 
-    public static void setAppNameValue(String name) throws RegistryCanNotWriteInfoException {
-        RegistryManager.createRegistryEntry(KEY_APP_NAME, name);
+    public static void setAppNameValue() throws RegistryCanNotWriteInfoException {
+        RegistryManager.createRegistryEntry(KEY_APP_NAME, ApplicationConstants.APP_NAME);
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public static String getURLUpdateValue() throws RegistryCanNotReadInfoException {
 
         if (settings.getProperty(KEY_URL_UPDATE_LINK) == null) {
@@ -123,8 +125,8 @@ public class RegistryManager {
 
     }
 
-    public static void setURLUpdateValue(String name) throws RegistryCanNotWriteInfoException {
-        RegistryManager.createRegistryEntry(KEY_URL_UPDATE_LINK, name);
+    public static void setURLUpdateValue() throws RegistryCanNotWriteInfoException {
+        RegistryManager.createRegistryEntry(KEY_URL_UPDATE_LINK, ApplicationConstants.UPDATE_WEB_URL);
     }
 
     public static void createRegistryEntry(String valueName, String value) throws RegistryCanNotWriteInfoException {
