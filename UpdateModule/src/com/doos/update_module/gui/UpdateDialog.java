@@ -7,27 +7,30 @@ import com.doos.settings_manager.registry.RegistryCanNotReadInfoException;
 import com.doos.settings_manager.registry.RegistryCanNotWriteInfoException;
 import com.doos.settings_manager.registry.RegistryException;
 import com.doos.settings_manager.registry.RegistryManager;
+import com.doos.settings_manager.utils.FrameUtils;
 import com.doos.update_module.core.Main;
 import com.doos.update_module.update.AppVersion;
 import com.doos.update_module.update.Updater;
-import com.doos.update_module.utils.FrameUtils;
 import com.doos.update_module.utils.Internal;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 
 import static com.doos.settings_manager.core.SettingsManager.showErrorMessageToUser;
 
+@SuppressWarnings({"ALL", "ResultOfMethodCallIgnored"})
 public class UpdateDialog extends JFrame {
     public static UpdateDialog updateDialog = null;
 
     public JProgressBar progressBar1;
     public JButton buttonOK;
     public JButton buttonCancel;
-    Translation translation;
+    private Translation translation;
     private AppVersion serverAppVersion;
     private JPanel contentPane;
     private JLabel currentVersionLabel;
@@ -58,19 +61,9 @@ public class UpdateDialog extends JFrame {
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/icon.png")));
 
-        buttonOK.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
-                updateThread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        onOK();
-                    }
-
-                });
-                updateThread.start();
-            }
-
+        buttonOK.addActionListener(e -> {
+            updateThread = new Thread(() -> onOK());
+            updateThread.start();
         });
 
         buttonCancel.addActionListener(e -> onCancel());
@@ -84,11 +77,8 @@ public class UpdateDialog extends JFrame {
         });
 
         // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                                           JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         pack();
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
         setSize(new Dimension(400, 170));
@@ -187,13 +177,8 @@ public class UpdateDialog extends JFrame {
     private void onOK() {
         buttonOK.setEnabled(false);
         if (!Thread.currentThread().isInterrupted()) {
-            int successUpdate = Updater.startUpdate(serverAppVersion);
             buttonOK.setEnabled(true);
-
-            if (!Thread.currentThread().isInterrupted()) {
-                successUpdate = 1;
-                processUpdateResult(successUpdate);
-            }
+            processUpdateResult(Updater.startUpdate(serverAppVersion));
         } else {
             buttonOK.setEnabled(false);
         }

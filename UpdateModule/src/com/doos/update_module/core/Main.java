@@ -31,6 +31,7 @@ import static com.doos.update_module.nongui.NonGuiUpdater.trayIcon;
 /**
  * Created by Eugene Zrazhevsky on 02.11.2016.
  */
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class Main {
     public static Mode mode = Mode.NORMAL;
 
@@ -171,12 +172,11 @@ public class Main {
                 JAR_FILE_DEFAULT_LOCATION = new File(
                         programFilesPath + "WeblocOpener" + File.separator + "Updater.jar"); //TODO find better solution
             }
-            ;
         }
         return JAR_FILE_DEFAULT_LOCATION;
     }
 
-    public static void createUpdateDialog() {
+    private static void createUpdateDialog() {
         final UpdateDialog updateDialog = new UpdateDialog();
 
         updateDialog.addWindowListener(new WindowAdapter() {

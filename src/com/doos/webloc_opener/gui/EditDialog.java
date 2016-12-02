@@ -2,9 +2,9 @@ package com.doos.webloc_opener.gui;
 
 import com.doos.settings_manager.ApplicationConstants;
 import com.doos.settings_manager.Translation;
+import com.doos.settings_manager.utils.FrameUtils;
 import com.doos.webloc_opener.service.UrlsProceed;
 import com.doos.webloc_opener.service.gui.ClickListener;
-import com.doos.webloc_opener.utils.FrameUtils;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;

@@ -8,15 +8,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.bridj.Pointer;
+import org.bridj.PointerIO;
 import org.bridj.cpp.com.COMRuntime;
 import org.bridj.cpp.com.shell.ITaskbarList3;
 import org.bridj.jawt.JAWTUtils;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.swing.*;
-import java.awt.*;
 import java.io.*;
-import java.net.URI;
 import java.net.URL;
 
 import static com.doos.settings_manager.core.SettingsManager.showErrorMessageToUser;
@@ -24,6 +23,7 @@ import static com.doos.settings_manager.core.SettingsManager.showErrorMessageToU
 /**
  * Created by Eugene Zrazhevsky on 03.11.2016.
  */
+@SuppressWarnings({"ALL", "ResultOfMethodCallIgnored"})
 public class Updater {
     private static final String githubUrl = "https://api.github.com/repos/benchdoos/WeblocOpener/releases/latest";
     private static final String DEFAULT_ENCODING = "UTF-8";
@@ -157,7 +157,7 @@ public class Updater {
         }
 
         long hwndVal = JAWTUtils.getNativePeerHandle(UpdateDialog.updateDialog);
-        hwnd = Pointer.pointerToAddress(hwndVal);
+        hwnd = Pointer.pointerToAddress(hwndVal, PointerIO.getSizeTInstance());
 
         try {
             if (progressBar != null) {
@@ -181,6 +181,7 @@ public class Updater {
                             if (progressBar != null) {
                                 progressBar.setValue(0);
                                 if (list != null) {
+                                    //noinspection unchecked
                                     list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
                                                           progressBar.getMaximum());
                                 }
@@ -194,6 +195,7 @@ public class Updater {
                             if (progressBar != null) {
                                 progressBar.setValue(prg);
                                 if (list != null) {
+                                    //noinspection unchecked
                                     list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
                                                           progressBar.getMaximum());
                                 }
@@ -227,20 +229,6 @@ public class Updater {
             e.printStackTrace();
         }
         return installerFile;
-    }
-
-    public static void openUrl(String url) {
-        if (!Desktop.isDesktopSupported()) {
-            return;
-        }
-        Desktop desktop = Desktop.getDesktop();
-
-        try {
-            desktop.browse(URI.create(url));
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(new Frame(), "URL is corrupt: " + url);
-        }
-
     }
 
     private HttpsURLConnection getConnection() throws IOException {

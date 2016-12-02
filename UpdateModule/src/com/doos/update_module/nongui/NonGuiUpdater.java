@@ -5,13 +5,13 @@ import com.doos.settings_manager.registry.RegistryCanNotReadInfoException;
 import com.doos.settings_manager.registry.RegistryCanNotWriteInfoException;
 import com.doos.settings_manager.registry.RegistryManager;
 import com.doos.update_module.core.Main;
-import com.doos.update_module.gui.UpdateDialog;
 import com.doos.update_module.update.AppVersion;
 import com.doos.update_module.update.Updater;
 import com.doos.update_module.utils.Internal;
 
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Created by Eugene Zrazhevsky on 04.11.2016.
@@ -62,27 +62,21 @@ public class NonGuiUpdater {
             RegistryManager.setDefaultSettings();
             autoUpdateCheckBox.setState(ApplicationConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE);
         }
-        autoUpdateCheckBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                System.out.println(RegistryManager.KEY_AUTO_UPDATE + ": " + autoUpdateCheckBox.getState());
-                try {
-                    RegistryManager.setAutoUpdateActive(autoUpdateCheckBox.getState());
-                } catch (RegistryCanNotWriteInfoException e1) {
-                    RegistryManager.setDefaultSettings();
-                }
+        autoUpdateCheckBox.addItemListener(e -> {
+            System.out.println(RegistryManager.KEY_AUTO_UPDATE + ": " + autoUpdateCheckBox.getState());
+            try {
+                RegistryManager.setAutoUpdateActive(autoUpdateCheckBox.getState());
+            } catch (RegistryCanNotWriteInfoException e1) {
+                RegistryManager.setDefaultSettings();
             }
         });
         trayMenu.add(autoUpdateCheckBox);
         trayMenu.addSeparator();
 
         MenuItem exit = new MenuItem("Exit");
-        exit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tray.remove(trayIcon);
-                //System.exit(0); //FIXME
-            }
+        exit.addActionListener(e -> {
+            tray.remove(trayIcon);
+            //System.exit(0); //FIXME
         });
         trayMenu.add(exit);
 
@@ -90,8 +84,6 @@ public class NonGuiUpdater {
         trayIcon.setPopupMenu(trayMenu);
 
         trayIcon.addMouseListener(new MouseAdapter() {
-            UpdateDialog updateDialog = null;
-
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == 1) {

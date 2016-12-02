@@ -8,7 +8,7 @@ import com.doos.settings_manager.registry.fixer.RegistryFixer;
 import com.doos.settings_manager.registry.fixer.RegistryFixerAppVersionKeyFailException;
 import com.doos.settings_manager.registry.fixer.RegistryFixerAutoUpdateKeyFailException;
 import com.doos.settings_manager.registry.fixer.RegistryFixerInstallPathKeyFailException;
-import com.doos.webloc_opener.utils.FrameUtils;
+import com.doos.settings_manager.utils.FrameUtils;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package com.doos.update_module.utils;
+package com.doos.settings_manager.utils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ public class FrameUtils {
      * Returns the location of point of window, when it should be on center of the screen.
      *
      * @return Point of <code>Window</code> that is moved to center of the screen.
-     * @see Component#getLocation
+     * @see java.awt.Component#getLocation
      */
     public static Point getFrameOnCenterLocationPoint(Window window) {
         Dimension size = window.getSize();
@@ -50,8 +50,8 @@ public class FrameUtils {
 
         if (!timer.isRunning()) {
             timer.addActionListener(new ActionListener() {
-                final Point location = window.getLocation();
-                final int maxCounter = 6;
+                final static int maxCounter = 6;
+                Point location = window.getLocation();
                 int counter = 0;
                 int step = 14;
 
@@ -68,6 +68,11 @@ public class FrameUtils {
                     if (counter >= 0) {
                         if (counter <= maxCounter) {
                             counter++;
+
+                            if (location.x < 0 || location.y < 0) {
+                                window.setLocation(getFrameOnCenterLocationPoint(window));
+                                location = window.getLocation();
+                            }
                             if (counter % 2 != 0) {
                                 Point newLocation = new Point(location.x + step, location.y);
                                 window.setLocation(newLocation);
@@ -89,5 +94,19 @@ public class FrameUtils {
             timer.start();
         }
         Toolkit.getDefaultToolkit().beep();
+    }
+
+
+    public static void bringToFront(final Window window) {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                window.toFront();
+                window.repaint();
+                window.requestFocus();
+                window.requestFocusInWindow();
+                window.toFront();
+            }
+        });
     }
 }
