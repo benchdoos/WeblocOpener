@@ -96,17 +96,16 @@ public class FrameUtils {
         Toolkit.getDefaultToolkit().beep();
     }
 
-
-    public static void bringToFront(final Window window) {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                window.toFront();
-                window.repaint();
-                window.requestFocus();
-                window.requestFocusInWindow();
-                window.toFront();
-            }
-        });
+    /**
+     * Brings window to front.
+     * Not the best solution, but it works!
+     *
+     * @param frame Frame to make on the front of the screen
+     */
+    public static void bringToFront(JFrame frame) {
+        frame.setExtendedState(Frame.ICONIFIED);
+        frame.setExtendedState(Frame.NORMAL);
+        frame.toFront();
     }
+
 }

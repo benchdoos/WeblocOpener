@@ -5,7 +5,6 @@ import com.doos.settings_manager.Translation;
 import com.doos.settings_manager.utils.FrameUtils;
 import com.doos.webloc_opener.service.UrlsProceed;
 import com.doos.webloc_opener.service.gui.ClickListener;
-import com.doos.webloc_opener.service.gui.WindowFocusRequester;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
@@ -181,12 +180,8 @@ public class EditDialog extends JFrame {
 
 
     @Override
-    public void setVisible(boolean b) { //FIXME does not work properly
-        final EditDialog editDialog = this;
-        SwingUtilities.invokeLater(() -> {
-            WindowFocusRequester.runScript(WindowFocusRequester.requestFocusOnWindowScript(getTitle())); //TODO FIXME
-            FrameUtils.bringToFront(editDialog);
-        });
+    public void setVisible(boolean b) {
         super.setVisible(b);
+        FrameUtils.bringToFront(this);
     }
 }
