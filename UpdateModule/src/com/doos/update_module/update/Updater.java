@@ -18,7 +18,7 @@ import javax.swing.*;
 import java.io.*;
 import java.net.URL;
 
-import static com.doos.settings_manager.core.SettingsManager.showErrorMessageToUser;
+import static com.doos.settings_manager.utils.UserUtils.showErrorMessageToUser;
 
 /**
  * Created by Eugene Zrazhevsky on 03.11.2016.

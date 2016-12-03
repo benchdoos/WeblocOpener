@@ -19,7 +19,7 @@ import java.io.FileNotFoundException;
 
 import static com.doos.settings_manager.ApplicationConstants.OPENER_EDIT_ARGUMENT;
 import static com.doos.settings_manager.ApplicationConstants.OPENER_SETTINGS_ARGUMENT;
-import static com.doos.settings_manager.core.SettingsManager.showErrorMessageToUser;
+import static com.doos.settings_manager.utils.UserUtils.showErrorMessageToUser;
 import static java.awt.Frame.MAXIMIZED_HORIZ;
 
 public class Main {

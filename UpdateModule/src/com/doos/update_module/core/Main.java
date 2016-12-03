@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import static com.doos.settings_manager.ApplicationConstants.UPDATE_PATH_FILE;
-import static com.doos.settings_manager.core.SettingsManager.showErrorMessageToUser;
+import static com.doos.settings_manager.utils.UserUtils.showErrorMessageToUser;
 import static com.doos.update_module.nongui.NonGuiUpdater.tray;
 import static com.doos.update_module.nongui.NonGuiUpdater.trayIcon;
 

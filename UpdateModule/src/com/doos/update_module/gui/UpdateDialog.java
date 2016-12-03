@@ -21,7 +21,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 
-import static com.doos.settings_manager.core.SettingsManager.showErrorMessageToUser;
+import static com.doos.settings_manager.utils.UserUtils.showErrorMessageToUser;
 
 @SuppressWarnings({"ALL", "ResultOfMethodCallIgnored"})
 public class UpdateDialog extends JFrame {
