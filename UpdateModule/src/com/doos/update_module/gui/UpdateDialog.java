@@ -8,10 +8,10 @@ import com.doos.commons.registry.RegistryCanNotWriteInfoException;
 import com.doos.commons.registry.RegistryException;
 import com.doos.commons.registry.RegistryManager;
 import com.doos.commons.utils.FrameUtils;
+import com.doos.commons.utils.Internal;
 import com.doos.update_module.core.Main;
 import com.doos.update_module.update.AppVersion;
 import com.doos.update_module.update.Updater;
-import com.doos.update_module.utils.Internal;
 
 import javax.swing.*;
 import java.awt.*;

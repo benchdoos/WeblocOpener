@@ -7,6 +7,10 @@ import com.doos.commons.registry.fixer.RegistryFixer;
 import com.doos.commons.registry.fixer.RegistryFixerAppVersionKeyFailException;
 import com.doos.commons.registry.fixer.RegistryFixerAutoUpdateKeyFailException;
 import com.doos.commons.registry.fixer.RegistryFixerInstallPathKeyFailException;
+import com.doos.commons.utils.UserUtils;
+import com.doos.commons.utils.system.SystemUtils;
+import com.doos.commons.utils.system.UnsupportedOsSystemException;
+import com.doos.commons.utils.system.UnsupportedSystemVersionException;
 import com.doos.webloc_opener.gui.AboutApplicationDialog;
 import com.doos.webloc_opener.gui.EditDialog;
 import com.doos.webloc_opener.gui.SettingsDialog;
@@ -25,14 +29,19 @@ import static java.awt.Frame.MAXIMIZED_HORIZ;
 public class Main {
 
     public static void main(String[] args) {
-        new Logging();
 
-        enableLookAndFeel();
+        try {
+            SystemUtils.checkIfSystemIsSupported();
 
+            new Logging();
 
-        manageArguments(args);
+            enableLookAndFeel();
+
+            manageArguments(args);
+        } catch (UnsupportedOsSystemException | UnsupportedSystemVersionException e) {
+            UserUtils.showErrorMessageToUser(null, "Error", e.getMessage());
+        }
     }
-
 
 
     /**

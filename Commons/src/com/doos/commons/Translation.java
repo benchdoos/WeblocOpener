@@ -11,7 +11,7 @@ public abstract class Translation {
     public final ResourceBundle messages;
     private final String bundlePath;
 
-    public Translation(String bundlePath) {
+    protected Translation(String bundlePath) {
         this.bundlePath = bundlePath;
         messages = getTranslation();
     }

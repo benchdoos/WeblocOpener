@@ -1,4 +1,4 @@
-package com.doos.update_module.utils;
+package com.doos.commons.utils;
 
 /**
  * Created by Eugene Zrazhevsky on 03.11.2016.

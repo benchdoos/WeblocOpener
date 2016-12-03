@@ -10,9 +10,13 @@ import com.doos.commons.registry.fixer.RegistryFixer;
 import com.doos.commons.registry.fixer.RegistryFixerAppVersionKeyFailException;
 import com.doos.commons.registry.fixer.RegistryFixerAutoUpdateKeyFailException;
 import com.doos.commons.registry.fixer.RegistryFixerInstallPathKeyFailException;
+import com.doos.commons.utils.Internal;
+import com.doos.commons.utils.UserUtils;
+import com.doos.commons.utils.system.SystemUtils;
+import com.doos.commons.utils.system.UnsupportedOsSystemException;
+import com.doos.commons.utils.system.UnsupportedSystemVersionException;
 import com.doos.update_module.gui.UpdateDialog;
 import com.doos.update_module.nongui.NonGuiUpdater;
-import com.doos.update_module.utils.Internal;
 import org.apache.commons.io.FileUtils;
 
 import javax.swing.*;
@@ -36,13 +40,19 @@ public class Main {
     public static Mode mode = Mode.NORMAL;
 
     public static void main(String[] args) {
-        enableLookAndFeel();
+        try {
+            SystemUtils.checkIfSystemIsSupported();
 
-        tryLoadProperties();
+            enableLookAndFeel();
 
-        System.out.println("Updater args: " + Arrays.toString(args));
+            tryLoadProperties();
 
-        manageArguments(args);
+            System.out.println("Updater args: " + Arrays.toString(args));
+
+            manageArguments(args);
+        } catch (UnsupportedOsSystemException | UnsupportedSystemVersionException e) {
+            UserUtils.showErrorMessageToUser(null, "Error", e.getMessage());
+        }
     }
 
     private static void manageArguments(String[] args) {
@@ -169,12 +179,7 @@ public class Main {
                 JAR_FILE_DEFAULT_LOCATION = new File(file.getAbsolutePath() + File.separator + "Updater.jar");
             } else {
                 String programFilesPath;
-                String arch = System.getenv("PROCESSOR_ARCHITECTURE");
-                String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
-
-                String realArch = arch.endsWith("64")
-                        || wow64Arch != null && wow64Arch.endsWith("64")
-                        ? "64" : "32";
+                String realArch = SystemUtils.getRealSystemArch();
                 if (realArch.equals("64")) {
                     programFilesPath = System.getenv("ProgramFiles(X86)");
                 } else {
