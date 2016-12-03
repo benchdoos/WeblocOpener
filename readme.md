@@ -32,7 +32,7 @@ Watch [Youtube](https://youtu.be/Z-bT-VWMDsQ) video
 
 <ul class="SystemRequirements">
     <li><b>Operating system:</b></li>
-    <li>Windows 7 (SP1), 8, 10</li>
+    <li>Windows XP, Vista, 7, 8, 10</li>
     <li><b>CPU:</b></li>
     <li>Pentium 2 266MHz or better</li>
     <li><b>Memory:</b></li>
