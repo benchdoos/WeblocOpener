@@ -24,5 +24,6 @@ public interface ApplicationConstants {
 
     String OPENER_EDIT_ARGUMENT = "-edit";
     String OPENER_SETTINGS_ARGUMENT = "-settings";
+    String OPENER_ABOUT_ARGUMENT = "-about";
 
 }

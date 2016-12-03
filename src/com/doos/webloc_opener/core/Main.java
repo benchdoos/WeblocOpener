@@ -7,6 +7,7 @@ import com.doos.settings_manager.registry.fixer.RegistryFixer;
 import com.doos.settings_manager.registry.fixer.RegistryFixerAppVersionKeyFailException;
 import com.doos.settings_manager.registry.fixer.RegistryFixerAutoUpdateKeyFailException;
 import com.doos.settings_manager.registry.fixer.RegistryFixerInstallPathKeyFailException;
+import com.doos.webloc_opener.gui.AboutApplicationDialog;
 import com.doos.webloc_opener.gui.EditDialog;
 import com.doos.webloc_opener.gui.SettingsDialog;
 import com.doos.webloc_opener.service.Analyzer;
@@ -17,8 +18,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.FileNotFoundException;
 
-import static com.doos.settings_manager.ApplicationConstants.OPENER_EDIT_ARGUMENT;
-import static com.doos.settings_manager.ApplicationConstants.OPENER_SETTINGS_ARGUMENT;
+import static com.doos.settings_manager.ApplicationConstants.*;
 import static com.doos.settings_manager.utils.UserUtils.showErrorMessageToUser;
 import static java.awt.Frame.MAXIMIZED_HORIZ;
 
@@ -73,6 +73,9 @@ public class Main {
                         break;
                     case OPENER_SETTINGS_ARGUMENT:
                         runSettingsDialog();
+                        break;
+                    case OPENER_ABOUT_ARGUMENT:
+                        new AboutApplicationDialog().setVisible(true);
                         break;
                     default:
                         runAnalizer(args[0]);
