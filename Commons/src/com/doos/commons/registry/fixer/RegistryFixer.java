@@ -32,31 +32,39 @@ public class RegistryFixer { //TODO Enable logging
 
     private static void fixAppNameValue() {
         try {
+            System.out.println("[REGISTRY FIXER] Trying to fix " + RegistryManager.KEY_APP_NAME);
             RegistryManager.getAppNameValue();
         } catch (RegistryCanNotReadInfoException e1) {
             try {
                 RegistryManager.setAppNameValue();
                 System.out.println(
                         "[REGISTRY FIXER] Successfully Fixed " + RegistryManager.KEY_APP_NAME);
-            } catch (RegistryCanNotWriteInfoException ignore) {/*NOP*/}
+            } catch (RegistryCanNotWriteInfoException ignore) {
+                System.out.println("[REGISTRY FIXER] Failed to fix " + RegistryManager.KEY_APP_NAME);
+            }
         }
     }
 
     private static void fixUpdateUrlValue() {
         try {
+            System.out.println("[REGISTRY FIXER] Trying to fix " + RegistryManager.KEY_URL_UPDATE_LINK);
             RegistryManager.getURLUpdateValue();
         } catch (RegistryCanNotReadInfoException e) {
             try {
                 RegistryManager.setURLUpdateValue();
                 System.out.println(
                         "[REGISTRY FIXER] Successfully Fixed " + RegistryManager.KEY_URL_UPDATE_LINK);
-            } catch (RegistryCanNotWriteInfoException e2) {/*NOP*/}
+            } catch (RegistryCanNotWriteInfoException e2) {
+                e2.printStackTrace();
+                System.out.println("[REGISTRY FIXER] Failed to fix " + RegistryManager.KEY_URL_UPDATE_LINK);
+            }
         }
     }
 
     private static void fixInstallLocationValue()
             throws FileNotFoundException, RegistryFixerInstallPathKeyFailException {
         try {
+            System.out.println("[REGISTRY FIXER] Trying to fix " + RegistryManager.KEY_INSTALL_LOCATION);
             RegistryManager.getInstallLocationValue();
         } catch (RegistryCanNotReadInfoException e) {
             String path;
@@ -69,6 +77,7 @@ public class RegistryFixer { //TODO Enable logging
                     setAppInstallLocationToUserRoot(path);
                 }
             } catch (RegistryCanNotReadInfoException | RegistryCanNotWriteInfoException e1) {
+                System.out.println("[REGISTRY FIXER] Failed to fix " + RegistryManager.KEY_INSTALL_LOCATION);
                 throw new RegistryFixerInstallPathKeyFailException();
             }
         }
@@ -125,12 +134,14 @@ public class RegistryFixer { //TODO Enable logging
     private static void fixAppVersionValue()
             throws RegistryFixerAppVersionKeyFailException {
         try {
+            System.out.println("[REGISTRY FIXER] Trying to fix " + RegistryManager.KEY_CURRENT_VERSION);
             RegistryManager.getAppVersionValue();
         } catch (RegistryCanNotReadInfoException e) {
             try {
                 RegistryManager.setAppVersionValue(ApplicationConstants.APP_VERSION);
                 System.out.println("[REGISTRY FIXER] Successfully Fixed " + RegistryManager.KEY_CURRENT_VERSION);
             } catch (RegistryCanNotWriteInfoException e1) {
+                System.out.println("[REGISTRY FIXER] Failed to fix " + RegistryManager.KEY_CURRENT_VERSION);
                 throw new RegistryFixerAppVersionKeyFailException("", e);
             }
         }
@@ -138,12 +149,15 @@ public class RegistryFixer { //TODO Enable logging
 
     private static void fixAutoUpdateValue() throws RegistryFixerAutoUpdateKeyFailException {
         try {
+            System.out.println("[REGISTRY FIXER] Trying to fix " + RegistryManager.KEY_AUTO_UPDATE);
+
             RegistryManager.isAutoUpdateActive();
         } catch (RegistryCanNotReadInfoException e) {
             try {
                 RegistryManager.setAutoUpdateActive(ApplicationConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE);
                 System.out.println("[REGISTRY FIXER] Successfully Fixed " + RegistryManager.KEY_AUTO_UPDATE);
             } catch (RegistryCanNotWriteInfoException e1) {
+                System.out.println("[REGISTRY FIXER] Failed to fix " + RegistryManager.KEY_AUTO_UPDATE);
                 throw new RegistryFixerAutoUpdateKeyFailException("", e);
             }
         }

@@ -37,7 +37,8 @@ public class RegistryManager {
                 return value;
             } catch (Win32Exception e) {
                 throw new RegistryCanNotReadInfoException("Can not read Installed Location value : " +
-                                                                  "HKLM\\" + REGISTRY_APP_PATH + "" + KEY_INSTALL_LOCATION,
+                                                                  "HKCU\\" + REGISTRY_APP_PATH + "" +
+                                                                  KEY_INSTALL_LOCATION,
                                                           e);
             }
         } else return settings.getProperty(KEY_INSTALL_LOCATION);
