@@ -4,6 +4,7 @@ import com.doos.commons.ApplicationConstants;
 import com.doos.commons.registry.RegistryCanNotReadInfoException;
 import com.doos.commons.registry.RegistryCanNotWriteInfoException;
 import com.doos.commons.registry.RegistryManager;
+import com.doos.commons.utils.system.SystemUtils;
 import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.jna.platform.win32.WinReg;
 
@@ -14,8 +15,10 @@ import java.io.FileNotFoundException;
  * Created by Eugene Zrazhevsky on 24.11.2016.
  */
 public class RegistryFixer { //TODO Enable logging
-    private static final String DEFAULT_INSTALLER_UNINSTALL_LOCATION_PATH =
+    private static final String DEFAULT_INSTALLER_UNINSTALL_LOCATION_PATH_64 =
             "SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\" + ApplicationConstants.APP_ID;
+    private static final String DEFAULT_INSTALLER_UNINSTALL_LOCATION_PATH_32 =
+            "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\" + ApplicationConstants.APP_ID;
 
     public static void fixRegistry()
             throws FileNotFoundException, RegistryFixerAutoUpdateKeyFailException,
@@ -34,6 +37,7 @@ public class RegistryFixer { //TODO Enable logging
         System.out.println("[REGISTRY FIXER] Trying to fix Root app registry path");
         try {
             RegistryManager.createRootRegistryFolder();
+            System.out.println("[REGISTRY FIXER]Successfully Fixed Root app registry path");
         } catch (RegistryCanNotWriteInfoException e) {
             System.out.println("[REGISTRY FIXER] Failed to fix Root app registry path");
             e.printStackTrace();
@@ -81,7 +85,7 @@ public class RegistryFixer { //TODO Enable logging
             String path;
             try {
                 path = getLocationFromInstallerValue();
-
+                System.out.println("Probably path is: '" + path + "'");
                 if (!path.isEmpty()) {
                     setAppInstallLocationToDefault(path);
                 } else {
@@ -124,22 +128,36 @@ public class RegistryFixer { //TODO Enable logging
     private static String getLocationFromInstallerValue()
             throws RegistryCanNotReadInfoException {
         String path;
+        String pathValue;
+        pathValue = getUnistallLocationForCurrentSystemArch();
+
         try {
             path = WinReg.HKEY_LOCAL_MACHINE + "\\" +
-                    DEFAULT_INSTALLER_UNINSTALL_LOCATION_PATH + "\\" +
+                    pathValue + "\\" +
                     RegistryManager.KEY_INSTALL_LOCATION;
             System.out.println("Default installer value:" + path);
             path = Advapi32Util
                     .registryGetStringValue(WinReg.HKEY_LOCAL_MACHINE,
-                                            DEFAULT_INSTALLER_UNINSTALL_LOCATION_PATH,
+                                            pathValue,
                                             RegistryManager.KEY_INSTALL_LOCATION);
+            System.out.println("Default installer path: '" + path + "'");
 
         } catch (Exception e) {
             throw new RegistryCanNotReadInfoException(
                     "Can not read value from Windows UnInstaller: " + "HKLM\\" +
-                            DEFAULT_INSTALLER_UNINSTALL_LOCATION_PATH, e);
+                            pathValue, e);
         }
         return path;
+    }
+
+    private static String getUnistallLocationForCurrentSystemArch() {
+        String pathValue;
+        if (SystemUtils.getRealSystemArch().equals("64")) {
+            pathValue = DEFAULT_INSTALLER_UNINSTALL_LOCATION_PATH_64;
+        } else {
+            pathValue = DEFAULT_INSTALLER_UNINSTALL_LOCATION_PATH_32;
+        }
+        return pathValue;
     }
 
     private static void fixAppVersionValue()
