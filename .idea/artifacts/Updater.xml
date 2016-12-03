@@ -10,7 +10,7 @@
       <element id="extracted-dir" path="C:/Program Files (x86)/Java/jre1.8.0_111/lib/deploy.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/jna-4.2.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/jna-platform-4.2.2.jar" path-in-jar="/" />
-      <element id="module-output" name="SettingsManager" />
+      <element id="module-output" name="Commons" />
       <element id="library" level="project" name="jna-4.2.2" />
       <element id="module-output" name="UpdateModule" />
       <element id="library" level="project" name="com.google.code.gson:gson:2.8.0" />

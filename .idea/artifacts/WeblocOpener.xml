@@ -9,7 +9,7 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/dd-plist.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/jna-4.2.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/jna-platform-4.2.2.jar" path-in-jar="/" />
-      <element id="module-output" name="SettingsManager" />
+      <element id="module-output" name="Commons" />
       <element id="library" level="project" name="jna-4.2.2" />
       <element id="module-output" name="WeblocOpener" />
       <element id="library" level="project" name="log4j:log4j:1.2.8" />
