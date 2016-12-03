@@ -19,8 +19,11 @@ public class RegistryManager {
     public static final String KEY_AUTO_UPDATE = "AutoUpdateEnabled";
     public static final String KEY_APP_NAME = "Name";
     public static final String KEY_URL_UPDATE_LINK = "URLUpdateInfo";
+    public static final String KEY_APP_ROOT_FOLDER_NAME = ApplicationConstants.APP_NAME;
     private static final WinReg.HKEY APP_ROOT_HKEY = WinReg.HKEY_CURRENT_USER;
     private final static String REGISTRY_APP_PATH = "SOFTWARE\\" + ApplicationConstants.APP_NAME + "\\";
+
+
     private static final Properties settings = new Properties();
 
     public static String getInstallLocationValue() throws RegistryCanNotReadInfoException {
@@ -138,6 +141,16 @@ public class RegistryManager {
             throw new RegistryCanNotWriteInfoException("Can not create entry at: "
                                                                + APP_ROOT_HKEY + "\\" + REGISTRY_APP_PATH + valueName
                                                                + " With value [" + value + "]", e);
+        }
+    }
+
+    public static void createRootRegistryFolder() throws RegistryCanNotWriteInfoException {
+        if (!Advapi32Util.registryKeyExists(APP_ROOT_HKEY, REGISTRY_APP_PATH)) {
+            try {
+                Advapi32Util.registryCreateKey(APP_ROOT_HKEY, REGISTRY_APP_PATH);
+            } catch (Win32Exception e) {
+                throw new RegistryCanNotWriteInfoException("Can not create root folder on registry.", e);
+            }
         }
     }
 

@@ -20,14 +20,25 @@ public class RegistryFixer { //TODO Enable logging
     public static void fixRegistry()
             throws FileNotFoundException, RegistryFixerAutoUpdateKeyFailException,
             RegistryFixerAppVersionKeyFailException, RegistryFixerInstallPathKeyFailException {
-        System.out.println(
-                "[REGISTRY FIXER] Trying to check and fix registry values.");
+        System.out.println("[REGISTRY FIXER] Trying to check and fix registry values.");
+        fixRootRegistryUnit();
         fixAutoUpdateValue();
         fixAppVersionValue();
         fixInstallLocationValue();
         fixAppNameValue();
         fixUpdateUrlValue();
         /*TODO Add here sub-directories if needed*/
+    }
+
+    private static void fixRootRegistryUnit() {
+        System.out.println("[REGISTRY FIXER] Trying to fix Root app registry path");
+        try {
+            RegistryManager.createRootRegistryFolder();
+        } catch (RegistryCanNotWriteInfoException e) {
+            System.out.println("[REGISTRY FIXER] Failed to fix Root app registry path");
+            e.printStackTrace();
+        }
+
     }
 
     private static void fixAppNameValue() {
