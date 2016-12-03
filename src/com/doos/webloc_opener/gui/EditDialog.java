@@ -1,8 +1,8 @@
 package com.doos.webloc_opener.gui;
 
-import com.doos.settings_manager.ApplicationConstants;
-import com.doos.settings_manager.Translation;
-import com.doos.settings_manager.utils.FrameUtils;
+import com.doos.commons.ApplicationConstants;
+import com.doos.commons.Translation;
+import com.doos.commons.utils.FrameUtils;
 import com.doos.webloc_opener.service.UrlsProceed;
 import com.doos.webloc_opener.service.gui.ClickListener;
 import org.apache.log4j.Logger;

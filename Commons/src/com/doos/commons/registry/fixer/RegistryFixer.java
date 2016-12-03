@@ -1,9 +1,9 @@
-package com.doos.settings_manager.registry.fixer;
+package com.doos.commons.registry.fixer;
 
-import com.doos.settings_manager.ApplicationConstants;
-import com.doos.settings_manager.registry.RegistryCanNotReadInfoException;
-import com.doos.settings_manager.registry.RegistryCanNotWriteInfoException;
-import com.doos.settings_manager.registry.RegistryManager;
+import com.doos.commons.ApplicationConstants;
+import com.doos.commons.registry.RegistryCanNotReadInfoException;
+import com.doos.commons.registry.RegistryCanNotWriteInfoException;
+import com.doos.commons.registry.RegistryManager;
 import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.jna.platform.win32.WinReg;
 

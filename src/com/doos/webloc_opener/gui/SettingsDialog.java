@@ -1,14 +1,14 @@
 package com.doos.webloc_opener.gui;
 
-import com.doos.settings_manager.Translation;
-import com.doos.settings_manager.registry.RegistryCanNotReadInfoException;
-import com.doos.settings_manager.registry.RegistryException;
-import com.doos.settings_manager.registry.RegistryManager;
-import com.doos.settings_manager.registry.fixer.RegistryFixer;
-import com.doos.settings_manager.registry.fixer.RegistryFixerAppVersionKeyFailException;
-import com.doos.settings_manager.registry.fixer.RegistryFixerAutoUpdateKeyFailException;
-import com.doos.settings_manager.registry.fixer.RegistryFixerInstallPathKeyFailException;
-import com.doos.settings_manager.utils.FrameUtils;
+import com.doos.commons.Translation;
+import com.doos.commons.registry.RegistryCanNotReadInfoException;
+import com.doos.commons.registry.RegistryException;
+import com.doos.commons.registry.RegistryManager;
+import com.doos.commons.registry.fixer.RegistryFixer;
+import com.doos.commons.registry.fixer.RegistryFixerAppVersionKeyFailException;
+import com.doos.commons.registry.fixer.RegistryFixerAutoUpdateKeyFailException;
+import com.doos.commons.registry.fixer.RegistryFixerInstallPathKeyFailException;
+import com.doos.commons.utils.FrameUtils;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;

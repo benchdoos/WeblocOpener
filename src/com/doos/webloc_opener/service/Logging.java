@@ -1,6 +1,6 @@
 package com.doos.webloc_opener.service;
 
-import com.doos.settings_manager.ApplicationConstants;
+import com.doos.commons.ApplicationConstants;
 
 import java.io.File;
 

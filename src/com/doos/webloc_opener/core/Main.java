@@ -1,12 +1,12 @@
 package com.doos.webloc_opener.core;
 
-import com.doos.settings_manager.core.SettingsManager;
-import com.doos.settings_manager.registry.RegistryException;
-import com.doos.settings_manager.registry.RegistryManager;
-import com.doos.settings_manager.registry.fixer.RegistryFixer;
-import com.doos.settings_manager.registry.fixer.RegistryFixerAppVersionKeyFailException;
-import com.doos.settings_manager.registry.fixer.RegistryFixerAutoUpdateKeyFailException;
-import com.doos.settings_manager.registry.fixer.RegistryFixerInstallPathKeyFailException;
+import com.doos.commons.core.SettingsManager;
+import com.doos.commons.registry.RegistryException;
+import com.doos.commons.registry.RegistryManager;
+import com.doos.commons.registry.fixer.RegistryFixer;
+import com.doos.commons.registry.fixer.RegistryFixerAppVersionKeyFailException;
+import com.doos.commons.registry.fixer.RegistryFixerAutoUpdateKeyFailException;
+import com.doos.commons.registry.fixer.RegistryFixerInstallPathKeyFailException;
 import com.doos.webloc_opener.gui.AboutApplicationDialog;
 import com.doos.webloc_opener.gui.EditDialog;
 import com.doos.webloc_opener.gui.SettingsDialog;
@@ -18,8 +18,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.FileNotFoundException;
 
-import static com.doos.settings_manager.ApplicationConstants.*;
-import static com.doos.settings_manager.utils.UserUtils.showErrorMessageToUser;
+import static com.doos.commons.ApplicationConstants.*;
+import static com.doos.commons.utils.UserUtils.showErrorMessageToUser;
 import static java.awt.Frame.MAXIMIZED_HORIZ;
 
 public class Main {

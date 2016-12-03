@@ -1,9 +1,9 @@
 package com.doos.update_module.nongui;
 
-import com.doos.settings_manager.ApplicationConstants;
-import com.doos.settings_manager.registry.RegistryCanNotReadInfoException;
-import com.doos.settings_manager.registry.RegistryCanNotWriteInfoException;
-import com.doos.settings_manager.registry.RegistryManager;
+import com.doos.commons.ApplicationConstants;
+import com.doos.commons.registry.RegistryCanNotReadInfoException;
+import com.doos.commons.registry.RegistryCanNotWriteInfoException;
+import com.doos.commons.registry.RegistryManager;
 import com.doos.update_module.core.Main;
 import com.doos.update_module.update.AppVersion;
 import com.doos.update_module.update.Updater;

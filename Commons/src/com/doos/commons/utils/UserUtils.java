@@ -1,6 +1,6 @@
-package com.doos.settings_manager.utils;
+package com.doos.commons.utils;
 
-import com.doos.settings_manager.ApplicationConstants;
+import com.doos.commons.ApplicationConstants;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;

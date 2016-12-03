@@ -1,4 +1,4 @@
-package com.doos.settings_manager.registry;
+package com.doos.commons.registry;
 
 /**
  * Created by Eugene Zrazhevsky on 21.11.2016.

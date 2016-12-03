@@ -1,9 +1,9 @@
 package com.doos.webloc_opener.gui;
 
-import com.doos.settings_manager.ApplicationConstants;
-import com.doos.settings_manager.Translation;
-import com.doos.settings_manager.utils.FrameUtils;
-import com.doos.settings_manager.utils.UserUtils;
+import com.doos.commons.ApplicationConstants;
+import com.doos.commons.Translation;
+import com.doos.commons.utils.FrameUtils;
+import com.doos.commons.utils.UserUtils;
 
 import javax.swing.*;
 import java.awt.*;

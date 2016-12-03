@@ -1,9 +1,9 @@
-package com.doos.settings_manager.core;
+package com.doos.commons.core;
 
-import com.doos.settings_manager.ApplicationConstants;
-import com.doos.settings_manager.registry.RegistryCanNotReadInfoException;
-import com.doos.settings_manager.registry.RegistryCanNotWriteInfoException;
-import com.doos.settings_manager.registry.RegistryManager;
+import com.doos.commons.ApplicationConstants;
+import com.doos.commons.registry.RegistryCanNotReadInfoException;
+import com.doos.commons.registry.RegistryCanNotWriteInfoException;
+import com.doos.commons.registry.RegistryManager;
 
 /**
  * Created by Eugene Zrazhevsky on 20.11.2016.

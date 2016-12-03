@@ -1,7 +1,7 @@
 package com.doos.update_module.update;
 
 
-import com.doos.settings_manager.ApplicationConstants;
+import com.doos.commons.ApplicationConstants;
 import com.doos.update_module.gui.UpdateDialog;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -18,7 +18,7 @@ import javax.swing.*;
 import java.io.*;
 import java.net.URL;
 
-import static com.doos.settings_manager.utils.UserUtils.showErrorMessageToUser;
+import static com.doos.commons.utils.UserUtils.showErrorMessageToUser;
 
 /**
  * Created by Eugene Zrazhevsky on 03.11.2016.

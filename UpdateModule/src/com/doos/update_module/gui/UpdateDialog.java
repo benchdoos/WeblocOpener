@@ -1,13 +1,13 @@
 package com.doos.update_module.gui;
 
-import com.doos.settings_manager.ApplicationConstants;
-import com.doos.settings_manager.Translation;
-import com.doos.settings_manager.core.SettingsManager;
-import com.doos.settings_manager.registry.RegistryCanNotReadInfoException;
-import com.doos.settings_manager.registry.RegistryCanNotWriteInfoException;
-import com.doos.settings_manager.registry.RegistryException;
-import com.doos.settings_manager.registry.RegistryManager;
-import com.doos.settings_manager.utils.FrameUtils;
+import com.doos.commons.ApplicationConstants;
+import com.doos.commons.Translation;
+import com.doos.commons.core.SettingsManager;
+import com.doos.commons.registry.RegistryCanNotReadInfoException;
+import com.doos.commons.registry.RegistryCanNotWriteInfoException;
+import com.doos.commons.registry.RegistryException;
+import com.doos.commons.registry.RegistryManager;
+import com.doos.commons.utils.FrameUtils;
 import com.doos.update_module.core.Main;
 import com.doos.update_module.update.AppVersion;
 import com.doos.update_module.update.Updater;
@@ -21,7 +21,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 
-import static com.doos.settings_manager.utils.UserUtils.showErrorMessageToUser;
+import static com.doos.commons.utils.UserUtils.showErrorMessageToUser;
 
 @SuppressWarnings({"ALL", "ResultOfMethodCallIgnored"})
 public class UpdateDialog extends JFrame {

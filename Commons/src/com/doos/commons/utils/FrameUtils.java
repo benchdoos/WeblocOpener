@@ -1,4 +1,4 @@
-package com.doos.settings_manager.utils;
+package com.doos.commons.utils;
 
 import javax.swing.*;
 import java.awt.*;

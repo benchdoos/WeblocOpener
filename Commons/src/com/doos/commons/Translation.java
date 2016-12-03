@@ -1,4 +1,4 @@
-package com.doos.settings_manager;
+package com.doos.commons;
 
 import java.util.Locale;
 import java.util.ResourceBundle;

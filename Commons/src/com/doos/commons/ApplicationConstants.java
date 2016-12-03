@@ -1,4 +1,4 @@
-package com.doos.settings_manager;
+package com.doos.commons;
 
 import java.io.File;
 
