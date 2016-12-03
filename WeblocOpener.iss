@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "WeblocOpener"
-#define MyAppVersion "1.2.3"
+#define MyAppVersion "1.2.4"
 #define MyAppPublisher "Eugene Zrazhevsky"
 #define MyAppURL "https://benchdoos.github.io/"
 #define MyAppExeName "WeblocOpener.exe"
@@ -34,7 +34,7 @@ PrivilegesRequired=admin
 ; File association
 Root: HKCR; Subkey: ".webloc"; ValueType: string; ValueName: ""; ValueData: "Webloc"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc"; ValueType: string; ValueName: ""; ValueData: "Webloc link"; Flags: uninsdeletekey
-Root: HKCR; Subkey: "Webloc\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppExeName},1"; Flags: uninsdeletevalue 
+Root: HKCR; Subkey: "Webloc\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppExeName},1"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
 
 ; Add new file .webloc
@@ -43,27 +43,21 @@ Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "FileName"
 Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "NullFile"; ValueData: ""; Flags: uninsdeletevalue
 
 ; Add edit file menu
-Root: HKCR; Subkey: "Webloc\shell\edit\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-edit"" ""%1"" "; Flags: uninsdeletevalue          
-
+Root: HKCR; Subkey: "Webloc\shell\edit\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-edit"" ""%1"" "; Flags: uninsdeletevalue
 
 ; Add updater autorun
 Root: HKCU; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "WeblocOpenerUpdater"; ValueData: """{app}\Updater.jar"" ""-s"""; Flags: uninsdeletevalue
 
 ; Add app info
-Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: ""; ValueData: ""; Flags: uninsdeletevalue  
-Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "Name"; ValueData: "{#MyAppName}"; Flags: uninsdeletevalue 
-Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "URLUpdateInfo"; ValueData: "{#MyAppURL}"; Flags: uninsdeletevalue 
-Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "CurrentVersion"; ValueData: "{#MyAppVersion}"; Flags: uninsdeletevalue 
-Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "InstallLocation"; ValueData: "{app}\"; Flags: uninsdeletevalue 
-;Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "ProductId"; ValueData: ""; Flags: uninsdeletevalue 
-Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "AutoUpdateEnabled"; ValueData: "true"; Flags: uninsdeletevalue 
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: ""; ValueData: ""; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "Name"; ValueData: "{#MyAppName}"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "URLUpdateInfo"; ValueData: "{#MyAppURL}"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "CurrentVersion"; ValueData: "{#MyAppVersion}"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "InstallLocation"; ValueData: "{app}\"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener"; ValueType: string; ValueName: "AutoUpdateEnabled"; ValueData: "true"; Flags: uninsdeletevalue
 
-Root: HKCU; Subkey: "SOFTWARE\WeblocOpener\Capabilities"; ValueType: string; ValueName: "ApplicationDescription"; ValueData: "Open, edit and create .webloc links on Windows"; Flags: uninsdeletevalue 
-Root: HKCU; Subkey: "SOFTWARE\WeblocOpener\Capabilities\FileAssociations"; ValueType: string; ValueName: ".webloc"; ValueData: "Webloc link"; Flags: uninsdeletevalue 
-
-
-
-
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener\Capabilities"; ValueType: string; ValueName: "ApplicationDescription"; ValueData: "Open, edit and create .webloc links on Windows"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "SOFTWARE\WeblocOpener\Capabilities\FileAssociations"; ValueType: string; ValueName: ".webloc"; ValueData: "Webloc link"; Flags: uninsdeletevalue
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -75,8 +69,12 @@ Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
 Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\WeblocOpener\WeblocOpener.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\WeblocOpener\Template.webloc"; DestDir: "{app}"; Flags: ignoreversion
 Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\Updater\Updater.jar"; DestDir: "{app}"; Flags: ignoreversion
-Source: "F:\Developer\JAVA\WeblocOpener\readme.rtf"; DestDir: "{app}"; Flags: ignoreversion isreadme 
+Source: "F:\Developer\JAVA\WeblocOpener\readme.rtf"; DestDir: "{app}"; Flags: ignoreversion isreadme
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+
+[InstallDelete]
+;Deletes old lnk
+Type: files; Name: "{group}\{#MyAppName}.lnk"
 
 [Icons]
 Name: "{group}\{#MyAppName} - Settings"; Filename: "{app}\{#MyAppExeName}"
@@ -84,4 +82,4 @@ Name: "{group}\Updater"; Filename: "{app}\Updater.jar"
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Run]
-Filename: https://benchdoos.github.io/; Description: "{cm:ProgramOnTheWeb,{#MyAppName}}"; Flags: postinstall shellexec  unchecked 
+Filename: https://benchdoos.github.io/; Description: "{cm:ProgramOnTheWeb,{#MyAppName}}"; Flags: postinstall shellexec  unchecked
