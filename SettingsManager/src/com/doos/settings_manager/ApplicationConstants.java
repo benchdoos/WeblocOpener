@@ -11,7 +11,8 @@ public interface ApplicationConstants {
     String APP_LOG_FOLDER_PATH = System.getProperty("java.io.tmpdir") + APP_NAME + File.separator + "Log";
     String APP_LOG_PROPERTY = "WeblocOpener.log.folder";
     String UPDATE_PATH_FILE = System.getProperty("java.io.tmpdir") + APP_NAME + File.separator;
-    String UPDATE_WEB_URL = "https://github.com/benchdoos/WeblocOpener/";
+    //String UPDATE_WEB_URL = "https://github.com/benchdoos/WeblocOpener/";
+    String UPDATE_WEB_URL = "https://benchdoos.github.io/";
 
     boolean IS_APP_AUTO_UPDATE_DEFAULT_VALUE = true;
 
