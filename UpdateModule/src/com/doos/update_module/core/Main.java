@@ -168,7 +168,18 @@ public class Main {
             if (file.getName().equals(ApplicationConstants.APP_NAME)) {
                 JAR_FILE_DEFAULT_LOCATION = new File(file.getAbsolutePath() + File.separator + "Updater.jar");
             } else {
-                String programFilesPath = System.getenv("ProgramFiles(X86)");
+                String programFilesPath;
+                String arch = System.getenv("PROCESSOR_ARCHITECTURE");
+                String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
+
+                String realArch = arch.endsWith("64")
+                        || wow64Arch != null && wow64Arch.endsWith("64")
+                        ? "64" : "32";
+                if (realArch.equals("64")) {
+                    programFilesPath = System.getenv("ProgramFiles(X86)");
+                } else {
+                    programFilesPath = System.getenv("ProgramFiles");
+                }
                 JAR_FILE_DEFAULT_LOCATION = new File(
                         programFilesPath + "WeblocOpener" + File.separator + "Updater.jar"); //TODO find better solution
             }
