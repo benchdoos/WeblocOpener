@@ -149,7 +149,7 @@ public class UpdateDialog extends JFrame {
 
     private void setNewVersionSizeInfo() {
         if (serverAppVersion.getSize() > 1024 * 1024) {
-            double size = serverAppVersion.getSize() / ((double) 1024 / (double) 1024);
+            double size = serverAppVersion.getSize() / 1024 / (double) 1024;
             size = size * 100;
             int i = (int) Math.round(size);
             size = (double) i / 100;
