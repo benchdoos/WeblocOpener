@@ -3,8 +3,9 @@ package com.doos.webloc_opener.service.gui;
 import org.apache.log4j.Logger;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import static com.doos.webloc_opener.service.Logging.getCurrentClassName;
 
@@ -15,7 +16,7 @@ import static com.doos.webloc_opener.service.Logging.getCurrentClassName;
  */
 
 
-class WindowFocusRequester {
+public class WindowFocusRequester {
     private static final Logger log = Logger.getLogger(getCurrentClassName());
 
     public static String requestFocusOnWindowScript(String windowTitle) {
@@ -26,26 +27,36 @@ class WindowFocusRequester {
     }
 
     public static boolean runScript(String script) {
-        FileWriter fw = null;
+        FileOutputStream fileOutputStream = null;
+        File file = null;
         try {
-            File file = File.createTempFile("WeblocOpenerScript", ".vbs");
+            file = File.createTempFile("WeblocOpenerScript", ".vbs");
             file.deleteOnExit();
-            fw = new java.io.FileWriter(file);
+            //fileOutputStream = new FileWriter(file);
+            fileOutputStream = new FileOutputStream(file);
             log.debug("Temp file created at: " + file.getAbsolutePath());
-            fw.write(script);
+            byte[] contentInBytes = script.getBytes(Charset.forName("UTF-8"));
+            fileOutputStream.write(contentInBytes);
 
-            Process p = Runtime.getRuntime().exec("wscript " + file.getPath());
-            p.waitFor();
-            return (p.exitValue() == 1);
         } catch (Exception e) {
-            log.warn("Can not run script: " + script, e);
+            log.warn("Can not create script: " + script, e);
             return false;
         } finally {
             try {
-                if (fw != null) {
-                    fw.close();
+                if (fileOutputStream != null) {
+                    fileOutputStream.flush();
+                    fileOutputStream.close();
                 }
             } catch (IOException ignore) {/*NOP*/}
         }
+        Process p = null;
+        try {
+            p = Runtime.getRuntime().exec("wscript " + file.getPath());
+            p.waitFor();
+        } catch (IOException | InterruptedException e) {
+            log.warn("Can not run script: " + script, e);
+
+        }
+        return p != null && (p.exitValue() == 1);
     }
 }

@@ -179,6 +179,7 @@ public class Main {
     private static void createUpdateDialog() {
         final UpdateDialog updateDialog = new UpdateDialog();
 
+
         updateDialog.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
@@ -208,6 +209,8 @@ public class Main {
             }
 
         });
+        UpdateDialog.updateDialog = updateDialog;
+
         updateDialog.setVisible(true);
         updateDialog.checkForUpdates();
     }

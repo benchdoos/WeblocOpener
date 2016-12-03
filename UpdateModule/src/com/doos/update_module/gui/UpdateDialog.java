@@ -85,7 +85,6 @@ public class UpdateDialog extends JFrame {
         setResizable(false);
         loadProperties();
         translateDialog();
-        updateDialog = this;
     }
 
     private void translateDialog() {
@@ -150,7 +149,7 @@ public class UpdateDialog extends JFrame {
 
     private void setNewVersionSizeInfo() {
         if (serverAppVersion.getSize() > 1024 * 1024) {
-            double size = serverAppVersion.getSize() / 1024 / (double) 1024;
+            double size = serverAppVersion.getSize() / ((double) 1024 / (double) 1024);
             size = size * 100;
             int i = (int) Math.round(size);
             size = (double) i / 100;
@@ -237,7 +236,7 @@ public class UpdateDialog extends JFrame {
                                 "argument: " + command);
                 Runtime.getRuntime().exec(command);
                 System.exit(0);
-            } catch (Exception e) {
+            } catch (RegistryCanNotReadInfoException | IOException e) {
                 e.printStackTrace();
             }
         }

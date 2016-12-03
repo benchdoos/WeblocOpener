@@ -68,6 +68,8 @@ public class Updater {
                 }
             } catch (NullPointerException e) {
                 e.getStackTrace();
+                showErrorMessageToUser(null, "Can not Update", "Can not connect to api.github.com \n" + e.getMessage());
+
             }
         } catch (IOException e) {
             e.printStackTrace();
