@@ -32,6 +32,7 @@ public class SettingsDialog extends JFrame {
     private JButton updateNowButton;
     private JLabel versionLabel;
     private JLabel versionStringLabel;
+    private JButton aboutButton;
 
 
     private String errorMessage = "Error";
@@ -40,8 +41,6 @@ public class SettingsDialog extends JFrame {
 
     public SettingsDialog() {
         setContentPane(contentPane);
-
-        translateDialog();
 
 
         getRootPane().setDefaultButton(buttonOK);
@@ -54,6 +53,10 @@ public class SettingsDialog extends JFrame {
         buttonCancel.addActionListener(e -> onCancel());
 
         updateNowButton.addActionListener(e -> onUpdateNow());
+
+        aboutButton.addActionListener(e -> {
+            onAbout();
+        });
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -77,6 +80,12 @@ public class SettingsDialog extends JFrame {
         setSize(350, 200);
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
         setResizable(false);
+        translateDialog();
+    }
+
+    private void onAbout() {
+        AboutApplicationDialog dialog = new AboutApplicationDialog();
+        dialog.setVisible(true);
     }
 
     private void translateDialog() {
