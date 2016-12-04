@@ -24,7 +24,7 @@ public class UserUtils {
         jEditorPane.setBackground(Color.getColor("#EEEEEE"));
         jEditorPane.addHyperlinkListener(e -> {
             if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
-                openAppGithubPage();
+                openAppGithubPage(ApplicationConstants.UPDATE_WEB_URL);
             }
 
         });
@@ -34,16 +34,16 @@ public class UserUtils {
                                       "[WeblocOpener] " + title, JOptionPane.ERROR_MESSAGE);
     }
 
-    public static void openAppGithubPage() {
+    public static void openAppGithubPage(String url) {
         if (!Desktop.isDesktopSupported()) {
             return;
         }
         Desktop desktop = Desktop.getDesktop();
 
         try {
-            desktop.browse(URI.create(ApplicationConstants.UPDATE_WEB_URL));
+            desktop.browse(URI.create(url));
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(new Frame(), "URL is corrupt: " + ApplicationConstants.UPDATE_WEB_URL);
+            JOptionPane.showMessageDialog(new Frame(), "URL is corrupt: " + url);
         }
 
     }
