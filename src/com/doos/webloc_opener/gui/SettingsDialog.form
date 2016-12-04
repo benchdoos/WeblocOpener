@@ -71,7 +71,7 @@
             </constraints>
             <properties>
               <contentAreaFilled value="true"/>
-              <font name="Inconsolata"/>
+              <font/>
               <horizontalTextPosition value="2"/>
               <selected value="true"/>
               <text value="Auto-update"/>
