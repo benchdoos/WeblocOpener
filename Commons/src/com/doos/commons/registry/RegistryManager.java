@@ -20,10 +20,8 @@ public class RegistryManager {
     public static final String KEY_APP_NAME = "Name";
     public static final String KEY_URL_UPDATE_LINK = "URLUpdateInfo";
     public static final String KEY_APP_ROOT_FOLDER_NAME = ApplicationConstants.APP_NAME;
+    public final static String REGISTRY_APP_PATH = "SOFTWARE\\" + ApplicationConstants.APP_NAME + "\\";
     private static final WinReg.HKEY APP_ROOT_HKEY = WinReg.HKEY_CURRENT_USER;
-    private final static String REGISTRY_APP_PATH = "SOFTWARE\\" + ApplicationConstants.APP_NAME + "\\";
-
-
     private static final Properties settings = new Properties();
 
     public static String getInstallLocationValue() throws RegistryCanNotReadInfoException {
@@ -133,21 +131,26 @@ public class RegistryManager {
         RegistryManager.createRegistryEntry(KEY_URL_UPDATE_LINK, ApplicationConstants.UPDATE_WEB_URL);
     }
 
-    public static void createRegistryEntry(String valueName, String value) throws RegistryCanNotWriteInfoException {
+    public static void createRegistryEntry(String path, String valueName, String value) throws
+            RegistryCanNotWriteInfoException {
         try {
             settings.setProperty(valueName, value);
-            Advapi32Util.registrySetStringValue(APP_ROOT_HKEY, REGISTRY_APP_PATH, valueName, value);
+            Advapi32Util.registrySetStringValue(APP_ROOT_HKEY, path, valueName, value);
         } catch (Win32Exception e) {
             throw new RegistryCanNotWriteInfoException("Can not create entry at: "
-                                                               + APP_ROOT_HKEY + "\\" + REGISTRY_APP_PATH + valueName
+                                                               + APP_ROOT_HKEY + "\\" + path + valueName
                                                                + " With value [" + value + "]", e);
         }
     }
 
-    public static void createRootRegistryFolder() throws RegistryCanNotWriteInfoException {
-        if (!Advapi32Util.registryKeyExists(APP_ROOT_HKEY, REGISTRY_APP_PATH)) {
+    public static void createRegistryEntry(String valueName, String value) throws RegistryCanNotWriteInfoException {
+        createRegistryEntry(REGISTRY_APP_PATH, valueName, value);
+    }
+
+    public static void createRootRegistryFolder(String path) throws RegistryCanNotWriteInfoException {
+        if (!Advapi32Util.registryKeyExists(APP_ROOT_HKEY, path)) {
             try {
-                Advapi32Util.registryCreateKey(APP_ROOT_HKEY, REGISTRY_APP_PATH);
+                Advapi32Util.registryCreateKey(APP_ROOT_HKEY, path);
             } catch (Win32Exception e) {
                 throw new RegistryCanNotWriteInfoException("Can not create root folder on registry.", e);
             }

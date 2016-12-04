@@ -23,20 +23,74 @@ public class RegistryFixer { //TODO Enable logging
     public static void fixRegistry()
             throws FileNotFoundException, RegistryFixerAutoUpdateKeyFailException,
             RegistryFixerAppVersionKeyFailException, RegistryFixerInstallPathKeyFailException {
-        System.out.println("[REGISTRY FIXER] Trying to check and fix registry values.");
+        System.out.println("[REGISTRY FIXER] Trying to check and fix registry values. [REGISTRY FIXER]");
         fixRootRegistryUnit();
         fixAutoUpdateValue();
         fixAppVersionValue();
         fixInstallLocationValue();
         fixAppNameValue();
         fixUpdateUrlValue();
-        /*TODO Add here sub-directories if needed*/
+
+        fixCapabilitiesRegistryUnit();
+        fixFileAssociationsRegistryUnit();
+        fixApplicationDescriptionValue();
+        fixFileAssociationsValues();
+
+
+    }
+
+    private static void fixFileAssociationsValues() {
+        System.out.println("[REGISTRY FIXER] Trying to fix value: ApplicationDescription");
+        try {
+            RegistryManager.createRegistryEntry(RegistryManager.REGISTRY_APP_PATH +
+                                                        "Capabilities\\", "ApplicationDescription",
+                                                "Open, edit and create .webloc links on Windows");
+            System.out.println("[REGISTRY FIXER] Successfully Fixed value: ApplicationDescription");
+        } catch (RegistryCanNotWriteInfoException e) {
+            System.out.println("[REGISTRY FIXER] Failed to fix value: ApplicationDescription");
+            e.printStackTrace();
+        }
+    }
+
+    private static void fixApplicationDescriptionValue() {
+        System.out.println("[REGISTRY FIXER] Trying to fix value: ApplicationDescription");
+        try {
+            RegistryManager.createRegistryEntry(RegistryManager.REGISTRY_APP_PATH + "Capabilities\\FileAssociations\\",
+                                                ".webloc", "Webloc link");
+            System.out.println("[REGISTRY FIXER] Successfully Fixed value: ApplicationDescription");
+        } catch (RegistryCanNotWriteInfoException e) {
+            System.out.println("[REGISTRY FIXER] Failed to fix value: ApplicationDescription");
+            e.printStackTrace();
+        }
+    }
+
+    private static void fixFileAssociationsRegistryUnit() {
+        System.out.println("[REGISTRY FIXER] Trying to fix FileAssociations app registry path");
+        try {
+            RegistryManager.createRootRegistryFolder(RegistryManager.REGISTRY_APP_PATH +
+                                                             "Capabilities\\FileAssociations\\");
+            System.out.println("[REGISTRY FIXER] Successfully Fixed FileAssociations app registry path");
+        } catch (RegistryCanNotWriteInfoException e) {
+            System.out.println("[REGISTRY FIXER] Failed to fix FileAssociations app registry path");
+            e.printStackTrace();
+        }
+    }
+
+    private static void fixCapabilitiesRegistryUnit() {
+        System.out.println("[REGISTRY FIXER] Trying to fix Capabilities app registry path");
+        try {
+            RegistryManager.createRootRegistryFolder(RegistryManager.REGISTRY_APP_PATH + "Capabilities\\");
+            System.out.println("[REGISTRY FIXER]Successfully Fixed Capabilities app registry path");
+        } catch (RegistryCanNotWriteInfoException e) {
+            System.out.println("[REGISTRY FIXER] Failed to fix Capabilities app registry path");
+            e.printStackTrace();
+        }
     }
 
     private static void fixRootRegistryUnit() {
         System.out.println("[REGISTRY FIXER] Trying to fix Root app registry path");
         try {
-            RegistryManager.createRootRegistryFolder();
+            RegistryManager.createRootRegistryFolder(RegistryManager.REGISTRY_APP_PATH);
             System.out.println("[REGISTRY FIXER]Successfully Fixed Root app registry path");
         } catch (RegistryCanNotWriteInfoException e) {
             System.out.println("[REGISTRY FIXER] Failed to fix Root app registry path");
