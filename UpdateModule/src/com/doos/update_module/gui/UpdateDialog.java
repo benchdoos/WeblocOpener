@@ -176,23 +176,22 @@ public class UpdateDialog extends JFrame {
     private void processUpdateResult(int installationCode) {
         System.out.println("Installation code: " + installationCode);
         switch (installationCode) {
-            case 0: //NORMAL state, app updated
+            case ApplicationConstants.UPDATE_CODE_SUCCESS:
                 updateSuccessfullyInstalled();
-
                 break;
-            case 1: //Installation was cancelled or Incorrect function or corrupt file
+            case ApplicationConstants.UPDATE_CODE_CANCEL:
                 showErrorMessageToUser(this, installationCancelledTitle,
                                        installationCancelledMessage);
                 Updater.installerFile.delete();
                 break;
-            case 2: //The system cannot find the file specified. OR! User gave no permissions.
+            case ApplicationConstants.UPDATE_CODE_NO_FILE:
                 showErrorMessageToUser(this, installationCancelledTitle, noPermissionsMessage);
                 break;
 
-            case 193: //Installation file is corrupt
+            case ApplicationConstants.UPDATE_CODE_CORRUPT:
                 showErrorMessageToUser(this, installationCancelledTitle, noPermissionsMessage);
                 break;
-            case -999:/*NOP*/
+            case ApplicationConstants.UPDATE_CODE_INTERRUPT:/*NOP*/
                 break;
             default:
                 String message = installationCancelledByErrorMessage1
@@ -200,7 +199,6 @@ public class UpdateDialog extends JFrame {
                         installationCode
                         + "\n" + installationCancelledByErrorMessage3;
                 showErrorMessageToUser(this, installationCancelledTitle, message);
-
                 break;
         }
     }

@@ -26,4 +26,10 @@ public interface ApplicationConstants {
     String OPENER_SETTINGS_ARGUMENT = "-settings";
     String OPENER_ABOUT_ARGUMENT = "-about";
 
+    int UPDATE_CODE_SUCCESS = 0; //NORMAL state, app updated.
+    int UPDATE_CODE_CANCEL = 1; //Install was cancelled or Incorrect function or corrupt file.
+    int UPDATE_CODE_NO_FILE = 2; //The system cannot find the file specified. OR! User gave no permissions.
+    int UPDATE_CODE_CORRUPT = 193; //Installation file is corrupt.
+    int UPDATE_CODE_INTERRUPT = -999; //Downloading/installation was interrupted by user.
+
 }
