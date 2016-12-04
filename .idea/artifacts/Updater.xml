@@ -17,7 +17,6 @@
       <element id="library" level="module" name="testng" module-name="UpdateModule" />
       <element id="library" level="project" name="commons-io-2.5" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/bridj-0.7.0.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/dx-1.7.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
