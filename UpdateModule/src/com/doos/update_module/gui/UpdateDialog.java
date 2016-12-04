@@ -51,7 +51,7 @@ public class UpdateDialog extends JFrame {
     private String installationCancelledByErrorMessage1 = "Installation cancelled by Error (unhandled error),";
     private String installationCancelledByErrorMessage2 = "code: ";
     private String installationCancelledByErrorMessage3
-            = "visit https://github.com/benchdoos/WeblocOpener for more info.";
+            = "visit " + ApplicationConstants.GITHUB_WEB_URL + " for more info.";
 
     public UpdateDialog() {
         serverAppVersion = new AppVersion();
@@ -139,8 +139,8 @@ public class UpdateDialog extends JFrame {
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) > 0) {
             //App version is bigger then on server
             buttonOK.setText(translation.messages.getString("buttonOkDev"));
-//            buttonOK.setEnabled(true);
-            buttonOK.setEnabled(false); //TODO TURN BACK BEFORE RELEASE
+            buttonOK.setEnabled(true);
+//            buttonOK.setEnabled(false); //TODO TURN BACK BEFORE RELEASE
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
             //No reason to update;
             buttonOK.setText(translation.messages.getString("buttonOkUp2Date"));
@@ -245,13 +245,15 @@ public class UpdateDialog extends JFrame {
         //dispose();
     }
 
-    private void onCancel() {
+    private void onCancel() { //TODO FIXME
         if (updateThread != null) {
             if (!updateThread.isInterrupted()) {
                 updateThread.interrupt();
                 System.out.println("Installation was interrupted: " + updateThread.isInterrupted());
                 if (!updateThread.isInterrupted()) {
+                    System.out.println("dispose>>");
                     dispose();
+                    System.exit(0);//TODO FIXME
                 }
             }
             runCleanInstallerFile();
@@ -272,15 +274,16 @@ public class UpdateDialog extends JFrame {
             System.out.println("running " + ApplicationConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT + " " +
                                        "argument: " + command);
             Runtime.getRuntime().exec(command);
-            System.exit(0);
         } catch (RegistryCanNotReadInfoException | IOException e) {
             e.printStackTrace();
         }
     }
 
     private void runCleanInstallerFile() {
-        new File(ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetup"
-                         + serverAppVersion.getVersion() + "" + ".exe").delete();
+        System.out.println("Deleting file: " + ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
+                                   + serverAppVersion.getVersion() + "" + ".exe");
+        new File(ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
+                         + serverAppVersion.getVersion() + ".exe").delete();
     }
 
 }

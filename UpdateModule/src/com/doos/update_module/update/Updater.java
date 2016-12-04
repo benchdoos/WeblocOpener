@@ -85,6 +85,11 @@ public class Updater {
         if (!Thread.currentThread().isInterrupted()) {
             if (!installerFile.exists()) {
                 installerFile = downloadNewVersionInstaller(appVersion);
+            } else {
+                if (installerFile.length() != appVersion.getSize()) {
+                    installerFile.delete();
+                    installerFile = downloadNewVersionInstaller(appVersion);
+                }
             }
             if (!Thread.currentThread().isInterrupted()) {
                 int installationResult = 0;
@@ -162,9 +167,7 @@ public class Updater {
 
         try {
             list = COMRuntime.newInstance(ITaskbarList3.class);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        } catch (ClassNotFoundException ignore) {/*WINDOWS<WINDOWS 7*/}
 
         long hwndVal = JAWTUtils.getNativePeerHandle(UpdateDialog.updateDialog);
         hwnd = Pointer.pointerToAddress(hwndVal, PointerIO.getSizeTInstance());
