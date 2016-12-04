@@ -173,20 +173,9 @@ public class UpdateDialog extends JFrame {
     }
 
 
-    private void onOK() {
-        buttonOK.setEnabled(false);
-        if (!Thread.currentThread().isInterrupted()) {
-            buttonOK.setEnabled(true);
-            processUpdateResult(Updater.startUpdate(serverAppVersion));
-        } else {
-            buttonOK.setEnabled(false);
-        }
-
-        //dispose();
-    }
-
-    private void processUpdateResult(int successUpdate) {
-        switch (successUpdate) {
+    private void processUpdateResult(int installationCode) {
+        System.out.println("Installation code: " + installationCode);
+        switch (installationCode) {
             case 0: //NORMAL state, app updated
                 updateSuccessfullyInstalled();
 
@@ -203,10 +192,12 @@ public class UpdateDialog extends JFrame {
             case 193: //Installation file is corrupt
                 showErrorMessageToUser(this, installationCancelledTitle, noPermissionsMessage);
                 break;
+            case -999:/*NOP*/
+                break;
             default:
                 String message = installationCancelledByErrorMessage1
                         + "\n" + installationCancelledByErrorMessage2 +
-                        successUpdate
+                        installationCode
                         + "\n" + installationCancelledByErrorMessage3;
                 showErrorMessageToUser(this, installationCancelledTitle, message);
 
@@ -226,47 +217,72 @@ public class UpdateDialog extends JFrame {
                 + serverAppVersion.getVersion(), successTitle, JOptionPane.INFORMATION_MESSAGE);
 
         if (Main.mode != Main.Mode.AFTER_UPDATE) {
-            try {
-                dispose();
-                String value = RegistryManager.getInstallLocationValue();
-                final String command
-                        = "java -jar \"" + value + "Updater.jar\" " + ApplicationConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT;
-                System.out.println(
-                        "running " + ApplicationConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT + " " +
-                                "argument: " + command);
-                Runtime.getRuntime().exec(command);
-                System.exit(0);
-            } catch (RegistryCanNotReadInfoException | IOException e) {
-                e.printStackTrace();
-            }
+            dispose();
+            runCleanTempUpdaterFile();
         }
 
-    }
-
-    private void onCancel() {
-        // add your code here if necessary
-        if (updateThread != null) {
-            if (!updateThread.isInterrupted()) {
-                updateThread.interrupt();
-                System.out.println("Installation was interrupted: " + updateThread.isInterrupted());
-                new File(ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetup"
-                                 + serverAppVersion.getVersion() + "" + ".exe").delete();
-            }
-        }
-        //TODO any fix???
-        File updateJar = new File(ApplicationConstants.UPDATE_PATH_FILE + "Updater_.jar");
-        if (updateJar.exists()) {
-            try {
-                Runtime.getRuntime().exec("java -jar \""
-                                                  + RegistryManager.getInstallLocationValue()
-                                                  + "\"Updater.jar " + ApplicationConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT);
-            } catch (IOException | RegistryCanNotReadInfoException ignore) {/*NOP*/}
-        }
-        dispose();
     }
 
     public AppVersion getAppVersion() {
         return serverAppVersion;
+    }
+
+    private void onOK() {
+        buttonOK.setEnabled(false);
+        if (!Thread.currentThread().isInterrupted()) {
+            //TODO make this beautifull: call downloader, return file, then call installation
+            int result = Updater.startUpdate(serverAppVersion);
+            if (Thread.currentThread().isInterrupted()) {
+                result = -999;
+            } else {
+                processUpdateResult(result);
+            }
+            buttonOK.setEnabled(true);
+            buttonCancel.setEnabled(true);
+        } else {
+            buttonOK.setEnabled(true);
+            buttonCancel.setEnabled(true);
+        }
+
+        //dispose();
+    }
+
+    private void onCancel() {
+        if (updateThread != null) {
+            if (!updateThread.isInterrupted()) {
+                updateThread.interrupt();
+                System.out.println("Installation was interrupted: " + updateThread.isInterrupted());
+                if (!updateThread.isInterrupted()) {
+                    dispose();
+                }
+            }
+            runCleanInstallerFile();
+        } else {
+            dispose();
+        }
+        File updateJar = new File(ApplicationConstants.UPDATE_PATH_FILE + "Updater_.jar");
+        if (updateJar.exists()) {
+            runCleanTempUpdaterFile();
+        }
+    }
+
+    private void runCleanTempUpdaterFile() {
+        try {
+            String value = RegistryManager.getInstallLocationValue();
+            final String command
+                    = "java -jar \"" + value + "Updater.jar\" " + ApplicationConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT;
+            System.out.println("running " + ApplicationConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT + " " +
+                                       "argument: " + command);
+            Runtime.getRuntime().exec(command);
+            System.exit(0);
+        } catch (RegistryCanNotReadInfoException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void runCleanInstallerFile() {
+        new File(ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetup"
+                         + serverAppVersion.getVersion() + "" + ".exe").delete();
     }
 
 }

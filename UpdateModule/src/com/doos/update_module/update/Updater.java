@@ -63,7 +63,7 @@ public class Updater {
                     JsonObject userObject = assert_.getAsJsonObject();
                     if (userObject.get("name").getAsString().equals("WeblocOpenerSetup.exe")) {
                         appVersion.setDownloadUrl(userObject.get("browser_download_url").getAsString());
-                        appVersion.setSize(userObject.get("size").getAsInt());
+                        appVersion.setSize(userObject.get("size").getAsLong());
                     }
                 }
             } catch (NullPointerException e) {
@@ -86,33 +86,41 @@ public class Updater {
             if (!installerFile.exists()) {
                 installerFile = downloadNewVersionInstaller(appVersion);
             }
-            int installationResult = 0;
+            if (!Thread.currentThread().isInterrupted()) {
+                int installationResult = 0;
 
-            try {
-                if (!Thread.currentThread().isInterrupted()) {
-                    installationResult = update(installerFile);
-                }
-            } catch (IOException e) {
-                if (e.getMessage().contains("CreateProcess error=193")) {
-                    try {
-                        if (!Thread.currentThread().isInterrupted()) {
-                            installerFile.delete();
-                            installerFile = downloadNewVersionInstaller(appVersion); //Fixes corrupt file
+                try {
+                    if (!Thread.currentThread().isInterrupted()) {
+                        if (installerFile.length() == appVersion.getSize()) {
                             installationResult = update(installerFile);
                         }
-                    } catch (IOException e1) {
-                        if (e1.getMessage().contains("CreateProcess error=193")) {
-                            installerFile.delete();
-                            return 193;
+                    }
+                } catch (IOException e) {
+                    if (e.getMessage().contains("CreateProcess error=193")) {
+                        try {
+                            if (!Thread.currentThread().isInterrupted()) {
+                                installerFile.delete();
+                                installerFile = downloadNewVersionInstaller(appVersion); //Fixes corrupt file
+                                installationResult = update(installerFile);
+                            } else {
+                                return -999;
+                            }
+                        } catch (IOException e1) {
+                            if (e1.getMessage().contains("CreateProcess error=193")) {
+                                installerFile.delete();
+                                return 193;
+                            }
                         }
                     }
                 }
+                deleteFileIfSuccess(installationResult);
+                return installationResult;
+            } else {
+                return -999;
             }
-            deleteFileIfSuccess(installationResult);
 
-            return installationResult;
         } else {
-            return 0; //TODO maybe -1?
+            return -999; //TODO maybe -1?
         }
     }
 
@@ -133,12 +141,12 @@ public class Updater {
             if (!Thread.currentThread().isInterrupted()) {
                 result = updateProcess.waitFor();
             }
-            UpdateDialog.updateDialog.buttonCancel.setEnabled(true);
+//            UpdateDialog.updateDialog.buttonCancel.setEnabled(true);
             return result;
         } catch (InterruptedException e) {
             e.printStackTrace();
-            UpdateDialog.updateDialog.buttonCancel.setEnabled(true);
-            return 1;
+            //UpdateDialog.updateDialog.buttonCancel.setEnabled(true);
+            return -999;
         }
 
     }

@@ -6,7 +6,7 @@ package com.doos.update_module.update;
 public class AppVersion {
     private String version;
     private String downloadUrl;
-    private int size;
+    private long size;
 
     public String getDownloadUrl() {
         return downloadUrl;
@@ -24,12 +24,12 @@ public class AppVersion {
         this.version = version.replace("v", "");
     }
 
-    public int getSize() {
+    public long getSize() {
         return size;
     }
 
 
-    public void setSize(int size) {
+    public void setSize(long size) {
         this.size = size;
     }
 
