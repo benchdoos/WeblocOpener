@@ -20,6 +20,9 @@ public class AboutApplicationDialog extends JDialog {
     private JLabel visitSiteLabel;
     private ImagePanel imagePanel1;
     private JScrollPane scrollPane1;
+    private JLabel visitGithubLabel;
+    private JLabel siteLinkLabel;
+    private JLabel githubLinkLabel;
 
     public AboutApplicationDialog() {
         setContentPane(contentPane);
@@ -40,15 +43,29 @@ public class AboutApplicationDialog extends JDialog {
             public void initTranslations() {
                 setTitle(messages.getString("windowTitle"));
                 versionLabel.setText(messages.getString("appVersionLabel") + " " + ApplicationConstants.APP_VERSION);
-                visitSiteLabel.setText("<html> " + messages.getString("visitLabel") + ": " +
-                                               "<a href=\"\">" + ApplicationConstants.UPDATE_WEB_URL + "</a></html>");
-                visitSiteLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                visitSiteLabel.addMouseListener(new MouseAdapter() {
+                visitSiteLabel.setText(messages.getString("visitLabel") + ":");
+
+                siteLinkLabel.setText("<html><a href=\"\">" + ApplicationConstants.UPDATE_WEB_URL + "</a></html>");
+                siteLinkLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                siteLinkLabel.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        UserUtils.openAppGithubPage();
+                        UserUtils.openAppGithubPage(ApplicationConstants.UPDATE_WEB_URL);
                     }
                 });
+                siteLinkLabel.setToolTipText(ApplicationConstants.UPDATE_WEB_URL);
+
+                visitGithubLabel.setText(messages.getString("visitGithubLabel") + ":");
+
+                githubLinkLabel.setText("<html><a href=\"\">" + "Github" + "</a></html>");
+                githubLinkLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                githubLinkLabel.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        UserUtils.openAppGithubPage(ApplicationConstants.GITHUB_WEB_URL);
+                    }
+                });
+                githubLinkLabel.setToolTipText(ApplicationConstants.GITHUB_WEB_URL);
             }
         };
         translation.initTranslations();
