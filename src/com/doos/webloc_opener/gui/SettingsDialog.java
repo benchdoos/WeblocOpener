@@ -38,7 +38,6 @@ public class SettingsDialog extends JFrame {
     private String errorMessage = "Error";
     private String canNotSaveSettingsToRegistryMessage = "Can not save settings to registry.";
 
-
     public SettingsDialog() {
         setContentPane(contentPane);
 
@@ -147,10 +146,11 @@ public class SettingsDialog extends JFrame {
         }
     }
 
-
     private void onOK() {
         try {
-            RegistryManager.setAutoUpdateActive(autoUpdateEnabledCheckBox.isSelected());
+            if (RegistryManager.isAutoUpdateActive() != autoUpdateEnabledCheckBox.isSelected()) {
+                RegistryManager.setAutoUpdateActive(autoUpdateEnabledCheckBox.isSelected());
+            }
         } catch (RegistryException e) {
             log.warn("Can not save settings change", e);
             JOptionPane.showMessageDialog(new JFrame(), errorMessage,
