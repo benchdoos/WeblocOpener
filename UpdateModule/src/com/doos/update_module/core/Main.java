@@ -27,6 +27,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static com.doos.commons.ApplicationConstants.APP_NAME;
 import static com.doos.commons.ApplicationConstants.UPDATE_PATH_FILE;
 import static com.doos.commons.utils.UserUtils.showErrorMessageToUser;
 import static com.doos.update_module.nongui.NonGuiUpdater.tray;
@@ -80,6 +81,15 @@ public class Main {
                 case ApplicationConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT:
                     mode = Mode.AFTER_UPDATE;
                     new File(UPDATE_PATH_FILE + "Updater_.jar").delete();
+                    File[] files = new File(UPDATE_PATH_FILE).listFiles();
+                    if (files != null) {
+                        for (File current : files) {
+                            if (current.isFile() && current.getName().toLowerCase().contains(APP_NAME.toLowerCase()) &&
+                                    current.getName().toLowerCase().contains("exe")) {
+                                current.delete();
+                            }
+                        }
+                    }
                     //createUpdateDialog();
                     break;
                 default:
