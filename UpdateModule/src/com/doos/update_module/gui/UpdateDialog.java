@@ -245,7 +245,7 @@ public class UpdateDialog extends JFrame {
         //dispose();
     }
 
-    private void onCancel() { //TODO FIXME
+    private void onCancel() {
         if (updateThread != null) {
             if (!updateThread.isInterrupted()) {
                 updateThread.interrupt();
