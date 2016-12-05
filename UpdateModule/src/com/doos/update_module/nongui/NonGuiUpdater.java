@@ -8,10 +8,13 @@ import com.doos.commons.utils.Internal;
 import com.doos.update_module.core.Main;
 import com.doos.update_module.update.AppVersion;
 import com.doos.update_module.update.Updater;
+import org.apache.log4j.Logger;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import static com.doos.commons.utils.Logging.getCurrentClassName;
 
 /**
  * Created by Eugene Zrazhevsky on 04.11.2016.
@@ -19,10 +22,10 @@ import java.awt.event.MouseEvent;
 
 
 public class NonGuiUpdater {
-    public static final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit()
-                                                                 .getImage(
-                                                                         NonGuiUpdater.class.getResource("/icon.png")));
+    public static final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(
+            NonGuiUpdater.class.getResource("/icon.png")));
     public static final SystemTray tray = SystemTray.getSystemTray();
+    private static final Logger log = Logger.getLogger(getCurrentClassName());
     private AppVersion serverAppVersion = null;
 
 
@@ -38,12 +41,9 @@ public class NonGuiUpdater {
             //create trayicon and show pop-up
             createTrayIcon();
             trayIcon.displayMessage(ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME + " - Updater",
-                                    "There is a new version of application:" + serverAppVersion.getVersion(),
-                                    TrayIcon.MessageType.INFO);
-        } /*else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
-            //System.exit(0);
-
-        }*/
+                    "There is a new version of application:" + serverAppVersion.getVersion(),
+                    TrayIcon.MessageType.INFO); //TODO internationalize this
+        }
     }
 
     private void createTrayIcon() {
@@ -52,8 +52,7 @@ public class NonGuiUpdater {
 
         final CheckboxMenuItem autoUpdateCheckBox = new CheckboxMenuItem("Auto-update");
         try {
-            System.out.println(
-                    RegistryManager.KEY_AUTO_UPDATE + ": " + RegistryManager.isAutoUpdateActive());
+            log.debug(RegistryManager.KEY_AUTO_UPDATE + ": " + RegistryManager.isAutoUpdateActive());
         } catch (RegistryCanNotReadInfoException ignore) {/*NOP*/}
 
         try {
@@ -63,7 +62,7 @@ public class NonGuiUpdater {
             autoUpdateCheckBox.setState(ApplicationConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE);
         }
         autoUpdateCheckBox.addItemListener(e -> {
-            System.out.println(RegistryManager.KEY_AUTO_UPDATE + ": " + autoUpdateCheckBox.getState());
+            log.debug(RegistryManager.KEY_AUTO_UPDATE + ": " + autoUpdateCheckBox.getState());
             try {
                 RegistryManager.setAutoUpdateActive(autoUpdateCheckBox.getState());
             } catch (RegistryCanNotWriteInfoException e1) {
