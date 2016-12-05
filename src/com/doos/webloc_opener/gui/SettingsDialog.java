@@ -67,7 +67,7 @@ public class SettingsDialog extends JFrame {
 
         // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                                           JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         try {
             versionLabel.setText(RegistryManager.getAppVersionValue());
@@ -116,13 +116,13 @@ public class SettingsDialog extends JFrame {
         } catch (RegistryCanNotReadInfoException e) {
             e.printStackTrace();
             run = new File(SettingsDialog.class.getProtectionDomain()
-                                   .getCodeSource().getLocation().getPath()).getAbsolutePath().replace("%20", " ");
+                    .getCodeSource().getLocation().getPath()).getAbsolutePath().replace("%20", " ");
         }
-        System.out.println(">>>> " + run);
+        log.info("Running " + run);
         try {
             Runtime.getRuntime().exec(run);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warn("Can not execute command: " + run, e);
         }
         dispose();
     }
@@ -154,8 +154,8 @@ public class SettingsDialog extends JFrame {
         } catch (RegistryException e) {
             log.warn("Can not save settings change", e);
             JOptionPane.showMessageDialog(new JFrame(), errorMessage,
-                                          canNotSaveSettingsToRegistryMessage,
-                                          JOptionPane.ERROR_MESSAGE);
+                    canNotSaveSettingsToRegistryMessage,
+                    JOptionPane.ERROR_MESSAGE);
         }
         dispose();
     }
