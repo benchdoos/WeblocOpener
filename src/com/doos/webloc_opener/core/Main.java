@@ -32,9 +32,9 @@ public class Main {
     public static void main(String[] args) {
 
         try {
-            SystemUtils.checkIfSystemIsSupported();
-
             new Logging(ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME);
+
+            SystemUtils.checkIfSystemIsSupported();
 
             enableLookAndFeel();
 
