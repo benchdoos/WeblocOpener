@@ -2,6 +2,7 @@ package com.doos.webloc_opener.service;
 
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListParser;
+import com.doos.commons.utils.Logging;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;

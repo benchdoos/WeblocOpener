@@ -1,4 +1,4 @@
-package com.doos.webloc_opener.service;
+package com.doos.commons.utils;
 
 import com.doos.commons.ApplicationConstants;
 
@@ -8,7 +8,10 @@ import java.io.File;
  * Created by Eugene Zrazhevsky on 30.10.2016.
  */
 public class Logging {
-    public Logging() {
+    private String collingApp;
+
+    public Logging(String collingAppName) {
+        collingApp = collingAppName;
         checkFolders();
         startLogging();
     }
@@ -32,9 +35,12 @@ public class Logging {
      */
     private void checkFolders() {
         File logFolder = new File(ApplicationConstants.APP_LOG_FOLDER_PATH);
-        File infoLogFolder = new File(ApplicationConstants.APP_LOG_FOLDER_PATH + File.separator + "INFO");
-        File warnLogFolder = new File(ApplicationConstants.APP_LOG_FOLDER_PATH + File.separator + "WARN");
-        File debugLogFolder = new File(ApplicationConstants.APP_LOG_FOLDER_PATH + File.separator + "DEBUG");
+        File infoLogFolder = new File(ApplicationConstants.APP_LOG_FOLDER_PATH + File.separator + collingApp
+                                              + File.separator + "INFO");
+        File warnLogFolder = new File(ApplicationConstants.APP_LOG_FOLDER_PATH + File.separator + collingApp
+                                              + File.separator + "WARN");
+        File debugLogFolder = new File(ApplicationConstants.APP_LOG_FOLDER_PATH + File.separator + collingApp
+                                               + File.separator + "DEBUG");
         if (!logFolder.exists()) {
             boolean success = logFolder.mkdirs();
             if (!success) {
@@ -69,8 +75,9 @@ public class Logging {
      * Warning! Run this before any log implementation.
      */
     private void startLogging() {
-        System.setProperty(ApplicationConstants.APP_LOG_PROPERTY, ApplicationConstants.APP_LOG_FOLDER_PATH);
-        System.out.println("Logging starts at: " + ApplicationConstants.APP_LOG_FOLDER_PATH);
+        final String path = ApplicationConstants.APP_LOG_FOLDER_PATH + File.separator + collingApp;
+        System.setProperty(ApplicationConstants.APP_LOG_PROPERTY, path);
+        System.out.println("Logging starts at: " + path);
     }
 
 }

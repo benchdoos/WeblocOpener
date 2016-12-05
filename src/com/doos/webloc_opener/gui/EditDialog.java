@@ -22,7 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
-import static com.doos.webloc_opener.service.Logging.getCurrentClassName;
+import static com.doos.commons.utils.Logging.getCurrentClassName;
 
 public class EditDialog extends JFrame {
     private static final Logger log = Logger.getLogger(getCurrentClassName());

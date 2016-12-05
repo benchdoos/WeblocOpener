@@ -155,7 +155,7 @@ public class RegistryFixer { //TODO Enable logging
     private static void setAppInstallLocationToUserRoot(String path)
             throws RegistryCanNotWriteInfoException, FileNotFoundException {
         if (new File(path).exists() && new File(path).isDirectory() && new File(path).getName().equals
-                (ApplicationConstants.APP_NAME)) {
+                (ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME)) {
             RegistryManager.setInstallLocationValue(path);
             System.out.println(
                     "[REGISTRY FIXER] Successfully Fixed " + RegistryManager.KEY_INSTALL_LOCATION);

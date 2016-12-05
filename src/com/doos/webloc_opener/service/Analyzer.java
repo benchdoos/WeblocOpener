@@ -8,7 +8,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
-import static com.doos.webloc_opener.service.Logging.getCurrentClassName;
+import static com.doos.commons.utils.Logging.getCurrentClassName;
 
 /**
  * Created by Eugene Zrazhevsky on 30.10.2016.

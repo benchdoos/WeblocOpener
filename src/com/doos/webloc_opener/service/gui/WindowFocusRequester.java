@@ -7,7 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import static com.doos.webloc_opener.service.Logging.getCurrentClassName;
+import static com.doos.commons.utils.Logging.getCurrentClassName;
 
 /**
  * Created by Eugene Zrazhevsky on 02.11.2016.

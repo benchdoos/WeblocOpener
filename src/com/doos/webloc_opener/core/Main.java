@@ -1,5 +1,6 @@
 package com.doos.webloc_opener.core;
 
+import com.doos.commons.ApplicationConstants;
 import com.doos.commons.core.SettingsManager;
 import com.doos.commons.registry.RegistryException;
 import com.doos.commons.registry.RegistryManager;
@@ -7,6 +8,7 @@ import com.doos.commons.registry.fixer.RegistryFixer;
 import com.doos.commons.registry.fixer.RegistryFixerAppVersionKeyFailException;
 import com.doos.commons.registry.fixer.RegistryFixerAutoUpdateKeyFailException;
 import com.doos.commons.registry.fixer.RegistryFixerInstallPathKeyFailException;
+import com.doos.commons.utils.Logging;
 import com.doos.commons.utils.UserUtils;
 import com.doos.commons.utils.system.SystemUtils;
 import com.doos.commons.utils.system.UnsupportedOsSystemException;
@@ -15,7 +17,6 @@ import com.doos.webloc_opener.gui.AboutApplicationDialog;
 import com.doos.webloc_opener.gui.EditDialog;
 import com.doos.webloc_opener.gui.SettingsDialog;
 import com.doos.webloc_opener.service.Analyzer;
-import com.doos.webloc_opener.service.Logging;
 import com.doos.webloc_opener.service.UrlsProceed;
 
 import javax.swing.*;
@@ -33,7 +34,7 @@ public class Main {
         try {
             SystemUtils.checkIfSystemIsSupported();
 
-            new Logging();
+            new Logging(ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME);
 
             enableLookAndFeel();
 

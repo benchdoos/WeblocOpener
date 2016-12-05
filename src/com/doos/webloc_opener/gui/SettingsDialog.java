@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import static com.doos.webloc_opener.service.Logging.getCurrentClassName;
+import static com.doos.commons.utils.Logging.getCurrentClassName;
 
 public class SettingsDialog extends JFrame {
     private static final Logger log = Logger.getLogger(getCurrentClassName());

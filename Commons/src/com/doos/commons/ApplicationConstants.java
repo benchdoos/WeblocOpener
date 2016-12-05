@@ -6,11 +6,13 @@ import java.io.File;
  * Created by Eugene Zrazhevsky on 30.10.2016.
  */
 public interface ApplicationConstants {
-    String APP_NAME = "WeblocOpener";
+    String WEBLOC_OPENER_APPLICATION_NAME = "WeblocOpener";
+    String UPDATER_APPLICATION_NAME = "Updater";
     String APP_VERSION = "1.3";
-    String APP_LOG_FOLDER_PATH = System.getProperty("java.io.tmpdir") + APP_NAME + File.separator + "Log";
+    String APP_LOG_FOLDER_PATH = System
+            .getProperty("java.io.tmpdir") + WEBLOC_OPENER_APPLICATION_NAME + File.separator + "Log";
     String APP_LOG_PROPERTY = "WeblocOpener.log.folder";
-    String UPDATE_PATH_FILE = System.getProperty("java.io.tmpdir") + APP_NAME + File.separator;
+    String UPDATE_PATH_FILE = System.getProperty("java.io.tmpdir") + WEBLOC_OPENER_APPLICATION_NAME + File.separator;
     String UPDATE_WEB_URL = "https://benchdoos.github.io/";
     String GITHUB_WEB_URL = "https://github.com/benchdoos/WeblocOpener/";
 

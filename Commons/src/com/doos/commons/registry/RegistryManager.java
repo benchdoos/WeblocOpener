@@ -19,8 +19,9 @@ public class RegistryManager {
     public static final String KEY_AUTO_UPDATE = "AutoUpdateEnabled";
     public static final String KEY_APP_NAME = "Name";
     public static final String KEY_URL_UPDATE_LINK = "URLUpdateInfo";
-    public static final String KEY_APP_ROOT_FOLDER_NAME = ApplicationConstants.APP_NAME;
-    public final static String REGISTRY_APP_PATH = "SOFTWARE\\" + ApplicationConstants.APP_NAME + "\\";
+    public static final String KEY_APP_ROOT_FOLDER_NAME = ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME;
+    public final static String REGISTRY_APP_PATH
+            = "SOFTWARE\\" + ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME + "\\";
     private static final WinReg.HKEY APP_ROOT_HKEY = WinReg.HKEY_CURRENT_USER;
     private static final Properties settings = new Properties();
 
@@ -105,7 +106,7 @@ public class RegistryManager {
     }
 
     public static void setAppNameValue() throws RegistryCanNotWriteInfoException {
-        RegistryManager.createRegistryEntry(KEY_APP_NAME, ApplicationConstants.APP_NAME);
+        RegistryManager.createRegistryEntry(KEY_APP_NAME, ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME);
     }
 
     @SuppressWarnings("UnusedReturnValue")
@@ -164,7 +165,7 @@ public class RegistryManager {
     public static void setDefaultSettings() {
         settings.setProperty(KEY_CURRENT_VERSION, ApplicationConstants.APP_VERSION);
         settings.setProperty(KEY_AUTO_UPDATE, Boolean.toString(ApplicationConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE));
-        settings.setProperty(KEY_APP_NAME, ApplicationConstants.APP_NAME);
+        settings.setProperty(KEY_APP_NAME, ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME);
         settings.setProperty(KEY_URL_UPDATE_LINK, ApplicationConstants.UPDATE_WEB_URL);
     }
 }
