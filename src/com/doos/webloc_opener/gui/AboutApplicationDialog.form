@@ -63,7 +63,7 @@
                     </properties>
                     <border type="none"/>
                     <children>
-                      <component id="94b2d" class="javax.swing.JTextPane" binding="weblocOpenerBWillTextPane">
+                      <component id="94b2d" class="javax.swing.JTextPane" binding="weblocOpenerBWillTextPane" custom-create="true">
                         <constraints/>
                         <properties>
                           <background color="-1118482"/>
