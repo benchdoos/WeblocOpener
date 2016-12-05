@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="com.github.dblock:oshi-core:3.2" type="repository">
+    <properties maven-id="com.github.dblock:oshi-core:3.2" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/oshi-core-3.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jna-platform-4.2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jna-4.2.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-api-1.7.21.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/oshi-core-3.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
