@@ -8,5 +8,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="jna-4.2.2" level="project" />
+    <orderEntry type="library" name="log4j:log4j:1.2.8" level="project" />
+    <orderEntry type="library" name="com.github.dblock:oshi-core:3.2" level="project" />
   </component>
 </module>

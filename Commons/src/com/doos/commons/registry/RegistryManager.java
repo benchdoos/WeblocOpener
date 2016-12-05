@@ -6,9 +6,12 @@ import com.doos.commons.ApplicationConstants;
 import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.jna.platform.win32.Win32Exception;
 import com.sun.jna.platform.win32.WinReg;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.util.Properties;
+
+import static com.doos.commons.utils.Logging.getCurrentClassName;
 
 /**
  * Created by Eugene Zrazhevsky on 19.11.2016.
@@ -22,6 +25,7 @@ public class RegistryManager {
     public static final String KEY_APP_ROOT_FOLDER_NAME = ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME;
     public final static String REGISTRY_APP_PATH
             = "SOFTWARE\\" + ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME + "\\";
+    private static final Logger log = Logger.getLogger(getCurrentClassName());
     private static final WinReg.HKEY APP_ROOT_HKEY = WinReg.HKEY_CURRENT_USER;
     private static final Properties settings = new Properties();
 
@@ -163,6 +167,7 @@ public class RegistryManager {
      * It will help to prevent app from crash (if install location is not currupt);
      */
     public static void setDefaultSettings() {
+        log.info("[REGISTRY MANAGER] Setting default settings for app");
         settings.setProperty(KEY_CURRENT_VERSION, ApplicationConstants.APP_VERSION);
         settings.setProperty(KEY_AUTO_UPDATE, Boolean.toString(ApplicationConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE));
         settings.setProperty(KEY_APP_NAME, ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME);

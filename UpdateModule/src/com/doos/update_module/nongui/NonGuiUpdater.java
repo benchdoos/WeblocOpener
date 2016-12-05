@@ -37,7 +37,7 @@ public class NonGuiUpdater {
         if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
             //create trayicon and show pop-up
             createTrayIcon();
-            trayIcon.displayMessage(ApplicationConstants.APP_NAME + " - Updater",
+            trayIcon.displayMessage(ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME + " - Updater",
                                     "There is a new version of application:" + serverAppVersion.getVersion(),
                                     TrayIcon.MessageType.INFO);
         } /*else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
