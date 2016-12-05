@@ -99,37 +99,28 @@ public class SystemUtils {
         SystemInfo si = new SystemInfo();
         OperatingSystem os = si.getOperatingSystem();
         HardwareAbstractionLayer hal = si.getHardware();
-        int mb = 1024 * 1024;
+        int megabyte = 1024 * 1024;
 
-        StringBuilder sb = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
-        sb.append("==========================System=========================").append("\n");
-        sb.append("System:").append("\n");
-        sb.append("\tOS: ").append(os.getManufacturer()).append(" ").append(os.getFamily())
+        builder.append("==========================System=========================").append("\n");
+        builder.append("System:").append("\n");
+        builder.append("\tOS: ").append(os.getManufacturer()).append(" ").append(os.getFamily())
                 .append(" Version: ").append(os.getVersion()).append(" x" + getRealSystemArch()).append("\n");
 
-        sb.append("Hardware:").append("\n");
-        sb.append("\tCore: ").append(hal.getProcessor()).append(")").append("\n");
-        sb.append("\tMemory: ").append(hal.getMemory().getAvailable() / mb).append(" (total:")
-                .append(hal.getMemory().getTotal() / mb).append(") MB").append("\n");
+        builder.append("Hardware:").append("\n");
+        builder.append("\tProcessors: ").append(Runtime.getRuntime().availableProcessors()).append("\n");
+        builder.append("\tTotal JVM memory: ").append(Runtime.getRuntime().maxMemory() / megabyte).append(" mb\n");
 
-        sb.append("Java:").append("\n");
-        sb.append("\tJava version: ").append(System.getProperty("java.specification.version")).append("(").append
+
+        builder.append("Java:").append("\n");
+        builder.append("\tJava version: ").append(System.getProperty("java.specification.version")).append("(").append
                 (System.getProperty("java.version")).append(")").append("\n");
-        sb.append("\t").append(System.getProperty("java.runtime.name")).append(" v").append(System.getProperty("java" +
-                ".vm.version"))
-                .append("\n");
+        builder.append("\t").append(System.getProperty("java.runtime.name")).append(" v")
+                .append(System.getProperty("java.vm.version")).append("\n");
+        builder.append("=========================================================").append("\n");
 
-        sb.append("User:").append("\n");
-        sb.append("\tName: ").append(System.getProperty("user.name")).append(" Home: ")
-                .append(System.getProperty("user.home")).append("\n");
-        sb.append("\tTime zone: ").append(System.getProperty("user.timezone")).append(" (")
-                .append(System.getProperty("user.country")).append(") language: ")
-                .append(System.getProperty("user.language")).append("\n");
-
-        sb.append("=========================================================").append("\n");
-
-        return sb.toString();
+        return builder.toString();
     }
 
     enum OS {WINDOWS, MAC_OS, UNIX, SOLARIS}
