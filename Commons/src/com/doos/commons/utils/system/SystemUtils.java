@@ -99,37 +99,22 @@ public class SystemUtils {
         SystemInfo si = new SystemInfo();
         OperatingSystem os = si.getOperatingSystem();
         HardwareAbstractionLayer hal = si.getHardware();
-        int mb = 1024 * 1024;
+        int megabyte = 1024 * 1024;
 
-        StringBuilder sb = new StringBuilder();
 
-        sb.append("==========================System=========================").append("\n");
-        sb.append("System:").append("\n");
-        sb.append("\tOS: ").append(os.getManufacturer()).append(" ").append(os.getFamily())
-                .append(" Version: ").append(os.getVersion()).append(" x" + getRealSystemArch()).append("\n");
-
-        sb.append("Hardware:").append("\n");
-        sb.append("\tCore: ").append(hal.getProcessor()).append(")").append("\n");
-        sb.append("\tMemory: ").append(hal.getMemory().getAvailable() / mb).append(" (total:")
-                .append(hal.getMemory().getTotal() / mb).append(") MB").append("\n");
-
-        sb.append("Java:").append("\n");
-        sb.append("\tJava version: ").append(System.getProperty("java.specification.version")).append("(").append
-                (System.getProperty("java.version")).append(")").append("\n");
-        sb.append("\t").append(System.getProperty("java.runtime.name")).append(" v").append(System.getProperty("java" +
-                ".vm.version"))
-                .append("\n");
-
-        sb.append("User:").append("\n");
-        sb.append("\tName: ").append(System.getProperty("user.name")).append(" Home: ")
-                .append(System.getProperty("user.home")).append("\n");
-        sb.append("\tTime zone: ").append(System.getProperty("user.timezone")).append(" (")
-                .append(System.getProperty("user.country")).append(") language: ")
-                .append(System.getProperty("user.language")).append("\n");
-
-        sb.append("=========================================================").append("\n");
-
-        return sb.toString();
+        return "==========================System=========================" + "\n" +
+                "System:" + "\n" +
+                "\tOS: " + os.getManufacturer() + " " + os.getFamily() +
+                " Version: " + os.getVersion() + " x" + getRealSystemArch() + "\n" +
+                "Hardware:" + "\n" +
+                "\tProcessors: " + Runtime.getRuntime().availableProcessors() + "\n" +
+                "\tTotal JVM memory: " + Runtime.getRuntime().maxMemory() / megabyte + " mb\n" +
+                "Java:" + "\n" +
+                "\tJava version: " + System.getProperty("java.specification.version") + "(" +
+                System.getProperty("java.version") + ")" + "\n" +
+                "\t" + System.getProperty("java.runtime.name") + " v" +
+                System.getProperty("java.vm.version") + "\n" +
+                "=========================================================" + "\n";
     }
 
     enum OS {WINDOWS, MAC_OS, UNIX, SOLARIS}
