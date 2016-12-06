@@ -79,7 +79,6 @@ public class AboutApplicationDialog extends JDialog {
 
 
     private void createUIComponents() {
-        // TODO: place custom component creation code here
         try {
             imagePanel1 = new ImagePanel(ImageIO.read(ImagePanel.class.getResource("/about/background.png")));
             weblocOpenerBWillTextPane = new JTextPane();
