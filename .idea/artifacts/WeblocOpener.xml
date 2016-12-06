@@ -15,6 +15,9 @@
       <element id="library" level="project" name="log4j:log4j:1.2.8" />
       <element id="library" level="project" name="dd-plist" />
       <element id="library" level="module" name="JUnit4" module-name="WeblocOpener" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/oshi-core-3.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/slf4j-api-1.7.21.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/slf4j-nop-1.7.21.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
