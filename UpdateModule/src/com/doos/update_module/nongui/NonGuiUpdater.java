@@ -1,6 +1,7 @@
 package com.doos.update_module.nongui;
 
 import com.doos.commons.ApplicationConstants;
+import com.doos.commons.Translation;
 import com.doos.commons.registry.RegistryCanNotReadInfoException;
 import com.doos.commons.registry.RegistryCanNotWriteInfoException;
 import com.doos.commons.registry.RegistryManager;
@@ -35,14 +36,25 @@ public class NonGuiUpdater {
         compareVersions();
     }
 
+    //TODO read https://docs.microsoft.com/en-us/azure/notification-hubs/notification-hubs-java-push-notification-tutorial
     private void compareVersions() {
         String str = ApplicationConstants.APP_VERSION;
         if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
             //create trayicon and show pop-up
             createTrayIcon();
+
+
+            final String[] displayMessage = new String[1];
+            Translation translation = new Translation("translations/UpdateDialogBundle") {
+                @Override
+                public void initTranslations() {
+                    displayMessage[0] = messages.getString("newVersionAvailableTrayNotification");
+                }
+            };
+            translation.initTranslations();
             trayIcon.displayMessage(ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME + " - Updater",
-                    "There is a new version of application:" + serverAppVersion.getVersion(),
-                    TrayIcon.MessageType.INFO); //TODO internationalize this
+                    displayMessage[0] + ": " + serverAppVersion.getVersion(),
+                    TrayIcon.MessageType.INFO);
         }
     }
 
@@ -75,7 +87,6 @@ public class NonGuiUpdater {
         MenuItem exit = new MenuItem("Exit");
         exit.addActionListener(e -> {
             tray.remove(trayIcon);
-            //System.exit(0); //FIXME
         });
         trayMenu.add(exit);
 
