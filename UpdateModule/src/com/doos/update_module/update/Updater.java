@@ -125,7 +125,7 @@ public class Updater {
             }
 
         } else {
-            return -999; //TODO maybe -1?
+            return -999;
         }
     }
 
