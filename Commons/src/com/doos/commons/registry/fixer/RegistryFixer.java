@@ -254,7 +254,10 @@ public class RegistryFixer { //TODO Enable logging
     private static void checkRegistry() throws RegistryException {
         log.info("Checking important registry info.");
         RegistryManager.getAppNameValue();
-        RegistryManager.getAppVersionValue();
+        String version = RegistryManager.getAppVersionValue();
+        if (!version.equals(ApplicationConstants.APP_VERSION)) {
+            RegistryManager.setAppVersionValue(ApplicationConstants.APP_VERSION);
+        }
         RegistryManager.getInstallLocationValue();
         RegistryManager.getURLUpdateValue();
         log.info("Registry is alright.");
