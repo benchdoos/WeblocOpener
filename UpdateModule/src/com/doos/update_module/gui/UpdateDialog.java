@@ -8,27 +8,27 @@ import com.doos.commons.registry.RegistryManager;
 import com.doos.commons.registry.fixer.RegistryFixer;
 import com.doos.commons.utils.FrameUtils;
 import com.doos.commons.utils.Internal;
+import com.doos.commons.utils.MessagePushable;
 import com.doos.update_module.core.Main;
 import com.doos.update_module.update.AppVersion;
 import com.doos.update_module.update.Updater;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
 import static com.doos.commons.utils.UserUtils.showErrorMessageToUser;
+import static com.doos.commons.utils.UserUtils.showSuccessMessageToUser;
 
 @SuppressWarnings({"ALL", "ResultOfMethodCallIgnored"})
-public class UpdateDialog extends JFrame {
+public class UpdateDialog extends JFrame implements MessagePushable {
     public static UpdateDialog updateDialog = null;
-
     public JProgressBar progressBar1;
     public JButton buttonOK;
     public JButton buttonCancel;
+    Timer messageTimer;
     private Translation translation;
     private AppVersion serverAppVersion;
     private JPanel contentPane;
@@ -38,6 +38,8 @@ public class UpdateDialog extends JFrame {
     private JLabel unitLabel;
     private JLabel currentVersionStringLabel;
     private JLabel avaliableVersionStringLabel;
+    private JPanel errorPanel;
+    private JTextPane errorTextPane;
     private Thread updateThread;
 
     private String successUpdatedMessage = "WeblocOpener successfully updated to version: ";
@@ -208,11 +210,11 @@ public class UpdateDialog extends JFrame {
         }
 
 
-        JOptionPane.showMessageDialog(this, successUpdatedMessage
-                + serverAppVersion.getVersion(), successTitle, JOptionPane.INFORMATION_MESSAGE);
+        showSuccessMessageToUser(this, successTitle,
+                successUpdatedMessage + serverAppVersion.getVersion());
 
         if (Main.mode != Main.Mode.AFTER_UPDATE) {
-            dispose();
+            //dispose(); //TODO test it, if ok, delete
             runCleanTempUpdaterFile();
         }
 
@@ -239,7 +241,6 @@ public class UpdateDialog extends JFrame {
             buttonCancel.setEnabled(true);
         }
 
-        //dispose();
     }
 
     private void onCancel() {
@@ -283,4 +284,43 @@ public class UpdateDialog extends JFrame {
                 + serverAppVersion.getVersion() + ".exe").delete();
     }
 
+    public void showMessage(String message, int messageValue) {
+        errorPanel.setBackground(MessagePushable.getMessageColor(messageValue));
+
+        errorPanel.setVisible(true);
+        errorTextPane.setText(message);
+        updateSize(UpdateMode.BEFORE_HIDE);
+
+        if (messageTimer != null) {
+            messageTimer.stop();
+        }
+
+        messageTimer = new Timer(DEFAULT_TIMER_DELAY, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                errorTextPane.setText("");
+                errorPanel.setVisible(false);
+                updateSize(UpdateMode.AFTER_HIDE);
+            }
+        });
+        messageTimer.setRepeats(false);
+        messageTimer.start();
+    }
+
+    private void updateSize(UpdateMode mode) {
+
+        setResizable(true);
+        revalidate();
+        final int DEFAULT_APPLICTAION_WIDTH = 400;
+        if (mode == UpdateMode.BEFORE_HIDE) {
+            pack();
+            setSize(new Dimension(DEFAULT_APPLICTAION_WIDTH, getHeight()));
+        } else if (mode == UpdateMode.AFTER_HIDE) {
+            setSize(new Dimension(DEFAULT_APPLICTAION_WIDTH, 170));
+        }
+        setResizable(false);
+
+    }
+
+    enum UpdateMode {BEFORE_HIDE, AFTER_HIDE}
 }
