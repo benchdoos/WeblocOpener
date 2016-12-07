@@ -1,6 +1,6 @@
 package com.doos.commons.registry.fixer;
 
-import com.doos.commons.ApplicationConstants;
+import com.doos.commons.core.ApplicationConstants;
 import com.doos.commons.registry.RegistryCanNotReadInfoException;
 import com.doos.commons.registry.RegistryCanNotWriteInfoException;
 import com.doos.commons.registry.RegistryManager;
@@ -179,7 +179,7 @@ public class RegistryFixer { //TODO Enable logging
             throws RegistryCanNotReadInfoException {
         String path;
         String pathValue;
-        pathValue = getUnistallLocationForCurrentSystemArch();
+        pathValue = getUninstallLocationForCurrentSystemArch();
 
         try {
             path = WinReg.HKEY_LOCAL_MACHINE + "\\" +
@@ -202,7 +202,7 @@ public class RegistryFixer { //TODO Enable logging
         return path;
     }
 
-    private static String getUnistallLocationForCurrentSystemArch() {
+    private static String getUninstallLocationForCurrentSystemArch() {
         String pathValue;
         if (SystemUtils.getRealSystemArch().equals("64")) {
             pathValue = DEFAULT_INSTALLER_UNINSTALL_LOCATION_PATH_64;

@@ -1,7 +1,7 @@
 package com.doos.update_module.gui;
 
-import com.doos.commons.ApplicationConstants;
 import com.doos.commons.Translation;
+import com.doos.commons.core.ApplicationConstants;
 import com.doos.commons.core.SettingsManager;
 import com.doos.commons.registry.RegistryCanNotReadInfoException;
 import com.doos.commons.registry.RegistryCanNotWriteInfoException;

@@ -1,4 +1,4 @@
-package com.doos.commons;
+package com.doos.commons.core;
 
 import java.io.File;
 

@@ -1,7 +1,7 @@
 package com.doos.update_module.update;
 
 
-import com.doos.commons.ApplicationConstants;
+import com.doos.commons.core.ApplicationConstants;
 import com.doos.update_module.gui.UpdateDialog;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

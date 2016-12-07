@@ -1,6 +1,6 @@
 package com.doos.webloc_opener.core;
 
-import com.doos.commons.ApplicationConstants;
+import com.doos.commons.core.ApplicationConstants;
 import com.doos.commons.core.SettingsManager;
 import com.doos.commons.registry.RegistryException;
 import com.doos.commons.registry.RegistryManager;
@@ -23,7 +23,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.FileNotFoundException;
 
-import static com.doos.commons.ApplicationConstants.*;
+import static com.doos.commons.core.ApplicationConstants.*;
 import static com.doos.commons.utils.UserUtils.showErrorMessageToUser;
 import static java.awt.Frame.MAXIMIZED_HORIZ;
 

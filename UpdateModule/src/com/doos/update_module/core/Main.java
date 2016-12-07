@@ -1,6 +1,6 @@
 package com.doos.update_module.core;
 
-import com.doos.commons.ApplicationConstants;
+import com.doos.commons.core.ApplicationConstants;
 import com.doos.commons.core.SettingsManager;
 import com.doos.commons.registry.RegistryCanNotReadInfoException;
 import com.doos.commons.registry.RegistryCanNotWriteInfoException;
@@ -29,8 +29,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 
-import static com.doos.commons.ApplicationConstants.UPDATE_PATH_FILE;
-import static com.doos.commons.ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME;
+import static com.doos.commons.core.ApplicationConstants.UPDATE_PATH_FILE;
+import static com.doos.commons.core.ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME;
 import static com.doos.commons.utils.Logging.getCurrentClassName;
 import static com.doos.commons.utils.UserUtils.showErrorMessageToUser;
 import static com.doos.update_module.nongui.NonGuiUpdater.tray;

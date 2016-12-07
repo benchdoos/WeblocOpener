@@ -1,6 +1,6 @@
 package com.doos.commons.utils;
 
-import com.doos.commons.ApplicationConstants;
+import com.doos.commons.core.ApplicationConstants;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;

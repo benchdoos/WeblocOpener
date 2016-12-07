@@ -1,5 +1,5 @@
 
-import com.doos.commons.ApplicationConstants;
+import com.doos.commons.core.ApplicationConstants;
 import com.doos.commons.registry.RegistryManager;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.testng.annotations.Test;

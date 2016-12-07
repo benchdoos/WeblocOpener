@@ -1,6 +1,5 @@
 package com.doos.commons.core;
 
-import com.doos.commons.ApplicationConstants;
 import com.doos.commons.registry.RegistryCanNotReadInfoException;
 import com.doos.commons.registry.RegistryCanNotWriteInfoException;
 import com.doos.commons.registry.RegistryManager;
