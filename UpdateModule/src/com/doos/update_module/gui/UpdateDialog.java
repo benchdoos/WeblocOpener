@@ -1,12 +1,11 @@
 package com.doos.update_module.gui;
 
 import com.doos.commons.core.ApplicationConstants;
-import com.doos.commons.core.SettingsManager;
 import com.doos.commons.core.Translation;
 import com.doos.commons.registry.RegistryCanNotReadInfoException;
-import com.doos.commons.registry.RegistryCanNotWriteInfoException;
 import com.doos.commons.registry.RegistryException;
 import com.doos.commons.registry.RegistryManager;
+import com.doos.commons.registry.fixer.RegistryFixer;
 import com.doos.commons.utils.FrameUtils;
 import com.doos.commons.utils.Internal;
 import com.doos.update_module.core.Main;
@@ -203,9 +202,9 @@ public class UpdateDialog extends JFrame {
 
     private void updateSuccessfullyInstalled() {
         try {
-            SettingsManager.loadInfo();
-        } catch (RegistryCanNotReadInfoException | RegistryCanNotWriteInfoException ignore) {
-            /*NOP*/
+            RegistryFixer.fixRegistry();
+        } catch (Exception ignore) {
+           /*NOP*/
         }
 
 

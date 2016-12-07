@@ -1,10 +1,8 @@
 package com.doos.update_module.core;
 
 import com.doos.commons.core.ApplicationConstants;
-import com.doos.commons.core.SettingsManager;
 import com.doos.commons.registry.RegistryCanNotReadInfoException;
 import com.doos.commons.registry.RegistryCanNotWriteInfoException;
-import com.doos.commons.registry.RegistryException;
 import com.doos.commons.registry.RegistryManager;
 import com.doos.commons.registry.fixer.RegistryFixer;
 import com.doos.commons.registry.fixer.RegistryFixerAppVersionKeyFailException;
@@ -118,22 +116,16 @@ public class Main {
 
     private static void tryLoadProperties() {
         try {
-            SettingsManager.loadInfo();
-        } catch (RegistryException e) {
-            log.warn("Can not load info from registry", e);
-            try {
-                RegistryFixer.fixRegistry();
-            } catch (RegistryFixerAutoUpdateKeyFailException | RegistryFixerAppVersionKeyFailException e1) {
-                log.warn("Can not fix registry on startup", e1);
-                RegistryManager.setDefaultSettings();
-            } catch (RegistryFixerInstallPathKeyFailException | FileNotFoundException e1) {
-                log.warn("Can not fix registry on startup", e1);
-                showErrorMessageToUser(null, "Can not fix registry",
-                        "Registry application data is corrupt. " +
-                                "Please re-install the " + "application.");
-                System.exit(-1);
-            }
-
+            RegistryFixer.fixRegistry();
+        } catch (RegistryFixerAutoUpdateKeyFailException | RegistryFixerAppVersionKeyFailException e1) {
+            log.warn("Can not fix registry on startup", e1);
+            RegistryManager.setDefaultSettings();
+        } catch (RegistryFixerInstallPathKeyFailException | FileNotFoundException e1) {
+            log.warn("Can not fix registry on startup", e1);
+            showErrorMessageToUser(null, "Can not fix registry",
+                    "Registry application data is corrupt. " +
+                            "Please re-install the " + "application.");
+            System.exit(-1);
         }
     }
 
@@ -172,15 +164,6 @@ public class Main {
                 e.printStackTrace();
             }
         } else {
-            try {
-                SettingsManager.loadInfo();
-            } catch (RegistryException e) {
-                String message
-                        = "Can not read data from registry.";
-                log.warn(message);
-                JOptionPane.showMessageDialog(null, message, message, JOptionPane.ERROR_MESSAGE);
-
-            }
             Main.createUpdateDialog();
         }
     }
@@ -227,11 +210,6 @@ public class Main {
         updateDialog.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
-                try {
-                    SettingsManager.loadInfo();
-                } catch (RegistryException e1) {
-                    e1.printStackTrace();
-                }
                 String str;
                 try {
                     str = RegistryManager.getAppVersionValue();

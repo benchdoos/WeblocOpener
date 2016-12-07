@@ -1,13 +1,9 @@
 package com.doos.webloc_opener.core;
 
 import com.doos.commons.core.ApplicationConstants;
-import com.doos.commons.core.SettingsManager;
-import com.doos.commons.registry.RegistryException;
 import com.doos.commons.registry.RegistryManager;
 import com.doos.commons.registry.fixer.RegistryFixer;
-import com.doos.commons.registry.fixer.RegistryFixerAppVersionKeyFailException;
-import com.doos.commons.registry.fixer.RegistryFixerAutoUpdateKeyFailException;
-import com.doos.commons.registry.fixer.RegistryFixerInstallPathKeyFailException;
+import com.doos.commons.registry.fixer.RegistryFixerException;
 import com.doos.commons.utils.Logging;
 import com.doos.commons.utils.UserUtils;
 import com.doos.commons.utils.system.SystemUtils;
@@ -24,7 +20,6 @@ import java.awt.*;
 import java.io.FileNotFoundException;
 
 import static com.doos.commons.core.ApplicationConstants.*;
-import static com.doos.commons.utils.UserUtils.showErrorMessageToUser;
 import static java.awt.Frame.MAXIMIZED_HORIZ;
 
 public class Main {
@@ -52,20 +47,9 @@ public class Main {
      */
     private static void tryLoadProperties() {
         try {
-            SettingsManager.loadInfo();
-        } catch (RegistryException e) {
-            e.printStackTrace();
-            try {
-                RegistryFixer.fixRegistry();
-            } catch (RegistryFixerAutoUpdateKeyFailException | RegistryFixerAppVersionKeyFailException e1) {
-                RegistryManager.setDefaultSettings();
-            } catch (RegistryFixerInstallPathKeyFailException | FileNotFoundException e1) {
-                showErrorMessageToUser(null, "Can not fix registry",
-                                       "Registry application data is corrupt. " +
-                                               "Please re-install the " + "application.");
-                System.exit(-1);
-            }
-
+            RegistryFixer.fixRegistry();
+        } catch (FileNotFoundException | RegistryFixerException e) {
+            RegistryManager.setDefaultSettings();
         }
     }
 
@@ -88,7 +72,7 @@ public class Main {
                         new AboutApplicationDialog().setVisible(true);
                         break;
                     default:
-                        runAnalizer(args[0]);
+                        runAnalyzer(args[0]);
                         break;
                 }
             }
@@ -108,7 +92,7 @@ public class Main {
      *
      * @param arg main args
      */
-    private static void runAnalizer(String arg) {
+    private static void runAnalyzer(String arg) {
         String url = new Analyzer(arg).getUrl();
         UrlsProceed.openUrl(url);
         UrlsProceed.shutdownLogout();
@@ -124,8 +108,8 @@ public class Main {
             runEditDialog(args[1]);
         } else {
             JOptionPane.showMessageDialog(new Frame(), "Argument '-edit' should have " +
-                                                  "location path parameter.", "Error",
-                                          JOptionPane.ERROR_MESSAGE);
+                            "location path parameter.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 

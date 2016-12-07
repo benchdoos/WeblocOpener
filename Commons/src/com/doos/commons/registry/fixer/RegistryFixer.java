@@ -3,6 +3,7 @@ package com.doos.commons.registry.fixer;
 import com.doos.commons.core.ApplicationConstants;
 import com.doos.commons.registry.RegistryCanNotReadInfoException;
 import com.doos.commons.registry.RegistryCanNotWriteInfoException;
+import com.doos.commons.registry.RegistryException;
 import com.doos.commons.registry.RegistryManager;
 import com.doos.commons.utils.system.SystemUtils;
 import com.sun.jna.platform.win32.Advapi32Util;
@@ -28,63 +29,23 @@ public class RegistryFixer { //TODO Enable logging
     public static void fixRegistry()
             throws FileNotFoundException, RegistryFixerAutoUpdateKeyFailException,
             RegistryFixerAppVersionKeyFailException, RegistryFixerInstallPathKeyFailException {
-        log.info("[REGISTRY FIXER] Trying to check and fix registry values. [REGISTRY FIXER]");
-        fixRootRegistryUnit();
-        fixAutoUpdateValue();
-        fixAppVersionValue();
-        fixInstallLocationValue();
-        fixAppNameValue();
-        fixUpdateUrlValue();
 
-        fixCapabilitiesRegistryUnit();
-        fixFileAssociationsRegistryUnit();
-        fixApplicationDescriptionValue();
-        fixFileAssociationsValues();
-
-
-    }
-
-    private static void fixFileAssociationsValues() {
-        log.info("[REGISTRY FIXER] Trying to fix value: ApplicationDescription");
         try {
-            RegistryManager.createRegistryEntry(RegistryManager.REGISTRY_APP_PATH +
-                            "Capabilities\\", "ApplicationDescription",
-                    "Open, edit and create .webloc links on Windows");
-            log.info("[REGISTRY FIXER] Successfully Fixed value: ApplicationDescription");
-        } catch (RegistryCanNotWriteInfoException e) {
-            log.warn("[REGISTRY FIXER] Failed to fix value: ApplicationDescription", e);
-        }
-    }
+            checkRegistry();
+        } catch (RegistryException e) {
+            log.info("Something is wrong with registry.", e);
+            log.info("[REGISTRY FIXER] Trying to check and fix registry values. [REGISTRY FIXER]");
+            fixRootRegistryUnit();
+            fixAutoUpdateValue();
+            fixAppVersionValue();
+            fixInstallLocationValue();
+            fixAppNameValue();
+            fixUpdateUrlValue();
 
-    private static void fixApplicationDescriptionValue() {
-        log.info("[REGISTRY FIXER] Trying to fix value: ApplicationDescription");
-        try {
-            RegistryManager.createRegistryEntry(RegistryManager.REGISTRY_APP_PATH + "Capabilities\\FileAssociations\\",
-                    ".webloc", "Webloc link");
-            log.info("[REGISTRY FIXER] Successfully Fixed value: ApplicationDescription");
-        } catch (RegistryCanNotWriteInfoException e) {
-            log.warn("[REGISTRY FIXER] Failed to fix value: ApplicationDescription", e);
-        }
-    }
-
-    private static void fixFileAssociationsRegistryUnit() {
-        log.info("[REGISTRY FIXER] Trying to fix FileAssociations app registry path");
-        try {
-            RegistryManager.createRootRegistryFolder(RegistryManager.REGISTRY_APP_PATH +
-                    "Capabilities\\FileAssociations\\");
-            log.info("[REGISTRY FIXER] Successfully Fixed FileAssociations app registry path");
-        } catch (RegistryCanNotWriteInfoException e) {
-            log.warn("[REGISTRY FIXER] Failed to fix FileAssociations app registry path", e);
-        }
-    }
-
-    private static void fixCapabilitiesRegistryUnit() {
-        log.info("[REGISTRY FIXER] Trying to fix Capabilities app registry path");
-        try {
-            RegistryManager.createRootRegistryFolder(RegistryManager.REGISTRY_APP_PATH + "Capabilities\\");
-            log.info("[REGISTRY FIXER]Successfully Fixed Capabilities app registry path");
-        } catch (RegistryCanNotWriteInfoException e) {
-            log.warn("[REGISTRY FIXER] Failed to fix Capabilities app registry path", e);
+            fixCapabilitiesRegistryUnit();
+            fixFileAssociationsRegistryUnit();
+            fixApplicationDescriptionValue();
+            fixFileAssociationsValues();
         }
     }
 
@@ -92,7 +53,7 @@ public class RegistryFixer { //TODO Enable logging
         log.info("[REGISTRY FIXER] Trying to fix Root app registry path");
         try {
             RegistryManager.createRootRegistryFolder(RegistryManager.REGISTRY_APP_PATH);
-            log.info("[REGISTRY FIXER]Successfully Fixed Root app registry path");
+            log.info("[REGISTRY FIXER] Successfully Fixed Root app registry path");
         } catch (RegistryCanNotWriteInfoException e) {
             log.warn("[REGISTRY FIXER] Failed to fix Root app registry path", e);
         }
@@ -243,5 +204,59 @@ public class RegistryFixer { //TODO Enable logging
             }
         }
 
+    }
+
+    private static void fixCapabilitiesRegistryUnit() {
+        log.info("[REGISTRY FIXER] Trying to fix Capabilities app registry path");
+        try {
+            RegistryManager.createRootRegistryFolder(RegistryManager.REGISTRY_APP_PATH + "Capabilities\\");
+            log.info("[REGISTRY FIXER] Successfully Fixed Capabilities app registry path");
+        } catch (RegistryCanNotWriteInfoException e) {
+            log.warn("[REGISTRY FIXER] Failed to fix Capabilities app registry path", e);
+        }
+    }
+
+    private static void fixFileAssociationsValues() {
+        log.info("[REGISTRY FIXER] Trying to fix value: ApplicationDescription");
+        try {
+            RegistryManager.createRegistryEntry(RegistryManager.REGISTRY_APP_PATH +
+                            "Capabilities\\", "ApplicationDescription",
+                    "Open, edit and create .webloc links on Windows");
+            log.info("[REGISTRY FIXER] Successfully Fixed value: ApplicationDescription");
+        } catch (RegistryCanNotWriteInfoException e) {
+            log.warn("[REGISTRY FIXER] Failed to fix value: ApplicationDescription", e);
+        }
+    }
+
+    private static void fixApplicationDescriptionValue() {
+        log.info("[REGISTRY FIXER] Trying to fix value: ApplicationDescription");
+        try {
+            RegistryManager.createRegistryEntry(RegistryManager.REGISTRY_APP_PATH + "Capabilities\\FileAssociations\\",
+                    ".webloc", "Webloc link");
+            log.info("[REGISTRY FIXER] Successfully Fixed value: ApplicationDescription");
+        } catch (RegistryCanNotWriteInfoException e) {
+            log.warn("[REGISTRY FIXER] Failed to fix value: ApplicationDescription", e);
+        }
+    }
+
+    private static void fixFileAssociationsRegistryUnit() {
+        log.info("[REGISTRY FIXER] Trying to fix FileAssociations app registry path");
+        try {
+            RegistryManager.createRootRegistryFolder(RegistryManager.REGISTRY_APP_PATH +
+                    "Capabilities\\FileAssociations\\");
+            log.info("[REGISTRY FIXER] Successfully Fixed FileAssociations app registry path");
+        } catch (RegistryCanNotWriteInfoException e) {
+            log.warn("[REGISTRY FIXER] Failed to fix FileAssociations app registry path", e);
+        }
+    }
+
+
+    private static void checkRegistry() throws RegistryException {
+        log.info("Checking important registry info.");
+        RegistryManager.getAppNameValue();
+        RegistryManager.getAppVersionValue();
+        RegistryManager.getInstallLocationValue();
+        RegistryManager.getURLUpdateValue();
+        log.info("Registry is alright.");
     }
 }
