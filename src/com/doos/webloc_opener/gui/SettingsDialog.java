@@ -153,7 +153,7 @@ public class SettingsDialog extends JFrame {
             }
         } catch (RegistryException e) {
             log.warn("Can not save settings change", e);
-            JOptionPane.showMessageDialog(new JFrame(), errorMessage,
+            JOptionPane.showMessageDialog(null, errorMessage,
                     canNotSaveSettingsToRegistryMessage,
                     JOptionPane.ERROR_MESSAGE);
         }
