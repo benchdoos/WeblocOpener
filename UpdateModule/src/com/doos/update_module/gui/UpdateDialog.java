@@ -40,6 +40,7 @@ public class UpdateDialog extends JFrame {
     private JLabel currentVersionStringLabel;
     private JLabel avaliableVersionStringLabel;
     private Thread updateThread;
+
     private String successUpdatedMessage = "WeblocOpener successfully updated to version: ";
     private String successTitle = "Success";
 
@@ -50,8 +51,7 @@ public class UpdateDialog extends JFrame {
 
     private String installationCancelledByErrorMessage1 = "Installation cancelled by Error (unhandled error),";
     private String installationCancelledByErrorMessage2 = "code: ";
-    private String installationCancelledByErrorMessage3
-            = "visit " + ApplicationConstants.GITHUB_WEB_URL + " for more info.";
+    private String installationCancelledByErrorMessage3 = "visit " + ApplicationConstants.GITHUB_WEB_URL + " for more info.";
 
     public UpdateDialog() {
         serverAppVersion = new AppVersion();
@@ -78,7 +78,7 @@ public class UpdateDialog extends JFrame {
 
         // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                                           JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         pack();
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
         setSize(new Dimension(400, 170));
@@ -162,9 +162,7 @@ public class UpdateDialog extends JFrame {
     }
 
     private void loadProperties() {
-
         try {
-            SettingsManager.loadInfo();
             currentVersionLabel.setText(RegistryManager.getAppVersionValue());
         } catch (RegistryException e) {
             currentVersionLabel.setText(ApplicationConstants.APP_VERSION);
@@ -181,7 +179,7 @@ public class UpdateDialog extends JFrame {
                 break;
             case ApplicationConstants.UPDATE_CODE_CANCEL:
                 showErrorMessageToUser(this, installationCancelledTitle,
-                                       installationCancelledMessage);
+                        installationCancelledMessage);
                 Updater.installerFile.delete();
                 break;
             case ApplicationConstants.UPDATE_CODE_NO_FILE:
@@ -272,7 +270,7 @@ public class UpdateDialog extends JFrame {
             final String command
                     = "java -jar \"" + value + "Updater.jar\" " + ApplicationConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT;
             System.out.println("running " + ApplicationConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT + " " +
-                                       "argument: " + command);
+                    "argument: " + command);
             Runtime.getRuntime().exec(command);
         } catch (RegistryCanNotReadInfoException | IOException e) {
             e.printStackTrace();
@@ -281,9 +279,9 @@ public class UpdateDialog extends JFrame {
 
     private void runCleanInstallerFile() {
         System.out.println("Deleting file: " + ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
-                                   + serverAppVersion.getVersion() + "" + ".exe");
+                + serverAppVersion.getVersion() + "" + ".exe");
         new File(ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
-                         + serverAppVersion.getVersion() + ".exe").delete();
+                + serverAppVersion.getVersion() + ".exe").delete();
     }
 
 }
