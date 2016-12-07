@@ -36,7 +36,6 @@ public class NonGuiUpdater {
         compareVersions();
     }
 
-    //TODO read https://docs.microsoft.com/en-us/azure/notification-hubs/notification-hubs-java-push-notification-tutorial
     private void compareVersions() {
         String str = ApplicationConstants.APP_VERSION;
         if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
