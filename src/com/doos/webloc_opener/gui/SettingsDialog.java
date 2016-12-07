@@ -1,6 +1,6 @@
 package com.doos.webloc_opener.gui;
 
-import com.doos.commons.Translation;
+import com.doos.commons.core.Translation;
 import com.doos.commons.registry.RegistryCanNotReadInfoException;
 import com.doos.commons.registry.RegistryException;
 import com.doos.commons.registry.RegistryManager;

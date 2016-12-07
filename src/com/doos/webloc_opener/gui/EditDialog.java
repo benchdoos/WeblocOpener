@@ -1,7 +1,7 @@
 package com.doos.webloc_opener.gui;
 
-import com.doos.commons.Translation;
 import com.doos.commons.core.ApplicationConstants;
+import com.doos.commons.core.Translation;
 import com.doos.commons.utils.FrameUtils;
 import com.doos.webloc_opener.service.UrlsProceed;
 import com.doos.webloc_opener.service.gui.ClickListener;

@@ -1,4 +1,4 @@
-package com.doos.commons;
+package com.doos.commons.core;
 
 import org.apache.log4j.Logger;
 
