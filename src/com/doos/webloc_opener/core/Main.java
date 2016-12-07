@@ -107,7 +107,7 @@ public class Main {
         if (args.length > 1) {
             runEditDialog(args[1]);
         } else {
-            JOptionPane.showMessageDialog(new Frame(), "Argument '-edit' should have " +
+            JOptionPane.showMessageDialog(null, "Argument '-edit' should have " +
                             "location path parameter.", "Error",
                     JOptionPane.ERROR_MESSAGE);
         }

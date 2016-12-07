@@ -4,7 +4,6 @@ import com.doos.webloc_opener.gui.EditDialog;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -48,11 +47,11 @@ public class Analyzer {
         } catch (IOException e) {
             String message = "Can not read file [" + file + "]";
             log.warn(message, e);
-            JOptionPane.showMessageDialog(new Frame(), message, "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             final String message = "URL in file [" + file + "] is corrupt.";
             log.warn(message, e);
-            JOptionPane.showMessageDialog(new Frame(), message, "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
             if (file != null) {
                 new EditDialog(file.getAbsolutePath()).setVisible(true);
             }

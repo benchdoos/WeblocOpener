@@ -37,7 +37,7 @@ public class UrlsProceed {
             }
         } catch (IOException e) {
             log.warn("Can not open url: " + url, e);
-            JOptionPane.showMessageDialog(new Frame(), "URL is corrupt: " + url);
+            JOptionPane.showMessageDialog(null, "URL is corrupt: " + url);
         }
 
     }
