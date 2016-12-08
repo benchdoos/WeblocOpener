@@ -3,6 +3,7 @@ package com.doos.webloc_opener.gui;
 import com.doos.commons.core.ApplicationConstants;
 import com.doos.commons.core.Translation;
 import com.doos.commons.utils.FrameUtils;
+import com.doos.commons.utils.MessagePushable;
 import com.doos.commons.utils.UserUtils;
 import com.doos.webloc_opener.service.UrlsProceed;
 import com.doos.webloc_opener.service.gui.ClickListener;
@@ -25,7 +26,7 @@ import java.util.Map;
 
 import static com.doos.commons.utils.Logging.getCurrentClassName;
 
-public class EditDialog extends JFrame {
+public class EditDialog extends JFrame implements MessagePushable {
     private static final Logger log = Logger.getLogger(getCurrentClassName());
     //JDialog dialog = this;
 
@@ -38,9 +39,12 @@ public class EditDialog extends JFrame {
     private JTextPane createWeblocFileTextPane;
     private JLabel iconLabel;
     private JLabel urlLabel;
+    private JTextPane errorTextPane;
+    private JPanel errorPanel;
 
     private String incorrectUrlMessage = "Incorrect URL";
     private String errorTitle = "Error";
+    private Timer messageTimer;
 
 
     @SuppressWarnings("unchecked")
@@ -99,8 +103,10 @@ public class EditDialog extends JFrame {
 
         pack();
 
-        setMinimumSize(getSize());
-        setPreferredSize(getSize());
+        /*setMinimumSize(getSize());
+        setPreferredSize(getSize());*/
+
+        setSize(300, 200);
         setResizable(false); //TODO fix setMaximumSize
 
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
@@ -162,9 +168,16 @@ public class EditDialog extends JFrame {
             dispose();
         } catch (MalformedURLException e) {
             log.warn("Can not parse URL: [" + textField1.getText() + "]", e);
+
+            String message = incorrectUrlMessage + ": [";
+            String incorrectUrl = textField1.getText()
+                    .substring(0, Math.min(textField1.getText().length(), 10));
+            //Fixes EditDialog long url message showing issue
+            message += textField1.getText().length() > incorrectUrl.length() ? incorrectUrl + "...]" : incorrectUrl + "]";
+
+
             UserUtils.showWarningMessageToUser(this, errorTitle,
-                    incorrectUrlMessage + ": [" + textField1.getText()
-                            .substring(0, Math.min(textField1.getText().length(), UserUtils.MAXIMUM_MESSAGE_SIZE - 1)) + "]");
+                    message);
         }
 
     }
@@ -185,4 +198,47 @@ public class EditDialog extends JFrame {
         super.setVisible(b);
         FrameUtils.bringToFront(this);
     }
+
+    @Override
+    public void showMessage(String message, int messageValue) {
+        errorPanel.setBackground(MessagePushable.getMessageColor(messageValue));
+
+        boolean wasVisible = errorPanel.isVisible();
+        errorPanel.setVisible(true);
+        errorTextPane.setText(message);
+
+        if (!wasVisible) {
+            updateSize(SettingsDialog.UpdateMode.BEFORE_HIDE);
+        }
+
+        if (messageTimer != null) {
+            messageTimer.stop();
+        }
+
+        messageTimer = new Timer(DEFAULT_TIMER_DELAY, e -> {
+            errorTextPane.setText("");
+            errorPanel.setVisible(false);
+            updateSize(SettingsDialog.UpdateMode.AFTER_HIDE);
+        });
+        messageTimer.setRepeats(false);
+        messageTimer.start();
+    }
+
+    private void updateSize(SettingsDialog.UpdateMode mode) {
+
+        setResizable(true);
+
+        revalidate();
+        final int DEFAULT_APPLICATION_WIDTH = 295;
+        if (mode == SettingsDialog.UpdateMode.BEFORE_HIDE) {
+            pack();
+            setSize(new Dimension(DEFAULT_APPLICATION_WIDTH, getHeight()));
+        } else if (mode == SettingsDialog.UpdateMode.AFTER_HIDE) {
+            setSize(new Dimension(DEFAULT_APPLICATION_WIDTH, 207));
+        }
+        setResizable(false);
+
+    }
+
+    enum UpdateMode {BEFORE_HIDE, AFTER_HIDE}
 }
