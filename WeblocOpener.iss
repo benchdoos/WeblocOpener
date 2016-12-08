@@ -69,7 +69,7 @@ Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
 Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\WeblocOpener\WeblocOpener.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\WeblocOpener\Template.webloc"; DestDir: "{app}"; Flags: ignoreversion
 Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\Updater\Updater.jar"; DestDir: "{app}"; Flags: ignoreversion
-Source: "F:\Developer\JAVA\WeblocOpener\readme.rtf"; DestDir: "{app}"; Flags: ignoreversion isreadme
+Source: "F:\Developer\JAVA\WeblocOpener\readme.rtf"; DestDir: "{app}"; Flags: ignoreversion isreadme unchecked 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [InstallDelete]
@@ -78,7 +78,7 @@ Type: files; Name: "{group}\{#MyAppName}.lnk"
 
 [Icons]
 Name: "{group}\{#MyAppName} - Settings"; Filename: "{app}\{#MyAppExeName}"
-Name: "{group}\Updater"; Filename: "{app}\Updater.jar"
+Name: "{group}\Updater"; Filename: "{app}\Updater.jar"; IconFilename: "{app}\{#MyAppName}.exe"; IconIndex: 2;
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Run]
