@@ -85,6 +85,9 @@ public class UserUtils {
             }
         }
 
+        if (title == null) {
+            title = "";
+        }
 
         JOptionPane.showMessageDialog(parentComponent,
                 jEditorPane,
