@@ -2,6 +2,7 @@ package com.doos.webloc_opener.gui;
 
 import com.doos.commons.core.Translation;
 import com.doos.commons.registry.RegistryCanNotReadInfoException;
+import com.doos.commons.registry.RegistryCanNotWriteInfoException;
 import com.doos.commons.registry.RegistryException;
 import com.doos.commons.registry.RegistryManager;
 import com.doos.commons.registry.fixer.RegistryFixer;
@@ -151,14 +152,23 @@ public class SettingsDialog extends JFrame implements MessagePushable {
 
     private void onOK() {
         try {
-            if (RegistryManager.isAutoUpdateActive() != autoUpdateEnabledCheckBox.isSelected()) {
-                RegistryManager.setAutoUpdateActive(autoUpdateEnabledCheckBox.isSelected());
-            }
-            dispose();
+            updateRegistryAndDispose();
         } catch (RegistryException e) {
             log.warn("Can not save settings: " + RegistryManager.KEY_AUTO_UPDATE, e);
-            UserUtils.showWarningMessageToUser(this, errorMessageTitle, canNotSaveSettingsToRegistryMessage);
+            try {
+                RegistryFixer.fixRegistryAnyway();
+                updateRegistryAndDispose();
+            } catch (Exception e1) {
+                UserUtils.showWarningMessageToUser(this, errorMessageTitle, canNotSaveSettingsToRegistryMessage);
+            }
         }
+    }
+
+    private void updateRegistryAndDispose() throws RegistryCanNotReadInfoException, RegistryCanNotWriteInfoException {
+        if (RegistryManager.isAutoUpdateActive() != autoUpdateEnabledCheckBox.isSelected()) {
+            RegistryManager.setAutoUpdateActive(autoUpdateEnabledCheckBox.isSelected());
+        }
+        dispose();
     }
 
     private void onCancel() {
