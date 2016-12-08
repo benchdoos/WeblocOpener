@@ -12,7 +12,7 @@ import java.net.URI;
  * Created by Eugene Zrazhevsky on 03.12.2016.
  */
 public class UserUtils {
-    private static final int MAXIMUM_MESSAGE_SIZE = 150;
+    public static final int MAXIMUM_MESSAGE_SIZE = 150;
 
     public static void showErrorMessageToUser(Component parentComponent, String title, String message) {
         FrameUtils.shakeFrame(parentComponent);
