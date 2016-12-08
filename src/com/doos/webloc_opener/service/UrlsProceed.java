@@ -3,9 +3,9 @@ package com.doos.webloc_opener.service;
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListParser;
 import com.doos.commons.utils.Logging;
+import com.doos.commons.utils.UserUtils;
 import org.apache.log4j.Logger;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +37,7 @@ public class UrlsProceed {
             }
         } catch (IOException e) {
             log.warn("Can not open url: " + url, e);
-            JOptionPane.showMessageDialog(null, "URL is corrupt: " + url);
+            UserUtils.showWarningMessageToUser(null, null, "URL is corrupt: " + url);
         }
 
     }
