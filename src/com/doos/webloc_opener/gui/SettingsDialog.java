@@ -9,6 +9,8 @@ import com.doos.commons.registry.fixer.RegistryFixerAppVersionKeyFailException;
 import com.doos.commons.registry.fixer.RegistryFixerAutoUpdateKeyFailException;
 import com.doos.commons.registry.fixer.RegistryFixerInstallPathKeyFailException;
 import com.doos.commons.utils.FrameUtils;
+import com.doos.commons.utils.MessagePushable;
+import com.doos.commons.utils.UserUtils;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
@@ -22,7 +24,7 @@ import java.io.IOException;
 
 import static com.doos.commons.utils.Logging.getCurrentClassName;
 
-public class SettingsDialog extends JFrame {
+public class SettingsDialog extends JFrame implements MessagePushable {
     private static final Logger log = Logger.getLogger(getCurrentClassName());
 
     private JPanel contentPane;
@@ -33,10 +35,13 @@ public class SettingsDialog extends JFrame {
     private JLabel versionLabel;
     private JLabel versionStringLabel;
     private JButton aboutButton;
+    private JTextPane errorTextPane;
+    private JPanel errorPanel;
 
 
-    private String errorMessage = "Error";
+    private String errorMessageTitle = "Error";
     private String canNotSaveSettingsToRegistryMessage = "Can not save settings to registry.";
+    private Timer messageTimer;
 
     public SettingsDialog() {
         setContentPane(contentPane);
@@ -53,9 +58,7 @@ public class SettingsDialog extends JFrame {
 
         updateNowButton.addActionListener(e -> onUpdateNow());
 
-        aboutButton.addActionListener(e -> {
-            onAbout();
-        });
+        aboutButton.addActionListener(e -> onAbout());
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -101,7 +104,7 @@ public class SettingsDialog extends JFrame {
                 updateNowButton.setText(messages.getString("updateNowButton"));
 
                 canNotSaveSettingsToRegistryMessage = messages.getString("canNotSaveSettingsToRegistryMessage");
-                errorMessage = messages.getString("errorMessage");
+                errorMessageTitle = messages.getString("errorMessage");
             }
         };
         translation.initTranslations();
@@ -151,16 +154,56 @@ public class SettingsDialog extends JFrame {
             if (RegistryManager.isAutoUpdateActive() != autoUpdateEnabledCheckBox.isSelected()) {
                 RegistryManager.setAutoUpdateActive(autoUpdateEnabledCheckBox.isSelected());
             }
+            dispose();
         } catch (RegistryException e) {
-            log.warn("Can not save settings change", e);
-            JOptionPane.showMessageDialog(null, errorMessage,
-                    canNotSaveSettingsToRegistryMessage,
-                    JOptionPane.ERROR_MESSAGE);
+            log.warn("Can not save settings: " + RegistryManager.KEY_AUTO_UPDATE, e);
+            UserUtils.showWarningMessageToUser(this, errorMessageTitle, canNotSaveSettingsToRegistryMessage);
         }
-        dispose();
     }
 
     private void onCancel() {
         dispose();
     }
+
+    @Override
+    public void showMessage(String message, int messageValue) {
+        errorPanel.setBackground(MessagePushable.getMessageColor(messageValue));
+
+        boolean wasVisible = errorPanel.isVisible();
+        errorPanel.setVisible(true);
+        errorTextPane.setText(message);
+
+        if (!wasVisible) {
+            updateSize(UpdateMode.BEFORE_HIDE);
+        }
+
+        if (messageTimer != null) {
+            messageTimer.stop();
+        }
+
+        messageTimer = new Timer(DEFAULT_TIMER_DELAY, e -> {
+            errorTextPane.setText("");
+            errorPanel.setVisible(false);
+            updateSize(UpdateMode.AFTER_HIDE);
+        });
+        messageTimer.setRepeats(false);
+        messageTimer.start();
+    }
+
+    private void updateSize(UpdateMode mode) {
+
+        setResizable(true);
+        revalidate();
+        final int DEFAULT_APPLICATION_WIDTH = 350;
+        if (mode == UpdateMode.BEFORE_HIDE) {
+            pack();
+            setSize(new Dimension(DEFAULT_APPLICATION_WIDTH, getHeight()));
+        } else if (mode == UpdateMode.AFTER_HIDE) {
+            setSize(new Dimension(DEFAULT_APPLICATION_WIDTH, 200));
+        }
+        setResizable(false);
+
+    }
+
+    enum UpdateMode {BEFORE_HIDE, AFTER_HIDE}
 }
