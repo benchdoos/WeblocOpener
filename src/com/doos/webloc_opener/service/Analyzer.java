@@ -1,9 +1,9 @@
 package com.doos.webloc_opener.service;
 
+import com.doos.commons.utils.UserUtils;
 import com.doos.webloc_opener.gui.EditDialog;
 import org.apache.log4j.Logger;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -42,16 +42,17 @@ public class Analyzer {
             this.url = url;
         } catch (NullPointerException e) {
             log.warn("URL in file [" + file + "] has empty link.", e);
-            assert file != null;
-            new EditDialog(file.getAbsolutePath()).setVisible(true);
+            if (file != null) {
+                new EditDialog(file.getAbsolutePath()).setVisible(true);
+            }
         } catch (IOException e) {
             String message = "Can not read file [" + file + "]";
             log.warn(message, e);
-            JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+            UserUtils.showErrorMessageToUser(null, "Error", message);
         } catch (Exception e) {
             final String message = "URL in file [" + file + "] is corrupt.";
             log.warn(message, e);
-            JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
+            UserUtils.showErrorMessageToUser(null, "Error", message);
             if (file != null) {
                 new EditDialog(file.getAbsolutePath()).setVisible(true);
             }
