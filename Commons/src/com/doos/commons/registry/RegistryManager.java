@@ -29,9 +29,18 @@ public class RegistryManager {
     private static final WinReg.HKEY APP_ROOT_HKEY = WinReg.HKEY_CURRENT_USER;
     private static final Properties settings = new Properties();
 
+    public static void repealSettings() {
+        log.info("[REGISTRY MANAGER] Setting settings to empty");
+        settings.setProperty(KEY_CURRENT_VERSION, "");
+        settings.setProperty(KEY_INSTALL_LOCATION, "");
+        settings.setProperty(KEY_AUTO_UPDATE, "");
+        settings.setProperty(KEY_APP_NAME, "");
+        settings.setProperty(KEY_URL_UPDATE_LINK, "");
+    }
+
     public static String getInstallLocationValue() throws RegistryCanNotReadInfoException {
 
-        if (settings.getProperty(KEY_INSTALL_LOCATION) == null) {
+        if (settings.getProperty(KEY_INSTALL_LOCATION) == null || settings.getProperty(KEY_INSTALL_LOCATION).isEmpty()) {
             try {
                 String value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
                                                                    REGISTRY_APP_PATH,
@@ -56,7 +65,7 @@ public class RegistryManager {
 
     public static String getAppVersionValue() throws RegistryCanNotReadInfoException {
 
-        if (settings.getProperty(KEY_CURRENT_VERSION) == null) {
+        if (settings.getProperty(KEY_CURRENT_VERSION) == null || settings.getProperty(KEY_CURRENT_VERSION).isEmpty()) {
             try {
                 String result = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
                                                                     REGISTRY_APP_PATH,
@@ -74,7 +83,7 @@ public class RegistryManager {
     }
 
     public static boolean isAutoUpdateActive() throws RegistryCanNotReadInfoException {
-        if (settings.getProperty(KEY_AUTO_UPDATE) == null) {
+        if (settings.getProperty(KEY_AUTO_UPDATE) == null || settings.getProperty(KEY_AUTO_UPDATE).isEmpty()) {
             try {
                 String value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY, REGISTRY_APP_PATH, KEY_AUTO_UPDATE);
 
@@ -94,7 +103,7 @@ public class RegistryManager {
 
     @SuppressWarnings("UnusedReturnValue")
     public static String getAppNameValue() throws RegistryCanNotReadInfoException {
-        if (settings.getProperty(KEY_APP_NAME) == null) {
+        if (settings.getProperty(KEY_APP_NAME) == null || settings.getProperty(KEY_APP_NAME).isEmpty()) {
             try {
                 String value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
                                                                    REGISTRY_APP_PATH,
@@ -116,7 +125,7 @@ public class RegistryManager {
     @SuppressWarnings("UnusedReturnValue")
     public static String getURLUpdateValue() throws RegistryCanNotReadInfoException {
 
-        if (settings.getProperty(KEY_URL_UPDATE_LINK) == null) {
+        if (settings.getProperty(KEY_URL_UPDATE_LINK) == null || settings.getProperty(KEY_URL_UPDATE_LINK).isEmpty()) {
             try {
                 String value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
                                                                    REGISTRY_APP_PATH,
