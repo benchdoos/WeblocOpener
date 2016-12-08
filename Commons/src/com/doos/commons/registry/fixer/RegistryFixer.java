@@ -34,19 +34,26 @@ public class RegistryFixer { //TODO Enable logging
             checkRegistry();
         } catch (RegistryException e) {
             log.info("Something is wrong with registry.", e);
-            log.info("[REGISTRY FIXER] Trying to check and fix registry values. [REGISTRY FIXER]");
-            fixRootRegistryUnit();
-            fixAutoUpdateValue();
-            fixAppVersionValue();
-            fixInstallLocationValue();
-            fixAppNameValue();
-            fixUpdateUrlValue();
-
-            fixCapabilitiesRegistryUnit();
-            fixFileAssociationsRegistryUnit();
-            fixApplicationDescriptionValue();
-            fixFileAssociationsValues();
+            fixRegistryAnyway();
         }
+    }
+
+    public static void fixRegistryAnyway() throws RegistryFixerAutoUpdateKeyFailException,
+            RegistryFixerAppVersionKeyFailException, FileNotFoundException, RegistryFixerInstallPathKeyFailException {
+        log.info("[REGISTRY FIXER] Trying to check and fix registry values. [REGISTRY FIXER]");
+        RegistryManager.repealSettings();
+
+        fixRootRegistryUnit();
+        fixAutoUpdateValue();
+        fixAppVersionValue();
+        fixInstallLocationValue();
+        fixAppNameValue();
+        fixUpdateUrlValue();
+
+        fixCapabilitiesRegistryUnit();
+        fixFileAssociationsRegistryUnit();
+        fixApplicationDescriptionValue();
+        fixFileAssociationsValues();
     }
 
     private static void fixRootRegistryUnit() {
