@@ -3,6 +3,7 @@ package com.doos.webloc_opener.gui;
 import com.doos.commons.core.ApplicationConstants;
 import com.doos.commons.core.Translation;
 import com.doos.commons.utils.FrameUtils;
+import com.doos.commons.utils.UserUtils;
 import com.doos.webloc_opener.service.UrlsProceed;
 import com.doos.webloc_opener.service.gui.ClickListener;
 import org.apache.log4j.Logger;
@@ -77,7 +78,7 @@ public class EditDialog extends JFrame {
 
         // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                                           JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         createWeblocFileTextPane.setBackground(new Color(232, 232, 232));
 
@@ -161,9 +162,9 @@ public class EditDialog extends JFrame {
             dispose();
         } catch (MalformedURLException e) {
             log.warn("Can not parse URL: [" + textField1.getText() + "]", e);
-            FrameUtils.shakeFrame(this);
-            JOptionPane.showMessageDialog(this, incorrectUrlMessage + ": [" + textField1.getText() + "]", errorTitle,
-                                          JOptionPane.ERROR_MESSAGE);
+            UserUtils.showWarningMessageToUser(this, errorTitle,
+                    incorrectUrlMessage + ": [" + textField1.getText()
+                            .substring(0, Math.min(textField1.getText().length(), UserUtils.MAXIMUM_MESSAGE_SIZE - 1)) + "]");
         }
 
     }
