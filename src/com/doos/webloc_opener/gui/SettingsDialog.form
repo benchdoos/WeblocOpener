@@ -134,8 +134,10 @@
               <foreground color="-1"/>
               <opaque value="false"/>
               <requestFocusEnabled value="false"/>
-              <selectionEnd value="5"/>
+              <selectionEnd value="0"/>
+              <selectionStart value="0"/>
               <text value="Error"/>
+              <verifyInputWhenFocusTarget value="false"/>
             </properties>
           </component>
         </children>
