@@ -102,19 +102,19 @@ public class SystemUtils {
         int megabyte = 1024 * 1024;
 
 
-        return "==========================System=========================" + "\n" +
-                "System:" + "\n" +
+        return "==========================System=========================" + "\r\n" +
+                "System:" + "\r\n" +
                 "\tOS: " + os.getManufacturer() + " " + os.getFamily() +
-                " Version: " + os.getVersion() + " x" + getRealSystemArch() + "\n" +
-                "Hardware:" + "\n" +
-                "\tProcessors: " + Runtime.getRuntime().availableProcessors() + "\n" +
-                "\tTotal JVM memory: " + Runtime.getRuntime().maxMemory() / megabyte + " mb\n" +
-                "Java:" + "\n" +
+                " Version: " + os.getVersion() + " x" + getRealSystemArch() + "\r\n" +
+                "Hardware:" + "\r\n" +
+                "\tProcessors: " + Runtime.getRuntime().availableProcessors() + "\r\n" +
+                "\tTotal JVM memory: " + Runtime.getRuntime().maxMemory() / megabyte + " mb\r\n" +
+                "Java:" + "\r\n" +
                 "\tJava version: " + System.getProperty("java.specification.version") + "(" +
-                System.getProperty("java.version") + ")" + "\n" +
+                System.getProperty("java.version") + ")" + "\r\n" +
                 "\t" + System.getProperty("java.runtime.name") + " v" +
-                System.getProperty("java.vm.version") + "\n" +
-                "=========================================================" + "\n";
+                System.getProperty("java.vm.version") + "\r\n" +
+                "=========================================================" + "\r\n";
     }
 
     enum OS {WINDOWS, MAC_OS, UNIX, SOLARIS}
