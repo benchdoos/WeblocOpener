@@ -8,6 +8,7 @@ import java.io.File;
  * Created by Eugene Zrazhevsky on 30.10.2016.
  */
 public class Logging {
+    public static final File LOG_FOLDER = new File(ApplicationConstants.APP_LOG_FOLDER_PATH);
     private String collingApp;
 
     public Logging(String collingAppName) {
@@ -34,17 +35,17 @@ public class Logging {
      * Checks folders for Log4j, creates them, if needed.
      */
     private void checkFolders() {
-        File logFolder = new File(ApplicationConstants.APP_LOG_FOLDER_PATH);
+
         File infoLogFolder = new File(ApplicationConstants.APP_LOG_FOLDER_PATH + File.separator + collingApp
-                                              + File.separator + "INFO");
+                + File.separator + "INFO");
         File warnLogFolder = new File(ApplicationConstants.APP_LOG_FOLDER_PATH + File.separator + collingApp
-                                              + File.separator + "WARN");
+                + File.separator + "WARN");
         File debugLogFolder = new File(ApplicationConstants.APP_LOG_FOLDER_PATH + File.separator + collingApp
-                                               + File.separator + "DEBUG");
-        if (!logFolder.exists()) {
-            boolean success = logFolder.mkdirs();
+                + File.separator + "DEBUG");
+        if (!LOG_FOLDER.exists()) {
+            boolean success = LOG_FOLDER.mkdirs();
             if (!success) {
-                System.out.println("Could not create file: " + logFolder.getAbsolutePath());
+                System.out.println("Could not create file: " + LOG_FOLDER.getAbsolutePath());
             }
         }
 

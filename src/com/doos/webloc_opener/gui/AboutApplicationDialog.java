@@ -3,6 +3,7 @@ package com.doos.webloc_opener.gui;
 import com.doos.commons.core.ApplicationConstants;
 import com.doos.commons.core.Translation;
 import com.doos.commons.utils.FrameUtils;
+import com.doos.commons.utils.Logging;
 import com.doos.commons.utils.UserUtils;
 import org.apache.log4j.Logger;
 
@@ -28,6 +29,7 @@ public class AboutApplicationDialog extends JDialog {
     private JLabel visitGithubLabel;
     private JLabel siteLinkLabel;
     private JLabel githubLinkLabel;
+    private JLabel logFolderLabel;
 
     public AboutApplicationDialog() {
 
@@ -72,6 +74,20 @@ public class AboutApplicationDialog extends JDialog {
                     }
                 });
                 githubLinkLabel.setToolTipText(ApplicationConstants.GITHUB_WEB_URL);
+
+                logFolderLabel.setText("<html><a href=\"\">" + messages.getString("logFolderLabel") + "</a></html>");
+                logFolderLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                logFolderLabel.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        try {
+                            Desktop.getDesktop().open(Logging.LOG_FOLDER);
+                        } catch (IOException e1) {
+                            log.warn("Can not open log folder: " + Logging.LOG_FOLDER);
+                        }
+                    }
+                });
+                logFolderLabel.setToolTipText(messages.getString("logFolderLabel"));
             }
         };
         translation.initTranslations();
