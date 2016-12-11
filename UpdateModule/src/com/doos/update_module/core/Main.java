@@ -78,7 +78,7 @@ public class Main {
                         } catch (RegistryCanNotWriteInfoException ignore) {/*NOP*/}
                     }
 
-                    System.out.println(RegistryManager.KEY_AUTO_UPDATE + " : " + isAutoUpdate);
+                    log.debug(RegistryManager.KEY_AUTO_UPDATE + " : " + isAutoUpdate);
                     if (isAutoUpdate) {
                         new NonGuiUpdater();
                     }
@@ -100,7 +100,10 @@ public class Main {
                     break;
                 default:
                     mode = Mode.ERROR;
-                    System.out.println("No such argument: [" + args[0] + "]");
+                    String message = "No such argument: [" + args[0] + "]";
+                    log.warn(message);
+                    UserUtils.showWarningMessageToUser(null, null,
+                            message);
                     break;
             }
         } else {
