@@ -2,11 +2,13 @@ package com.doos.update_module.update;
 
 
 import com.doos.commons.core.ApplicationConstants;
+import com.doos.update_module.core.Main;
 import com.doos.update_module.gui.UpdateDialog;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.apache.log4j.Logger;
 import org.bridj.Pointer;
 import org.bridj.PointerIO;
 import org.bridj.cpp.com.COMRuntime;
@@ -18,6 +20,7 @@ import javax.swing.*;
 import java.io.*;
 import java.net.URL;
 
+import static com.doos.commons.utils.Logging.getCurrentClassName;
 import static com.doos.commons.utils.UserUtils.showErrorMessageToUser;
 
 /**
@@ -25,6 +28,8 @@ import static com.doos.commons.utils.UserUtils.showErrorMessageToUser;
  */
 @SuppressWarnings({"ALL", "ResultOfMethodCallIgnored"})
 public class Updater {
+    private static final Logger log = Logger.getLogger(getCurrentClassName());
+
     private static final String githubUrl = "https://api.github.com/repos/benchdoos/WeblocOpener/releases/latest";
     private static final String DEFAULT_ENCODING = "UTF-8";
     public static File installerFile = null;
@@ -48,40 +53,28 @@ public class Updater {
 
         try {
             String input;
-            try (BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING))) {
-                input = bufferedReader.readLine();
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING));
 
-                JsonParser parser = new JsonParser();
-                JsonObject root = parser.parse(input).getAsJsonObject();
+            input = bufferedReader.readLine();
 
-                appVersion = new AppVersion();
-                appVersion.setVersion(root.getAsJsonObject().get("tag_name").getAsString());
+            JsonParser parser = new JsonParser();
+            JsonObject root = parser.parse(input).getAsJsonObject();
 
-                JsonArray asserts = root.getAsJsonArray("assets");
-                for (JsonElement assert_ : asserts) {
-                    JsonObject userObject = assert_.getAsJsonObject();
-                    if (userObject.get("name").getAsString().equals("WeblocOpenerSetup.exe")) {
-                        appVersion.setDownloadUrl(userObject.get("browser_download_url").getAsString());
-                        appVersion.setSize(userObject.get("size").getAsLong());
-                    }
-                }
-            } catch (NullPointerException e) {
-                e.getStackTrace();
-                showErrorMessageToUser(null, "Can not Update", "Can not connect to api.github.com \n" + e.getMessage());
-
+            appVersion = new AppVersion();
+            formAppVersionFromJson(root);
+        } catch (IOException | NullPointerException e) {
+            String message = "Can not connect to api.github.com";
+            log.warn(message, e);
+            if (Main.mode != Main.Mode.SILENT) {
+                showErrorMessageToUser(null, "Can not Update", message);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-
-            showErrorMessageToUser(null, "Can not Update", "Can not connect to api.github.com");
         }
     }
 
-
     public static int startUpdate(AppVersion appVersion) {
-        installerFile = new File(ApplicationConstants.UPDATE_PATH_FILE
-                                         + "WeblocOpenerSetupV" + appVersion.getVersion() + ".exe");
+        installerFile = new File(ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
+                + appVersion.getVersion() + ".exe");
         if (!Thread.currentThread().isInterrupted()) {
             if (!installerFile.exists()) {
                 installerFile = downloadNewVersionInstaller(appVersion);
@@ -196,7 +189,7 @@ public class Updater {
                                 if (list != null) {
                                     //noinspection unchecked
                                     list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
-                                                          progressBar.getMaximum());
+                                            progressBar.getMaximum());
                                 }
                             }
                             break;
@@ -210,7 +203,7 @@ public class Updater {
                                 if (list != null) {
                                     //noinspection unchecked
                                     list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
-                                                          progressBar.getMaximum());
+                                            progressBar.getMaximum());
                                 }
                             }
                         }
@@ -242,6 +235,19 @@ public class Updater {
             e.printStackTrace();
         }
         return installerFile;
+    }
+
+    public void formAppVersionFromJson(JsonObject root) {
+        appVersion.setVersion(root.getAsJsonObject().get("tag_name").getAsString());
+
+        JsonArray asserts = root.getAsJsonArray("assets");
+        for (JsonElement assert_ : asserts) {
+            JsonObject userObject = assert_.getAsJsonObject();
+            if (userObject.get("name").getAsString().equals("WeblocOpenerSetup.exe")) {
+                appVersion.setDownloadUrl(userObject.get("browser_download_url").getAsString());
+                appVersion.setSize(userObject.get("size").getAsLong());
+            }
+        }
     }
 
     private HttpsURLConnection getConnection() throws IOException {
