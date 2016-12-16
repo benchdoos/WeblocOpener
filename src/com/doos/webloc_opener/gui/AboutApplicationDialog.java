@@ -14,6 +14,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import static com.doos.commons.utils.Logging.getCurrentClassName;
 
@@ -30,6 +32,7 @@ public class AboutApplicationDialog extends JDialog {
     private JLabel siteLinkLabel;
     private JLabel githubLinkLabel;
     private JLabel logFolderLabel;
+    private JLabel feedbackLabel;
 
     public AboutApplicationDialog() {
 
@@ -58,7 +61,7 @@ public class AboutApplicationDialog extends JDialog {
                 siteLinkLabel.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        UserUtils.openAppGithubPage(ApplicationConstants.UPDATE_WEB_URL);
+                        UserUtils.openWebUrl(ApplicationConstants.UPDATE_WEB_URL);
                     }
                 });
                 siteLinkLabel.setToolTipText(ApplicationConstants.UPDATE_WEB_URL);
@@ -70,7 +73,7 @@ public class AboutApplicationDialog extends JDialog {
                 githubLinkLabel.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        UserUtils.openAppGithubPage(ApplicationConstants.GITHUB_WEB_URL);
+                        UserUtils.openWebUrl(ApplicationConstants.GITHUB_WEB_URL);
                     }
                 });
                 githubLinkLabel.setToolTipText(ApplicationConstants.GITHUB_WEB_URL);
@@ -88,6 +91,24 @@ public class AboutApplicationDialog extends JDialog {
                     }
                 });
                 logFolderLabel.setToolTipText(messages.getString("logFolderLabel"));
+
+                feedbackLabel.setText("<html><a href=\"\">" + "feedback" + "</a></html>");
+                feedbackLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                feedbackLabel.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        final String url = "mailto:weblocopener@gmail.com?subject=WeblocOpener%20feedback" +
+                                "&body=Type%20here%20your%20question%20/%20problem,%20I%20try%20to%20help%20you%20as%20soon%20as%20it%20is%20possible!" +
+                                "%0AYou%20can%20attach%20log%20files%20(see%20WeblocOpener%20-%20Settings%20-%20About%20-%20Log%20folder%20-%20zip%20log%20folder%20-%20attach)." +
+                                "%0ADon't%20forget%20to%20close%20the%20application%20before%20zipping%20logs;)";
+                        try {
+                            Desktop.getDesktop().mail(new URI(url));
+                        } catch (URISyntaxException | IOException ex) {
+                            log.warn("Can not open mail for: '" + url + "'", ex);
+                        }
+                    }
+                });
+                feedbackLabel.setToolTipText(messages.getString("logFolderLabel"));
             }
         };
         translation.initTranslations();
