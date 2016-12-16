@@ -45,6 +45,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
     private Timer messageTimer;
 
     public SettingsDialog() {
+        log.debug("Creating settings dialog.");
         setContentPane(contentPane);
 
 
@@ -84,6 +85,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
         setResizable(false);
         translateDialog();
+        log.debug("Settings dialog created.");
     }
 
     private void onAbout() {
@@ -116,13 +118,12 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         try {
             run = "java -jar \"" + RegistryManager.getInstallLocationValue()
                     + File.separator + "Updater.jar\"";
-
         } catch (RegistryCanNotReadInfoException e) {
-            e.printStackTrace();
             run = new File(SettingsDialog.class.getProtectionDomain()
                     .getCodeSource().getLocation().getPath()).getAbsolutePath().replace("%20", " ");
+            log.warn("Can not read registry, using alternate path: [" + run + "]", e);
         }
-        log.info("Running " + run);
+        log.info("Running: " + run);
         try {
             Runtime.getRuntime().exec(run);
         } catch (IOException e) {
@@ -158,8 +159,11 @@ public class SettingsDialog extends JFrame implements MessagePushable {
             try {
                 RegistryFixer.fixRegistryAnyway();
                 updateRegistryAndDispose();
-            } catch (Exception e1) {
+            } catch (FileNotFoundException | RegistryException e1) {
+                log.error("Can not fix registry", e1);
                 UserUtils.showWarningMessageToUser(this, errorMessageTitle, canNotSaveSettingsToRegistryMessage);
+            } catch (Exception e1) {
+                log.warn("Can not update settings", e1);
             }
         }
     }
