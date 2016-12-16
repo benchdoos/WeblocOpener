@@ -108,7 +108,6 @@ public class AboutApplicationDialog extends JDialog {
                         }
                     }
                 });
-                feedbackLabel.setToolTipText(messages.getString("logFolderLabel"));
             }
         };
         translation.initTranslations();
