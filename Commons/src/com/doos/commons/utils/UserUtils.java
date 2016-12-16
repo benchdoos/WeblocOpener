@@ -71,7 +71,7 @@ public class UserUtils {
         jEditorPane.setBackground(Color.getColor("#EEEEEE"));
         jEditorPane.addHyperlinkListener(e -> {
             if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
-                openAppGithubPage(ApplicationConstants.UPDATE_WEB_URL);
+                openWebUrl(ApplicationConstants.UPDATE_WEB_URL);
             }
 
         });
@@ -94,7 +94,7 @@ public class UserUtils {
                 "[WeblocOpener] " + title, messageType);
     }
 
-    public static void openAppGithubPage(String url) {
+    public static void openWebUrl(String url) {
         if (!Desktop.isDesktopSupported()) {
             return;
         }
