@@ -29,7 +29,7 @@ Watch [Youtube](https://youtu.be/Z-bT-VWMDsQ) video
 
 
 ## System Requirements
-
+<ul class="SystemRequirements">
     <b>Operating system:</b>
      Windows XP, Vista, 7, 8, 10 
     <b>CPU:</b>
@@ -41,6 +41,7 @@ Watch [Youtube](https://youtu.be/Z-bT-VWMDsQ) video
     <br>
     <b>Additional software:</b>
  Java 8 required - <a href="https://java.com/download/">Download</a> 
+</ul>
 
 
 
