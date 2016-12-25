@@ -31,16 +31,16 @@ Watch [Youtube](https://youtu.be/Z-bT-VWMDsQ) video
 ## System Requirements
 
 <ul class="SystemRequirements">
-    <li><b>Operating system:</b></li>
+    <b>Operating system:</b>
     <li>Windows XP, Vista, 7, 8, 10</li>
-    <li><b>CPU:</b></li>
+    <b>CPU:</b>
     <li>Pentium 2 266MHz or better</li>
-    <li><b>Memory:</b></li>
+    <b>Memory:</b>
     <li>128 MB RAM</li>
-    <li><b>Hard drive:</b></li>
+    <b>Hard drive:</b>
     <li>25 MB free hard disk space</li>
     <br>
-    <li><b>Additional software:</b></li>
+    <b>Additional software:</b>
 <li>Java 8 required - <a href="https://java.com/download/">Download</a></li>
 </ul>
 
