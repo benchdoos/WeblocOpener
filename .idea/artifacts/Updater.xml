@@ -7,7 +7,6 @@
       </element>
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/gson-2.8.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/commons-io-2.5.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="C:/Program Files (x86)/Java/jre1.8.0_111/lib/deploy.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/jna-4.2.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/jna-platform-4.2.2.jar" path-in-jar="/" />
       <element id="module-output" name="Commons" />
