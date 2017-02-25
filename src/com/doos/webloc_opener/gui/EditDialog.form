@@ -68,7 +68,6 @@
             </constraints>
             <properties>
               <font/>
-              <foreground color="-14328075"/>
               <text value=""/>
             </properties>
           </component>
@@ -135,7 +134,6 @@
           <component id="33fb" class="javax.swing.JTextPane" binding="errorTextPane">
             <constraints border-constraint="North"/>
             <properties>
-              <caretPosition value="0"/>
               <editable value="false"/>
               <focusCycleRoot value="false"/>
               <focusable value="false"/>

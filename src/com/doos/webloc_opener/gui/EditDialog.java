@@ -7,9 +7,12 @@ import com.doos.commons.utils.MessagePushable;
 import com.doos.commons.utils.UserUtils;
 import com.doos.webloc_opener.service.UrlsProceed;
 import com.doos.webloc_opener.service.gui.ClickListener;
+import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -87,16 +90,43 @@ public class EditDialog extends JFrame implements MessagePushable {
         createWeblocFileTextPane.setBackground(new Color(232, 232, 232));
 
 
-        Font font = textField1.getFont();
-        Map attributes = font.getAttributes();
-        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-        textField1.setFont(font.deriveFont(attributes));
-
         textField1.addMouseListener(new ClickListener() {
             @Override
             public void doubleClick(MouseEvent e) {
                 textField1.selectAll();
             }
+        });
+
+        textField1.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateTextFont();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateTextFont();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+
+            private void updateTextFont() {
+                UrlValidator urlValidator = new UrlValidator();
+                if (urlValidator.isValid(textField1.getText())) {
+                    if (textField1 != null) {
+                        setTextFieldFont(textField1.getFont(), TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+                        textField1.setForeground(Color.BLUE);
+                    }
+                } else {
+                    if (textField1 != null) {
+                        setTextFieldFont(textField1.getFont(), TextAttribute.UNDERLINE, -1);
+                        textField1.setForeground(Color.BLACK);
+                    }
+                }
+            }
+
         });
 
         fillTextField(pathToEditingFile);
@@ -112,6 +142,12 @@ public class EditDialog extends JFrame implements MessagePushable {
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
 
         log.debug("Got path path: [" + pathToEditingFile + "]");
+    }
+
+    public void setTextFieldFont(Font font, TextAttribute attribute1, int attribute2) {
+        Map attributes = font.getAttributes();
+        attributes.put(attribute1, attribute2);
+        textField1.setFont(font.deriveFont(attributes));
     }
 
     private void translateDialog() {
@@ -153,8 +189,12 @@ public class EditDialog extends JFrame implements MessagePushable {
         try {
             String data = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
             URL url = new URL(data);
-            textField1.setText(url.toString());
-            log.debug("Got URL from clipboard: " + url);
+            UrlValidator urlValidator = new UrlValidator();
+            if (urlValidator.isValid(data)) {
+                textField1.setText(url.toString());
+                setTextFieldFont(textField1.getFont(), TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+                log.debug("Got URL from clipboard: " + url);
+            }
         } catch (UnsupportedFlavorException | IllegalStateException | HeadlessException | IOException e) {
             textField1.setText("");
             log.warn("Can not read URL from clipboard.", e);
@@ -164,8 +204,13 @@ public class EditDialog extends JFrame implements MessagePushable {
     private void onOK() {
         try {
             URL url = new URL(textField1.getText());
-            UrlsProceed.createWebloc(url, path);
-            dispose();
+            UrlValidator urlValidator = new UrlValidator();
+            if (urlValidator.isValid(textField1.getText())) {
+                UrlsProceed.createWebloc(url, path);
+                dispose();
+            } else {
+                throw new MalformedURLException();
+            }
         } catch (MalformedURLException e) {
             log.warn("Can not parse URL: [" + textField1.getText() + "]", e);
 
