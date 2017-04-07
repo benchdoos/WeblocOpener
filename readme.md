@@ -3,6 +3,7 @@
 # WeblocOpener
 
 Visit website: [https://benchdoos.github.io/](https://benchdoos.github.io/)
+Download [Latest version](https://github.com/benchdoos/WeblocOpener/releases/latest)
 
 ## Introduction:
 WeblocOpener is a simple way to open, edit, create MacOS Safari `.webloc` files on Windows.
