@@ -34,6 +34,17 @@ So that's why this application was created - for these users.
 - **Auto-paste URL from clipboard when you created a new file. When you've just created an empty file, WeblocOpener helps you to paste copied URL into ULR-field. It automatically finds an URL in your clipboard.** [<img src="autopaste.png"  width="888" />](#what-can-weblocopener-do)
 - **Auto-update tool will help you receive new updates just from the server. You should not check, if there is an update, WeblocOpener updater will notify you if there is a new version of the app.** [<img src="autoupdate.png"  width="888" />](#what-can-weblocopener-do)
 
+## Supported features
+
+| Feature        | Windows       | UNIX           |  MacOS  |
+| -------------  |:-------------:|:-------------: |:-------:|
+| Open           | Yes           | In development | Default |
+| Edit           | Yes           | In development |   No    |
+| Create new     | Yes           | In development | Default |
+| URL auto-paste | Yes           | In development | WO feature |
+| Auto-update    | Yes           | In development | WO feature |
+| Open in not default browser    | No           | No | No |
+
 
 ## Have questions? 
 Watch [Youtube](https://youtu.be/Z-bT-VWMDsQ) video
