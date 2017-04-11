@@ -28,7 +28,7 @@ So that's why this application was created - for these users.
 
 ## What can WeblocOpener do?
 
-- **Open  MacOS Safari .webloc link on Windows on your default browser.** [<img src="open.png"  width="888" />](#what-can-weblocopener-do)
+- **Open  MacOS Safari .webloc link on Windows on your default browser.** ![alt text](open.png "Logo Title Text 1") 
 - **Create new .webloc files. Created files are fully supported by Safari on MacOS and WeblocOpener on Windows.** [<img src="edit.png"  width="888" />](#what-can-weblocopener-do)
 - **Edit created files. Unlike .webloc files on MacOS that can not be edited by default (except for text editors), WeblocOpener provides the ability to edit .webloc files on Windows.** [<img src="create.png"  width="888" />](#what-can-weblocopener-do)
 - **Auto-paste URL from clipboard when you created a new file. When you've just created an empty file, WeblocOpener helps you to paste copied URL into ULR-field. It automatically finds an URL in your clipboard.** [<img src="autopaste.png"  width="888" />](#what-can-weblocopener-do)
