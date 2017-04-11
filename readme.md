@@ -43,7 +43,7 @@ So that's why this application was created - for these users.
 | Create new     | Yes           | In development | Default |
 | URL auto-paste | Yes           | In development | WO feature |
 | Auto-update    | Yes           | In development | WO feature |
-| Open in not default browser    | No           | No | No |
+| Open in not default browser    | Not yet           | Not yet | Safari only |
 
 
 ## Have questions? 
