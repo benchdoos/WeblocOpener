@@ -28,11 +28,11 @@ So that's why this application was created - for these users.
 
 ## What can WeblocOpener do?
 
-- Open  MacOS Safari .webloc link on Windows on your default browser [<img src="open.png"  width="888" />]()
-- Create new .webloc files [<img src="edit.png"  width="888" />](#)
-- Edit created files [<img src="create.png"  width="888" />](#)
-- Auto-paste URL from clipboard when you created a new file [<img src="autopaste.png"  width="888" />](#)
-- Auto-update tool will help you receive new updates just from the server [<img src="autoupdate.png"  width="888" />](#)
+- Open  MacOS Safari .webloc link on Windows on your default browser [<img src="open.png"  width="888" />](#what-can-weblocopener-do)
+- Create new .webloc files [<img src="edit.png"  width="888" />](#what-can-weblocopener-do)
+- Edit created files [<img src="create.png"  width="888" />](#what-can-weblocopener-do)
+- Auto-paste URL from clipboard when you created a new file [<img src="autopaste.png"  width="888" />](#what-can-weblocopener-do)
+- Auto-update tool will help you receive new updates just from the server [<img src="autoupdate.png"  width="888" />](#what-can-weblocopener-do)
 
 
 ## Have questions? 
