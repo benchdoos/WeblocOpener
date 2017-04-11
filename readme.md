@@ -48,12 +48,12 @@ So that's why this application was created - for these users.
 
 | Feature        | Windows       | UNIX           |  MacOS  |
 | -------------  |:-------------:|:-------------: |:-------:|
-| Open           | Yes           | In development | Default |
+| Open           | Yes           | In development | Safari only |
 | Edit           | Yes           | In development |   No    |
 | Create new     | Yes           | In development | Default |
 | URL auto-paste | Yes           | In development | WO feature |
 | Auto-update    | Yes           | In development | WO feature |
-| Open in not default browser    | Not yet           | Not yet | Safari only |
+| Open in not default browser    | Not yet           | Not yet | Not |
 
 
 ## Have questions? 
