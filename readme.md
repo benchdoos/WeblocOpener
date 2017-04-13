@@ -3,6 +3,7 @@
 # WeblocOpener
 
 Visit website: [https://benchdoos.github.io/](https://benchdoos.github.io/)
+Subscribe on telegram [channel](https://t.me/WeblocOpener)
 
 Download [Latest version](https://github.com/benchdoos/WeblocOpener/releases/latest)
 
