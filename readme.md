@@ -1,10 +1,10 @@
-[<img src="new_header.png" align="right" width="888" />](https://benchdoos.github.io/)
+[<img src="new_header.png" align="right" width="888" />](https://vk.cc/6wK76Z)
 
 # WeblocOpener
 
-Visit website: [https://benchdoos.github.io/](https://benchdoos.github.io/)
+Visit website: [https://benchdoos.github.io/](https://vk.cc/6wK76Z)
 
-Subscribe on telegram [channel](https://t.me/WeblocOpener)
+Subscribe on telegram [channel](https://vk.cc/6wK7k1)
 
 Download [Latest version](https://vk.cc/6wK3sP)
 
@@ -59,7 +59,7 @@ So that's why this application was created - for these users.
 
 
 ## Have questions? 
-Watch [Youtube](https://youtu.be/Z-bT-VWMDsQ) video
+Watch [Youtube](https://vk.cc/6wK7X5) video
 
 
 ## System Requirements
@@ -82,4 +82,4 @@ Watch [Youtube](https://youtu.be/Z-bT-VWMDsQ) video
 ## Download:
 Windows:
 
-[Latest version](https://github.com/benchdoos/WeblocOpener/releases/latest) v1.3.1
+[Latest version](https://vk.cc/6wK3sP) v1.3.1
