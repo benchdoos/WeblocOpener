@@ -38,6 +38,8 @@ public class Updater {
     private static HttpsURLConnection connection = null;
     private AppVersion appVersion = null;
 
+    private static final String WINDOWS_SETUP_DEFAULT_NAME = "WeblocOpenerSetup.exe";
+
 
     public Updater() throws IOException, NullPointerException {
         try {
@@ -69,10 +71,11 @@ public class Updater {
     }
 
     public static void canNotConnectManage(Exception e) {
+        String title = "Can not Update";
         String message = "Can not connect to api.github.com";
         log.warn(message, e);
         if (Main.mode != Main.Mode.SILENT) {
-            showErrorMessageToUser(null, "Can not Update", message);
+            showErrorMessageToUser(null, title, message);
         }
     }
 
@@ -231,6 +234,7 @@ public class Updater {
 
             if (Thread.currentThread().isInterrupted()) {
                 installerFile.delete();
+                installerFile.deleteOnExit();
             }
             if (list != null) {
                 list.Release();
@@ -241,14 +245,19 @@ public class Updater {
     }
 
     public void formAppVersionFromJson(JsonObject root) {
+        String browser_download_url = "browser_download_url";
+        String assets = "assets";
+        String name = "name";
+        String size = "size";
+
         appVersion.setVersion(root.getAsJsonObject().get("tag_name").getAsString());
 
-        JsonArray asserts = root.getAsJsonArray("assets");
+        JsonArray asserts = root.getAsJsonArray(assets);
         for (JsonElement assert_ : asserts) {
             JsonObject userObject = assert_.getAsJsonObject();
-            if (userObject.get("name").getAsString().equals("WeblocOpenerSetup.exe")) {
-                appVersion.setDownloadUrl(userObject.get("browser_download_url").getAsString());
-                appVersion.setSize(userObject.get("size").getAsLong());
+            if (userObject.get(name).getAsString().equals(WINDOWS_SETUP_DEFAULT_NAME)) {
+                appVersion.setDownloadUrl(userObject.get(browser_download_url).getAsString());
+                appVersion.setSize(userObject.get(size).getAsLong());
             }
         }
     }
