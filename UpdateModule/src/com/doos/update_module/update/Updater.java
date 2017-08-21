@@ -2,6 +2,7 @@ package com.doos.update_module.update;
 
 
 import com.doos.commons.core.ApplicationConstants;
+import com.doos.commons.core.Translation;
 import com.doos.update_module.core.Main;
 import com.doos.update_module.gui.UpdateDialog;
 import com.google.gson.JsonArray;
@@ -18,7 +19,6 @@ import org.bridj.jawt.JAWTUtils;
 import javax.net.ssl.HttpsURLConnection;
 import javax.swing.*;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import static com.doos.commons.core.ApplicationConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME;
@@ -40,8 +40,14 @@ public class Updater {
 
     private static final String WINDOWS_SETUP_DEFAULT_NAME = "WeblocOpenerSetup.exe";
 
+    private static Translation translation;
+
+    private static String canNotUpdateTitle = "Can not Update";
+    private static String canNotUpdateMessage = "Can not connect to api.github.com";
+
 
     public Updater() throws IOException, NullPointerException {
+        translateMessages();
         try {
             getConnection();
             if (!connection.getDoOutput()) {
@@ -70,12 +76,23 @@ public class Updater {
 
     }
 
+    private void translateMessages(){
+        translation = new Translation("translations/UpdaterBundle") {
+            @Override
+            public void initTranslations() {
+                canNotUpdateTitle = messages.getString("canNotUpdateTitle");
+                canNotUpdateMessage = messages.getString("canNotUpdateMessage");
+            }
+        };
+        translation.initTranslations();
+    }
+
     public static void canNotConnectManage(Exception e) {
-        String title = "Can not Update";
-        String message = "Can not connect to api.github.com";
-        log.warn(message, e);
+
+
+        log.warn(canNotUpdateMessage, e);
         if (Main.mode != Main.Mode.SILENT) {
-            showErrorMessageToUser(null, title, message);
+            showErrorMessageToUser(null, canNotUpdateTitle, canNotUpdateMessage);
         }
     }
 

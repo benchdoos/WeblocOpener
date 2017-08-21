@@ -1,6 +1,7 @@
 package com.doos.commons.utils;
 
 import com.doos.commons.core.ApplicationConstants;
+import com.doos.commons.core.Translation;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
@@ -8,11 +9,16 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 
+import static com.doos.commons.core.ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME;
+
 /**
  * Created by Eugene Zrazhevsky on 03.12.2016.
  */
 public class UserUtils {
     public static final int MAXIMUM_MESSAGE_SIZE = 150;
+    static String pleaseVisitMessage = "Please visit";
+    static Translation translation;
+
 
     public static void showErrorMessageToUser(Component parentComponent, String title, String message) {
         FrameUtils.shakeFrame(parentComponent);
@@ -35,6 +41,7 @@ public class UserUtils {
     }
 
     private static void showMessage(Component parentComponent, String title, String message, int messageLevel) {
+        translateMessage();
         if (message.length() > MAXIMUM_MESSAGE_SIZE) {
             message = message.substring(0, Math.min(message.length(), MAXIMUM_MESSAGE_SIZE)) + "...";
         }
@@ -52,13 +59,23 @@ public class UserUtils {
             String msg;
             if (messageLevel == MessagePushable.ERROR_MESSAGE) {
 
-                msg = "<HTML><BODY><P>" + message + " <br>Please visit " +
+                msg = "<HTML><BODY><P>" + message + " <br>" + pleaseVisitMessage + " " +
                         "<a href=\"" + ApplicationConstants.UPDATE_WEB_URL + "\">" + ApplicationConstants.UPDATE_WEB_URL + "</P></BODY></HTML>";
             } else {
                 msg = message;
             }
             showDefaultSystemErrorMessage(parentComponent, title, msg, messageLevel);
         }
+    }
+
+    private static void translateMessage() {
+       translation = new Translation("translations/UpdaterBundle") {
+            @Override
+            public void initTranslations() {
+                pleaseVisitMessage = messages.getString("pleaseVisitMessage");
+            }
+        };
+        translation.initTranslations();
     }
 
     private static void showDefaultSystemErrorMessage(Component parentComponent, String title, String message, int messageLevel) {
@@ -91,7 +108,7 @@ public class UserUtils {
 
         JOptionPane.showMessageDialog(parentComponent,
                 jEditorPane,
-                "[WeblocOpener] " + title, messageType);
+                "["+WEBLOC_OPENER_APPLICATION_NAME+"] " + title, messageType);
     }
 
     public static void openWebUrl(String url) {
