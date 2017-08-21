@@ -23,5 +23,6 @@
     <orderEntry type="library" name="jna-4.2.2" level="project" />
     <orderEntry type="module" module-name="Commons" exported="" />
     <orderEntry type="library" name="commons-validator-1.6" level="project" />
+    <orderEntry type="library" name="bridj-0.7.0" level="project" />
   </component>
 </module>
