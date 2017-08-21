@@ -18,8 +18,10 @@ import org.bridj.jawt.JAWTUtils;
 import javax.net.ssl.HttpsURLConnection;
 import javax.swing.*;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 
+import static com.doos.commons.core.ApplicationConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME;
 import static com.doos.commons.utils.Logging.getCurrentClassName;
 import static com.doos.commons.utils.UserUtils.showErrorMessageToUser;
 
@@ -37,7 +39,7 @@ public class Updater {
     private AppVersion appVersion = null;
 
 
-    public Updater() {
+    public Updater() throws IOException, NullPointerException {
         try {
             getConnection();
             if (!connection.getDoOutput()) {
@@ -48,41 +50,45 @@ public class Updater {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            log.warn(e);
         }
 
-        try {
-            String input;
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING));
 
-            input = bufferedReader.readLine();
+        String input;
+        BufferedReader bufferedReader = new BufferedReader(
+                new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING));
 
-            JsonParser parser = new JsonParser();
-            JsonObject root = parser.parse(input).getAsJsonObject();
+        input = bufferedReader.readLine();
 
-            appVersion = new AppVersion();
-            formAppVersionFromJson(root);
-        } catch (IOException | NullPointerException e) {
-            String message = "Can not connect to api.github.com";
-            log.warn(message, e);
-            if (Main.mode != Main.Mode.SILENT) {
-                showErrorMessageToUser(null, "Can not Update", message);
-            }
+        JsonParser parser = new JsonParser();
+        JsonObject root = parser.parse(input).getAsJsonObject();
+
+        appVersion = new AppVersion();
+        formAppVersionFromJson(root);
+
+    }
+
+    public static void canNotConnectManage(Exception e) {
+        String message = "Can not connect to api.github.com";
+        log.warn(message, e);
+        if (Main.mode != Main.Mode.SILENT) {
+            showErrorMessageToUser(null, "Can not Update", message);
         }
     }
 
-    public static int startUpdate(AppVersion appVersion) {
+    public static int startUpdate(AppVersion appVersion) throws IOException {
         installerFile = new File(ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
                 + appVersion.getVersion() + ".exe");
         if (!Thread.currentThread().isInterrupted()) {
-            if (!installerFile.exists()) {
+            if (!installerFile.exists() || installerFile.length() != appVersion.getSize()) {
+
+                installerFile.delete();
                 installerFile = downloadNewVersionInstaller(appVersion);
-            } else {
-                if (installerFile.length() != appVersion.getSize()) {
-                    installerFile.delete();
-                    installerFile = downloadNewVersionInstaller(appVersion);
-                }
+
+
+                return -999;
+
+
             }
             if (!Thread.currentThread().isInterrupted()) {
                 int installationResult = 0;
@@ -138,18 +144,17 @@ public class Updater {
         try {
             if (!Thread.currentThread().isInterrupted()) {
                 result = updateProcess.waitFor();
+                log.warn("Update interrupted by user.");
             }
-//            UpdateDialog.updateDialog.buttonCancel.setEnabled(true);
             return result;
         } catch (InterruptedException e) {
-            e.printStackTrace();
-            //UpdateDialog.updateDialog.buttonCancel.setEnabled(true);
+            log.warn(e);
             return -999;
         }
 
     }
 
-    private static File downloadNewVersionInstaller(AppVersion appVersion) {
+    private static File downloadNewVersionInstaller(AppVersion appVersion) throws IOException {
         JProgressBar progressBar = null;
         if (UpdateDialog.updateDialog != null) {
             progressBar = UpdateDialog.updateDialog.progressBar1;
@@ -165,75 +170,73 @@ public class Updater {
         long hwndVal = JAWTUtils.getNativePeerHandle(UpdateDialog.updateDialog);
         hwnd = Pointer.pointerToAddress(hwndVal, PointerIO.getSizeTInstance());
 
+
+        if (progressBar != null) {
+            progressBar.setStringPainted(true);
+        }
+        BufferedInputStream in = null;
+        FileOutputStream fout = null;
         try {
-            if (progressBar != null) {
-                progressBar.setStringPainted(true);
-            }
-            BufferedInputStream in = null;
-            FileOutputStream fout = null;
+
+            in = new BufferedInputStream(new URL(appVersion.getDownloadUrl()).openStream());
             try {
+                fout = new FileOutputStream(installerFile);
 
-                in = new BufferedInputStream(new URL(appVersion.getDownloadUrl()).openStream());
-                try {
-                    fout = new FileOutputStream(installerFile);
-
-                    final int bufferLength = 1024 * 1024;
-                    final byte data[] = new byte[bufferLength];
-                    int count;
-                    int progress = 0;
-                    while ((count = in.read(data, 0, bufferLength)) != -1) {
-                        if (Thread.currentThread().isInterrupted()) {
-                            installerFile.delete();
-                            if (progressBar != null) {
-                                progressBar.setValue(0);
-                                if (list != null) {
-                                    //noinspection unchecked
-                                    list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
-                                            progressBar.getMaximum());
-                                }
+                final int bufferLength = 1024 * 1024;
+                final byte data[] = new byte[bufferLength];
+                int count;
+                int progress = 0;
+                while ((count = in.read(data, 0, bufferLength)) != -1) {
+                    if (Thread.currentThread().isInterrupted()) {
+                        installerFile.delete();
+                        if (progressBar != null) {
+                            progressBar.setValue(0);
+                            if (list != null) {
+                                //noinspection unchecked
+                                list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
+                                        progressBar.getMaximum());
                             }
-                            break;
-                        } else {
-                            fout.write(data, 0, count);
-                            progress += count;
-                            int prg = (int) (((double) progress / appVersion.getSize()) * 100);
+                        }
+                        break;
+                    } else {
+                        fout.write(data, 0, count);
+                        progress += count;
+                        int prg = (int) (((double) progress / appVersion.getSize()) * 100);
 
-                            if (progressBar != null) {
-                                progressBar.setValue(prg);
-                                if (list != null) {
-                                    //noinspection unchecked
-                                    list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
-                                            progressBar.getMaximum());
-                                }
+                        if (progressBar != null) {
+                            progressBar.setValue(prg);
+                            if (list != null) {
+                                //noinspection unchecked
+                                list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
+                                        progressBar.getMaximum());
                             }
                         }
                     }
-
-                } catch (FileNotFoundException e) {
-                    if (installerFile.exists() && installerFile.getName().contains("WeblocOpenerSetup")) { //TODO FIX
-                        // HERE
-                        installerFile.delete();
-                        fout = new FileOutputStream(installerFile);
-                    }
-                }
-            } finally {
-                if (in != null) {
-                    in.close();
-                }
-                if (fout != null) {
-                    fout.close();
                 }
 
-                if (Thread.currentThread().isInterrupted()) {
+            } catch (FileNotFoundException e) {
+                if (installerFile.exists() && installerFile.getName().contains(WINDOWS_WEBLOCOPENER_SETUP_NAME)) { //TODO FIX
+                    // HERE
                     installerFile.delete();
-                }
-                if (list != null) {
-                    list.Release();
+                    fout = new FileOutputStream(installerFile);
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } finally {
+            if (in != null) {
+                in.close();
+            }
+            if (fout != null) {
+                fout.close();
+            }
+
+            if (Thread.currentThread().isInterrupted()) {
+                installerFile.delete();
+            }
+            if (list != null) {
+                list.Release();
+            }
         }
+
         return installerFile;
     }
 
@@ -252,9 +255,11 @@ public class Updater {
 
     private HttpsURLConnection getConnection() throws IOException {
         URL url = new URL(githubUrl);
-        //if (connection == null) {
+        if (connection != null) {
+            connection.setConnectTimeout(500);
+        }
+
         connection = (HttpsURLConnection) url.openConnection();
-        //}
         return connection;
     }
 

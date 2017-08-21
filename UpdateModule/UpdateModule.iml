@@ -45,5 +45,6 @@
     <orderEntry type="library" name="com.nativelibs4java:bridj:0.7.0" level="project" />
     <orderEntry type="module" module-name="Commons" exported="" />
     <orderEntry type="library" name="log4j:log4j:1.2.8" level="project" />
+    <orderEntry type="library" name="bridj-0.7.0" level="project" />
   </component>
 </module>

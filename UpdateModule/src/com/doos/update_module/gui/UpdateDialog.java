@@ -12,15 +12,15 @@ import com.doos.commons.utils.MessagePushable;
 import com.doos.update_module.core.Main;
 import com.doos.update_module.update.AppVersion;
 import com.doos.update_module.update.Updater;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
+import static com.doos.commons.utils.Logging.getCurrentClassName;
 import static com.doos.commons.utils.UserUtils.showErrorMessageToUser;
 import static com.doos.commons.utils.UserUtils.showSuccessMessageToUser;
 
@@ -28,20 +28,28 @@ import static com.doos.commons.utils.UserUtils.showSuccessMessageToUser;
 public class UpdateDialog extends JFrame implements MessagePushable {
     public static UpdateDialog updateDialog = null;
     public JProgressBar progressBar1;
+
     public JButton buttonOK;
     public JButton buttonCancel;
+
     Timer messageTimer;
+
     private Translation translation;
+
     private AppVersion serverAppVersion;
+
     private JPanel contentPane;
+    private JPanel errorPanel;
+
     private JLabel currentVersionLabel;
     private JLabel availableVersionLabel;
     private JLabel newVersionSizeLabel;
     private JLabel unitLabel;
     private JLabel currentVersionStringLabel;
     private JLabel avaliableVersionStringLabel;
-    private JPanel errorPanel;
+
     private JTextPane errorTextPane;
+
     private Thread updateThread;
 
     private String successUpdatedMessage = "WeblocOpener successfully updated to version: ";
@@ -56,20 +64,23 @@ public class UpdateDialog extends JFrame implements MessagePushable {
     private String installationCancelledByErrorMessage2 = "code: ";
     private String installationCancelledByErrorMessage3 = "visit " + ApplicationConstants.GITHUB_WEB_URL + " for more info.";
 
+    private static final Logger log = Logger.getLogger(getCurrentClassName());
+
     public UpdateDialog() {
         serverAppVersion = new AppVersion();
 
+        createGUI();
+        loadProperties();
+        translateDialog();
+    }
+
+    private void createGUI() {
         setContentPane(contentPane);
         getRootPane().setDefaultButton(buttonOK);
 
         setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/icon.png")));
 
-        buttonOK.addActionListener(e -> {
-            updateThread = new Thread(() -> onOK());
-            updateThread.start();
-        });
-
-        buttonCancel.addActionListener(e -> onCancel());
+        createDefaultActionListeners();
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -86,8 +97,25 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
         setSize(new Dimension(400, 170));
         setResizable(false);
-        loadProperties();
-        translateDialog();
+    }
+
+    private void createDefaultActionListeners() {
+        for (ActionListener actionListener :
+                buttonOK.getActionListeners()) {
+            buttonOK.removeActionListener(actionListener);
+        }
+
+        for (ActionListener actionListener :
+                buttonCancel.getActionListeners()) {
+            buttonCancel.removeActionListener(actionListener);
+        }
+
+        buttonOK.addActionListener(e -> {
+            updateThread = new Thread(() -> onOK());
+            updateThread.start();
+        });
+
+        buttonCancel.addActionListener(e -> onCancel());
     }
 
     private void translateDialog() {
@@ -117,21 +145,44 @@ public class UpdateDialog extends JFrame implements MessagePushable {
 
     public void checkForUpdates() {
         progressBar1.setIndeterminate(true);
-        Updater updater = new Updater();
-        serverAppVersion = updater.getAppVersion();
-        progressBar1.setIndeterminate(false);
-        availableVersionLabel.setText(serverAppVersion.getVersion());
-
-        setNewVersionSizeInfo();
-
-        String str;
+        Updater updater = null;
         try {
-            str = RegistryManager.getAppVersionValue();
-        } catch (RegistryCanNotReadInfoException e) {
-            RegistryManager.setDefaultSettings();
-            str = ApplicationConstants.APP_VERSION;
+            updater = new Updater();
+            createDefaultActionListeners();
+
+            serverAppVersion = updater.getAppVersion();
+            progressBar1.setIndeterminate(false);
+            availableVersionLabel.setText(serverAppVersion.getVersion());
+            setNewVersionSizeInfo();
+
+
+            String str;
+            try {
+                str = RegistryManager.getAppVersionValue();
+            } catch (RegistryCanNotReadInfoException e) {
+                RegistryManager.setDefaultSettings();
+                str = ApplicationConstants.APP_VERSION;
+            }
+            compareVersions(str);
+        } catch (IOException e) {
+            removeAllListeners(buttonOK);
+
+            Updater.canNotConnectManage(e);
+            progressBar1.setIndeterminate(false);
+            buttonOK.setEnabled(true);
+            buttonOK.setText("Try again");
+            buttonOK.addActionListener(e1 -> {
+                progressBar1.setIndeterminate(true);
+                checkForUpdates();
+            });
         }
-        compareVersions(str);
+    }
+
+    private void removeAllListeners(JButton button) {
+        for (ActionListener al :
+                button.getActionListeners()) {
+            button.removeActionListener(al);
+        }
     }
 
     private void compareVersions(String str) {
@@ -143,7 +194,7 @@ public class UpdateDialog extends JFrame implements MessagePushable {
             //App version is bigger then on server
             buttonOK.setText(translation.messages.getString("buttonOkDev"));
 //            buttonOK.setEnabled(true);
-            buttonOK.setEnabled(false); //TODO TURN BACK BEFORE RELEASE
+            buttonOK.setEnabled(false); //TODO TURN TO FALSE BACK BEFORE RELEASE
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
             //No reason to update;
             buttonOK.setText(translation.messages.getString("buttonOkUp2Date"));
@@ -230,7 +281,14 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         buttonOK.setEnabled(false);
         if (!Thread.currentThread().isInterrupted()) {
             //TODO make this beautifull: call downloader, return file, then call installation
-            int result = Updater.startUpdate(serverAppVersion);
+            int result = 0;
+            try {
+                result = Updater.startUpdate(serverAppVersion);
+            } catch (IOException e) {
+                log.warn(e);
+                result = -999;
+                showErrorMessageToUser(this, "Can not update", "Can not download update \nLost connection, retry."); //TODO translate this
+            }
             if (Thread.currentThread().isInterrupted()) {
                 result = -999;
             } else {
@@ -280,10 +338,11 @@ public class UpdateDialog extends JFrame implements MessagePushable {
     }
 
     private void runCleanInstallerFile() {
-        System.out.println("Deleting file: " + ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
+       log.info("Deleting file: " + ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
                 + serverAppVersion.getVersion() + "" + ".exe");
-        new File(ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
-                + serverAppVersion.getVersion() + ".exe").delete();
+        File installer = new File(ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
+                + serverAppVersion.getVersion() + ".exe");
+        installer.deleteOnExit();
     }
 
     public void showMessage(String message, int messageValue) {

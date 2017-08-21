@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 import static com.doos.commons.utils.Logging.getCurrentClassName;
 
@@ -31,9 +32,15 @@ public class NonGuiUpdater {
 
 
     public NonGuiUpdater() {
-        Updater updater = new Updater();
-        serverAppVersion = updater.getAppVersion();
-        compareVersions();
+        Updater updater;
+        try {
+            updater = new Updater();
+
+            serverAppVersion = updater.getAppVersion();
+            compareVersions();
+        } catch (IOException e) {
+            Updater.canNotConnectManage(e);
+        }
     }
 
     private void compareVersions() {
@@ -84,9 +91,7 @@ public class NonGuiUpdater {
         trayMenu.addSeparator();
 
         MenuItem exit = new MenuItem("Exit");
-        exit.addActionListener(e -> {
-            tray.remove(trayIcon);
-        });
+        exit.addActionListener(e -> tray.remove(trayIcon));
         trayMenu.add(exit);
 
         trayIcon.setImageAutoSize(true);

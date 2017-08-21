@@ -8,7 +8,7 @@ import java.io.File;
 public interface ApplicationConstants {
     String WEBLOC_OPENER_APPLICATION_NAME = "WeblocOpener";
     String UPDATER_APPLICATION_NAME = "Updater";
-    String APP_VERSION = "1.3.1";
+    String APP_VERSION = "1.3.2";
     String APP_LOG_FOLDER_PATH = System
             .getProperty("java.io.tmpdir") + WEBLOC_OPENER_APPLICATION_NAME + File.separator + "Log";
     String APP_LOG_PROPERTY = "WeblocOpener.log.folder";
@@ -27,6 +27,9 @@ public interface ApplicationConstants {
     String OPENER_EDIT_ARGUMENT = "-edit";
     String OPENER_SETTINGS_ARGUMENT = "-settings";
     String OPENER_ABOUT_ARGUMENT = "-about";
+
+    String WINDOWS_WEBLOCOPENER_SETUP_NAME = "WeblocOpenerSetup";
+
 
     int UPDATE_CODE_SUCCESS = 0; //NORMAL state, app updated.
     int UPDATE_CODE_CANCEL = 1; //Install was cancelled or Incorrect function or corrupt file.
