@@ -38,20 +38,14 @@ public class Updater {
 
 
     public Updater() {
-        try {
-            getConnection();
-            if (!connection.getDoOutput()) {
-                connection.setDoOutput(true);
-            }
-            if (!connection.getDoInput()) {
-                connection.setDoInput(true);
-            }
+        createConnection();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        getServerApllicationVersion();
+    }
 
+    public void getServerApllicationVersion() {
         try {
+            log.debug("Getting current server apllication version");
             String input;
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING));
@@ -69,6 +63,21 @@ public class Updater {
             if (Main.mode != Main.Mode.SILENT) {
                 showErrorMessageToUser(null, "Can not Update", message);
             }
+        }
+    }
+
+    public void createConnection() {
+        try {
+            getConnection();
+            if (!connection.getDoOutput()) {
+                connection.setDoOutput(true);
+            }
+            if (!connection.getDoInput()) {
+                connection.setDoInput(true);
+            }
+
+        } catch (IOException e) {
+            log.warn("Could not establish connection", e);
         }
     }
 
@@ -238,6 +247,7 @@ public class Updater {
     }
 
     public void formAppVersionFromJson(JsonObject root) {
+        log.debug("Parsing json to app version");
         appVersion.setVersion(root.getAsJsonObject().get("tag_name").getAsString());
 
         JsonArray asserts = root.getAsJsonArray("assets");
@@ -251,6 +261,7 @@ public class Updater {
     }
 
     private HttpsURLConnection getConnection() throws IOException {
+        log.debug("Creating connection");
         URL url = new URL(githubUrl);
         //if (connection == null) {
         connection = (HttpsURLConnection) url.openConnection();
