@@ -46,7 +46,7 @@ public class UpdateDialog extends JFrame implements MessagePushable {
     private JLabel newVersionSizeLabel;
     private JLabel unitLabel;
     private JLabel currentVersionStringLabel;
-    private JLabel avaliableVersionStringLabel;
+    private JLabel availableVersionStringLabel;
 
     private JTextPane errorTextPane;
 
@@ -63,6 +63,11 @@ public class UpdateDialog extends JFrame implements MessagePushable {
     private String installationCancelledByErrorMessage1 = "Installation cancelled by Error (unhandled error),";
     private String installationCancelledByErrorMessage2 = "code: ";
     private String installationCancelledByErrorMessage3 = "visit " + ApplicationConstants.GITHUB_WEB_URL + " for more info.";
+
+    private String lostConnectionTitle = "Unable to update.";
+    private String lostConnectionMessage = "Can not download update \nLost connection, retry.";
+
+    String retryButton = "Retry";
 
     private static final Logger log = Logger.getLogger(getCurrentClassName());
 
@@ -127,7 +132,7 @@ public class UpdateDialog extends JFrame implements MessagePushable {
                 buttonCancel.setText(messages.getString("buttonCancel"));
 
                 currentVersionStringLabel.setText(messages.getString("currentVersionStringLabel"));
-                avaliableVersionStringLabel.setText(messages.getString("avaliableVersionStringLabel"));
+                availableVersionStringLabel.setText(messages.getString("availableVersionStringLabel"));
                 availableVersionLabel.setText(messages.getString("availableVersionLabel"));
 
                 successTitle = messages.getString("successTitle");
@@ -138,6 +143,11 @@ public class UpdateDialog extends JFrame implements MessagePushable {
                 installationCancelledByErrorMessage1 = messages.getString("installationCancelledByErrorMessage1");
                 installationCancelledByErrorMessage2 = messages.getString("installationCancelledByErrorMessage2");
                 installationCancelledByErrorMessage3 = messages.getString("installationCancelledByErrorMessage3");
+
+                lostConnectionTitle = messages.getString("lostConnectionTitle");
+                lostConnectionMessage = messages.getString("lostConnectionMessage");
+
+                retryButton = messages.getString("retryButton");
             }
         };
         translation.initTranslations();
@@ -170,7 +180,7 @@ public class UpdateDialog extends JFrame implements MessagePushable {
             Updater.canNotConnectManage(e);
             progressBar1.setIndeterminate(false);
             buttonOK.setEnabled(true);
-            buttonOK.setText("Try again");
+            buttonOK.setText(retryButton);
             buttonOK.addActionListener(e1 -> {
                 progressBar1.setIndeterminate(true);
                 checkForUpdates();
@@ -287,7 +297,7 @@ public class UpdateDialog extends JFrame implements MessagePushable {
             } catch (IOException e) {
                 log.warn(e);
                 result = -999;
-                showErrorMessageToUser(this, "Can not update", "Can not download update \nLost connection, retry."); //TODO translate this
+                showErrorMessageToUser(this, lostConnectionTitle, lostConnectionMessage); //TODO translate this
             }
             if (Thread.currentThread().isInterrupted()) {
                 result = -999;

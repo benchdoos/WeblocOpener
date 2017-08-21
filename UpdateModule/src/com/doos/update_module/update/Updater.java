@@ -32,7 +32,7 @@ import static com.doos.commons.utils.UserUtils.showErrorMessageToUser;
 public class Updater {
     private static final Logger log = Logger.getLogger(getCurrentClassName());
 
-    private static final String githubUrl = "https://api.github.com/repos/benchdoos/WeblocOpener/releases/latest";
+    private static final String GITHUB_URL = "https://api.github.com/repos/benchdoos/WeblocOpener/releases/latest";
     private static final String DEFAULT_ENCODING = "UTF-8";
     public static File installerFile = null;
     private static HttpsURLConnection connection = null;
@@ -254,12 +254,10 @@ public class Updater {
     }
 
     private HttpsURLConnection getConnection() throws IOException {
-        URL url = new URL(githubUrl);
-        if (connection != null) {
-            connection.setConnectTimeout(500);
-        }
+        URL url = new URL(GITHUB_URL);
 
         connection = (HttpsURLConnection) url.openConnection();
+        connection.setConnectTimeout(500);
         return connection;
     }
 

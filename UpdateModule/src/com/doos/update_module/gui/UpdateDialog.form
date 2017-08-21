@@ -86,12 +86,12 @@
               <text value=""/>
             </properties>
           </component>
-          <component id="40545" class="javax.swing.JLabel" binding="avaliableVersionStringLabel">
+          <component id="40545" class="javax.swing.JLabel" binding="availableVersionStringLabel">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text resource-bundle="translations/UpdateDialogBundle" key="avaliableVersionStringLabel"/>
+              <text resource-bundle="translations/UpdateDialogBundle" key="availableVersionStringLabel"/>
             </properties>
           </component>
           <component id="59d90" class="javax.swing.JLabel" binding="availableVersionLabel">
