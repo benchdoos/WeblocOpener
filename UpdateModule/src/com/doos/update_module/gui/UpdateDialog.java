@@ -20,6 +20,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 
+import static com.doos.commons.core.ApplicationConstants.UPDATE_CODE_INTERRUPT;
 import static com.doos.commons.utils.Logging.getCurrentClassName;
 import static com.doos.commons.utils.UserUtils.showErrorMessageToUser;
 import static com.doos.commons.utils.UserUtils.showSuccessMessageToUser;
@@ -253,7 +254,7 @@ public class UpdateDialog extends JFrame implements MessagePushable {
             case ApplicationConstants.UPDATE_CODE_CORRUPT:
                 showErrorMessageToUser(this, installationCancelledTitle, noPermissionsMessage);
                 break;
-            case ApplicationConstants.UPDATE_CODE_INTERRUPT:/*NOP*/
+            case UPDATE_CODE_INTERRUPT:/*NOP*/
                 break;
             default:
                 String message = installationCancelledByErrorMessage1
@@ -296,11 +297,11 @@ public class UpdateDialog extends JFrame implements MessagePushable {
                 result = Updater.startUpdate(serverAppVersion);
             } catch (IOException e) {
                 log.warn(e);
-                result = -999;
+                result = UPDATE_CODE_INTERRUPT;
                 showErrorMessageToUser(this, lostConnectionTitle, lostConnectionMessage); //TODO translate this
             }
             if (Thread.currentThread().isInterrupted()) {
-                result = -999;
+                result = UPDATE_CODE_INTERRUPT;
             } else {
                 processUpdateResult(result);
             }

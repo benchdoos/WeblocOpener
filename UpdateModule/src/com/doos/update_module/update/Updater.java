@@ -21,6 +21,7 @@ import javax.swing.*;
 import java.io.*;
 import java.net.URL;
 
+import static com.doos.commons.core.ApplicationConstants.UPDATE_CODE_INTERRUPT;
 import static com.doos.commons.core.ApplicationConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME;
 import static com.doos.commons.utils.Logging.getCurrentClassName;
 import static com.doos.commons.utils.UserUtils.showErrorMessageToUser;
@@ -30,6 +31,8 @@ import static com.doos.commons.utils.UserUtils.showErrorMessageToUser;
  */
 @SuppressWarnings({"ALL", "ResultOfMethodCallIgnored"})
 public class Updater {
+
+
     private static final Logger log = Logger.getLogger(getCurrentClassName());
 
     private static final String GITHUB_URL = "https://api.github.com/repos/benchdoos/WeblocOpener/releases/latest";
@@ -56,7 +59,7 @@ public class Updater {
 
 
 
-    public void getServerApllicationVersion() {
+    public void getServerApllicationVersion() throws IOException {
         log.debug("Getting current server apllication version");
             String input;
             BufferedReader bufferedReader = new BufferedReader(
@@ -111,16 +114,8 @@ public class Updater {
         installerFile = new File(ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
                 + appVersion.getVersion() + ".exe");
         if (!Thread.currentThread().isInterrupted()) {
-            if (!installerFile.exists() || installerFile.length() != appVersion.getSize()) {
+            if (redownloadOnCorrupt(appVersion)) return UPDATE_CODE_INTERRUPT;
 
-                installerFile.delete();
-                installerFile = downloadNewVersionInstaller(appVersion);
-
-
-                return -999;
-
-
-            }
             if (!Thread.currentThread().isInterrupted()) {
                 int installationResult = 0;
 
@@ -138,7 +133,7 @@ public class Updater {
                                 installerFile = downloadNewVersionInstaller(appVersion); //Fixes corrupt file
                                 installationResult = update(installerFile);
                             } else {
-                                return -999;
+                                return UPDATE_CODE_INTERRUPT;
                             }
                         } catch (IOException e1) {
                             if (e1.getMessage().contains("CreateProcess error=193")) {
@@ -151,12 +146,22 @@ public class Updater {
                 deleteFileIfSuccess(installationResult);
                 return installationResult;
             } else {
-                return -999;
+                return UPDATE_CODE_INTERRUPT;
             }
 
         } else {
-            return -999;
+            return UPDATE_CODE_INTERRUPT;
         }
+    }
+
+    private static boolean redownloadOnCorrupt(AppVersion appVersion) throws IOException {
+        if (!installerFile.exists() || installerFile.length() != appVersion.getSize()) {
+
+            installerFile.delete();
+            installerFile = downloadNewVersionInstaller(appVersion);
+            return true;
+        }
+        return false;
     }
 
     private static void deleteFileIfSuccess(int installationResult) {
@@ -181,7 +186,7 @@ public class Updater {
             return result;
         } catch (InterruptedException e) {
             log.warn(e);
-            return -999;
+            return UPDATE_CODE_INTERRUPT;
         }
 
     }
@@ -202,7 +207,6 @@ public class Updater {
         long hwndVal = JAWTUtils.getNativePeerHandle(UpdateDialog.updateDialog);
         hwnd = Pointer.pointerToAddress(hwndVal, PointerIO.getSizeTInstance());
 
-        try {
             if (progressBar != null) {
                 progressBar.setStringPainted(true);
             }
@@ -275,7 +279,6 @@ public class Updater {
 
     public void formAppVersionFromJson(JsonObject root) {
         log.debug("Parsing json to app version");
-    }
         String browser_download_url = "browser_download_url";
         String assets = "assets";
         String name = "name";
