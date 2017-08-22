@@ -48,28 +48,24 @@ public class Updater {
 
     public Updater() throws IOException, NullPointerException {
         translateMessages();
-        try {
-            getConnection();
-            if (!connection.getDoOutput()) {
-                connection.setDoOutput(true);
-            }
-            if (!connection.getDoInput()) {
-                connection.setDoInput(true);
-            }
+        createConnection();
 
-        } catch (IOException e) {
-            log.warn(e);
-        }
+        getServerApllicationVersion();
+    }
 
 
-        String input;
-        BufferedReader bufferedReader = new BufferedReader(
-                new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING));
 
-        input = bufferedReader.readLine();
 
-        JsonParser parser = new JsonParser();
-        JsonObject root = parser.parse(input).getAsJsonObject();
+    public void getServerApllicationVersion() {
+        log.debug("Getting current server apllication version");
+            String input;
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING));
+
+            input = bufferedReader.readLine();
+
+            JsonParser parser = new JsonParser();
+            JsonObject root = parser.parse(input).getAsJsonObject();
 
         appVersion = new AppVersion();
         formAppVersionFromJson(root);
@@ -93,6 +89,21 @@ public class Updater {
         log.warn(canNotUpdateMessage, e);
         if (Main.mode != Main.Mode.SILENT) {
             showErrorMessageToUser(null, canNotUpdateTitle, canNotUpdateMessage);
+        }
+    }
+
+    public void createConnection() {
+        try {
+            getConnection();
+            if (!connection.getDoOutput()) {
+                connection.setDoOutput(true);
+            }
+            if (!connection.getDoInput()) {
+                connection.setDoInput(true);
+            }
+
+        } catch (IOException e) {
+            log.warn("Could not establish connection", e);
         }
     }
 
@@ -166,6 +177,7 @@ public class Updater {
                 result = updateProcess.waitFor();
                 log.warn("Update interrupted by user.");
             }
+//            UpdateDialog.updateDialog.buttonCancel.setEnabled(true);
             return result;
         } catch (InterruptedException e) {
             log.warn(e);
@@ -190,64 +202,64 @@ public class Updater {
         long hwndVal = JAWTUtils.getNativePeerHandle(UpdateDialog.updateDialog);
         hwnd = Pointer.pointerToAddress(hwndVal, PointerIO.getSizeTInstance());
 
-
-        if (progressBar != null) {
-            progressBar.setStringPainted(true);
-        }
-        BufferedInputStream in = null;
-        FileOutputStream fout = null;
         try {
-
-            in = new BufferedInputStream(new URL(appVersion.getDownloadUrl()).openStream());
+            if (progressBar != null) {
+                progressBar.setStringPainted(true);
+            }
+            BufferedInputStream in = null;
+            FileOutputStream fout = null;
             try {
-                fout = new FileOutputStream(installerFile);
 
-                final int bufferLength = 1024 * 1024;
-                final byte data[] = new byte[bufferLength];
-                int count;
-                int progress = 0;
-                while ((count = in.read(data, 0, bufferLength)) != -1) {
-                    if (Thread.currentThread().isInterrupted()) {
-                        installerFile.delete();
-                        if (progressBar != null) {
-                            progressBar.setValue(0);
-                            if (list != null) {
-                                //noinspection unchecked
-                                list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
-                                        progressBar.getMaximum());
+                in = new BufferedInputStream(new URL(appVersion.getDownloadUrl()).openStream());
+                try {
+                    fout = new FileOutputStream(installerFile);
+
+                    final int bufferLength = 1024 * 1024;
+                    final byte data[] = new byte[bufferLength];
+                    int count;
+                    int progress = 0;
+                    while ((count = in.read(data, 0, bufferLength)) != -1) {
+                        if (Thread.currentThread().isInterrupted()) {
+                            installerFile.delete();
+                            if (progressBar != null) {
+                                progressBar.setValue(0);
+                                if (list != null) {
+                                    //noinspection unchecked
+                                    list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
+                                            progressBar.getMaximum());
+                                }
                             }
-                        }
-                        break;
-                    } else {
-                        fout.write(data, 0, count);
-                        progress += count;
-                        int prg = (int) (((double) progress / appVersion.getSize()) * 100);
+                            break;
+                        } else {
+                            fout.write(data, 0, count);
+                            progress += count;
+                            int prg = (int) (((double) progress / appVersion.getSize()) * 100);
 
-                        if (progressBar != null) {
-                            progressBar.setValue(prg);
-                            if (list != null) {
-                                //noinspection unchecked
-                                list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
-                                        progressBar.getMaximum());
+                            if (progressBar != null) {
+                                progressBar.setValue(prg);
+                                if (list != null) {
+                                    //noinspection unchecked
+                                    list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
+                                            progressBar.getMaximum());
+                                }
                             }
                         }
                     }
-                }
 
-            } catch (FileNotFoundException e) {
-                if (installerFile.exists() && installerFile.getName().contains(WINDOWS_WEBLOCOPENER_SETUP_NAME)) { //TODO FIX
-                    // HERE
-                    installerFile.delete();
-                    fout = new FileOutputStream(installerFile);
+                } catch (FileNotFoundException e) {
+                    if (installerFile.exists() && installerFile.getName().contains("WeblocOpenerSetup")) { //TODO FIX
+                        // HERE
+                        installerFile.delete();
+                        fout = new FileOutputStream(installerFile);
+                    }
                 }
-            }
-        } finally {
-            if (in != null) {
-                in.close();
-            }
-            if (fout != null) {
-                fout.close();
-            }
+            } finally {
+                if (in != null) {
+                    in.close();
+                }
+                if (fout != null) {
+                    fout.close();
+                }
 
             if (Thread.currentThread().isInterrupted()) {
                 installerFile.delete();
@@ -262,6 +274,8 @@ public class Updater {
     }
 
     public void formAppVersionFromJson(JsonObject root) {
+        log.debug("Parsing json to app version");
+    }
         String browser_download_url = "browser_download_url";
         String assets = "assets";
         String name = "name";
@@ -281,6 +295,7 @@ public class Updater {
 
     private HttpsURLConnection getConnection() throws IOException {
         URL url = new URL(GITHUB_URL);
+        log.debug("Creating connection");
 
         connection = (HttpsURLConnection) url.openConnection();
         connection.setConnectTimeout(500);
