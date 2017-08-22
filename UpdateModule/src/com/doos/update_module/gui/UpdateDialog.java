@@ -204,8 +204,8 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) > 0) {
             //App version is bigger then on server
             buttonOK.setText(translation.messages.getString("buttonOkDev"));
-            buttonOK.setEnabled(true);
-//            buttonOK.setEnabled(false); //TODO TURN TO FALSE BACK BEFORE RELEASE
+//            buttonOK.setEnabled(true);
+            buttonOK.setEnabled(false); //TODO TURN TO FALSE BACK BEFORE RELEASE
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
             //No reason to update;
             buttonOK.setText(translation.messages.getString("buttonOkUp2Date"));
