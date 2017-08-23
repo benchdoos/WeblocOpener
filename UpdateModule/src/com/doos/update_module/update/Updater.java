@@ -22,7 +22,6 @@ import java.io.*;
 import java.net.URL;
 
 import static com.doos.commons.core.ApplicationConstants.UPDATE_CODE_INTERRUPT;
-import static com.doos.commons.core.ApplicationConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME;
 import static com.doos.commons.utils.Logging.getCurrentClassName;
 import static com.doos.commons.utils.UserUtils.showErrorMessageToUser;
 
@@ -182,7 +181,6 @@ public class Updater {
                 result = updateProcess.waitFor();
                 log.warn("Update interrupted by user.");
             }
-//            UpdateDialog.updateDialog.buttonCancel.setEnabled(true);
             return result;
         } catch (InterruptedException e) {
             log.warn(e);
