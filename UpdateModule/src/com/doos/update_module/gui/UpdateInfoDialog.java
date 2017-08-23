@@ -72,10 +72,9 @@ public class UpdateInfoDialog extends JDialog {
                 "</style>";
         String defaultHead = "<html><head>" + style + "</head><body>";
         String defaultFooter = "</body></html>";
-        updateInfo = updateInfo.replace("\n", "<br>");
-        final String result = defaultHead + updateInfo + defaultFooter;
-        System.out.println(result);
-        return result;
+        updateInfo = updateInfo.replaceAll("\n", "<br>");
+
+        return defaultHead + updateInfo + defaultFooter;
     }
 
     private void onOK() {
