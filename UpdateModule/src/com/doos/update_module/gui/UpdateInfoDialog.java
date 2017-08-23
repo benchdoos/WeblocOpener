@@ -61,14 +61,14 @@ public class UpdateInfoDialog extends JDialog {
     //https://assets-cdn.github.com/assets/github-cc7a4e0393fcfd39ca34ef16ad34385585bc79c553e0b4f317dcd2bb2493db8e.css
     private String generatePageForDisplay(String updateInfo) {
         String style = "<style>" +
-                "code {\n" +
-                "    padding: 0;\n" +
-                "    padding-top: 0.2em;\n" +
-                "    padding-bottom: 0.2em;\n" +
-                "    margin: 0;\n" +
-                "    font-size: 85%;\n" +
-                "    background-color: rgba(27,31,35,0.05);\n" +
-                "    border-radius: 3px;\n" +
+                "code {" +
+                "    padding: 0;" +
+                "    padding-top: 0.2em;" +
+                "    padding-bottom: 0.2em;" +
+                "    margin: 0;" +
+                "    font-size: 85%;" +
+                "    background-color: #f3f3f3;" +
+                "    border-radius: 3px;" +
                 "}" +
                 "</style>";
         String defaultHead = "<html><head>" + style + "</head><body>";
