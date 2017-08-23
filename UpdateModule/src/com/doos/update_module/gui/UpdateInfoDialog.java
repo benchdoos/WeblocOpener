@@ -32,6 +32,7 @@ public class UpdateInfoDialog extends JDialog {
         setTitle("Info about update - " + appVersion.getVersion());
         setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateInfoDialog.class.getResource("/info16.png")));
 
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
