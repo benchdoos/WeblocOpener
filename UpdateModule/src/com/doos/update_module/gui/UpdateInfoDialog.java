@@ -18,16 +18,6 @@ public class UpdateInfoDialog extends JDialog {
         createGUI();
     }
 
-    public static void main(String[] args) {
-        AppVersion appVersion = new AppVersion();
-        appVersion.setUpdateInfo("[<img src=\"https://benchdoos.github.io/img/1.3.1.png\" align=\"right\" />](https://benchdoos.github.io/)\n" +
-                "- Url validation is more accurate\n" +
-                "- Now you see if url is valid or not - valid urls are underlined and colored in blue, otherwise it is standart black.\n" +
-                "- Now supported protocols are only <code>http://</code>, <code>https://</code>, and <code>ftp://</code>.\n");
-        UpdateInfoDialog dialog = new UpdateInfoDialog(appVersion);
-        System.exit(0);
-    }
-
     private void createGUI() {
         setTitle("Info about update - " + appVersion.getVersion());
         setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateInfoDialog.class.getResource("/info16.png")));
