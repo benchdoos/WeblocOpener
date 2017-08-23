@@ -36,16 +36,13 @@ public class Updater {
 
     private static final String GITHUB_URL = "https://api.github.com/repos/benchdoos/WeblocOpener/releases/latest";
     private static final String DEFAULT_ENCODING = "UTF-8";
+    private static final String WINDOWS_SETUP_DEFAULT_NAME = "WeblocOpenerSetup.exe";
     public static File installerFile = null;
     private static HttpsURLConnection connection = null;
-    private AppVersion appVersion = null;
-
-    private static final String WINDOWS_SETUP_DEFAULT_NAME = "WeblocOpenerSetup.exe";
-
     private static Translation translation;
-
     private static String canNotUpdateTitle = "Can not Update";
     private static String canNotUpdateMessage = "Can not connect to api.github.com";
+    private AppVersion appVersion = null;
 
 
     public Updater() throws IOException, NullPointerException {
@@ -55,57 +52,12 @@ public class Updater {
         getServerApllicationVersion();
     }
 
-
-
-
-    public void getServerApllicationVersion() throws IOException {
-        log.debug("Getting current server apllication version");
-            String input;
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING));
-
-            input = bufferedReader.readLine();
-
-            JsonParser parser = new JsonParser();
-            JsonObject root = parser.parse(input).getAsJsonObject();
-
-        appVersion = new AppVersion();
-        formAppVersionFromJson(root);
-
-    }
-
-    private void translateMessages(){
-        translation = new Translation("translations/UpdaterBundle") {
-            @Override
-            public void initTranslations() {
-                canNotUpdateTitle = messages.getString("canNotUpdateTitle");
-                canNotUpdateMessage = messages.getString("canNotUpdateMessage");
-            }
-        };
-        translation.initTranslations();
-    }
-
     public static void canNotConnectManage(Exception e) {
 
 
         log.warn(canNotUpdateMessage, e);
         if (Main.mode != Main.Mode.SILENT) {
             showErrorMessageToUser(null, canNotUpdateTitle, canNotUpdateMessage);
-        }
-    }
-
-    public void createConnection() {
-        try {
-            getConnection();
-            if (!connection.getDoOutput()) {
-                connection.setDoOutput(true);
-            }
-            if (!connection.getDoInput()) {
-                connection.setDoInput(true);
-            }
-
-        } catch (IOException e) {
-            log.warn("Could not establish connection", e);
         }
     }
 
@@ -205,63 +157,63 @@ public class Updater {
         long hwndVal = JAWTUtils.getNativePeerHandle(UpdateDialog.updateDialog);
         hwnd = Pointer.pointerToAddress(hwndVal, PointerIO.getSizeTInstance());
 
-            if (progressBar != null) {
-                progressBar.setStringPainted(true);
-            }
-            BufferedInputStream in = null;
-            FileOutputStream fout = null;
+        if (progressBar != null) {
+            progressBar.setStringPainted(true);
+        }
+        BufferedInputStream in = null;
+        FileOutputStream fout = null;
+        try {
+
+            in = new BufferedInputStream(new URL(appVersion.getDownloadUrl()).openStream());
             try {
+                fout = new FileOutputStream(installerFile);
 
-                in = new BufferedInputStream(new URL(appVersion.getDownloadUrl()).openStream());
-                try {
-                    fout = new FileOutputStream(installerFile);
-
-                    final int bufferLength = 1024 * 1024;
-                    final byte data[] = new byte[bufferLength];
-                    int count;
-                    int progress = 0;
-                    while ((count = in.read(data, 0, bufferLength)) != -1) {
-                        if (Thread.currentThread().isInterrupted()) {
-                            installerFile.delete();
-                            if (progressBar != null) {
-                                progressBar.setValue(0);
-                                if (list != null) {
-                                    //noinspection unchecked
-                                    list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
-                                            progressBar.getMaximum());
-                                }
+                final int bufferLength = 1024 * 1024;
+                final byte data[] = new byte[bufferLength];
+                int count;
+                int progress = 0;
+                while ((count = in.read(data, 0, bufferLength)) != -1) {
+                    if (Thread.currentThread().isInterrupted()) {
+                        installerFile.delete();
+                        if (progressBar != null) {
+                            progressBar.setValue(0);
+                            if (list != null) {
+                                //noinspection unchecked
+                                list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
+                                        progressBar.getMaximum());
                             }
-                            break;
-                        } else {
-                            fout.write(data, 0, count);
-                            progress += count;
-                            int prg = (int) (((double) progress / appVersion.getSize()) * 100);
+                        }
+                        break;
+                    } else {
+                        fout.write(data, 0, count);
+                        progress += count;
+                        int prg = (int) (((double) progress / appVersion.getSize()) * 100);
 
-                            if (progressBar != null) {
-                                progressBar.setValue(prg);
-                                if (list != null) {
-                                    //noinspection unchecked
-                                    list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
-                                            progressBar.getMaximum());
-                                }
+                        if (progressBar != null) {
+                            progressBar.setValue(prg);
+                            if (list != null) {
+                                //noinspection unchecked
+                                list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
+                                        progressBar.getMaximum());
                             }
                         }
                     }
+                }
 
-                } catch (FileNotFoundException e) {
-                    if (installerFile.exists() && installerFile.getName().contains("WeblocOpenerSetup")) { //TODO FIX
-                        // HERE
-                        installerFile.delete();
-                        fout = new FileOutputStream(installerFile);
-                    }
+            } catch (FileNotFoundException e) {
+                if (installerFile.exists() && installerFile.getName().contains("WeblocOpenerSetup")) { //TODO FIX
+                    // HERE
+                    installerFile.delete();
+                    fout = new FileOutputStream(installerFile);
                 }
-            } finally {
-                if (in != null) {
-                    in.close();
-                }
-                if (fout != null) {
-                    fout.close();
-                }
+            }
+        } finally {
+            if (in != null) {
+                in.close();
+            }
+            if (fout != null) {
+                fout.close();
+            }
 
             if (Thread.currentThread().isInterrupted()) {
                 installerFile.delete();
@@ -275,14 +227,58 @@ public class Updater {
         return installerFile;
     }
 
+    public void getServerApllicationVersion() throws IOException {
+        log.debug("Getting current server apllication version");
+        String input;
+        BufferedReader bufferedReader = new BufferedReader(
+                new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING));
+
+        input = bufferedReader.readLine();
+
+        JsonParser parser = new JsonParser();
+        JsonObject root = parser.parse(input).getAsJsonObject();
+
+        appVersion = new AppVersion();
+        formAppVersionFromJson(root);
+    }
+
+    private void translateMessages() {
+        translation = new Translation("translations/UpdaterBundle") {
+            @Override
+            public void initTranslations() {
+                canNotUpdateTitle = messages.getString("canNotUpdateTitle");
+                canNotUpdateMessage = messages.getString("canNotUpdateMessage");
+            }
+        };
+        translation.initTranslations();
+    }
+
+    public void createConnection() {
+        try {
+            getConnection();
+            if (!connection.getDoOutput()) {
+                connection.setDoOutput(true);
+            }
+            if (!connection.getDoInput()) {
+                connection.setDoInput(true);
+            }
+
+        } catch (IOException e) {
+            log.warn("Could not establish connection", e);
+        }
+    }
+
     public void formAppVersionFromJson(JsonObject root) {
         log.debug("Parsing json to app version");
-        String browser_download_url = "browser_download_url";
-        String assets = "assets";
-        String name = "name";
-        String size = "size";
+        final String version = "tag_name";
+        final String browser_download_url = "browser_download_url";
+        final String assets = "assets";
+        final String name = "name";
+        final String size = "size";
+        final String info = "body";
 
-        appVersion.setVersion(root.getAsJsonObject().get("tag_name").getAsString());
+        appVersion.setVersion(root.getAsJsonObject().get(version).getAsString());
+        appVersion.setUpdateInfo(root.getAsJsonObject().get(info).getAsString());
 
         JsonArray asserts = root.getAsJsonArray(assets);
         for (JsonElement assert_ : asserts) {

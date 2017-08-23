@@ -7,6 +7,7 @@ public class AppVersion {
     private String version;
     private String downloadUrl;
     private long size;
+    private String updateInfo;
 
     public String getDownloadUrl() {
         return downloadUrl;
@@ -35,7 +36,19 @@ public class AppVersion {
 
     @Override
     public String toString() {
-        return "AppVersion: {" + version + "\ndownload:[" + downloadUrl + "], size: " + size / 1024 + "kb}";
+        return "AppVersion: {" + version + "\ndownload:[" + downloadUrl + "], size: " + getKilobyteFromByte() + "kb}" +
+                "\n" + updateInfo;
     }
 
+    private long getKilobyteFromByte() {
+        return size / 1024;
+    }
+
+    public String getUpdateInfo() {
+        return updateInfo;
+    }
+
+    public void setUpdateInfo(String updateInfo) {
+        this.updateInfo = updateInfo;
+    }
 }
