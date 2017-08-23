@@ -27,50 +27,36 @@ import static com.doos.commons.utils.UserUtils.showSuccessMessageToUser;
 
 @SuppressWarnings({"ALL", "ResultOfMethodCallIgnored"})
 public class UpdateDialog extends JFrame implements MessagePushable {
+    private static final Logger log = Logger.getLogger(getCurrentClassName());
     public static UpdateDialog updateDialog = null;
     public JProgressBar progressBar1;
-
     public JButton buttonOK;
     public JButton buttonCancel;
-
     Timer messageTimer;
-
+    String retryButton = "Retry";
     private Translation translation;
-
     private AppVersion serverAppVersion;
-
     private JPanel contentPane;
     private JPanel errorPanel;
-
     private JLabel currentVersionLabel;
     private JLabel availableVersionLabel;
     private JLabel newVersionSizeLabel;
     private JLabel unitLabel;
     private JLabel currentVersionStringLabel;
     private JLabel availableVersionStringLabel;
-
     private JTextPane errorTextPane;
-
+    private JButton updateInfoButton;
     private Thread updateThread;
-
     private String successUpdatedMessage = "WeblocOpener successfully updated to version: ";
     private String successTitle = "Success";
-
     private String installationCancelledTitle = "Installation cancelled";
     private String installationCancelledMessage = "Installation cancelled by User during installation";
-
     private String noPermissionsMessage = "Installation can not be run, because it has no permissions.";
-
     private String installationCancelledByErrorMessage1 = "Installation cancelled by Error (unhandled error),";
     private String installationCancelledByErrorMessage2 = "code: ";
     private String installationCancelledByErrorMessage3 = "visit " + ApplicationConstants.GITHUB_WEB_URL + " for more info.";
-
     private String lostConnectionTitle = "Unable to update.";
     private String lostConnectionMessage = "Can not download update \nLost connection, retry.";
-
-    String retryButton = "Retry";
-
-    private static final Logger log = Logger.getLogger(getCurrentClassName());
 
     public UpdateDialog() {
         serverAppVersion = new AppVersion();
@@ -99,6 +85,18 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                 JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        updateInfoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (serverAppVersion != null) {
+                    if (!serverAppVersion.getUpdateInfo().isEmpty()) {
+                        UpdateInfoDialog dialog = new UpdateInfoDialog(serverAppVersion);
+                    }
+                }
+            }
+        });
+
         pack();
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
         setSize(new Dimension(400, 170));
@@ -165,6 +163,8 @@ public class UpdateDialog extends JFrame implements MessagePushable {
             progressBar1.setIndeterminate(false);
             availableVersionLabel.setText(serverAppVersion.getVersion());
             setNewVersionSizeInfo();
+
+            updateInfoButton.setEnabled(true);
 
 
             String str;
@@ -326,13 +326,12 @@ public class UpdateDialog extends JFrame implements MessagePushable {
                 }
             }
             runCleanInstallerFile();
-        } else {
-            dispose();
         }
         File updateJar = new File(ApplicationConstants.UPDATE_PATH_FILE + "Updater_.jar");
         if (updateJar.exists()) {
             runCleanTempUpdaterFile();
         }
+        dispose();
     }
 
     private void runCleanTempUpdaterFile() {
@@ -349,7 +348,7 @@ public class UpdateDialog extends JFrame implements MessagePushable {
     }
 
     private void runCleanInstallerFile() {
-       log.info("Deleting file: " + ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
+        log.info("Deleting file: " + ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
                 + serverAppVersion.getVersion() + "" + ".exe");
         File installer = new File(ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
                 + serverAppVersion.getVersion() + ".exe");
