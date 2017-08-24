@@ -39,6 +39,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
     private JTextPane errorTextPane;
     private JPanel errorPanel;
     private JComboBox browserComboBox;
+    private JButton обновитьСписокButton;
 
 
     private String errorMessageTitle = "Error";
@@ -89,50 +90,6 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         log.debug("Settings dialog created.");
     }
 
-    private void onAbout() {
-        AboutApplicationDialog dialog = new AboutApplicationDialog();
-        dialog.setVisible(true);
-    }
-
-    private void translateDialog() {
-        Translation translation = new Translation("translations/SettingsDialogBundle") {
-            @Override
-            public void initTranslations() {
-                setTitle(messages.getString("windowTitle"));
-
-                buttonOK.setText(messages.getString("buttonOk"));
-                buttonCancel.setText(messages.getString("buttonCancel"));
-
-                versionStringLabel.setText(messages.getString("versionString"));
-                autoUpdateEnabledCheckBox.setText(messages.getString("autoUpdateEnabledCheckBox"));
-                updateNowButton.setText(messages.getString("updateNowButton"));
-
-                canNotSaveSettingsToRegistryMessage = messages.getString("canNotSaveSettingsToRegistryMessage");
-                errorMessageTitle = messages.getString("errorMessage");
-            }
-        };
-        translation.initTranslations();
-    }
-
-    private void onUpdateNow() {
-        String run;
-        try {
-            run = "java -jar \"" + RegistryManager.getInstallLocationValue()
-                    + File.separator + "Updater.jar\"";
-        } catch (RegistryCanNotReadInfoException e) {
-            run = new File(SettingsDialog.class.getProtectionDomain()
-                    .getCodeSource().getLocation().getPath()).getAbsolutePath().replace("%20", " ");
-            log.warn("Can not read registry, using alternate path: [" + run + "]", e);
-        }
-        log.info("Running: " + run);
-        try {
-            Runtime.getRuntime().exec(run);
-        } catch (IOException e) {
-            log.warn("Can not execute command: " + run, e);
-        }
-        dispose();
-    }
-
     private void loadSettings() {
         try {
             autoUpdateEnabledCheckBox.setSelected(RegistryManager.isAutoUpdateActive());
@@ -152,6 +109,15 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         }
     }
 
+    private void onAbout() {
+        AboutApplicationDialog dialog = new AboutApplicationDialog();
+        dialog.setVisible(true);
+    }
+
+    private void onCancel() {
+        dispose();
+    }
+
     private void onOK() {
         try {
             updateRegistryAndDispose();
@@ -169,14 +135,22 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         }
     }
 
-    private void updateRegistryAndDispose() throws RegistryCanNotReadInfoException, RegistryCanNotWriteInfoException {
-        if (RegistryManager.isAutoUpdateActive() != autoUpdateEnabledCheckBox.isSelected()) {
-            RegistryManager.setAutoUpdateActive(autoUpdateEnabledCheckBox.isSelected());
+    private void onUpdateNow() {
+        String run;
+        try {
+            run = "java -jar \"" + RegistryManager.getInstallLocationValue()
+                    + File.separator + "Updater.jar\"";
+        } catch (RegistryCanNotReadInfoException e) {
+            run = new File(SettingsDialog.class.getProtectionDomain()
+                    .getCodeSource().getLocation().getPath()).getAbsolutePath().replace("%20", " ");
+            log.warn("Can not read registry, using alternate path: [" + run + "]", e);
         }
-        dispose();
-    }
-
-    private void onCancel() {
+        log.info("Running: " + run);
+        try {
+            Runtime.getRuntime().exec(run);
+        } catch (IOException e) {
+            log.warn("Can not execute command: " + run, e);
+        }
         dispose();
     }
 
@@ -203,6 +177,33 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         });
         messageTimer.setRepeats(false);
         messageTimer.start();
+    }
+
+    private void translateDialog() {
+        Translation translation = new Translation("translations/SettingsDialogBundle") {
+            @Override
+            public void initTranslations() {
+                setTitle(messages.getString("windowTitle"));
+
+                buttonOK.setText(messages.getString("buttonOk"));
+                buttonCancel.setText(messages.getString("buttonCancel"));
+
+                versionStringLabel.setText(messages.getString("versionString"));
+                autoUpdateEnabledCheckBox.setText(messages.getString("autoUpdateEnabledCheckBox"));
+                updateNowButton.setText(messages.getString("updateNowButton"));
+
+                canNotSaveSettingsToRegistryMessage = messages.getString("canNotSaveSettingsToRegistryMessage");
+                errorMessageTitle = messages.getString("errorMessage");
+            }
+        };
+        translation.initTranslations();
+    }
+
+    private void updateRegistryAndDispose() throws RegistryCanNotReadInfoException, RegistryCanNotWriteInfoException {
+        if (RegistryManager.isAutoUpdateActive() != autoUpdateEnabledCheckBox.isSelected()) {
+            RegistryManager.setAutoUpdateActive(autoUpdateEnabledCheckBox.isSelected());
+        }
+        dispose();
     }
 
     private void updateSize(UpdateMode mode) {

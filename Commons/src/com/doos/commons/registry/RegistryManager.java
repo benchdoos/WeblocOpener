@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.util.Properties;
 
+import static com.doos.commons.core.ApplicationConstants.BROWSER_DEFAULT_VALUE;
 import static com.doos.commons.utils.Logging.getCurrentClassName;
 
 /**
@@ -25,38 +26,70 @@ public class RegistryManager {
     public static final String KEY_APP_ROOT_FOLDER_NAME = ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME;
     public final static String REGISTRY_APP_PATH
             = "SOFTWARE\\" + ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME + "\\";
-    private static final Logger log = Logger.getLogger(getCurrentClassName());
+    public static final String KEY_BROWSER = "Browser";
+
+
     private static final WinReg.HKEY APP_ROOT_HKEY = WinReg.HKEY_CURRENT_USER;
-    private static final Properties settings = new Properties();
+
+    private static final Properties SETTINGS = new Properties();
+
+    private static final Logger log = Logger.getLogger(getCurrentClassName());
+
 
     public static void repealSettings() {
-        log.info("[REGISTRY MANAGER] Setting settings to empty");
-        settings.setProperty(KEY_CURRENT_VERSION, "");
-        settings.setProperty(KEY_INSTALL_LOCATION, "");
-        settings.setProperty(KEY_AUTO_UPDATE, "");
-        settings.setProperty(KEY_APP_NAME, "");
-        settings.setProperty(KEY_URL_UPDATE_LINK, "");
+        log.info("[REGISTRY MANAGER] Setting SETTINGS to empty");
+        SETTINGS.setProperty(KEY_CURRENT_VERSION, "");
+        SETTINGS.setProperty(KEY_INSTALL_LOCATION, "");
+        SETTINGS.setProperty(KEY_AUTO_UPDATE, "");
+        SETTINGS.setProperty(KEY_BROWSER, "");
+        SETTINGS.setProperty(KEY_APP_NAME, "");
+        SETTINGS.setProperty(KEY_URL_UPDATE_LINK, "");
+    }
+
+    public static String getBrowserValue() {
+        if (SETTINGS.getProperty(KEY_BROWSER) == null || SETTINGS.getProperty(KEY_BROWSER).isEmpty()) {
+            try {
+                String value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
+                        REGISTRY_APP_PATH,
+                        KEY_BROWSER);
+                return value;
+            } catch (Win32Exception e) {
+                return BROWSER_DEFAULT_VALUE;
+            }
+        } else {
+            if (!SETTINGS.getProperty(KEY_BROWSER).equals(BROWSER_DEFAULT_VALUE)) {
+                return SETTINGS.getProperty(KEY_BROWSER);
+            } else {
+                return BROWSER_DEFAULT_VALUE;
+            }
+        }
+    }
+
+    public static void setBrowserValue(String callPath) throws RegistryCanNotWriteInfoException {
+        if (!callPath.isEmpty() && !callPath.equals(BROWSER_DEFAULT_VALUE)) {
+            RegistryManager.createRegistryEntry(KEY_BROWSER, callPath);
+        }
     }
 
     public static String getInstallLocationValue() throws RegistryCanNotReadInfoException {
 
-        if (settings.getProperty(KEY_INSTALL_LOCATION) == null || settings.getProperty(KEY_INSTALL_LOCATION).isEmpty()) {
+        if (SETTINGS.getProperty(KEY_INSTALL_LOCATION) == null || SETTINGS.getProperty(KEY_INSTALL_LOCATION).isEmpty()) {
             try {
                 String value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
-                                                                   REGISTRY_APP_PATH,
-                                                                   KEY_INSTALL_LOCATION);
+                        REGISTRY_APP_PATH,
+                        KEY_INSTALL_LOCATION);
                 if (!value.endsWith(File.separator)) {
                     value = value + File.separator;
                 }
-                settings.setProperty(KEY_INSTALL_LOCATION, value);
+                SETTINGS.setProperty(KEY_INSTALL_LOCATION, value);
                 return value;
             } catch (Win32Exception e) {
                 throw new RegistryCanNotReadInfoException("Can not read Installed Location value : " +
-                                                                  "HKCU\\" + REGISTRY_APP_PATH + "" +
-                                                                  KEY_INSTALL_LOCATION,
-                                                          e);
+                        "HKCU\\" + REGISTRY_APP_PATH + "" +
+                        KEY_INSTALL_LOCATION,
+                        e);
             }
-        } else return settings.getProperty(KEY_INSTALL_LOCATION);
+        } else return SETTINGS.getProperty(KEY_INSTALL_LOCATION);
     }
 
     public static void setInstallLocationValue(String location) throws RegistryCanNotWriteInfoException {
@@ -65,17 +98,17 @@ public class RegistryManager {
 
     public static String getAppVersionValue() throws RegistryCanNotReadInfoException {
 
-        if (settings.getProperty(KEY_CURRENT_VERSION) == null || settings.getProperty(KEY_CURRENT_VERSION).isEmpty()) {
+        if (SETTINGS.getProperty(KEY_CURRENT_VERSION) == null || SETTINGS.getProperty(KEY_CURRENT_VERSION).isEmpty()) {
             try {
                 String result = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
-                                                                    REGISTRY_APP_PATH,
-                                                                    KEY_CURRENT_VERSION);
-                settings.setProperty(KEY_CURRENT_VERSION, result);
+                        REGISTRY_APP_PATH,
+                        KEY_CURRENT_VERSION);
+                SETTINGS.setProperty(KEY_CURRENT_VERSION, result);
                 return result;
             } catch (Win32Exception e) {
                 throw new RegistryCanNotReadInfoException("Can not get app version value", e);
             }
-        } else return settings.getProperty(KEY_CURRENT_VERSION);
+        } else return SETTINGS.getProperty(KEY_CURRENT_VERSION);
     }
 
     public static void setAppVersionValue(String version) throws RegistryCanNotWriteInfoException {
@@ -83,18 +116,18 @@ public class RegistryManager {
     }
 
     public static boolean isAutoUpdateActive() throws RegistryCanNotReadInfoException {
-        if (settings.getProperty(KEY_AUTO_UPDATE) == null || settings.getProperty(KEY_AUTO_UPDATE).isEmpty()) {
+        if (SETTINGS.getProperty(KEY_AUTO_UPDATE) == null || SETTINGS.getProperty(KEY_AUTO_UPDATE).isEmpty()) {
             try {
                 String value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY, REGISTRY_APP_PATH, KEY_AUTO_UPDATE);
 
                 boolean result = Boolean.parseBoolean(value); //prevents
-                settings.setProperty(KEY_AUTO_UPDATE, Boolean.toString(result));
+                SETTINGS.setProperty(KEY_AUTO_UPDATE, Boolean.toString(result));
                 return result;
             } catch (Win32Exception e) {
                 throw new RegistryCanNotReadInfoException("Can not read " + RegistryManager.KEY_AUTO_UPDATE + " value",
-                                                          e);
+                        e);
             }
-        } else return Boolean.parseBoolean(settings.getProperty(KEY_AUTO_UPDATE));
+        } else return Boolean.parseBoolean(SETTINGS.getProperty(KEY_AUTO_UPDATE));
     }
 
     public static void setAutoUpdateActive(boolean autoUpdateActive) throws RegistryCanNotWriteInfoException {
@@ -103,18 +136,18 @@ public class RegistryManager {
 
     @SuppressWarnings("UnusedReturnValue")
     public static String getAppNameValue() throws RegistryCanNotReadInfoException {
-        if (settings.getProperty(KEY_APP_NAME) == null || settings.getProperty(KEY_APP_NAME).isEmpty()) {
+        if (SETTINGS.getProperty(KEY_APP_NAME) == null || SETTINGS.getProperty(KEY_APP_NAME).isEmpty()) {
             try {
                 String value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
-                                                                   REGISTRY_APP_PATH,
-                                                                   KEY_APP_NAME);
-                settings.setProperty(KEY_APP_NAME, value);
+                        REGISTRY_APP_PATH,
+                        KEY_APP_NAME);
+                SETTINGS.setProperty(KEY_APP_NAME, value);
                 return value;
             } catch (Win32Exception e) {
                 throw new RegistryCanNotReadInfoException("Can not read Installed Location value : " +
-                                                                  "HKLM\\" + REGISTRY_APP_PATH + "" + KEY_APP_NAME, e);
+                        "HKLM\\" + REGISTRY_APP_PATH + "" + KEY_APP_NAME, e);
             }
-        } else return settings.getProperty(KEY_APP_NAME);
+        } else return SETTINGS.getProperty(KEY_APP_NAME);
 
     }
 
@@ -125,19 +158,19 @@ public class RegistryManager {
     @SuppressWarnings("UnusedReturnValue")
     public static String getURLUpdateValue() throws RegistryCanNotReadInfoException {
 
-        if (settings.getProperty(KEY_URL_UPDATE_LINK) == null || settings.getProperty(KEY_URL_UPDATE_LINK).isEmpty()) {
+        if (SETTINGS.getProperty(KEY_URL_UPDATE_LINK) == null || SETTINGS.getProperty(KEY_URL_UPDATE_LINK).isEmpty()) {
             try {
                 String value = Advapi32Util.registryGetStringValue(APP_ROOT_HKEY,
-                                                                   REGISTRY_APP_PATH,
-                                                                   KEY_URL_UPDATE_LINK);
-                settings.setProperty(KEY_URL_UPDATE_LINK, value);
+                        REGISTRY_APP_PATH,
+                        KEY_URL_UPDATE_LINK);
+                SETTINGS.setProperty(KEY_URL_UPDATE_LINK, value);
                 return value;
             } catch (Win32Exception e) {
                 throw new RegistryCanNotReadInfoException(
                         "Can not read Installed Location value : " +
                                 "HKLM\\" + REGISTRY_APP_PATH + "" + KEY_URL_UPDATE_LINK, e);
             }
-        } else return settings.getProperty(KEY_URL_UPDATE_LINK);
+        } else return SETTINGS.getProperty(KEY_URL_UPDATE_LINK);
 
     }
 
@@ -148,12 +181,12 @@ public class RegistryManager {
     public static void createRegistryEntry(String path, String valueName, String value) throws
             RegistryCanNotWriteInfoException {
         try {
-            settings.setProperty(valueName, value);
+            SETTINGS.setProperty(valueName, value);
             Advapi32Util.registrySetStringValue(APP_ROOT_HKEY, path, valueName, value);
         } catch (Win32Exception e) {
             throw new RegistryCanNotWriteInfoException("Can not create entry at: "
-                                                               + APP_ROOT_HKEY + "\\" + path + valueName
-                                                               + " With value [" + value + "]", e);
+                    + APP_ROOT_HKEY + "\\" + path + valueName
+                    + " With value [" + value + "]", e);
         }
     }
 
@@ -176,11 +209,11 @@ public class RegistryManager {
      * It will help to prevent app from crash (if install location is not currupt);
      */
     public static void setDefaultSettings() {
-        log.info("[REGISTRY MANAGER] Setting default settings for app");
-        settings.setProperty(KEY_CURRENT_VERSION, ApplicationConstants.APP_VERSION);
-        settings.setProperty(KEY_AUTO_UPDATE, Boolean.toString(ApplicationConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE));
-        settings.setProperty(KEY_APP_NAME, ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME);
-        settings.setProperty(KEY_URL_UPDATE_LINK, ApplicationConstants.UPDATE_WEB_URL);
+        log.info("[REGISTRY MANAGER] Setting default SETTINGS for app");
+        SETTINGS.setProperty(KEY_CURRENT_VERSION, ApplicationConstants.APP_VERSION);
+        SETTINGS.setProperty(KEY_AUTO_UPDATE, Boolean.toString(ApplicationConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE));
+        SETTINGS.setProperty(KEY_APP_NAME, ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME);
+        SETTINGS.setProperty(KEY_URL_UPDATE_LINK, ApplicationConstants.UPDATE_WEB_URL);
     }
 }
 

@@ -164,7 +164,7 @@ public class Main {
                 Runtime.getRuntime().exec("java -jar " + UPDATE_PATH_FILE + "Updater_.jar");
                 System.exit(0);
             } catch (IOException e) {
-                e.printStackTrace();
+                log.warn(e);
             }
         } else {
             Main.createUpdateDialog();

@@ -2,13 +2,17 @@ package com.doos.webloc_opener.service;
 
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListParser;
+import com.doos.commons.core.ApplicationConstants;
+import com.doos.commons.registry.RegistryManager;
 import com.doos.commons.utils.Logging;
 import com.doos.commons.utils.UserUtils;
 import org.apache.log4j.Logger;
 
 import java.awt.*;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
 
@@ -25,10 +29,51 @@ public class UrlsProceed {
      * @param url Url to open.
      */
     public static void openUrl(String url) {
+        if (RegistryManager.getBrowserValue().equals(ApplicationConstants.BROWSER_DEFAULT_VALUE)
+                || RegistryManager.getBrowserValue().isEmpty()) {
+            log.info("Opening URL in default browser: " + url);
+            openUrlInDefaultBrowser(url);
+        } else {
+            try {
+                log.info("Opening URL in not default browser with call:[" + RegistryManager.getBrowserValue() + "]: " + url);
+                openUrlInNotDefaultBrowser(url);
+            } catch (IOException e) {
+                log.warn(e);
+            }
+        }
+
+    }
+
+    private static void openUrlInNotDefaultBrowser(String url) throws IOException {
+        if (!url.isEmpty()) {
+            String call = RegistryManager.getBrowserValue().replace("%site", url);
+            Runtime runtime = Runtime.getRuntime();
+            Process process = runtime.exec("cmd /c " + call);
+
+            BufferedReader stdError = new BufferedReader(new
+                    InputStreamReader(process.getErrorStream()));
+
+            // read the output from the command
+            String errorMessage = null;
+            boolean error = false;
+            while ((errorMessage = stdError.readLine()) != null) {
+                error = true;
+                log.warn("Can not start this browser: " + errorMessage);
+                log.info("Opening in default browser: " + url);
+            }
+            if (error) {
+                openUrlInDefaultBrowser(url);
+            }
+
+        }
+    }
+
+    private static void openUrlInDefaultBrowser(String url) {
         if (!Desktop.isDesktopSupported()) {
             log.warn("Desktop is not supported");
             return;
         }
+
         Desktop desktop = Desktop.getDesktop();
 
         try {
@@ -39,7 +84,6 @@ public class UrlsProceed {
             log.warn("Can not open url: " + url, e);
             UserUtils.showWarningMessageToUser(null, null, "URL is corrupt: " + url);
         }
-
     }
 
 

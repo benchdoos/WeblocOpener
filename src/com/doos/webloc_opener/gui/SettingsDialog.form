@@ -113,11 +113,6 @@
               <text resource-bundle="translations/SettingsDialogBundle" key="versionString"/>
             </properties>
           </component>
-          <hspacer id="55788">
-            <constraints>
-              <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-          </hspacer>
           <component id="dabbe" class="javax.swing.JComboBox" binding="browserComboBox">
             <constraints>
               <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
@@ -129,7 +124,19 @@
               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
+              <labelFor value="dabbe"/>
               <text resource-bundle="translations/SettingsDialogBundle" key="openInBrowser"/>
+            </properties>
+          </component>
+          <component id="8ba86" class="javax.swing.JButton" binding="обновитьСписокButton" default-binding="true">
+            <constraints>
+              <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <icon value="refresh16.png"/>
+              <margin top="2" left="2" bottom="2" right="2"/>
+              <text value=""/>
+              <toolTipText resource-bundle="translations/SettingsDialogBundle" key="updateList"/>
             </properties>
           </component>
         </children>

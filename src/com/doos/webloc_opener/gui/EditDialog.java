@@ -70,16 +70,16 @@ public class EditDialog extends JFrame implements MessagePushable {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-
-            @Override
             public void windowActivated(WindowEvent e) {
                 if (textField1.getText().isEmpty()) {
                     fillTextFieldWithClipboard();
                 }
                 super.windowActivated(e);
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                onCancel();
             }
         });
 
@@ -99,6 +99,10 @@ public class EditDialog extends JFrame implements MessagePushable {
 
         textField1.getDocument().addDocumentListener(new DocumentListener() {
             @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+
+            @Override
             public void insertUpdate(DocumentEvent e) {
                 updateTextFont();
             }
@@ -106,10 +110,6 @@ public class EditDialog extends JFrame implements MessagePushable {
             @Override
             public void removeUpdate(DocumentEvent e) {
                 updateTextFont();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
             }
 
             private void updateTextFont() {
@@ -144,34 +144,10 @@ public class EditDialog extends JFrame implements MessagePushable {
         log.debug("Got path path: [" + pathToEditingFile + "]");
     }
 
-    public void setTextFieldFont(Font font, TextAttribute attribute1, int attribute2) {
-        Map attributes = font.getAttributes();
-        attributes.put(attribute1, attribute2);
-        textField1.setFont(font.deriveFont(attributes));
-    }
-
-    private void translateDialog() {
-        Translation translation = new Translation("translations/EditDialogBundle") {
-            @Override
-            public void initTranslations() {
-                setTitle(messages.getString("windowTitle"));
-                urlLabel.setText(messages.getString("urlLabelText"));
-                createWeblocFileTextPane.setText(
-                        "<html>\n" +
-                                "  <body>\n" + "\t"
-                                + messages.getString("textPane1") + " <b>.webloc</b> "
-                                + messages.getString("textPane2") + ":\n"
-                                + "  </body>\n" +
-                                "</html>\n");
-
-                buttonOK.setText(messages.getString("buttonOk"));
-                buttonCancel.setText(messages.getString("buttonCancel"));
-                iconLabel.setToolTipText(messages.getString("iconLabel") + ApplicationConstants.APP_VERSION);
-                incorrectUrlMessage = messages.getString("incorrectUrlMessage");
-                errorTitle = messages.getString("errorTitle");
-            }
-        };
-        translation.initTranslations();
+    @Override
+    public void dispose() {
+        super.dispose();
+        UrlsProceed.shutdownLogout();
     }
 
     private void fillTextField(String pathToEditingFile) {
@@ -201,6 +177,10 @@ public class EditDialog extends JFrame implements MessagePushable {
         }
     }
 
+    private void onCancel() {
+        dispose();
+    }
+
     private void onOK() {
         try {
             URL url = new URL(textField1.getText());
@@ -227,16 +207,11 @@ public class EditDialog extends JFrame implements MessagePushable {
 
     }
 
-    private void onCancel() {
-        dispose();
+    public void setTextFieldFont(Font font, TextAttribute attribute1, int attribute2) {
+        Map attributes = font.getAttributes();
+        attributes.put(attribute1, attribute2);
+        textField1.setFont(font.deriveFont(attributes));
     }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-        UrlsProceed.shutdownLogout();
-    }
-
 
     @Override
     public void setVisible(boolean b) {
@@ -267,6 +242,30 @@ public class EditDialog extends JFrame implements MessagePushable {
         });
         messageTimer.setRepeats(false);
         messageTimer.start();
+    }
+
+    private void translateDialog() {
+        Translation translation = new Translation("translations/EditDialogBundle") {
+            @Override
+            public void initTranslations() {
+                setTitle(messages.getString("windowTitle"));
+                urlLabel.setText(messages.getString("urlLabelText"));
+                createWeblocFileTextPane.setText(
+                        "<html>\n" +
+                                "  <body>\n" + "\t"
+                                + messages.getString("textPane1") + " <b>.webloc</b> "
+                                + messages.getString("textPane2") + ":\n"
+                                + "  </body>\n" +
+                                "</html>\n");
+
+                buttonOK.setText(messages.getString("buttonOk"));
+                buttonCancel.setText(messages.getString("buttonCancel"));
+                iconLabel.setToolTipText(messages.getString("iconLabel") + ApplicationConstants.APP_VERSION);
+                incorrectUrlMessage = messages.getString("incorrectUrlMessage");
+                errorTitle = messages.getString("errorTitle");
+            }
+        };
+        translation.initTranslations();
     }
 
     private void updateSize(SettingsDialog.UpdateMode mode) {
