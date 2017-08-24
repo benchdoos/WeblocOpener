@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -40,6 +41,11 @@ public class AboutApplicationDialog extends JDialog {
         setIconImage(Toolkit.getDefaultToolkit().getImage(SettingsDialog.class.getResource("/balloonIcon64.png")));
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        getRootPane().registerKeyboardAction(e -> {
+            dispose();
+        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+
         setModal(true);
         setSize(550, 300);
         setResizable(false);
