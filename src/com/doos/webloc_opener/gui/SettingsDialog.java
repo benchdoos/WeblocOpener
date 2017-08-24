@@ -38,6 +38,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
     private JButton aboutButton;
     private JTextPane errorTextPane;
     private JPanel errorPanel;
+    private JComboBox browserComboBox;
 
 
     private String errorMessageTitle = "Error";
