@@ -66,7 +66,7 @@ public class RegistryManager {
     }
 
     public static void setBrowserValue(String callPath) throws RegistryCanNotWriteInfoException {
-        if (!callPath.isEmpty() && !callPath.equals(BROWSER_DEFAULT_VALUE)) {
+        if (!callPath.isEmpty()) {
             RegistryManager.createRegistryEntry(KEY_BROWSER, callPath);
         }
     }

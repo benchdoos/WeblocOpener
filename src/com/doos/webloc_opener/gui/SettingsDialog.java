@@ -43,7 +43,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
     private JButton updateListButton;
     private JTextField callTextField;
     private JLabel callLabel;
-    private JLabel syntaxInfoButton;
+    private JLabel syntaxInfoLabel;
     private JCheckBox incognitoCheckBox;
     private String errorMessageTitle = "Error";
     private String canNotSaveSettingsToRegistryMessage = "Can not save settings to registry.";
@@ -109,6 +109,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
             } else {
                 if (comboBox.getSelectedIndex() == 0) {
                     incognitoCheckBox.setEnabled(false);
+                    incognitoCheckBox.setSelected(false);
                 } else {
                     if (browsers.get(comboBox.getSelectedIndex()).getIncognitoCall() != null) {
                         incognitoCheckBox.setEnabled(true);
@@ -142,6 +143,18 @@ public class SettingsDialog extends JFrame implements MessagePushable {
 
         aboutButton.addActionListener(e -> onAbout());
 
+        callTextField.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentHidden(ComponentEvent e) {
+                syntaxInfoLabel.setVisible(false);
+            }
+
+            @Override
+            public void componentShown(ComponentEvent e) {
+                syntaxInfoLabel.setVisible(true);
+            }
+        });
+
         setSyntaxInfoButtonToolTip();
 
         // call onCancel() when cross is clicked
@@ -161,6 +174,12 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         } catch (RegistryCanNotReadInfoException e) {
             versionLabel.setText("Unknown");
         }
+
+        syntaxInfoLabel.setVisible(false);
+        updateListButton.setVisible(false);
+        callTextField.setVisible(false);
+        callLabel.setVisible(false);
+
 
         onInit = false;
 
@@ -274,11 +293,11 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         ToolTipManager.sharedInstance().setDismissDelay(10_000);
 
 
-        final String toolTipText = "<html><body style=\"font-size: 12px;\">Syntax is <b style=\"color:red;\"><u>file path</u> %site</b>, don't forget to add <b>%site</b><br>" +
+        final String toolTipText = "<html><body style=\"font-size: 12px;\">Syntax: <b style=\"color:red;\"><u>file path</u> %site</b>, don't forget to add <b>%site</b><br>" +
                 "Example for Google Chrome: <b style=\"color:green;\">start chrome \"%site\"</b></body></html>";
-        syntaxInfoButton.setToolTipText(toolTipText);
+        syntaxInfoLabel.setToolTipText(toolTipText);
 
-        syntaxInfoButton.addMouseListener(new MouseAdapter() {
+        syntaxInfoLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent me) {
 //                ToolTipManager.sharedInstance().setDismissDelay(10_000);
@@ -291,7 +310,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                JComponent component = syntaxInfoButton;
+                JComponent component = syntaxInfoLabel;
 
                 MouseEvent phantom = new MouseEvent(
                         component,
@@ -363,15 +382,20 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         }
         Browser browser = (Browser) comboBox.getSelectedItem();
         if (browser != null) {
+            System.out.println(browser.getCall());
             if (comboBox.getSelectedIndex() != comboBox.getItemCount() - 1) {
                 if (browser.getCall() != null) {
                     if (!RegistryManager.getBrowserValue().equals(browser.getCall())) {
-                        RegistryManager.setBrowserValue(browser.getCall());
+                        if (!incognitoCheckBox.isSelected()) {
+                            RegistryManager.setBrowserValue(browser.getCall());
+                        }
                     }
                 }
                 if (browser.getIncognitoCall() != null) {
                     if (!RegistryManager.getBrowserValue().equals(browser.getIncognitoCall())) {
-                        RegistryManager.setBrowserValue(browser.getIncognitoCall());
+                        if (incognitoCheckBox.isSelected()) {
+                            RegistryManager.setBrowserValue(browser.getIncognitoCall());
+                        }
                     }
                 }
             } else {

@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "WeblocOpener"
-#define MyAppVersion "1.3.2"
+#define MyAppVersion "1.4"
 #define MyAppPublisher "Eugene Zrazhevsky"
 #define MyAppURL "https://benchdoos.github.io/"
 #define MyAppExeName "WeblocOpener.exe"
