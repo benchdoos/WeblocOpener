@@ -22,9 +22,6 @@ import java.util.ArrayList;
 public class BrowserManager {
     private static final Logger log = Logger.getLogger(Logging.getCurrentClassName());
 
-    private static final String FILE_LIST_NAME = "browser_list.plist";
-    private static final String DEFAULT_LIST_LOCATION = System.getProperty("java.io.tmpdir")
-            + ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME + File.separator + FILE_LIST_NAME;
     private static final String FIELD_NAME_LIST = "list";
     private static final String FIELD_NAME_BROWSER = "browser";
     private static final String FIELD_NAME_CALL = "call";
@@ -39,7 +36,7 @@ public class BrowserManager {
 
     public static void loadBrowserList() {
         initTranslation();
-        File file = new File(DEFAULT_LIST_LOCATION);
+        File file = new File(ApplicationConstants.DEFAULT_LIST_LOCATION);
         if (file.exists()) {
             parsePlist(file);
             browserList = plistToArrayList(plist);
@@ -120,8 +117,8 @@ public class BrowserManager {
         }
 
         try {
-            System.out.println("FL_: " + DEFAULT_LIST_LOCATION);
-            File file = new File(DEFAULT_LIST_LOCATION);
+            System.out.println("FL_: " + ApplicationConstants.DEFAULT_LIST_LOCATION);
+            File file = new File(ApplicationConstants.DEFAULT_LIST_LOCATION);
             PropertyListParser.saveAsXML(root, file);
         } catch (IOException e) {
             log.warn("Can not create .webloc file", e);
@@ -159,6 +156,12 @@ public class BrowserManager {
         firefox.setCall("start firefox " + "\"" + "%site" + "\"");
         firefox.setIncognitoCall("start firefox -private-window " + "\"" + "%site" + "\"");
         result.add(firefox);
+
+        Browser iexplorer = new Browser();
+        iexplorer.setName("Internet Explorer");
+        iexplorer.setCall("start iexplore " + "\"" + "%site" + "\"");
+        iexplorer.setIncognitoCall("start iexplore " + "\"" + "%site" + "\"" + " -private");
+        result.add(iexplorer);
 
         return result;
     }
