@@ -39,4 +39,7 @@ public interface ApplicationConstants {
     int UPDATE_CODE_CORRUPT = 193; //Installation file is corrupt.
     int UPDATE_CODE_INTERRUPT = -999; //Downloading/installation was interrupted by user.
 
+    String FILE_LIST_NAME = "browser_list.plist";
+    String DEFAULT_LIST_LOCATION = System.getProperty("java.io.tmpdir")
+            + WEBLOC_OPENER_APPLICATION_NAME + File.separator + FILE_LIST_NAME;
 }

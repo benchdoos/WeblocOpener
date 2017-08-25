@@ -96,6 +96,8 @@ public class Main {
                             }
                         }
                     }
+
+                    new File(ApplicationConstants.DEFAULT_LIST_LOCATION).delete();
                     //createUpdateDialog();
                     break;
                 default:
