@@ -12,22 +12,23 @@ import com.doos.commons.registry.fixer.RegistryFixerInstallPathKeyFailException;
 import com.doos.commons.utils.FrameUtils;
 import com.doos.commons.utils.MessagePushable;
 import com.doos.commons.utils.UserUtils;
+import com.doos.commons.utils.browser.Browser;
+import com.doos.commons.utils.browser.BrowserManager;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import static com.doos.commons.utils.Logging.getCurrentClassName;
 
 public class SettingsDialog extends JFrame implements MessagePushable {
     private static final Logger log = Logger.getLogger(getCurrentClassName());
-
+    boolean onInit = true;
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -38,21 +39,98 @@ public class SettingsDialog extends JFrame implements MessagePushable {
     private JButton aboutButton;
     private JTextPane errorTextPane;
     private JPanel errorPanel;
-    private JComboBox browserComboBox;
-    private JButton обновитьСписокButton;
-
-
+    private JComboBox<Object> comboBox;
+    private JButton updateListButton;
+    private JTextField callTextField;
+    private JLabel callLabel;
+    private JLabel syntaxInfoButton;
+    private JCheckBox incognitoCheckBox;
     private String errorMessageTitle = "Error";
     private String canNotSaveSettingsToRegistryMessage = "Can not save settings to registry.";
     private Timer messageTimer;
 
+    private String customBrowserName = "Custom...";
+
     public SettingsDialog() {
         log.debug("Creating settings dialog.");
+        translateDialog();
+        initGui();
+        log.debug("Settings dialog created.");
+    }
+
+    private int findBrowser(String browserValue) {
+        int result = 0;
+        for (int i = 0; i < BrowserManager.getBrowserList().size(); i++) {
+            Browser browser = BrowserManager.getBrowserList().get(i);
+            System.out.println(browser);
+
+            if (browser.getCall() != null) {
+                if (browser.getCall().equals(browserValue)) {
+                    result = i;
+                    return result;
+                } else if (browser.getIncognitoCall() != null) {
+                    if (browser.getIncognitoCall().equals(browserValue)) {
+                        result = i;
+                        return result;
+                    }
+                }
+            }
+        }
+
+        if (browserValue.equals("default") || browserValue.isEmpty()) {
+            return 0;
+        } else return BrowserManager.getBrowserList().size() - 1;
+    }
+
+    private void initComboBox() {
+        ArrayList<Browser> browsers = BrowserManager.getBrowserList();
+
+        Browser others = new Browser(customBrowserName, null);
+        browsers.add(others);
+
+        comboBox.setModel(new DefaultComboBoxModel<>(browsers.toArray()));
+
+        comboBox.addActionListener(e -> {
+            if (comboBox.getSelectedIndex() == comboBox.getItemCount() - 1) {
+                if (!onInit) {
+                    log.info("Opening file browser for custom browser search");
+                    String path = openFileBrowser();
+                    if (path != null) {
+                        callLabel.setVisible(true);
+                        callTextField.setVisible(true);
+                        callTextField.setText(path);
+                        incognitoCheckBox.setEnabled(false);
+                    }
+                } else {
+                    callLabel.setVisible(true);
+                    callTextField.setText(RegistryManager.getBrowserValue());
+                    callTextField.setVisible(true);
+                }
+            } else {
+                if (comboBox.getSelectedIndex() == 0) {
+                    incognitoCheckBox.setEnabled(false);
+                } else {
+                    if (browsers.get(comboBox.getSelectedIndex()).getIncognitoCall() != null) {
+                        incognitoCheckBox.setEnabled(true);
+                    } else {
+                        incognitoCheckBox.setSelected(false);
+                        incognitoCheckBox.setEnabled(false);
+                    }
+                }
+                callLabel.setVisible(false);
+                callTextField.setVisible(false);
+            }
+        });
+    }
+
+    private void initGui() {
         setContentPane(contentPane);
 
 
         getRootPane().setDefaultButton(buttonOK);
         setIconImage(Toolkit.getDefaultToolkit().getImage(SettingsDialog.class.getResource("/balloonIcon64.png")));
+
+        initComboBox();
 
         loadSettings();
 
@@ -63,6 +141,8 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         updateNowButton.addActionListener(e -> onUpdateNow());
 
         aboutButton.addActionListener(e -> onAbout());
+
+        setSyntaxInfoButtonToolTip();
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -82,17 +162,32 @@ public class SettingsDialog extends JFrame implements MessagePushable {
             versionLabel.setText("Unknown");
         }
 
+        onInit = false;
+
         pack();
-        setSize(350, 200);
+        setSize(400, 250);
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
         setResizable(false);
-        translateDialog();
-        log.debug("Settings dialog created.");
     }
 
     private void loadSettings() {
         try {
             autoUpdateEnabledCheckBox.setSelected(RegistryManager.isAutoUpdateActive());
+            comboBox.setSelectedIndex(findBrowser(RegistryManager.getBrowserValue()));
+            final Browser browser = (Browser) comboBox.getSelectedItem();
+
+            if (browser != null) {
+                if (browser.getIncognitoCall() != null) {
+                    incognitoCheckBox.setSelected(RegistryManager.getBrowserValue().equals(browser.getIncognitoCall()));
+                } else {
+                    incognitoCheckBox.setSelected(false);
+                    incognitoCheckBox.setEnabled(false);
+                }
+            } else {
+                incognitoCheckBox.setSelected(false);
+                incognitoCheckBox.setEnabled(false);
+            }
+
         } catch (RegistryException e) {
             log.warn("Can not load data from registry", e);
             try {
@@ -154,6 +249,67 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         dispose();
     }
 
+    private String openFileBrowser() {
+        log.debug("Opening File Browser");
+
+        FileDialog fd = new FileDialog(this, "Choose a file", FileDialog.LOAD);
+        fd.setIconImage(Toolkit.getDefaultToolkit()
+                .getImage(SettingsDialog.class.getResource("/balloonIcon64.png")));
+        fd.setDirectory(System.getProperty("user.dir"));
+        fd.setFile("*.exe");
+        fd.setVisible(true);
+        String filename = fd.getFile();
+        if (filename == null) {
+            log.debug("Choice canceled");
+            return null;
+        } else {
+            File file = new File(fd.getFile());
+            log.debug("Choice: " + file.getAbsolutePath());
+            return file.getAbsolutePath();
+        }
+    }
+
+    private void setSyntaxInfoButtonToolTip() {
+        final int defaultDismissTimeout = ToolTipManager.sharedInstance().getDismissDelay();
+        ToolTipManager.sharedInstance().setDismissDelay(10_000);
+
+
+        final String toolTipText = "<html><body style=\"font-size: 12px;\">Syntax is <b style=\"color:red;\"><u>file path</u> %site</b>, don't forget to add <b>%site</b><br>" +
+                "Example for Google Chrome: <b style=\"color:green;\">start chrome \"%site\"</b></body></html>";
+        syntaxInfoButton.setToolTipText(toolTipText);
+
+        syntaxInfoButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent me) {
+//                ToolTipManager.sharedInstance().setDismissDelay(10_000);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent me) {
+//                ToolTipManager.sharedInstance().setDismissDelay(defaultDismissTimeout);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                JComponent component = syntaxInfoButton;
+
+                MouseEvent phantom = new MouseEvent(
+                        component,
+                        MouseEvent.MOUSE_MOVED,
+                        System.currentTimeMillis(),
+                        0,
+                        0,
+                        0,
+                        0,
+                        false);
+
+                ToolTipManager.sharedInstance().mouseMoved(phantom);
+            }
+        });
+
+
+    }
+
     @Override
     public void showMessage(String message, int messageValue) {
         errorPanel.setBackground(MessagePushable.getMessageColor(messageValue));
@@ -194,6 +350,8 @@ public class SettingsDialog extends JFrame implements MessagePushable {
 
                 canNotSaveSettingsToRegistryMessage = messages.getString("canNotSaveSettingsToRegistryMessage");
                 errorMessageTitle = messages.getString("errorMessage");
+
+                customBrowserName = messages.getString("customBrowserName");
             }
         };
         translation.initTranslations();
@@ -203,6 +361,26 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         if (RegistryManager.isAutoUpdateActive() != autoUpdateEnabledCheckBox.isSelected()) {
             RegistryManager.setAutoUpdateActive(autoUpdateEnabledCheckBox.isSelected());
         }
+        Browser browser = (Browser) comboBox.getSelectedItem();
+        if (browser != null) {
+            if (comboBox.getSelectedIndex() != comboBox.getItemCount() - 1) {
+                if (browser.getCall() != null) {
+                    if (!RegistryManager.getBrowserValue().equals(browser.getCall())) {
+                        RegistryManager.setBrowserValue(browser.getCall());
+                    }
+                }
+                if (browser.getIncognitoCall() != null) {
+                    if (!RegistryManager.getBrowserValue().equals(browser.getIncognitoCall())) {
+                        RegistryManager.setBrowserValue(browser.getIncognitoCall());
+                    }
+                }
+            } else {
+                if (!callTextField.getText().equals(browser.getIncognitoCall())) {
+                    RegistryManager.setBrowserValue(callTextField.getText());
+                }
+            }
+        }
+
         dispose();
     }
 

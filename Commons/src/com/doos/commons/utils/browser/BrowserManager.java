@@ -28,6 +28,7 @@ public class BrowserManager {
     private static final String FIELD_NAME_LIST = "list";
     private static final String FIELD_NAME_BROWSER = "browser";
     private static final String FIELD_NAME_CALL = "call";
+    private static final String FIELD_NAME_PRIVATE_CALL = "private-call";
     private static NSArray plist = new NSArray();
     private static ArrayList<Browser> browserList = new ArrayList<>();
 
@@ -35,31 +36,59 @@ public class BrowserManager {
     private static String defaultBrowserName = "Default";
     private static Translation translation;
 
-    static void loadBrowserList() {
+
+    public static void loadBrowserList() {
         initTranslation();
         File file = new File(DEFAULT_LIST_LOCATION);
         if (file.exists()) {
             parsePlist(file);
             browserList = plistToArrayList(plist);
             browserList.add(0, new Browser(defaultBrowserName, ApplicationConstants.BROWSER_DEFAULT_VALUE));
-            System.out.println(browserList);
+            System.out.println("count: " + browserList.size() + " " + browserList);
         } else {
             reloadBrowserList(generateDefaultBrowserArrayList());
         }
     }
 
+    public static ArrayList<Browser> getBrowserList() {
+        return browserList;
+    }
+
+    public static boolean isDefaultBrowser(String call) {
+        boolean result = false;
+        ArrayList<Browser> defaultBrowserList = generateDefaultBrowserArrayList();
+        for (Browser browser : defaultBrowserList) {
+
+            if (browser.getCall() != null) {
+                if (browser.getCall().equals(call)) {
+                    result = true;
+                }
+            }
+            if (browser.getIncognitoCall() != null) {
+                if (browser.getIncognitoCall().equals(call)) {
+                    result = true;
+                }
+            }
+        }
+        return result;
+    }
+
     private static ArrayList<Browser> plistToArrayList(NSArray plist) {
         ArrayList<Browser> result = new ArrayList<>();
-        System.out.println("count : " + plist.count());
         for (int i = 0; i < plist.count(); i++) {
             try {
                 NSDictionary dictionary = (NSDictionary) plist.objectAtIndex(i);
                 final String name = dictionary.objectForKey(FIELD_NAME_BROWSER).toString();
                 final String call = dictionary.objectForKey(FIELD_NAME_CALL).toString();
-
                 Browser browser = new Browser();
                 browser.setName(name);
                 browser.setCall(call);
+
+                try {
+                    final String incognito = dictionary.objectForKey(FIELD_NAME_PRIVATE_CALL).toString();
+                    browser.setIncognitoCall(incognito);
+                } catch (NullPointerException e) {/*NOP*/}
+
 
                 result.add(browser);
             } catch (NullPointerException e) {
@@ -86,6 +115,7 @@ public class BrowserManager {
             NSDictionary browser = new NSDictionary();
             browser.put(FIELD_NAME_BROWSER, browserList.get(i).getName());
             browser.put(FIELD_NAME_CALL, browserList.get(i).getCall());
+            browser.put(FIELD_NAME_PRIVATE_CALL, browserList.get(i).getIncognitoCall());
             root.setValue(i, browser);
         }
 
@@ -108,18 +138,27 @@ public class BrowserManager {
         //HKLM\Software\Microsoft\Windows\CurrentVersion\Uninstall
         Browser chrome = new Browser();
         chrome.setName("Google Chrome");
-        chrome.setCall("start chrome " + "\"" + "%site" + "\"");
+        final String call = "start chrome " + "\"" + "%site" + "\"";
+        chrome.setCall(call);
+        chrome.setIncognitoCall(call + " --incognito");
         result.add(chrome);
 
         Browser opera = new Browser();
         opera.setName("Opera");
         opera.setCall("start opera " + "\"" + "%site" + "\"");
+        opera.setIncognitoCall("start opera --private " + "\"" + "%site" + "\"");
         result.add(opera);
 
         Browser edge = new Browser();
         edge.setName("Microsoft Edge");
         edge.setCall("start microsoft-edge:" + "\"" + "%site" + "\"");
         result.add(edge);
+
+        Browser firefox = new Browser();
+        firefox.setName("Firefox");
+        firefox.setCall("start firefox " + "\"" + "%site" + "\"");
+        firefox.setIncognitoCall("start firefox -private-window " + "\"" + "%site" + "\"");
+        result.add(firefox);
 
         return result;
     }

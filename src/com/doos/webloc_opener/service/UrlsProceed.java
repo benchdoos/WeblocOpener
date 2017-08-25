@@ -48,21 +48,26 @@ public class UrlsProceed {
         if (!url.isEmpty()) {
             String call = RegistryManager.getBrowserValue().replace("%site", url);
             Runtime runtime = Runtime.getRuntime();
-            Process process = runtime.exec("cmd /c " + call);
+            final String command = "cmd /c " + call;
+            if (call.startsWith("start")) {
+                Process process = runtime.exec(command);
 
-            BufferedReader stdError = new BufferedReader(new
-                    InputStreamReader(process.getErrorStream()));
+                BufferedReader stdError = new BufferedReader(new
+                        InputStreamReader(process.getErrorStream()));
 
-            // read the output from the command
-            String errorMessage = null;
-            boolean error = false;
-            while ((errorMessage = stdError.readLine()) != null) {
-                error = true;
-                log.warn("Can not start this browser: " + errorMessage);
-                log.info("Opening in default browser: " + url);
-            }
-            if (error) {
-                openUrlInDefaultBrowser(url);
+                // read the output from the command
+                String errorMessage = null;
+                boolean error = false;
+                while ((errorMessage = stdError.readLine()) != null) {
+                    error = true;
+                    log.warn("Can not start this browser: " + errorMessage);
+                    log.info("Opening in default browser: " + url);
+                }
+                if (error) {
+                    openUrlInDefaultBrowser(url);
+                }
+            } else {
+                runtime.exec(call);
             }
 
         }

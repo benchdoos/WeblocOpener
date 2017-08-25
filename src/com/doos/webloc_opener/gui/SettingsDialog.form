@@ -3,9 +3,12 @@
   <grid id="cbd77" binding="contentPane" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="10" right="0"/>
     <constraints>
-      <xy x="48" y="54" width="436" height="297"/>
+      <xy x="48" y="54" width="597" height="297"/>
     </constraints>
-    <properties/>
+    <properties>
+      <minimumSize width="400" height="250"/>
+      <preferredSize width="400" height="250"/>
+    </properties>
     <border type="none"/>
     <children>
       <grid id="94766" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -57,7 +60,7 @@
           </component>
         </children>
       </grid>
-      <grid id="e3588" layout-manager="GridLayoutManager" row-count="5" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="e3588" layout-manager="GridLayoutManager" row-count="5" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="10" left="10" bottom="0" right="10"/>
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -67,7 +70,7 @@
         <children>
           <component id="4ee57" class="javax.swing.JCheckBox" binding="autoUpdateEnabledCheckBox" default-binding="true">
             <constraints>
-              <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <contentAreaFilled value="true"/>
@@ -79,30 +82,17 @@
               <verticalAlignment value="0"/>
             </properties>
           </component>
-          <hspacer id="6cc6f">
-            <constraints>
-              <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-          </hspacer>
           <vspacer id="23183">
             <constraints>
-              <grid row="4" column="0" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+              <grid row="4" column="0" row-span="1" col-span="4" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
             </constraints>
           </vspacer>
-          <component id="5111e" class="javax.swing.JButton" binding="updateNowButton" default-binding="true">
-            <constraints>
-              <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <text resource-bundle="translations/SettingsDialogBundle" key="updateNowButton"/>
-            </properties>
-          </component>
           <component id="9345" class="javax.swing.JLabel" binding="versionLabel">
             <constraints>
-              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value=""/>
+              <text value="|"/>
             </properties>
           </component>
           <component id="6ecce" class="javax.swing.JLabel" binding="versionStringLabel">
@@ -113,30 +103,76 @@
               <text resource-bundle="translations/SettingsDialogBundle" key="versionString"/>
             </properties>
           </component>
-          <component id="dabbe" class="javax.swing.JComboBox" binding="browserComboBox">
+          <component id="dabbe" class="javax.swing.JComboBox" binding="comboBox">
             <constraints>
-              <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties/>
           </component>
           <component id="3434f" class="javax.swing.JLabel">
             <constraints>
-              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <labelFor value="dabbe"/>
               <text resource-bundle="translations/SettingsDialogBundle" key="openInBrowser"/>
             </properties>
           </component>
-          <component id="8ba86" class="javax.swing.JButton" binding="обновитьСписокButton" default-binding="true">
+          <component id="8ba86" class="javax.swing.JButton" binding="updateListButton">
             <constraints>
-              <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <icon value="refresh16.png"/>
               <margin top="2" left="2" bottom="2" right="2"/>
               <text value=""/>
               <toolTipText resource-bundle="translations/SettingsDialogBundle" key="updateList"/>
+            </properties>
+          </component>
+          <component id="270fb" class="javax.swing.JTextField" binding="callTextField">
+            <constraints>
+              <grid row="3" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="80" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <visible value="false"/>
+            </properties>
+          </component>
+          <component id="a049b" class="javax.swing.JLabel" binding="callLabel">
+            <constraints>
+              <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text resource-bundle="translations/SettingsDialogBundle" key="customCallLabel"/>
+              <visible value="false"/>
+            </properties>
+          </component>
+          <component id="5111e" class="javax.swing.JButton" binding="updateNowButton" default-binding="true">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <text resource-bundle="translations/SettingsDialogBundle" key="updateNowButton"/>
+            </properties>
+          </component>
+          <component id="207b2" class="javax.swing.JLabel" binding="syntaxInfoButton">
+            <constraints>
+              <grid row="3" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <icon value="info16.png"/>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="28ed6" class="javax.swing.JCheckBox" binding="incognitoCheckBox">
+            <constraints>
+              <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <enabled value="false"/>
+              <text value=""/>
+              <toolTipText resource-bundle="translations/SettingsDialogBundle" key="incognitoModeTooltip"/>
             </properties>
           </component>
         </children>

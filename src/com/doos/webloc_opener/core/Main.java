@@ -6,6 +6,7 @@ import com.doos.commons.registry.fixer.RegistryFixer;
 import com.doos.commons.registry.fixer.RegistryFixerException;
 import com.doos.commons.utils.Logging;
 import com.doos.commons.utils.UserUtils;
+import com.doos.commons.utils.browser.BrowserManager;
 import com.doos.commons.utils.system.SystemUtils;
 import com.doos.commons.utils.system.UnsupportedOsSystemException;
 import com.doos.commons.utils.system.UnsupportedSystemVersionException;
@@ -32,6 +33,8 @@ public class Main {
             SystemUtils.checkIfSystemIsSupported();
 
             enableLookAndFeel();
+
+            BrowserManager.loadBrowserList();
 
             manageArguments(args);
         } catch (UnsupportedOsSystemException | UnsupportedSystemVersionException e) {
