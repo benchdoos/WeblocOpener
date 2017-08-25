@@ -105,6 +105,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
                     callLabel.setVisible(true);
                     callTextField.setText(RegistryManager.getBrowserValue());
                     callTextField.setVisible(true);
+                    syntaxInfoLabel.setVisible(true);
                 }
             } else {
                 if (comboBox.getSelectedIndex() == 0) {
@@ -130,6 +131,11 @@ public class SettingsDialog extends JFrame implements MessagePushable {
 
         getRootPane().setDefaultButton(buttonOK);
         setIconImage(Toolkit.getDefaultToolkit().getImage(SettingsDialog.class.getResource("/balloonIcon64.png")));
+
+        syntaxInfoLabel.setVisible(false);
+        updateListButton.setVisible(false);
+        callTextField.setVisible(false);
+        callLabel.setVisible(false);
 
         initComboBox();
 
@@ -175,10 +181,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
             versionLabel.setText("Unknown");
         }
 
-        syntaxInfoLabel.setVisible(false);
-        updateListButton.setVisible(false);
-        callTextField.setVisible(false);
-        callLabel.setVisible(false);
+
 
 
         onInit = false;
@@ -276,15 +279,16 @@ public class SettingsDialog extends JFrame implements MessagePushable {
                 .getImage(SettingsDialog.class.getResource("/balloonIcon64.png")));
         fd.setDirectory(System.getProperty("user.dir"));
         fd.setFile("*.exe");
+        fd.setMultipleMode(false);
         fd.setVisible(true);
         String filename = fd.getFile();
-        if (filename == null) {
+        File[] f = fd.getFiles();
+        if (f.length > 0) {
+            log.debug("Choice: " + fd.getFiles()[0].getAbsolutePath());
+            return fd.getFiles()[0].getAbsolutePath();
+        } else {
             log.debug("Choice canceled");
             return null;
-        } else {
-            File file = new File(fd.getFile());
-            log.debug("Choice: " + file.getAbsolutePath());
-            return file.getAbsolutePath();
         }
     }
 
@@ -382,7 +386,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         }
         Browser browser = (Browser) comboBox.getSelectedItem();
         if (browser != null) {
-            System.out.println(browser.getCall());
+            System.out.println("browser call: " + browser.getCall());
             if (comboBox.getSelectedIndex() != comboBox.getItemCount() - 1) {
                 if (browser.getCall() != null) {
                     if (!RegistryManager.getBrowserValue().equals(browser.getCall())) {
