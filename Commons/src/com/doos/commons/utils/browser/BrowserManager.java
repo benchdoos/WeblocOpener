@@ -38,13 +38,20 @@ public class BrowserManager {
         initTranslation();
         File file = new File(ApplicationConstants.DEFAULT_LIST_LOCATION);
         if (file.exists()) {
-            parsePlist(file);
-            browserList = plistToArrayList(plist);
-            browserList.add(0, new Browser(defaultBrowserName, ApplicationConstants.BROWSER_DEFAULT_VALUE));
-            System.out.println("count: " + browserList.size() + " " + browserList);
+            loadBrowsersFromFile(file);
         } else {
             reloadBrowserList(generateDefaultBrowserArrayList());
+            if (file.exists()) {
+                loadBrowsersFromFile(file);
+            }
         }
+    }
+
+    private static void loadBrowsersFromFile(File file) {
+        parsePlist(file);
+        browserList = plistToArrayList(plist);
+        browserList.add(0, new Browser(defaultBrowserName, ApplicationConstants.BROWSER_DEFAULT_VALUE));
+        System.out.println("count: " + browserList.size() + " " + browserList);
     }
 
     public static ArrayList<Browser> getBrowserList() {

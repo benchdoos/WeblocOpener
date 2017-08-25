@@ -181,9 +181,6 @@ public class SettingsDialog extends JFrame implements MessagePushable {
             versionLabel.setText("Unknown");
         }
 
-
-
-
         onInit = false;
 
         pack();
