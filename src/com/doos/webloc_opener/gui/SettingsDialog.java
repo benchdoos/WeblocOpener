@@ -49,6 +49,8 @@ public class SettingsDialog extends JFrame implements MessagePushable {
     private String canNotSaveSettingsToRegistryMessage = "Can not save settings to registry.";
     private Timer messageTimer;
 
+    String chooseAFile = "Choose a file";
+
     private String customBrowserName = "Custom...";
 
     public SettingsDialog() {
@@ -271,7 +273,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
     private String openFileBrowser() {
         log.debug("Opening File Browser");
 
-        FileDialog fd = new FileDialog(this, "Choose a file", FileDialog.LOAD);
+        FileDialog fd = new FileDialog(this, chooseAFile, FileDialog.LOAD);
         fd.setIconImage(Toolkit.getDefaultToolkit()
                 .getImage(SettingsDialog.class.getResource("/balloonIcon64.png")));
         fd.setDirectory(System.getProperty("user.dir"));
@@ -372,6 +374,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
                 errorMessageTitle = messages.getString("errorMessage");
 
                 customBrowserName = messages.getString("customBrowserName");
+                chooseAFile = messages.getString("chooseAFile");
             }
         };
         translation.initTranslations();
