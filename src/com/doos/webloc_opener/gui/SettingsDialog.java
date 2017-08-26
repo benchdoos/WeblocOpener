@@ -49,7 +49,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
     private String canNotSaveSettingsToRegistryMessage = "Can not save settings to registry.";
     private Timer messageTimer;
 
-    String chooseAFile = "Choose a file:";
+    private String chooseAFile = "Choose a file:";
 
     private String customBrowserName = "Custom...";
 
