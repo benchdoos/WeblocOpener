@@ -32,7 +32,7 @@ public class UpdateInfoDialog extends JDialog {
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
 
 
-        textPane.setText(generatePageForDisplay(appVersion.getUpdateInfo()));
+        textPane.setText(generatePageForDisplay(appVersion.getUpdateTitle(), appVersion.getUpdateInfo()));
         textPane.setHighlighter(null);
 
         textPane.registerKeyboardAction(e -> {
@@ -48,7 +48,7 @@ public class UpdateInfoDialog extends JDialog {
         setVisible(true);
     }
 
-    private String generatePageForDisplay(String updateInfo) {
+    private String generatePageForDisplay(String updateTitle, String updateInfo) {
         String style = "<style>" +
                 "code {" +
                 "    padding: 0;" +
@@ -61,10 +61,13 @@ public class UpdateInfoDialog extends JDialog {
                 "}" +
                 "</style>";
         String defaultHead = "<html><head>" + style + "</head><body>";
+
+        String title = "<center style=\"font-size:14px; color:#4f7ece; padding-bottom:10px;\">" + updateTitle + "</center>";
         String defaultFooter = "</body></html>";
         updateInfo = updateInfo.replaceAll("\n", "<br>");
+        updateInfo = "<p style=\"font-size:12px;\">" + updateInfo + "</p>";
 
-        return defaultHead + updateInfo + defaultFooter;
+        return defaultHead + title + updateInfo + defaultFooter;
     }
 
     private void onOK() {

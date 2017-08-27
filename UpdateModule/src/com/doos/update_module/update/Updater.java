@@ -279,6 +279,7 @@ public class Updater {
 
         appVersion.setVersion(root.getAsJsonObject().get(version).getAsString());
         appVersion.setUpdateInfo(root.getAsJsonObject().get(info).getAsString());
+        appVersion.setUpdateTitle(root.getAsJsonObject().get(name).getAsString());
 
         JsonArray asserts = root.getAsJsonArray(assets);
         for (JsonElement assert_ : asserts) {

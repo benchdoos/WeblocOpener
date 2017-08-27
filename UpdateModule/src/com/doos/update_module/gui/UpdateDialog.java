@@ -66,92 +66,6 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         translateDialog();
     }
 
-    private void createGUI() {
-        setContentPane(contentPane);
-        getRootPane().setDefaultButton(buttonOK);
-
-        setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/icon.png")));
-
-        createDefaultActionListeners();
-
-        // call onCancel() when cross is clicked
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-        });
-
-        // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-
-        updateInfoButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (serverAppVersion != null) {
-                    if (!serverAppVersion.getUpdateInfo().isEmpty()) {
-                        UpdateInfoDialog dialog = new UpdateInfoDialog(serverAppVersion);
-                    }
-                }
-            }
-        });
-
-        pack();
-        setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
-        setSize(new Dimension(400, 170));
-        setResizable(false);
-    }
-
-    private void createDefaultActionListeners() {
-        for (ActionListener actionListener :
-                buttonOK.getActionListeners()) {
-            buttonOK.removeActionListener(actionListener);
-        }
-
-        for (ActionListener actionListener :
-                buttonCancel.getActionListeners()) {
-            buttonCancel.removeActionListener(actionListener);
-        }
-
-        buttonOK.addActionListener(e -> {
-            updateThread = new Thread(() -> onOK());
-            updateThread.start();
-        });
-
-        buttonCancel.addActionListener(e -> onCancel());
-    }
-
-    private void translateDialog() {
-        translation = new Translation("translations/UpdateDialogBundle") {
-            @Override
-            public void initTranslations() {
-                setTitle(messages.getString("windowTitle"));
-                buttonOK.setText(messages.getString("buttonOk"));
-                buttonCancel.setText(messages.getString("buttonCancel"));
-
-                currentVersionStringLabel.setText(messages.getString("currentVersionStringLabel"));
-                availableVersionStringLabel.setText(messages.getString("availableVersionStringLabel"));
-                availableVersionLabel.setText(messages.getString("availableVersionLabel"));
-
-                successTitle = messages.getString("successTitle");
-                successUpdatedMessage = messages.getString("successUpdatedMessage");
-                installationCancelledTitle = messages.getString("installationCancelledTitle");
-                installationCancelledMessage = messages.getString("installationCancelledMessage");
-                noPermissionsMessage = messages.getString("noPermissionsMessage");
-                installationCancelledByErrorMessage1 = messages.getString("installationCancelledByErrorMessage1");
-                installationCancelledByErrorMessage2 = messages.getString("installationCancelledByErrorMessage2");
-                installationCancelledByErrorMessage3 = messages.getString("installationCancelledByErrorMessage3");
-
-                lostConnectionTitle = messages.getString("lostConnectionTitle");
-                lostConnectionMessage = messages.getString("lostConnectionMessage");
-
-                retryButton = messages.getString("retryButton");
-            }
-        };
-        translation.initTranslations();
-    }
-
     public void checkForUpdates() {
         progressBar1.setIndeterminate(true);
         Updater updater = null;
@@ -189,13 +103,6 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         }
     }
 
-    private void removeAllListeners(JButton button) {
-        for (ActionListener al :
-                button.getActionListeners()) {
-            button.removeActionListener(al);
-        }
-    }
-
     private void compareVersions(String str) {
         if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
             //Need to update
@@ -212,18 +119,80 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         }
     }
 
-    private void setNewVersionSizeInfo() {
-        if (serverAppVersion.getSize() > 1024 * 1024) {
-            double size = serverAppVersion.getSize() / 1024 / (double) 1024;
-            size = size * 100;
-            int i = (int) Math.round(size);
-            size = (double) i / 100;
-            newVersionSizeLabel.setText(Double.toString(size));
-            unitLabel.setText("MB");
-        } else {
-            newVersionSizeLabel.setText(serverAppVersion.getSize() / 1024 + "");
-            unitLabel.setText("KB");
+    private void createDefaultActionListeners() {
+        for (ActionListener actionListener :
+                buttonOK.getActionListeners()) {
+            buttonOK.removeActionListener(actionListener);
         }
+
+        for (ActionListener actionListener :
+                buttonCancel.getActionListeners()) {
+            buttonCancel.removeActionListener(actionListener);
+        }
+
+        buttonOK.addActionListener(e -> {
+            updateThread = new Thread(() -> onOK());
+            updateThread.start();
+        });
+
+        buttonCancel.addActionListener(e -> onCancel());
+    }
+
+    private void createGUI() {
+        setContentPane(contentPane);
+        getRootPane().setDefaultButton(buttonOK);
+
+        setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/icon.png")));
+
+        createDefaultActionListeners();
+
+        // call onCancel() when cross is clicked
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                onCancel();
+            }
+        });
+
+        // call onCancel() on ESCAPE
+        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        updateInfoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onUpdateInfoButton();
+            }
+        });
+
+        pack();
+        setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
+        setSize(new Dimension(400, 170));
+        setResizable(false);
+    }
+
+    public AppVersion getAppVersion() {
+        return serverAppVersion;
+    }
+
+    private void onCancel() {
+        if (updateThread != null) {
+            if (!updateThread.isInterrupted()) {
+                updateThread.interrupt();
+                System.out.println("Installation was interrupted: " + updateThread.isInterrupted());
+                if (!updateThread.isInterrupted()) {
+                    System.out.println("dispose>>");
+                    dispose();
+                    System.exit(0);//TODO FIXME
+                }
+            }
+            runCleanInstallerFile();
+        }
+        File updateJar = new File(ApplicationConstants.UPDATE_PATH_FILE + "Updater_.jar");
+        if (updateJar.exists()) {
+            runCleanTempUpdaterFile();
+        }
+        dispose();
     }
 
     private void loadProperties() {
@@ -235,6 +204,39 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         availableVersionLabel.setText("Unknown");
     }
 
+    private void onOK() {
+        buttonOK.setEnabled(false);
+        if (!Thread.currentThread().isInterrupted()) {
+            //TODO make this beautifull: call downloader, return file, then call installation
+            int result = 0;
+            try {
+                result = Updater.startUpdate(serverAppVersion);
+            } catch (IOException e) {
+                log.warn(e);
+                result = UPDATE_CODE_INTERRUPT;
+                showErrorMessageToUser(this, lostConnectionTitle, lostConnectionMessage); //TODO translate this
+            }
+            if (Thread.currentThread().isInterrupted()) {
+                result = UPDATE_CODE_INTERRUPT;
+            } else {
+                processUpdateResult(result);
+            }
+            buttonOK.setEnabled(true);
+            buttonCancel.setEnabled(true);
+        } else {
+            buttonOK.setEnabled(true);
+            buttonCancel.setEnabled(true);
+        }
+
+    }
+
+    private void onUpdateInfoButton() {
+        if (serverAppVersion != null) {
+            if (!serverAppVersion.getUpdateInfo().isEmpty()) {
+                UpdateInfoDialog dialog = new UpdateInfoDialog(serverAppVersion);
+            }
+        }
+    }
 
     private void processUpdateResult(int installationCode) {
         System.out.println("Installation code: " + installationCode);
@@ -266,72 +268,19 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         }
     }
 
-    private void updateSuccessfullyInstalled() {
-        try {
-            RegistryFixer.fixRegistry();
-        } catch (Exception ignore) {
-           /*NOP*/
+    private void removeAllListeners(JButton button) {
+        for (ActionListener al :
+                button.getActionListeners()) {
+            button.removeActionListener(al);
         }
-
-
-        showSuccessMessageToUser(this, successTitle,
-                successUpdatedMessage + serverAppVersion.getVersion());
-
-        if (Main.mode != Main.Mode.AFTER_UPDATE) {
-            //dispose(); //TODO test it, if ok, delete
-            runCleanTempUpdaterFile();
-        }
-
     }
 
-    public AppVersion getAppVersion() {
-        return serverAppVersion;
-    }
-
-    private void onOK() {
-        buttonOK.setEnabled(false);
-        if (!Thread.currentThread().isInterrupted()) {
-            //TODO make this beautifull: call downloader, return file, then call installation
-            int result = 0;
-            try {
-                result = Updater.startUpdate(serverAppVersion);
-            } catch (IOException e) {
-                log.warn(e);
-                result = UPDATE_CODE_INTERRUPT;
-                showErrorMessageToUser(this, lostConnectionTitle, lostConnectionMessage); //TODO translate this
-            }
-            if (Thread.currentThread().isInterrupted()) {
-                result = UPDATE_CODE_INTERRUPT;
-            } else {
-                processUpdateResult(result);
-            }
-            buttonOK.setEnabled(true);
-            buttonCancel.setEnabled(true);
-        } else {
-            buttonOK.setEnabled(true);
-            buttonCancel.setEnabled(true);
-        }
-
-    }
-
-    private void onCancel() {
-        if (updateThread != null) {
-            if (!updateThread.isInterrupted()) {
-                updateThread.interrupt();
-                System.out.println("Installation was interrupted: " + updateThread.isInterrupted());
-                if (!updateThread.isInterrupted()) {
-                    System.out.println("dispose>>");
-                    dispose();
-                    System.exit(0);//TODO FIXME
-                }
-            }
-            runCleanInstallerFile();
-        }
-        File updateJar = new File(ApplicationConstants.UPDATE_PATH_FILE + "Updater_.jar");
-        if (updateJar.exists()) {
-            runCleanTempUpdaterFile();
-        }
-        dispose();
+    private void runCleanInstallerFile() {
+        log.info("Deleting file: " + ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
+                + serverAppVersion.getVersion() + "" + ".exe");
+        File installer = new File(ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
+                + serverAppVersion.getVersion() + ".exe");
+        installer.deleteOnExit();
     }
 
     private void runCleanTempUpdaterFile() {
@@ -347,12 +296,18 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         }
     }
 
-    private void runCleanInstallerFile() {
-        log.info("Deleting file: " + ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
-                + serverAppVersion.getVersion() + "" + ".exe");
-        File installer = new File(ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
-                + serverAppVersion.getVersion() + ".exe");
-        installer.deleteOnExit();
+    private void setNewVersionSizeInfo() {
+        if (serverAppVersion.getSize() > 1024 * 1024) {
+            double size = serverAppVersion.getSize() / 1024 / (double) 1024;
+            size = size * 100;
+            int i = (int) Math.round(size);
+            size = (double) i / 100;
+            newVersionSizeLabel.setText(Double.toString(size));
+            unitLabel.setText("MB");
+        } else {
+            newVersionSizeLabel.setText(serverAppVersion.getSize() / 1024 + "");
+            unitLabel.setText("KB");
+        }
     }
 
     public void showMessage(String message, int messageValue) {
@@ -379,6 +334,36 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         messageTimer.start();
     }
 
+    private void translateDialog() {
+        translation = new Translation("translations/UpdateDialogBundle") {
+            @Override
+            public void initTranslations() {
+                setTitle(messages.getString("windowTitle"));
+                buttonOK.setText(messages.getString("buttonOk"));
+                buttonCancel.setText(messages.getString("buttonCancel"));
+
+                currentVersionStringLabel.setText(messages.getString("currentVersionStringLabel"));
+                availableVersionStringLabel.setText(messages.getString("availableVersionStringLabel"));
+                availableVersionLabel.setText(messages.getString("availableVersionLabel"));
+
+                successTitle = messages.getString("successTitle");
+                successUpdatedMessage = messages.getString("successUpdatedMessage");
+                installationCancelledTitle = messages.getString("installationCancelledTitle");
+                installationCancelledMessage = messages.getString("installationCancelledMessage");
+                noPermissionsMessage = messages.getString("noPermissionsMessage");
+                installationCancelledByErrorMessage1 = messages.getString("installationCancelledByErrorMessage1");
+                installationCancelledByErrorMessage2 = messages.getString("installationCancelledByErrorMessage2");
+                installationCancelledByErrorMessage3 = messages.getString("installationCancelledByErrorMessage3");
+
+                lostConnectionTitle = messages.getString("lostConnectionTitle");
+                lostConnectionMessage = messages.getString("lostConnectionMessage");
+
+                retryButton = messages.getString("retryButton");
+            }
+        };
+        translation.initTranslations();
+    }
+
     private void updateSize(UpdateSizeMode mode) {
 
         setResizable(true);
@@ -391,6 +376,24 @@ public class UpdateDialog extends JFrame implements MessagePushable {
             setSize(new Dimension(DEFAULT_APPLICATION_WIDTH, 170));
         }
         setResizable(false);
+
+    }
+
+    private void updateSuccessfullyInstalled() {
+        try {
+            RegistryFixer.fixRegistry();
+        } catch (Exception ignore) {
+           /*NOP*/
+        }
+
+
+        showSuccessMessageToUser(this, successTitle,
+                successUpdatedMessage + serverAppVersion.getVersion());
+
+        if (Main.mode != Main.Mode.AFTER_UPDATE) {
+            //dispose(); //TODO test it, if ok, delete
+            runCleanTempUpdaterFile();
+        }
 
     }
 
