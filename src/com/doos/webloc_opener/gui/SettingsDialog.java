@@ -292,11 +292,13 @@ public class SettingsDialog extends JFrame implements MessagePushable {
     }
 
     private void setSyntaxInfoButtonToolTip() {
+        UIManager.put("ToolTip.background", Color.black);
+
         final int defaultDismissTimeout = ToolTipManager.sharedInstance().getDismissDelay();
         ToolTipManager.sharedInstance().setDismissDelay(10_000);
 
 
-        final String toolTipText = "<html><body style=\"font-size: 12px;\">Syntax: <b style=\"color:red;\"><u>file path</u> %site</b>, don't forget to add <b>%site</b><br>" +
+        final String toolTipText = "<html><body style=\"font-size: 12px; color:gray;\">Syntax: <b style=\"color:white;\"><u>file path</u></b> <b style=\"color:red;\">%site</b>, don't forget to add <b>%site</b><br>" +
                 "Example for Google Chrome: <b style=\"color:green;\">start chrome \"%site\"</b></body></html>";
         syntaxInfoLabel.setToolTipText(toolTipText);
 
@@ -308,6 +310,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
 
             @Override
             public void mouseExited(MouseEvent me) {
+                UIManager.put("ToolTip.background", Color.getColor("#000000")); // To turn back tooltip color
 //                ToolTipManager.sharedInstance().setDismissDelay(defaultDismissTimeout);
             }
 
