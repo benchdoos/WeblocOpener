@@ -38,7 +38,7 @@ public class EditDialog extends JFrame implements MessagePushable {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JTextField textField1;
+    private JTextField textField;
     private JTextPane createWeblocFileTextPane;
     private JLabel iconLabel;
     private JLabel urlLabel;
@@ -71,7 +71,7 @@ public class EditDialog extends JFrame implements MessagePushable {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowActivated(WindowEvent e) {
-                if (textField1.getText().isEmpty()) {
+                if (textField.getText().isEmpty()) {
                     fillTextFieldWithClipboard();
                 }
                 super.windowActivated(e);
@@ -90,14 +90,14 @@ public class EditDialog extends JFrame implements MessagePushable {
         createWeblocFileTextPane.setBackground(new Color(232, 232, 232));
 
 
-        textField1.addMouseListener(new ClickListener() {
+        textField.addMouseListener(new ClickListener() {
             @Override
             public void doubleClick(MouseEvent e) {
-                textField1.selectAll();
+                textField.selectAll();
             }
         });
 
-        textField1.getDocument().addDocumentListener(new DocumentListener() {
+        textField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void changedUpdate(DocumentEvent e) {
             }
@@ -114,15 +114,15 @@ public class EditDialog extends JFrame implements MessagePushable {
 
             private void updateTextFont() {
                 UrlValidator urlValidator = new UrlValidator();
-                if (urlValidator.isValid(textField1.getText())) {
-                    if (textField1 != null) {
-                        setTextFieldFont(textField1.getFont(), TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-                        textField1.setForeground(Color.BLUE);
+                if (urlValidator.isValid(textField.getText())) {
+                    if (textField != null) {
+                        setTextFieldFont(textField.getFont(), TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+                        textField.setForeground(Color.BLUE);
                     }
                 } else {
-                    if (textField1 != null) {
-                        setTextFieldFont(textField1.getFont(), TextAttribute.UNDERLINE, -1);
-                        textField1.setForeground(Color.BLACK);
+                    if (textField != null) {
+                        setTextFieldFont(textField.getFont(), TextAttribute.UNDERLINE, -1);
+                        textField.setForeground(Color.BLACK);
                     }
                 }
             }
@@ -153,7 +153,9 @@ public class EditDialog extends JFrame implements MessagePushable {
     private void fillTextField(String pathToEditingFile) {
         try {
             URL url = new URL(UrlsProceed.takeUrl(new File(pathToEditingFile)));
-            textField1.setText(url.toString());
+            textField.setText(url.toString());
+            textField.setCaretPosition(textField.getText().length());
+            textField.selectAll();
             log.debug("Got URL [" + url + "] from [" + pathToEditingFile + "]");
         } catch (Exception e) {
             log.warn("Can not read url from: [" + pathToEditingFile + "]");
@@ -167,12 +169,14 @@ public class EditDialog extends JFrame implements MessagePushable {
             URL url = new URL(data);
             UrlValidator urlValidator = new UrlValidator();
             if (urlValidator.isValid(data)) {
-                textField1.setText(url.toString());
-                setTextFieldFont(textField1.getFont(), TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+                textField.setText(url.toString());
+                setTextFieldFont(textField.getFont(), TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+                textField.setCaretPosition(textField.getText().length());
+                textField.selectAll();
                 log.debug("Got URL from clipboard: " + url);
             }
         } catch (UnsupportedFlavorException | IllegalStateException | HeadlessException | IOException e) {
-            textField1.setText("");
+            textField.setText("");
             log.warn("Can not read URL from clipboard.", e);
         }
     }
@@ -183,22 +187,22 @@ public class EditDialog extends JFrame implements MessagePushable {
 
     private void onOK() {
         try {
-            URL url = new URL(textField1.getText());
+            URL url = new URL(textField.getText());
             UrlValidator urlValidator = new UrlValidator();
-            if (urlValidator.isValid(textField1.getText())) {
+            if (urlValidator.isValid(textField.getText())) {
                 UrlsProceed.createWebloc(url, path);
                 dispose();
             } else {
                 throw new MalformedURLException();
             }
         } catch (MalformedURLException e) {
-            log.warn("Can not parse URL: [" + textField1.getText() + "]", e);
+            log.warn("Can not parse URL: [" + textField.getText() + "]", e);
 
             String message = incorrectUrlMessage + ": [";
-            String incorrectUrl = textField1.getText()
-                    .substring(0, Math.min(textField1.getText().length(), 10));
+            String incorrectUrl = textField.getText()
+                    .substring(0, Math.min(textField.getText().length(), 10));
             //Fixes EditDialog long url message showing issue
-            message += textField1.getText().length() > incorrectUrl.length() ? incorrectUrl + "...]" : incorrectUrl + "]";
+            message += textField.getText().length() > incorrectUrl.length() ? incorrectUrl + "...]" : incorrectUrl + "]";
 
 
             UserUtils.showWarningMessageToUser(this, errorTitle,
@@ -210,7 +214,7 @@ public class EditDialog extends JFrame implements MessagePushable {
     public void setTextFieldFont(Font font, TextAttribute attribute1, int attribute2) {
         Map attributes = font.getAttributes();
         attributes.put(attribute1, attribute2);
-        textField1.setFont(font.deriveFont(attributes));
+        textField.setFont(font.deriveFont(attributes));
     }
 
     @Override

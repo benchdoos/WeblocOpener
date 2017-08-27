@@ -103,7 +103,7 @@ public class FrameUtils {
      * @param frame Frame to make on the front of the screen
      */
     public static void bringToFront(JFrame frame) {
-        frame.setExtendedState(Frame.ICONIFIED);
+        frame.setExtendedState(Frame.ICONIFIED);//TODO do something with this!
         frame.setExtendedState(Frame.NORMAL);
         frame.toFront();
     }
