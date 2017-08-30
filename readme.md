@@ -50,8 +50,11 @@ So that's why this application was created - for these users.
 [<img src="https://benchdoos.github.io/img/faq/faq_6.png"  width="888" />](#what-can-weblocopener-do)
 
 - **Auto-update tool will help you receive new updates just from the server. You should not check, if there is an update, WeblocOpener updater will notify you if there is a new version of the app.** 
-
 [<img src="https://benchdoos.github.io/img/faq/faq_7.png"  width="888" />](#what-can-weblocopener-do)
+
+- **Find out, what's new in new update. Use info icon on Updater to check it out.** 
+[<img src="https://benchdoos.github.io/img/faq/faq_8.png"  width="888" />](#what-can-weblocopener-do)
+
 
 ## Supported features
 
