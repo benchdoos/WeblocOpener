@@ -33,7 +33,7 @@ public class UpdateInfoDialog extends JDialog {
 
 
         textPane.setText(generatePageForDisplay(appVersion.getUpdateTitle(), appVersion.getUpdateInfo()));
-        textPane.setHighlighter(null);
+        // textPane.setHighlighter(null); // TODO what to do? Stay? Or give user to select text???
 
         textPane.registerKeyboardAction(e -> {
             onOK();
@@ -65,7 +65,7 @@ public class UpdateInfoDialog extends JDialog {
         String title = "<center style=\"font-size:14px; color:#4f7ece; padding-bottom:10px;\">" + updateTitle + "</center>";
         String defaultFooter = "</body></html>";
         updateInfo = updateInfo.replaceAll("\n", "<br>");
-        updateInfo = "<p style=\"font-size:12px;\">" + updateInfo + "</p>";
+        updateInfo = "<p style=\"font-family:'Open Sans'; font-size:12px; padding:0; margin:0;\">" + updateInfo + "</p>";
 
         return defaultHead + title + updateInfo + defaultFooter;
     }

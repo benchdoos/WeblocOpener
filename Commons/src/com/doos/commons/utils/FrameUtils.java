@@ -108,4 +108,19 @@ public class FrameUtils {
         frame.toFront();
     }
 
+    /**
+     * Sets default font of the application
+     *
+     * @param font to set
+     */
+    public static void setUIFont(javax.swing.plaf.FontUIResource font) {
+        java.util.Enumeration keys = UIManager.getDefaults().keys();
+        while (keys.hasMoreElements()) {
+            Object key = keys.nextElement();
+            Object value = UIManager.get(key);
+            if (value != null && value instanceof javax.swing.plaf.FontUIResource)
+                UIManager.put(key, font);
+        }
+    }
+
 }

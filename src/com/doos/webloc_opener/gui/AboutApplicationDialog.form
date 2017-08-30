@@ -74,7 +74,7 @@
                           <enabled value="true"/>
                           <focusCycleRoot value="false"/>
                           <focusable value="false"/>
-                          <font size="10"/>
+                          <font size="72"/>
                           <opaque value="false"/>
                           <requestFocusEnabled value="false"/>
                           <text resource-bundle="translations/AboutApplicationDialogBundle" key="aboutAppInfo"/>
