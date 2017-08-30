@@ -1,4 +1,4 @@
-[<img src="new_header.png" align="right" width="888" />](https://vk.cc/6wK76Z)
+[<img src="/img/new_header.png" align="right" width="888" />](https://vk.cc/6wK76Z)
 
 # WeblocOpener
 
@@ -66,7 +66,8 @@ So that's why this application was created - for these users.
 
 
 ## Have questions? 
-Watch [Youtube](https://vk.cc/73qFIF) video
+**Watch the youtube video, with new abilities of version 1.4:**
+[<img src="/img/youtube_preview.png"  width="888" />](https://vk.cc/73qFIF)
 
 
 ## System Requirements
