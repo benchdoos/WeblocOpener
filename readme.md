@@ -30,21 +30,28 @@ So that's why this application was created - for these users.
 
 ## What can WeblocOpener do?
 
+
+- **Full `.webloc` file support on Windows.**
+[<img src="https://benchdoos.github.io/img/faq/faq_1.png"  width="888" />](#what-can-weblocopener-do)
+
 - **Open  MacOS Safari `.webloc` link on Windows on your default browser.** 
+[<img src="https://benchdoos.github.io/img/faq/faq_2.png"  width="888" />](#what-can-weblocopener-do)
 
-[<img src="open.png"  width="888" />](#what-can-weblocopener-do)
+- **Choose not default browser to open URL. Open in browser from presets or use custom.** 
+[<img src="https://benchdoos.github.io/img/faq/faq_3.png"  width="888" />](#what-can-weblocopener-do)
+
 - **Create new `.webloc` files. Created files are fully supported by Safari on MacOS and WeblocOpener on Windows.** 
+[<img src="https://benchdoos.github.io/img/faq/faq_4.png"  width="888" />](#what-can-weblocopener-do)
 
-[<img src="create.png"  width="888" />](#what-can-weblocopener-do)
 - **Edit created files. Unlike `.webloc` files on MacOS that can not be edited by default (except for text editors), WeblocOpener provides the ability to edit `.webloc` files on Windows.** 
+[<img src="https://benchdoos.github.io/img/faq/faq_5.png"  width="888" />](#what-can-weblocopener-do)
 
-[<img src="edit.png"  width="888" />](#what-can-weblocopener-do)
 - **Auto-paste URL from clipboard when you created a new file. When you've just created an empty file, WeblocOpener helps you to paste copied URL into ULR-field. It automatically finds an URL in your clipboard.** 
+[<img src="https://benchdoos.github.io/img/faq/faq_6.png"  width="888" />](#what-can-weblocopener-do)
 
-[<img src="autopaste.png"  width="888" />](#what-can-weblocopener-do)
 - **Auto-update tool will help you receive new updates just from the server. You should not check, if there is an update, WeblocOpener updater will notify you if there is a new version of the app.** 
 
-[<img src="autoupdate.png"  width="888" />](#what-can-weblocopener-do)
+[<img src="https://benchdoos.github.io/img/faq/faq_7.png"  width="888" />](#what-can-weblocopener-do)
 
 ## Supported features
 
@@ -55,11 +62,11 @@ So that's why this application was created - for these users.
 | Create new     | Yes           | In development | Default |
 | URL auto-paste | Yes           | In development | WO feature |
 | Auto-update    | Yes           | In development | WO feature |
-| Open in not default browser    | Not yet           | Not yet | Not |
+| Open in not default browser    | Yes           | Not yet | Not |
 
 
 ## Have questions? 
-Watch [Youtube](https://vk.cc/6wK7X5) video
+Watch [Youtube](https://vk.cc/73qFIF) video
 
 
 ## System Requirements
@@ -76,10 +83,3 @@ Watch [Youtube](https://vk.cc/6wK7X5) video
     <b>Additional software:</b>
 <li>Java 8 required - <a href="https://java.com/download/">Download</a></li>
 </ul>
-
-
-
-## Download:
-Windows:
-
-[Latest version](https://vk.cc/6wK3sP) v1.3.1
