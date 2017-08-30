@@ -38,7 +38,7 @@ public class AboutApplicationDialog extends JDialog {
     public AboutApplicationDialog() {
 
         setContentPane(contentPane);
-        setIconImage(Toolkit.getDefaultToolkit().getImage(SettingsDialog.class.getResource("/balloonIcon64.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(AboutApplicationDialog.class.getResource("/balloonIcon64.png")));
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
