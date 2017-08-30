@@ -292,7 +292,6 @@ public class SettingsDialog extends JFrame implements MessagePushable {
     }
 
     private void setSyntaxInfoButtonToolTip() {
-        UIManager.put("ToolTip.background", Color.black);
 
         final int defaultDismissTimeout = ToolTipManager.sharedInstance().getDismissDelay();
         ToolTipManager.sharedInstance().setDismissDelay(10_000);
@@ -305,12 +304,13 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         syntaxInfoLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent me) {
+                UIManager.put("ToolTip.background", Color.black);
 //                ToolTipManager.sharedInstance().setDismissDelay(10_000);
             }
 
             @Override
             public void mouseExited(MouseEvent me) {
-                UIManager.put("ToolTip.background", Color.getColor("#000000")); // To turn back tooltip color
+                UIManager.put("ToolTip.background", Color.getColor("#АА0000")); // To turn back tooltip color
 //                ToolTipManager.sharedInstance().setDismissDelay(defaultDismissTimeout);
             }
 
