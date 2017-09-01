@@ -120,6 +120,10 @@ public class UrlsProceed {
         }
     }
 
+    public static void createWebloc(String path, URL url) {
+        createWebloc(url, path);
+    }
+
     /**
      * Takes URL from <code>.webloc</code> file
      *

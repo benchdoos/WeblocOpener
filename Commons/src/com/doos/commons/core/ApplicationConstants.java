@@ -29,6 +29,7 @@ public interface ApplicationConstants {
     String OPENER_EDIT_ARGUMENT = "-edit";
     String OPENER_SETTINGS_ARGUMENT = "-settings";
     String OPENER_ABOUT_ARGUMENT = "-about";
+    String OPENER_CREATE_ARGUMENT = "-create";
 
     String WINDOWS_WEBLOCOPENER_SETUP_NAME = "WeblocOpenerSetup";
 

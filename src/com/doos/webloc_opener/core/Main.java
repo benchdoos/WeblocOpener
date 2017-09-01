@@ -15,20 +15,25 @@ import com.doos.webloc_opener.gui.EditDialog;
 import com.doos.webloc_opener.gui.SettingsDialog;
 import com.doos.webloc_opener.service.Analyzer;
 import com.doos.webloc_opener.service.UrlsProceed;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.FileNotFoundException;
+import java.net.URL;
+import java.util.Arrays;
 
 import static com.doos.commons.core.ApplicationConstants.*;
 import static java.awt.Frame.MAXIMIZED_HORIZ;
 
 public class Main {
+    private static final String CORRECT_CREATION_SYNTAX = "-create <file path> <url>";
+    private static Logger log;
 
     public static void main(String[] args) {
 
         try {
-            new Logging(ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME);
+            initLogging();
 
             SystemUtils.checkIfSystemIsSupported();
 
@@ -40,6 +45,11 @@ public class Main {
         } catch (UnsupportedOsSystemException | UnsupportedSystemVersionException e) {
             UserUtils.showErrorMessageToUser(null, "Error", e.getMessage());
         }
+    }
+
+    private static void initLogging() {
+        new Logging(ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME);
+        log = Logger.getLogger(Logging.getCurrentClassName());
     }
 
 
@@ -74,6 +84,15 @@ public class Main {
                     case OPENER_ABOUT_ARGUMENT:
                         new AboutApplicationDialog().setVisible(true);
                         break;
+
+                    case OPENER_CREATE_ARGUMENT:
+                        try {
+                            manageCreateArgument(args);
+                        } catch (Exception e) {
+                            log.warn("Can not create .webloc file (" + CORRECT_CREATION_SYNTAX + "): "
+                                    + Arrays.toString(args), e);
+                        }
+                        break;
                     default:
                         runAnalyzer(args[0]);
                         break;
@@ -81,6 +100,21 @@ public class Main {
             }
         } else {
             runSettingsDialog();
+        }
+    }
+
+    private static void manageCreateArgument(String[] args) throws Exception {
+        String filePath;
+        String url;
+        if (args.length > 2) {
+            filePath = args[1];
+            url = args[2];
+            if (args.length > 3) {
+                log.info("You can create only one link in one file. Creating.");
+            }
+            UrlsProceed.createWebloc(filePath, new URL(url));
+        } else {
+            throw new IllegalArgumentException("Not all arguments (" + CORRECT_CREATION_SYNTAX + "):" + Arrays.toString(args));
         }
     }
 
