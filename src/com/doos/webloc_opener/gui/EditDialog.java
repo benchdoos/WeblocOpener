@@ -144,7 +144,7 @@ public class EditDialog extends JFrame implements MessagePushable {
 
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
 
-        log.debug("Got path path: [" + pathToEditingFile + "]");
+        log.debug("Got path: [" + pathToEditingFile + "]");
     }
 
     @Override

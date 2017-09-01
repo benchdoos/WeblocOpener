@@ -142,7 +142,7 @@ public class UrlsProceed {
         log.debug("Got file: " + file);
         NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(file);
         String url = rootDict.objectForKey("URL").toString();
-        log.info("Got url: [" + url + "] from file: " + file);
+        log.info("Got URL: [" + url + "] from file: " + file);
 
         return url;
     }
