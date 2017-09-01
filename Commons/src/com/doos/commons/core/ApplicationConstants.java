@@ -8,7 +8,7 @@ import java.io.File;
 public interface ApplicationConstants {
     String WEBLOC_OPENER_APPLICATION_NAME = "WeblocOpener";
     String UPDATER_APPLICATION_NAME = "Updater";
-    String APP_VERSION = "1.4.0.1";
+    String APP_VERSION = "1.4.1";
     String APP_LOG_FOLDER_PATH = System
             .getProperty("java.io.tmpdir") + WEBLOC_OPENER_APPLICATION_NAME + File.separator + "Log";
     String APP_LOG_PROPERTY = "WeblocOpener.log.folder";
