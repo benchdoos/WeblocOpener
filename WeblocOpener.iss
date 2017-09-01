@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "WeblocOpener"
-#define MyAppVersion "1.4"
+#define MyAppVersion "1.4.1"
 #define MyAppPublisher "Eugene Zrazhevsky"
 #define MyAppURL "https://benchdoos.github.io/"
 #define MyAppExeName "WeblocOpener.exe"
@@ -23,7 +23,9 @@ DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 OutputDir=F:\Developer\JAVA\WeblocOpener\out\setup
 OutputBaseFilename=WeblocOpenerSetup
-SetupIconFile=F:\Developer\JAVA\WeblocOpener\balloonIcon256.ico
+SetupIconFile="F:\Developer\JAVA\WeblocOpener\other\installer\icon.ico"
+WizardImageFile="F:\Developer\JAVA\WeblocOpener\other\installer\installer1_2.bmp"
+WizardSmallImageFile="F:\Developer\JAVA\WeblocOpener\other\installer\installer3.bmp"
 UninstallDisplayIcon={app}\{#MyAppName}.exe,0
 Compression=lzma
 SolidCompression=yes
