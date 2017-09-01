@@ -69,7 +69,7 @@ public class UserUtils {
     }
 
     private static void translateMessage() {
-       translation = new Translation("translations/UpdaterBundle") {
+        translation = new Translation("translations/CommonsBundle") {
             @Override
             public void initTranslations() {
                 pleaseVisitMessage = messages.getString("pleaseVisitMessage");

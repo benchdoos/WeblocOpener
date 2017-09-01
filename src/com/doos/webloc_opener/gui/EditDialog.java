@@ -39,7 +39,7 @@ public class EditDialog extends JFrame implements MessagePushable {
     private JButton buttonOK;
     private JButton buttonCancel;
     private JTextField textField;
-    private JTextPane createWeblocFileTextPane;
+    final static int DEFAULT_APPLICATION_WIDTH = 350;
     private JLabel iconLabel;
     private JLabel urlLabel;
     private JTextPane errorTextPane;
@@ -48,6 +48,9 @@ public class EditDialog extends JFrame implements MessagePushable {
     private String incorrectUrlMessage = "Incorrect URL";
     private String errorTitle = "Error";
     private Timer messageTimer;
+    final static int DEFAULT_APPLICATION_HEIGHT = 200;
+    private JLabel createWeblocFileTextPane;
+
 
 
     @SuppressWarnings("unchecked")
@@ -136,7 +139,7 @@ public class EditDialog extends JFrame implements MessagePushable {
         /*setMinimumSize(getSize());
         setPreferredSize(getSize());*/
 
-        setSize(300, 200);
+        setSize(DEFAULT_APPLICATION_WIDTH, 200);
         setResizable(false); //TODO fix setMaximumSize
 
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
@@ -254,13 +257,13 @@ public class EditDialog extends JFrame implements MessagePushable {
             public void initTranslations() {
                 setTitle(messages.getString("windowTitle"));
                 urlLabel.setText(messages.getString("urlLabelText"));
-                createWeblocFileTextPane.setText(
+                /*createWeblocFileTextPane.setText(
                         "<html>\n" +
-                                "  <body>\n" + "\t"
+                                "  <body style=\"font-family:Open Sans; font-size:12px;\">" + "\t"
                                 + messages.getString("textPane1") + " <b>.webloc</b> "
                                 + messages.getString("textPane2") + ":\n"
                                 + "  </body>\n" +
-                                "</html>\n");
+                                "</html>\n");*/
 
                 buttonOK.setText(messages.getString("buttonOk"));
                 buttonCancel.setText(messages.getString("buttonCancel"));
@@ -277,16 +280,13 @@ public class EditDialog extends JFrame implements MessagePushable {
         setResizable(true);
 
         revalidate();
-        final int DEFAULT_APPLICATION_WIDTH = 295;
         if (mode == SettingsDialog.UpdateMode.BEFORE_HIDE) {
             pack();
             setSize(new Dimension(DEFAULT_APPLICATION_WIDTH, getHeight()));
         } else if (mode == SettingsDialog.UpdateMode.AFTER_HIDE) {
-            setSize(new Dimension(DEFAULT_APPLICATION_WIDTH, 207));
+            setSize(new Dimension(DEFAULT_APPLICATION_WIDTH, DEFAULT_APPLICATION_HEIGHT));
         }
         setResizable(false);
-
     }
 
-    enum UpdateMode {BEFORE_HIDE, AFTER_HIDE}
 }
