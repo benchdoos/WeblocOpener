@@ -13,13 +13,15 @@ import org.apache.log4j.Logger;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.awt.font.TextAttribute;
 import java.io.File;
 import java.io.IOException;
@@ -30,27 +32,22 @@ import java.util.Map;
 import static com.doos.commons.utils.Logging.getCurrentClassName;
 
 public class EditDialog extends JFrame implements MessagePushable {
+    final static int DEFAULT_APPLICATION_WIDTH = 350;
     private static final Logger log = Logger.getLogger(getCurrentClassName());
-    //JDialog dialog = this;
-
+    private final static int DEFAULT_APPLICATION_HEIGHT = 200;
     private String path = "";
-
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JTextField textField;
-    final static int DEFAULT_APPLICATION_WIDTH = 350;
     private JLabel iconLabel;
     private JLabel urlLabel;
     private JTextPane errorTextPane;
     private JPanel errorPanel;
-
     private String incorrectUrlMessage = "Incorrect URL";
     private String errorTitle = "Error";
     private Timer messageTimer;
-    private final static int DEFAULT_APPLICATION_HEIGHT = 200;
     private JLabel createWeblocFileTextPane;
-
 
 
     @SuppressWarnings("unchecked")
@@ -93,46 +90,7 @@ public class EditDialog extends JFrame implements MessagePushable {
         createWeblocFileTextPane.setBackground(new Color(232, 232, 232));
 
 
-        textField.addMouseListener(new ClickListener() {
-            @Override
-            public void doubleClick(MouseEvent e) {
-                textField.selectAll();
-            }
-        });
-
-        textField.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                updateTextFont();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                updateTextFont();
-            }
-
-            private void updateTextFont() {
-                UrlValidator urlValidator = new UrlValidator();
-                if (urlValidator.isValid(textField.getText())) {
-                    if (textField != null) {
-                        setTextFieldFont(textField.getFont(), TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
-                        textField.setForeground(Color.BLUE);
-                    }
-                } else {
-                    if (textField != null) {
-                        setTextFieldFont(textField.getFont(), TextAttribute.UNDERLINE, -1);
-                        textField.setForeground(Color.BLACK);
-                    }
-                }
-            }
-
-        });
-
-        fillTextField(pathToEditingFile);
+        initTextField(pathToEditingFile);
 
         pack();
 
@@ -182,6 +140,86 @@ public class EditDialog extends JFrame implements MessagePushable {
             textField.setText("");
             log.warn("Can not read URL from clipboard.", e);
         }
+    }
+
+    private void initTextField(String pathToEditingFile) {
+        textField.addMouseListener(new ClickListener() {
+            @Override
+            public void doubleClick(MouseEvent e) {
+                textField.selectAll();
+            }
+        });
+
+        textField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateTextFont();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateTextFont();
+            }
+
+            private void updateTextFont() {
+                UrlValidator urlValidator = new UrlValidator();
+                if (urlValidator.isValid(textField.getText())) {
+                    if (textField != null) {
+                        setTextFieldFont(textField.getFont(), TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+                        textField.setForeground(Color.BLUE);
+                    }
+                } else {
+                    if (textField != null) {
+                        setTextFieldFont(textField.getFont(), TextAttribute.UNDERLINE, -1);
+                        textField.setForeground(Color.BLACK);
+                    }
+                }
+            }
+
+        });
+
+        UndoManager undoManager = new UndoManager();
+        textField.getDocument().addUndoableEditListener(new UndoableEditListener() {
+
+            public void undoableEditHappened(UndoableEditEvent evt) {
+                undoManager.addEdit(evt.getEdit());
+            }
+
+        });
+
+        textField.getActionMap().put("Undo",
+                new AbstractAction("Undo") {
+                    public void actionPerformed(ActionEvent evt) {
+                        try {
+                            if (undoManager.canUndo()) {
+                                undoManager.undo();
+                            }
+                        } catch (CannotUndoException e) {
+                        }
+                    }
+                });
+
+        textField.getInputMap().put(KeyStroke.getKeyStroke("control Z"), "Undo");
+
+        textField.getActionMap().put("Redo",
+                new AbstractAction("Redo") {
+                    public void actionPerformed(ActionEvent evt) {
+                        try {
+                            if (undoManager.canRedo()) {
+                                undoManager.redo();
+                            }
+                        } catch (CannotRedoException e) {
+                        }
+                    }
+                });
+
+        textField.getInputMap().put(KeyStroke.getKeyStroke("control shift Z"), "Redo");
+
+        fillTextField(pathToEditingFile);
     }
 
     private void onCancel() {
