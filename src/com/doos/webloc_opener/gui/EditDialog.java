@@ -252,7 +252,7 @@ public class EditDialog extends JFrame implements MessagePushable {
 
     }
 
-    public void setTextFieldFont(Font font, TextAttribute attribute1, int attribute2) {
+    private void setTextFieldFont(Font font, TextAttribute attribute1, int attribute2) {
         Map attributes = font.getAttributes();
         attributes.put(attribute1, attribute2);
         textField.setFont(font.deriveFont(attributes));
