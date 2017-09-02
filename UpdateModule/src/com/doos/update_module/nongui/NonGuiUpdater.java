@@ -25,7 +25,7 @@ import static com.doos.commons.utils.Logging.getCurrentClassName;
 
 public class NonGuiUpdater {
     public static final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(
-            NonGuiUpdater.class.getResource("/icon.png")));
+            NonGuiUpdater.class.getResource("/updaterIcon16.png")));
     public static final SystemTray tray = SystemTray.getSystemTray();
     private static final Logger log = Logger.getLogger(getCurrentClassName());
     private AppVersion serverAppVersion = null;
@@ -108,6 +108,8 @@ public class NonGuiUpdater {
                 super.mouseClicked(e);
             }
         });
+
+        trayIcon.setToolTip("WeblocOpener Updater");
         try {
             tray.add(trayIcon);
         } catch (AWTException e) {

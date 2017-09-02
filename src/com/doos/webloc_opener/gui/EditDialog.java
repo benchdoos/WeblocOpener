@@ -48,7 +48,7 @@ public class EditDialog extends JFrame implements MessagePushable {
     private String incorrectUrlMessage = "Incorrect URL";
     private String errorTitle = "Error";
     private Timer messageTimer;
-    final static int DEFAULT_APPLICATION_HEIGHT = 200;
+    private final static int DEFAULT_APPLICATION_HEIGHT = 200;
     private JLabel createWeblocFileTextPane;
 
 
@@ -56,7 +56,7 @@ public class EditDialog extends JFrame implements MessagePushable {
     @SuppressWarnings("unchecked")
     public EditDialog(String pathToEditingFile) {
 
-        setIconImage(Toolkit.getDefaultToolkit().getImage(EditDialog.class.getResource("/icon64.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(EditDialog.class.getResource("/icon96.png")));
 
         this.path = pathToEditingFile;
         setContentPane(contentPane);

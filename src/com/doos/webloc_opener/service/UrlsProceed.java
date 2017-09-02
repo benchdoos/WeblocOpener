@@ -44,6 +44,10 @@ public class UrlsProceed {
 
     }
 
+    public static void openUrl(URL url) {
+        openUrl(url.toString());
+    }
+
     private static void openUrlInNotDefaultBrowser(String url) throws IOException {
         if (!url.isEmpty()) {
             String call = RegistryManager.getBrowserValue().replace("%site", url);

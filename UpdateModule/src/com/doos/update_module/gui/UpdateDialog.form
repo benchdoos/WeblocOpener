@@ -134,7 +134,7 @@
               <defaultCapable value="true"/>
               <doubleBuffered value="false"/>
               <enabled value="false"/>
-              <icon value="info16.png"/>
+              <icon value="infoIcon16.png"/>
               <margin top="2" left="2" bottom="2" right="2"/>
               <requestFocusEnabled value="false"/>
               <text value=""/>

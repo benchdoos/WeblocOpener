@@ -23,9 +23,9 @@ DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 OutputDir=F:\Developer\JAVA\WeblocOpener\out\setup
 OutputBaseFilename=WeblocOpenerSetup
-SetupIconFile="F:\Developer\JAVA\WeblocOpener\other\installer\icon.ico"
-WizardImageFile="F:\Developer\JAVA\WeblocOpener\other\installer\installer1_2.bmp"
-WizardSmallImageFile="F:\Developer\JAVA\WeblocOpener\other\installer\installer3.bmp"
+SetupIconFile="F:\Developer\JAVA\WeblocOpener\build\installer\icon.ico"
+WizardImageFile="F:\Developer\JAVA\WeblocOpener\build\installer\installer1_2.bmp"
+WizardSmallImageFile="F:\Developer\JAVA\WeblocOpener\build\installer\installer3.bmp"
 UninstallDisplayIcon={app}\{#MyAppName}.exe,0
 Compression=lzma
 SolidCompression=yes
@@ -72,7 +72,7 @@ Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
 Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\WeblocOpener\WeblocOpener.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\WeblocOpener\Template.webloc"; DestDir: "{app}"; Flags: ignoreversion
 Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\Updater\Updater.jar"; DestDir: "{app}"; Flags: ignoreversion
-Source: "F:\Developer\JAVA\WeblocOpener\readme.rtf"; DestDir: "{app}"; Flags: ignoreversion isreadme 
+;Source: "F:\Developer\JAVA\WeblocOpener\readme.rtf"; DestDir: "{app}"; Flags: ignoreversion isreadme 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [InstallDelete]
@@ -80,9 +80,9 @@ Source: "F:\Developer\JAVA\WeblocOpener\readme.rtf"; DestDir: "{app}"; Flags: ig
 Type: files; Name: "{group}\{#MyAppName}.lnk"
 
 [Icons]
-Name: "{group}\{#MyAppName} - Settings"; Filename: "{app}\{#MyAppExeName}"
+Name: "{group}\Settings - {#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{group}\Updater"; Filename: "{app}\Updater.jar"; IconFilename: "{app}\{#MyAppName}.exe"; IconIndex: 2;
-Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
+Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"; IconFilename: "{app}\{#MyAppName}.exe"; IconIndex: 3; 
 
 [Run]
 Filename: https://benchdoos.github.io/; Description: "{cm:ProgramOnTheWeb,{#MyAppName}}"; Flags: postinstall shellexec  unchecked

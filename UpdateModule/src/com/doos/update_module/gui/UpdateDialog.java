@@ -142,7 +142,7 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         setContentPane(contentPane);
         getRootPane().setDefaultButton(buttonOK);
 
-        setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/icon.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/updaterIcon16.png")));
 
         createDefaultActionListeners();
 
