@@ -80,9 +80,9 @@ Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\Updater\Updater.jar"; Dest
 Type: files; Name: "{group}\{#MyAppName}.lnk"
 
 [Icons]
-Name: "{group}\Settings - {#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{group}\Settings - {#MyAppName}"; Filename: "{app}\{#MyAppExeName}";
 Name: "{group}\Updater"; Filename: "{app}\Updater.jar"; IconFilename: "{app}\{#MyAppName}.exe"; IconIndex: 2;
-Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"; IconFilename: "{app}\{#MyAppName}.exe"; IconIndex: 3; 
+Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"; IconFilename: "{app}\{#MyAppName}.exe"; IconIndex: 3;
 
 [Run]
 Filename: https://benchdoos.github.io/; Description: "{cm:ProgramOnTheWeb,{#MyAppName}}"; Flags: postinstall shellexec  unchecked
