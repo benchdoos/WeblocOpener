@@ -43,7 +43,7 @@ public class Main {
 
             manageArguments(args);
         } catch (UnsupportedOsSystemException | UnsupportedSystemVersionException e) {
-            UserUtils.showErrorMessageToUser(null, "Error", e.getMessage());
+            UserUtils.showErrorMessageToUser(null, "System is not supported", e.getMessage());
         }
     }
 

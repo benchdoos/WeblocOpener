@@ -5,6 +5,7 @@ import com.doos.commons.core.Translation;
 import com.doos.commons.utils.FrameUtils;
 import com.doos.commons.utils.Logging;
 import com.doos.commons.utils.UserUtils;
+import com.doos.webloc_opener.service.UrlsProceed;
 import org.apache.log4j.Logger;
 
 import javax.imageio.ImageIO;
@@ -37,6 +38,7 @@ public class AboutApplicationDialog extends JDialog {
     private JLabel logFolderLabel;
     private JLabel feedbackLabel;
     private JLabel librariesLabel;
+    private JLabel telegramLabel;
 
     public AboutApplicationDialog() {
 
@@ -201,6 +203,16 @@ public class AboutApplicationDialog extends JDialog {
                         }
                     }
                 });
+
+                telegramLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                telegramLabel.setToolTipText("Feedback to telegram");
+                telegramLabel.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        UrlsProceed.openUrl(ApplicationConstants.BENCH_DOOS_TELEGRAM_URL);
+                    }
+                });
+
             }
         };
         translation.initTranslations();

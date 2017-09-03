@@ -16,6 +16,9 @@ public interface ApplicationConstants {
     String UPDATE_WEB_URL = "https://benchdoos.github.io/";
     String GITHUB_WEB_URL = "https://github.com/benchdoos/WeblocOpener/";
 
+    String BENCH_DOOS_TELEGRAM_URL = "https://vk.cc/74nB3D"; //for stats
+
+
     String BROWSER_DEFAULT_VALUE = "default";
 
     boolean IS_APP_AUTO_UPDATE_DEFAULT_VALUE = true;
