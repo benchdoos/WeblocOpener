@@ -389,7 +389,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         }
         Browser browser = (Browser) comboBox.getSelectedItem();
         if (browser != null) {
-            System.out.println("browser call: " + browser.getCall());
+            log.info("browser call: " + browser.getCall());
             if (comboBox.getSelectedIndex() != comboBox.getItemCount() - 1) {
                 if (browser.getCall() != null) {
                     if (!RegistryManager.getBrowserValue().equals(browser.getCall())) {
