@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="windows-1251">
-    <file url="file://$PROJECT_DIR$/src/com/doos/webloc_opener/gui/lib.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/com/doos/webloc_opener/gui/libs.html" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

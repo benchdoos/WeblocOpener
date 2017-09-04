@@ -151,7 +151,7 @@ public class AboutApplicationDialog extends JDialog {
                 StringBuilder contentBuilder = new StringBuilder();
                 try {
                     BufferedReader in = new BufferedReader(new InputStreamReader(
-                            getClass().getResourceAsStream("lib.html")));
+                            getClass().getResourceAsStream("libs.html")));
                     String str;
                     while ((str = in.readLine()) != null) {
                         contentBuilder.append(str);
@@ -184,7 +184,16 @@ public class AboutApplicationDialog extends JDialog {
         feedbackLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         feedbackLabel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
+                feedbackLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
+                        .getImage(SettingsDialog.class.getResource("/feedbackIconPressed.png"))));
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                feedbackLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
+                        .getImage(SettingsDialog.class.getResource("/feedbackIcon.png"))));
+
                 final String url = "mailto:weblocopener@gmail.com?subject=WeblocOpener%20feedback" +
                         "&body=Type%20here%20your%20question%20/%20problem,%20I%20try%20to%20help%20you%20as%20soon%20as%20it%20is%20possible!" +
                         "%0AYou%20can%20attach%20log%20files%20(see%20WeblocOpener%20-%20Settings%20-%20About%20-%20Log%20folder%20-%20zip%20log%20folder%20-%20attach)." +
