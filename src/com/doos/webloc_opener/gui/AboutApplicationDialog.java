@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -39,6 +41,7 @@ public class AboutApplicationDialog extends JDialog {
     private JLabel feedbackLabel;
     private JLabel librariesLabel;
     private JLabel telegramLabel;
+    private JLabel shareLabel;
 
     public AboutApplicationDialog() {
 
@@ -210,6 +213,26 @@ public class AboutApplicationDialog extends JDialog {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         UrlsProceed.openUrl(ApplicationConstants.BENCH_DOOS_TELEGRAM_URL);
+                    }
+                });
+
+                shareLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                shareLabel.setToolTipText(messages.getString("shareLabel"));
+                shareLabel.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        shareLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
+                                .getImage(SettingsDialog.class.getResource("/shareIconPressed.png"))));
+
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        shareLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
+                                .getImage(SettingsDialog.class.getResource("/shareIcon.png"))));
+                        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                        StringSelection stringSelection = new StringSelection(messages.getString("shareLabelText"));
+                        clipboard.setContents(stringSelection, null);
                     }
                 });
 
