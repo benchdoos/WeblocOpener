@@ -52,13 +52,19 @@ public class EditDialog extends JFrame implements MessagePushable {
 
     @SuppressWarnings("unchecked")
     public EditDialog(String pathToEditingFile) {
+        translateDialog();
 
+        initGui(pathToEditingFile);
+
+        log.debug("Got path: [" + pathToEditingFile + "]");
+    }
+
+    private void initGui(String pathToEditingFile) {
         setIconImage(Toolkit.getDefaultToolkit().getImage(EditDialog.class.getResource("/icon96.png")));
 
         this.path = pathToEditingFile;
         setContentPane(contentPane);
 
-        translateDialog();
 
         getRootPane().setDefaultButton(buttonOK);
 
@@ -101,8 +107,6 @@ public class EditDialog extends JFrame implements MessagePushable {
         setResizable(false); //TODO fix setMaximumSize
 
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
-
-        log.debug("Got path: [" + pathToEditingFile + "]");
     }
 
     @Override
@@ -260,8 +264,8 @@ public class EditDialog extends JFrame implements MessagePushable {
 
     @Override
     public void setVisible(boolean b) {
+        FrameUtils.showOnTop(this);
         super.setVisible(b);
-        FrameUtils.bringToFront(this);
     }
 
     @Override

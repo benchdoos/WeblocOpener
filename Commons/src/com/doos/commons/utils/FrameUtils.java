@@ -98,14 +98,33 @@ public class FrameUtils {
 
     /**
      * Brings window to front.
-     * Not the best solution, but it works!
      *
      * @param frame Frame to make on the front of the screen
+     * @see #showOnTop It gives not the best solution use more soft
+     * @deprecated Not the best solution. Makes frame blinking on screen.
      */
+    @Deprecated
     public static void bringToFront(JFrame frame) {
         frame.setExtendedState(Frame.ICONIFIED);//TODO do something with this!
         frame.setExtendedState(Frame.NORMAL);
         frame.toFront();
+    }
+
+
+    /**
+     * Brings windows to front. If some application is already in use, frame is shown on top without focus.
+     * If user requests switch focus to window and goes back, window will hide.
+     *
+     * @param frame Frame to make on the front of the screen.
+     * @see #bringToFront depricated method
+     */
+    public static void showOnTop(JFrame frame) {
+        java.awt.EventQueue.invokeLater(() -> {
+            frame.setAlwaysOnTop(true);
+            frame.toFront();
+            frame.repaint();
+            frame.setAlwaysOnTop(false);
+        });
     }
 
     /**
