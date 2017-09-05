@@ -9,7 +9,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="log4j:log4j:1.2.8" level="project" />
-    <orderEntry type="library" name="dd-plist" level="project" />
+    <orderEntry type="library" name="dd-plist 1.20" level="project" />
     <orderEntry type="module-library">
       <library name="JUnit4">
         <CLASSES>

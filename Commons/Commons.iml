@@ -14,6 +14,6 @@
     <orderEntry type="library" name="log4j:log4j:1.2.8" level="project" />
     <orderEntry type="library" name="commons-validator-1.6" level="project" />
     <orderEntry type="library" name="bridj-0.7.0" level="project" />
-    <orderEntry type="library" name="dd-plist" level="project" />
+    <orderEntry type="library" name="dd-plist 1.20" level="project" />
   </component>
 </module>

@@ -13,7 +13,7 @@
       <element id="library" level="project" name="jna-4.2.2" />
       <element id="module-output" name="WeblocOpener" />
       <element id="library" level="project" name="log4j:log4j:1.2.8" />
-      <element id="library" level="project" name="dd-plist" />
+      <element id="library" level="project" name="dd-plist 1.20" />
       <element id="library" level="module" name="JUnit4" module-name="WeblocOpener" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/oshi-core-3.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/slf4j-api-1.7.21.jar" path-in-jar="/" />
