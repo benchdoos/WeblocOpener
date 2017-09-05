@@ -52,11 +52,9 @@ public class AboutApplicationDialog extends JDialog {
 
 
     public AboutApplicationDialog() {
-
         translateDialog();
 
         initGui();
-
     }
 
     private void addWindowMoveListeners() {
@@ -114,6 +112,7 @@ public class AboutApplicationDialog extends JDialog {
     }
 
     private void initGui() {
+        log.debug("Creating GUI");
         setContentPane(contentPane);
         setIconImage(Toolkit.getDefaultToolkit().getImage(AboutApplicationDialog.class.getResource("/balloonIcon64.png")));
 
@@ -129,6 +128,7 @@ public class AboutApplicationDialog extends JDialog {
         setSize(550, 300);
         setResizable(false);
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
+        log.debug("GUI created");
     }
 
     private void initLinks() {
@@ -156,18 +156,23 @@ public class AboutApplicationDialog extends JDialog {
                 InfoDialog infoDialog = new InfoDialog();
                 infoDialog.setTitle(librariesLabelToolTip);
                 StringBuilder contentBuilder = new StringBuilder();
+                BufferedReader bufferedReader = null;
                 try {
-                    BufferedReader in = new BufferedReader(new InputStreamReader(
-                            getClass().getResourceAsStream("libs.html")));
+                    bufferedReader = new BufferedReader(new InputStreamReader(
+                            getClass().getResourceAsStream("resources/pages/libs.html")));
                     String str;
-                    while ((str = in.readLine()) != null) {
+                    while ((str = bufferedReader.readLine()) != null) {
                         contentBuilder.append(str);
                     }
-                    in.close();
-                } catch (IOException ignore) {/*NOP*/}
-
-                infoDialog.content = contentBuilder.toString();
-                infoDialog.setVisible(true);
+                    infoDialog.content = contentBuilder.toString();
+                    infoDialog.setVisible(true);
+                } catch (IOException ignore) {/*NOP*/} finally {
+                    if (bufferedReader != null) {
+                        try {
+                            bufferedReader.close();
+                        } catch (IOException ignore) {/*NOP*/}
+                    }
+                }
             }
 
             @Override
@@ -228,13 +233,6 @@ public class AboutApplicationDialog extends JDialog {
 
         shareLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         shareLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                shareLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-                        .getImage(SettingsDialog.class.getResource("/shareIconPressed.png"))));
-
-            }
-
             private void createBalloonTip() {
                 BalloonTip balloonTip = new BalloonTip(shareLabel, shareBalloonMessage);
                 balloonTip.setCloseButton(null);
@@ -244,6 +242,13 @@ public class AboutApplicationDialog extends JDialog {
                 balloonTip.setPositioner(balloonTipPositioner);
 
                 TimingUtils.showTimedBalloon(balloonTip, 4_000);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                shareLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
+                        .getImage(SettingsDialog.class.getResource("/shareIconPressed.png"))));
+
             }
 
             @Override

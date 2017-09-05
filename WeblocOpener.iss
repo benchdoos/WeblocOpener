@@ -37,6 +37,7 @@ PrivilegesRequired=admin
 Root: HKCR; Subkey: ".webloc"; ValueType: string; ValueName: ""; ValueData: "Webloc"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc"; ValueType: string; ValueName: ""; ValueData: "Webloc link"; Flags: uninsdeletekey
 Root: HKCR; Subkey: "Webloc\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppExeName},1"; Flags: uninsdeletevalue
+;Root: HKCR; Subkey: "Webloc\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\webloc.ico"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
 
 ; Add new file .webloc
@@ -72,16 +73,21 @@ Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
 Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\WeblocOpener\WeblocOpener.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\WeblocOpener\Template.webloc"; DestDir: "{app}"; Flags: ignoreversion
 Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\Updater\Updater.jar"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "F:\Developer\JAVA\WeblocOpener\Build\webloc.ico"; DestDir: "{app}"; Flags: ignoreversion
+
 ;Source: "F:\Developer\JAVA\WeblocOpener\readme.rtf"; DestDir: "{app}"; Flags: ignoreversion isreadme 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [InstallDelete]
-;Deletes old lnk
+;Deletes old files
 Type: files; Name: "{group}\{#MyAppName}.lnk"
+Type: files; Name: "{group}\Updater.lnk"
+Type: files; Name: "{app}\readme.rtf"
+
 
 [Icons]
 Name: "{group}\Settings - {#MyAppName}"; Filename: "{app}\{#MyAppExeName}";
-Name: "{group}\Updater"; Filename: "{app}\Updater.jar"; IconFilename: "{app}\{#MyAppName}.exe"; IconIndex: 2;
+Name: "{group}\Updater - WeblocOpener"; Filename: "{app}\Updater.jar"; IconFilename: "{app}\{#MyAppName}.exe"; IconIndex: 2;
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"; IconFilename: "{app}\{#MyAppName}.exe"; IconIndex: 3;
 
 [Run]
