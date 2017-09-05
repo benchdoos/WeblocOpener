@@ -97,17 +97,17 @@ public class FrameUtils {
     }
 
     /**
-     * Brings windows to front. If some application is already in use, frame is shown on top without focus.
+     * Brings windows to front. If some application is already in use, window is shown on top without focus.
      * If user requests switch focus to window and goes back, window will hide.
      *
-     * @param frame Frame to make on the front of the screen.
+     * @param window Frame to make on the front of the screen.
      */
-    public static void showOnTop(JFrame frame) {
+    public static void showOnTop(Window window) {
         java.awt.EventQueue.invokeLater(() -> {
-            frame.setAlwaysOnTop(true);
-            frame.toFront();
-            frame.repaint();
-            frame.setAlwaysOnTop(false);
+            window.setAlwaysOnTop(true);
+            window.toFront();
+            window.repaint();
+            window.setAlwaysOnTop(false);
         });
     }
 
