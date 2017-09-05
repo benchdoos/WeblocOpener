@@ -6,6 +6,12 @@ import com.doos.commons.utils.FrameUtils;
 import com.doos.commons.utils.Logging;
 import com.doos.commons.utils.UserUtils;
 import com.doos.webloc_opener.service.UrlsProceed;
+import net.java.balloontip.BalloonTip;
+import net.java.balloontip.positioners.BalloonTipPositioner;
+import net.java.balloontip.positioners.LeftAbovePositioner;
+import net.java.balloontip.styles.BalloonTipStyle;
+import net.java.balloontip.styles.MinimalBalloonStyle;
+import net.java.balloontip.utils.TimingUtils;
 import org.apache.log4j.Logger;
 
 import javax.imageio.ImageIO;
@@ -42,6 +48,7 @@ public class AboutApplicationDialog extends JDialog {
     private JLabel telegramLabel;
     private JLabel shareLabel;
     private String shareLabelText;
+    private String shareBalloonMessage;
 
 
     public AboutApplicationDialog() {
@@ -183,6 +190,18 @@ public class AboutApplicationDialog extends JDialog {
 
         feedbackLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         feedbackLabel.addMouseListener(new MouseAdapter() {
+            private void callMail() {
+                final String url = "mailto:weblocopener@gmail.com?subject=WeblocOpener%20feedback" +
+                        "&body=Type%20here%20your%20question%20/%20problem,%20I%20try%20to%20help%20you%20as%20soon%20as%20it%20is%20possible!" +
+                        "%0AYou%20can%20attach%20log%20files%20(see%20WeblocOpener%20-%20Settings%20-%20About%20-%20Log%20folder%20-%20zip%20log%20folder%20-%20attach)." +
+                        "%0ADon't%20forget%20to%20close%20the%20application%20before%20zipping%20logs;)";
+                try {
+                    Desktop.getDesktop().mail(new URI(url));
+                } catch (URISyntaxException | IOException ex) {
+                    log.warn("Can not open mail for: '" + url + "'", ex);
+                }
+            }
+
             @Override
             public void mousePressed(MouseEvent e) {
                 feedbackLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
@@ -194,15 +213,7 @@ public class AboutApplicationDialog extends JDialog {
                 feedbackLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
                         .getImage(SettingsDialog.class.getResource("/feedbackIcon.png"))));
 
-                final String url = "mailto:weblocopener@gmail.com?subject=WeblocOpener%20feedback" +
-                        "&body=Type%20here%20your%20question%20/%20problem,%20I%20try%20to%20help%20you%20as%20soon%20as%20it%20is%20possible!" +
-                        "%0AYou%20can%20attach%20log%20files%20(see%20WeblocOpener%20-%20Settings%20-%20About%20-%20Log%20folder%20-%20zip%20log%20folder%20-%20attach)." +
-                        "%0ADon't%20forget%20to%20close%20the%20application%20before%20zipping%20logs;)";
-                try {
-                    Desktop.getDesktop().mail(new URI(url));
-                } catch (URISyntaxException | IOException ex) {
-                    log.warn("Can not open mail for: '" + url + "'", ex);
-                }
+                callMail();
             }
         });
 
@@ -224,6 +235,17 @@ public class AboutApplicationDialog extends JDialog {
 
             }
 
+            private void createBalloonTip() {
+                BalloonTip balloonTip = new BalloonTip(shareLabel, shareBalloonMessage);
+                balloonTip.setCloseButton(null);
+                BalloonTipStyle minimalStyle = new MinimalBalloonStyle(Color.WHITE, 5);
+                balloonTip.setStyle(minimalStyle);
+                BalloonTipPositioner balloonTipPositioner = new LeftAbovePositioner(0, 0);
+                balloonTip.setPositioner(balloonTipPositioner);
+
+                TimingUtils.showTimedBalloon(balloonTip, 4_000);
+            }
+
             @Override
             public void mouseReleased(MouseEvent e) {
                 shareLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
@@ -231,6 +253,8 @@ public class AboutApplicationDialog extends JDialog {
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 StringSelection stringSelection = new StringSelection(shareLabelText);
                 clipboard.setContents(stringSelection, null);
+
+                createBalloonTip();
             }
         });
     }
@@ -262,6 +286,8 @@ public class AboutApplicationDialog extends JDialog {
 
 
                 telegramLabel.setToolTipText(messages.getString("telegramLabel"));
+
+                shareBalloonMessage = messages.getString("shareBalloonMessage");
 
                 shareLabel.setToolTipText(messages.getString("shareLabel"));
 
