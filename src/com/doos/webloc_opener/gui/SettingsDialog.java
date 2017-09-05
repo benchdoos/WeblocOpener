@@ -14,6 +14,9 @@ import com.doos.commons.utils.MessagePushable;
 import com.doos.commons.utils.UserUtils;
 import com.doos.commons.utils.browser.Browser;
 import com.doos.commons.utils.browser.BrowserManager;
+import net.java.balloontip.BalloonTip;
+import net.java.balloontip.styles.MinimalBalloonStyle;
+import net.java.balloontip.utils.TimingUtils;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
@@ -48,6 +51,8 @@ public class SettingsDialog extends JFrame implements MessagePushable {
     private String errorMessageTitle = "Error";
     private String canNotSaveSettingsToRegistryMessage = "Can not save settings to registry.";
     private Timer messageTimer;
+    private String toolTipText = "<html><body style=\"font-size:10px;\">Syntax: <b><u>file path</u></b> <b style=\"color:red;\">%site</b>, don't forget to add <b>%site</b><br>" +
+            "Example for Google Chrome: <b style=\"color:green;\">start chrome \"%site\"</b></body></html>";
 
     private String chooseAFile = "Choose a file:";
 
@@ -291,44 +296,43 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         }
     }
 
+    private BalloonTip generateBalloonTip(String toolTipText) {
+        BalloonTip balloonTip = new BalloonTip(syntaxInfoLabel, toolTipText);
+        balloonTip.setStyle(new MinimalBalloonStyle(Color.white, 5));
+        balloonTip.setCloseButton(null);
+        balloonTip.setVisible(false);
+        balloonTip.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                balloonTip.setVisible(false);
+            }
+        });
+        return balloonTip;
+    }
+
     private void setSyntaxInfoButtonToolTip() {
 
-        final int defaultDismissTimeout = ToolTipManager.sharedInstance().getDismissDelay();
-        ToolTipManager.sharedInstance().setDismissDelay(10_000);
-
-
-        final String toolTipText = "<html><body style=\"font-size: 12px; color:gray;\">Syntax: <b style=\"color:white;\"><u>file path</u></b> <b style=\"color:red;\">%site</b>, don't forget to add <b>%site</b><br>" +
-                "Example for Google Chrome: <b style=\"color:green;\">start chrome \"%site\"</b></body></html>";
-        syntaxInfoLabel.setToolTipText(toolTipText);
-
         syntaxInfoLabel.addMouseListener(new MouseAdapter() {
+            final int DEFAULT_TIME = 10_000;
+            final int SHORT_TIME = 6_000;
+
+            BalloonTip balloonTip = generateBalloonTip(toolTipText);
+
             @Override
-            public void mouseEntered(MouseEvent me) {
-                UIManager.put("ToolTip.background", Color.black);
-//                ToolTipManager.sharedInstance().setDismissDelay(10_000);
+            public void mouseClicked(MouseEvent e) {
+                balloonTip.setVisible(true);
+                TimingUtils.showTimedBalloon(balloonTip, DEFAULT_TIME);
             }
 
             @Override
-            public void mouseExited(MouseEvent me) {
-                UIManager.put("ToolTip.background", Color.getColor("#АА0000")); // To turn back tooltip color
-//                ToolTipManager.sharedInstance().setDismissDelay(defaultDismissTimeout);
+            public void mouseEntered(MouseEvent e) {
+                balloonTip.setVisible(true);
+                TimingUtils.showTimedBalloon(balloonTip, SHORT_TIME);
             }
 
             @Override
-            public void mouseReleased(MouseEvent e) {
-                JComponent component = syntaxInfoLabel;
-
-                MouseEvent phantom = new MouseEvent(
-                        component,
-                        MouseEvent.MOUSE_MOVED,
-                        System.currentTimeMillis(),
-                        0,
-                        0,
-                        0,
-                        0,
-                        false);
-
-                ToolTipManager.sharedInstance().mouseMoved(phantom);
+            public void mouseExited(MouseEvent e) {
+                balloonTip = generateBalloonTip(toolTipText);
             }
         });
 
@@ -375,6 +379,8 @@ public class SettingsDialog extends JFrame implements MessagePushable {
 
                 canNotSaveSettingsToRegistryMessage = messages.getString("canNotSaveSettingsToRegistryMessage");
                 errorMessageTitle = messages.getString("errorMessage");
+
+                toolTipText = messages.getString("toolTipText");
 
                 customBrowserName = messages.getString("customBrowserName");
                 chooseAFile = messages.getString("chooseAFile");
