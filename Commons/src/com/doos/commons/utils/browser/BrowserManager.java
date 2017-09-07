@@ -36,7 +36,8 @@ public class BrowserManager {
 
     public static void loadBrowserList() {
         initTranslation();
-        File file = new File(ApplicationConstants.DEFAULT_LIST_LOCATION);
+        loadBrowsersFromDefault(generateDefaultBrowserArrayList());
+        /*File file = new File(ApplicationConstants.DEFAULT_LIST_LOCATION);
         if (file.exists()) {
             loadBrowsersFromFile(file);
         } else {
@@ -44,14 +45,22 @@ public class BrowserManager {
             if (file.exists()) {
                 loadBrowsersFromFile(file);
             }
-        }
+        }*/
+    }
+
+    private static void loadBrowsersFromDefault(ArrayList<Browser> list) {
+
+        browserList = list;
+        browserList.add(0, new Browser(defaultBrowserName, ApplicationConstants.BROWSER_DEFAULT_VALUE));
+        log.debug("Browsers count: " + browserList.size() + " " + browserList);
+
     }
 
     private static void loadBrowsersFromFile(File file) {
         parsePlist(file);
         browserList = plistToArrayList(plist);
         browserList.add(0, new Browser(defaultBrowserName, ApplicationConstants.BROWSER_DEFAULT_VALUE));
-        System.out.println("count: " + browserList.size() + " " + browserList);
+        log.debug("count: " + browserList.size() + " " + browserList);
     }
 
     public static ArrayList<Browser> getBrowserList() {
