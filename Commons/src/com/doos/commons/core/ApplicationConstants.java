@@ -29,10 +29,13 @@ public interface ApplicationConstants {
     String UPDATE_SILENT_ARGUMENT = "-s";
     String UPDATE_DELETE_TEMP_FILE_ARGUMENT = "-clean";
 
+    String OPENER_CREATE_ARGUMENT = "-create";
     String OPENER_EDIT_ARGUMENT = "-edit";
     String OPENER_SETTINGS_ARGUMENT = "-settings";
+    String OPENER_UPDATE_ARGUMENT = "-update";
     String OPENER_ABOUT_ARGUMENT = "-about";
-    String OPENER_CREATE_ARGUMENT = "-create";
+    String OPENER_HELP_ARGUMENT_HYPHEN = "-help";
+    String OPENER_HELP_ARGUMENT_SLASH = "/help";
 
     String WINDOWS_WEBLOCOPENER_SETUP_NAME = "WeblocOpenerSetup";
 

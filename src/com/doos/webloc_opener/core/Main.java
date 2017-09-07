@@ -93,6 +93,15 @@ public class Main {
                                     + Arrays.toString(args), e);
                         }
                         break;
+
+                    case OPENER_UPDATE_ARGUMENT:
+                        SettingsDialog.runUpdater();
+                        break;
+                    case OPENER_HELP_ARGUMENT_HYPHEN:
+                    case OPENER_HELP_ARGUMENT_SLASH: {
+                        System.out.println(helpText());
+                        break;
+                    }
                     default:
                         runAnalyzer(args[0]);
                         break;
@@ -101,6 +110,15 @@ public class Main {
         } else {
             runSettingsDialog();
         }
+    }
+
+    private static String helpText() {
+        String text = OPENER_CREATE_ARGUMENT + "\t[filepath] [link] \tCreates a new .webloc file on [filepath]. " +
+                "[filepath] should end with [\\filename.webloc]\n" +
+                OPENER_EDIT_ARGUMENT + "\t[filepath] \t\t\tCalls Edit window to edit given .webloc file.\n" +
+                OPENER_SETTINGS_ARGUMENT + "\t\t\t\t\tCalls Settings window of WeblocOpener.\n" +
+                OPENER_UPDATE_ARGUMENT + "\t\t\t\t\t\tCalls update-tool for WeblocOpener.";
+        return text;
     }
 
     private static void manageCreateArgument(String[] args) throws Exception {
