@@ -43,7 +43,7 @@ public class UpdateInfoDialog extends JDialog {
         setMinimumSize(new Dimension(550, 300));
         setSize(550, 300);
 
-
+        textPane.setCaretPosition(0);
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
         setVisible(true);
     }
