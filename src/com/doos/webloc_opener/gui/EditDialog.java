@@ -235,7 +235,7 @@ public class EditDialog extends JFrame implements MessagePushable {
             URL url = new URL(textField.getText());
             UrlValidator urlValidator = new UrlValidator();
             if (urlValidator.isValid(textField.getText())) {
-                UrlsProceed.createWebloc(url, path);
+                UrlsProceed.createWebloc(path, url);
                 dispose();
             } else {
                 throw new MalformedURLException();

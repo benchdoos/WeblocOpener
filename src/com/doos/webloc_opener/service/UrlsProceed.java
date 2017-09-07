@@ -110,7 +110,7 @@ public class UrlsProceed {
      * @param url  URL to create.
      * @param path Path of creating file.
      */
-    public static void createWebloc(URL url, String path) {
+    public static void createWebloc(String path, URL url) {
         log.info("Creating .webloc at [" + path + "] URL: [" + url + "]");
         NSDictionary root = new NSDictionary();
         root.put("URL", url.toString());
@@ -122,10 +122,6 @@ public class UrlsProceed {
         } catch (IOException e) {
             log.warn("Can not create .webloc file", e);
         }
-    }
-
-    public static void createWebloc(String path, URL url) {
-        createWebloc(url, path);
     }
 
     /**
