@@ -156,28 +156,41 @@ public class BrowserManager {
         chrome.setIncognitoCall(call + " --incognito");
         result.add(chrome);
 
-        Browser opera = new Browser();
-        opera.setName("Opera");
-        opera.setCall("start opera " + "\"" + "%site" + "\"");
-        opera.setIncognitoCall("start opera --private " + "\"" + "%site" + "\"");
-        result.add(opera);
-
-        Browser edge = new Browser();
-        edge.setName("Microsoft Edge");
-        edge.setCall("start microsoft-edge:" + "\"" + "%site" + "\"");
-        result.add(edge);
-
         Browser firefox = new Browser();
         firefox.setName("Firefox");
         firefox.setCall("start firefox " + "\"" + "%site" + "\"");
         firefox.setIncognitoCall("start firefox -private-window " + "\"" + "%site" + "\"");
         result.add(firefox);
 
+        Browser edge = new Browser();
+        edge.setName("Microsoft Edge");
+        edge.setCall("start microsoft-edge:" + "\"" + "%site" + "\"");
+        result.add(edge);
+
         Browser iexplorer = new Browser();
         iexplorer.setName("Internet Explorer");
         iexplorer.setCall("start iexplore " + "\"" + "%site" + "\"");
         iexplorer.setIncognitoCall("start iexplore " + "\"" + "%site" + "\"" + " -private");
         result.add(iexplorer);
+
+        Browser opera = new Browser();
+        opera.setName("Opera");
+        opera.setCall("start opera " + "\"" + "%site" + "\"");
+        opera.setIncognitoCall("start opera --private " + "\"" + "%site" + "\"");
+        result.add(opera);
+
+        Browser yandex = new Browser();
+        yandex.setName("Yandex Browser");
+        yandex.setCall("start browser " + "\"" + "%site" + "\"");
+        yandex.setIncognitoCall("start browser -incognito " + "\"" + "%site" + "\"");
+        result.add(yandex);
+
+        Browser vivaldi = new Browser();
+        vivaldi.setName("Vivaldi");
+        vivaldi.setCall("start vivaldi " + "\"" + "%site" + "\"");
+        vivaldi.setIncognitoCall("start vivaldi -incognito " + "\"" + "%site" + "\"");
+        result.add(vivaldi);
+
 
         return result;
     }
