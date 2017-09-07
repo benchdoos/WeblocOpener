@@ -256,11 +256,10 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         }
     }
 
-    private void onUpdateNow() {
+    public static void runUpdater() {
         String run;
         try {
-            run = "java -jar \"" + RegistryManager.getInstallLocationValue()
-                    + File.separator + "Updater.jar\"";
+            run = "java -jar \"" + RegistryManager.getInstallLocationValue() + "Updater.jar\"";
         } catch (RegistryCanNotReadInfoException e) {
             run = new File(SettingsDialog.class.getProtectionDomain()
                     .getCodeSource().getLocation().getPath()).getAbsolutePath().replace("%20", " ");
@@ -272,6 +271,10 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         } catch (IOException e) {
             log.warn("Can not execute command: " + run, e);
         }
+    }
+
+    private void onUpdateNow() {
+        runUpdater();
         dispose();
     }
 
