@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static com.doos.commons.core.ApplicationConstants.UPDATE_CODE_INTERRUPT;
+import static com.doos.commons.core.ApplicationConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME;
 import static com.doos.commons.utils.Logging.getCurrentClassName;
 import static com.doos.commons.utils.UserUtils.showErrorMessageToUser;
 import static com.doos.commons.utils.UserUtils.showSuccessMessageToUser;
@@ -175,6 +176,15 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         return serverAppVersion;
     }
 
+    private void loadProperties() {
+        try {
+            currentVersionLabel.setText(RegistryManager.getAppVersionValue());
+        } catch (RegistryException e) {
+            currentVersionLabel.setText(ApplicationConstants.APP_VERSION);
+        }
+        availableVersionLabel.setText("Unknown");
+    }
+
     private void onCancel() {
         if (updateThread != null) {
             if (!updateThread.isInterrupted()) {
@@ -193,15 +203,6 @@ public class UpdateDialog extends JFrame implements MessagePushable {
             runCleanTempUpdaterFile();
         }
         dispose();
-    }
-
-    private void loadProperties() {
-        try {
-            currentVersionLabel.setText(RegistryManager.getAppVersionValue());
-        } catch (RegistryException e) {
-            currentVersionLabel.setText(ApplicationConstants.APP_VERSION);
-        }
-        availableVersionLabel.setText("Unknown");
     }
 
     private void onOK() {
@@ -276,9 +277,9 @@ public class UpdateDialog extends JFrame implements MessagePushable {
     }
 
     private void runCleanInstallerFile() {
-        log.info("Deleting file: " + ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
+        log.info("Deleting file: " + ApplicationConstants.UPDATE_PATH_FILE + WINDOWS_WEBLOCOPENER_SETUP_NAME + "V"
                 + serverAppVersion.getVersion() + "" + ".exe");
-        File installer = new File(ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
+        File installer = new File(ApplicationConstants.UPDATE_PATH_FILE + WINDOWS_WEBLOCOPENER_SETUP_NAME + "V"
                 + serverAppVersion.getVersion() + ".exe");
         installer.deleteOnExit();
     }
