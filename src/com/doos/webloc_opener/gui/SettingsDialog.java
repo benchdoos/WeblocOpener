@@ -65,6 +65,23 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         log.debug("Settings dialog created.");
     }
 
+    public static void runUpdater() {
+        String run;
+        try {
+            run = "java -jar \"" + RegistryManager.getInstallLocationValue() + "Updater.jar\"";
+        } catch (RegistryCanNotReadInfoException e) {
+            run = new File(SettingsDialog.class.getProtectionDomain()
+                    .getCodeSource().getLocation().getPath()).getAbsolutePath().replace("%20", " ");
+            log.warn("Can not read registry, using alternate path: [" + run + "]", e);
+        }
+        log.info("Running: " + run);
+        try {
+            Runtime.getRuntime().exec(run);
+        } catch (IOException e) {
+            log.warn("Can not execute command: " + run, e);
+        }
+    }
+
     private int findBrowser(String browserValue) {
         int result = 0;
         for (int i = 0; i < BrowserManager.getBrowserList().size(); i++) {
@@ -87,6 +104,20 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         if (browserValue.equals("default") || browserValue.isEmpty()) {
             return 0;
         } else return BrowserManager.getBrowserList().size() - 1;
+    }
+
+    private BalloonTip generateBalloonTip(String toolTipText) {
+        BalloonTip balloonTip = new BalloonTip(syntaxInfoLabel, toolTipText);
+        balloonTip.setStyle(new MinimalBalloonStyle(Color.white, 5));
+        balloonTip.setCloseButton(null);
+        balloonTip.setVisible(false);
+        balloonTip.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                balloonTip.setVisible(false);
+            }
+        });
+        return balloonTip;
     }
 
     private void initComboBox() {
@@ -256,23 +287,6 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         }
     }
 
-    public static void runUpdater() {
-        String run;
-        try {
-            run = "java -jar \"" + RegistryManager.getInstallLocationValue() + "Updater.jar\"";
-        } catch (RegistryCanNotReadInfoException e) {
-            run = new File(SettingsDialog.class.getProtectionDomain()
-                    .getCodeSource().getLocation().getPath()).getAbsolutePath().replace("%20", " ");
-            log.warn("Can not read registry, using alternate path: [" + run + "]", e);
-        }
-        log.info("Running: " + run);
-        try {
-            Runtime.getRuntime().exec(run);
-        } catch (IOException e) {
-            log.warn("Can not execute command: " + run, e);
-        }
-    }
-
     private void onUpdateNow() {
         runUpdater();
         dispose();
@@ -297,20 +311,6 @@ public class SettingsDialog extends JFrame implements MessagePushable {
             log.debug("Choice canceled");
             return null;
         }
-    }
-
-    private BalloonTip generateBalloonTip(String toolTipText) {
-        BalloonTip balloonTip = new BalloonTip(syntaxInfoLabel, toolTipText);
-        balloonTip.setStyle(new MinimalBalloonStyle(Color.white, 5));
-        balloonTip.setCloseButton(null);
-        balloonTip.setVisible(false);
-        balloonTip.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                balloonTip.setVisible(false);
-            }
-        });
-        return balloonTip;
     }
 
     private void setSyntaxInfoButtonToolTip() {
