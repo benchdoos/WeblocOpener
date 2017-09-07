@@ -82,7 +82,9 @@ Source: "F:\Developer\JAVA\WeblocOpener\out\artifacts\Updater\Updater.jar"; Dest
 ;Deletes old files
 Type: files; Name: "{group}\{#MyAppName}.lnk"
 Type: files; Name: "{group}\Updater.lnk"
+Type: files; Name: "{group}\Деинсталлировать WeblocOpener.lnk"
 Type: files; Name: "{app}\readme.rtf"
+
 
 
 [Icons]
