@@ -159,7 +159,7 @@ public class AboutApplicationDialog extends JDialog {
                 BufferedReader bufferedReader = null;
                 try {
                     bufferedReader = new BufferedReader(new InputStreamReader(
-                            getClass().getResourceAsStream("resources/pages/libs.html")));
+                            getClass().getResourceAsStream("/resources/pages/libs.html")));
                     String str;
                     while ((str = bufferedReader.readLine()) != null) {
                         contentBuilder.append(str);
