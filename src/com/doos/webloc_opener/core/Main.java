@@ -13,6 +13,7 @@ import com.doos.commons.utils.system.UnsupportedSystemVersionException;
 import com.doos.webloc_opener.gui.AboutApplicationDialog;
 import com.doos.webloc_opener.gui.EditDialog;
 import com.doos.webloc_opener.gui.SettingsDialog;
+import com.doos.webloc_opener.gui.ShowQrDialog;
 import com.doos.webloc_opener.service.Analyzer;
 import com.doos.webloc_opener.service.UrlsProceed;
 import org.apache.log4j.Logger;
@@ -102,8 +103,25 @@ public class Main {
                         System.out.println(helpText());
                         break;
                     }
+                    case OPENER_QR_ARGUMENT:
+                        if (args.length > 1) {
+                            String url = runAnalyzer(args[1]);
+
+                            ;
+
+                            ShowQrDialog qrDialog = null;
+                            try {
+                                qrDialog = new ShowQrDialog(UrlsProceed.generateQrCode(url));
+                                qrDialog.setVisible(true);
+                            } catch (Exception e) {
+                                log.warn("Can not create a qr-code from url: [" + url + "]", e);
+                            }
+                        }
+                        break;
                     default:
-                        runAnalyzer(args[0]);
+                        String url = runAnalyzer(args[0]);
+                        UrlsProceed.openUrl(url);
+                        UrlsProceed.shutdownLogout();
                         break;
                 }
             }
@@ -147,10 +165,8 @@ public class Main {
      *
      * @param arg main args
      */
-    private static void runAnalyzer(String arg) {
-        String url = new Analyzer(arg).getUrl();
-        UrlsProceed.openUrl(url);
-        UrlsProceed.shutdownLogout();
+    private static String runAnalyzer(String arg) {
+        return new Analyzer(arg).getUrl();
     }
 
     /**

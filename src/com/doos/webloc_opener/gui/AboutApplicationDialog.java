@@ -6,6 +6,7 @@ import com.doos.commons.utils.FrameUtils;
 import com.doos.commons.utils.Logging;
 import com.doos.commons.utils.UserUtils;
 import com.doos.webloc_opener.service.UrlsProceed;
+import com.doos.webloc_opener.service.gui.MousePickListener;
 import net.java.balloontip.BalloonTip;
 import net.java.balloontip.positioners.BalloonTipPositioner;
 import net.java.balloontip.positioners.LeftAbovePositioner;
@@ -22,7 +23,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -58,41 +58,14 @@ public class AboutApplicationDialog extends JDialog {
     }
 
     private void addWindowMoveListeners() {
-        Window parent = this;
-        final Point[] initialClick = new Point[1];
+        MousePickListener mousePickListener = new MousePickListener(this);
 
-        final MouseAdapter mouseAdapter = new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                initialClick[0] = e.getPoint();
-                getComponentAt(initialClick[0]);
-            }
-        };
+        imagePanel1.addMouseListener(mousePickListener.getMouseAdapter);
+        imagePanel1.addMouseMotionListener(mousePickListener.getMouseMotionAdapter);
 
-        final MouseMotionAdapter mouseMotionAdapter = new MouseMotionAdapter() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
+        weblocOpenerBWillTextPane.addMouseListener(mousePickListener.getMouseAdapter);
 
-                // get location of Window
-                int thisX = parent.getLocation().x;
-                int thisY = parent.getLocation().y;
-
-                // Determine how much the mouse moved since the initial click
-                int xMoved = (thisX + e.getX()) - (thisX + initialClick[0].x);
-                int yMoved = (thisY + e.getY()) - (thisY + initialClick[0].y);
-
-                // Move window to this position
-                int X = thisX + xMoved;
-                int Y = thisY + yMoved;
-                parent.setLocation(X, Y);
-            }
-        };
-
-        imagePanel1.addMouseListener(mouseAdapter);
-        imagePanel1.addMouseMotionListener(mouseMotionAdapter);
-
-        weblocOpenerBWillTextPane.addMouseListener(mouseAdapter);
-
-        weblocOpenerBWillTextPane.addMouseMotionListener(mouseMotionAdapter);
+        weblocOpenerBWillTextPane.addMouseMotionListener(mousePickListener.getMouseMotionAdapter);
     }
 
     private void createUIComponents() {

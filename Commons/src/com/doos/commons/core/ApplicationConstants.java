@@ -36,6 +36,7 @@ public interface ApplicationConstants {
     String OPENER_ABOUT_ARGUMENT = "-about";
     String OPENER_HELP_ARGUMENT_HYPHEN = "-help";
     String OPENER_HELP_ARGUMENT_SLASH = "/help";
+    String OPENER_QR_ARGUMENT = "-qr";
 
     String WINDOWS_WEBLOCOPENER_SETUP_NAME = "WeblocOpenerSetup";
 

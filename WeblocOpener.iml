@@ -25,5 +25,6 @@
     <orderEntry type="library" name="commons-validator-1.6" level="project" />
     <orderEntry type="library" name="bridj-0.7.0" level="project" />
     <orderEntry type="library" name="balloontip-1.2.4.1" level="project" />
+    <orderEntry type="library" name="com.google.zxing:javase:3.3.0" level="project" />
   </component>
 </module>
