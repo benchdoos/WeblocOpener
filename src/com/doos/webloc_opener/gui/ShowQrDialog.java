@@ -6,10 +6,12 @@ import com.doos.webloc_opener.service.gui.MousePickListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
-public class ShowQrDialog extends JDialog {
+public class ShowQrDialog extends JFrame {
     BufferedImage qrCodeImage = null;
     private JPanel contentPane;
     private ImagePanel imagePanel;
@@ -17,10 +19,11 @@ public class ShowQrDialog extends JDialog {
     public ShowQrDialog(BufferedImage qrCodeImage) {
         this.qrCodeImage = qrCodeImage;
 
-        setTitle("QR-Code for .webloc link");
+        setTitle("QR-Code for .webloc");
+        setIconImage(Toolkit.getDefaultToolkit().getImage(ShowQrDialog.class.getResource("/balloonIcon64.png")));
+
 
         setContentPane(contentPane);
-        setModal(true);
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
@@ -29,11 +32,8 @@ public class ShowQrDialog extends JDialog {
             }
         });
 
-        imagePanel.registerKeyboardAction(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
-            }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        imagePanel.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(
+                KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         setSize(new Dimension(UrlsProceed.QR_CODE_WIDTH, UrlsProceed.QR_CODE_HEIGHT + 30));
         setResizable(false);
