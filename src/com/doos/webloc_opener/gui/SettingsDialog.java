@@ -51,8 +51,12 @@ public class SettingsDialog extends JFrame implements MessagePushable {
     private String errorMessageTitle = "Error";
     private String canNotSaveSettingsToRegistryMessage = "Can not save settings to registry.";
     private Timer messageTimer;
-    private String toolTipText = "<html><body style=\"font-size:10px;\">Syntax: <b><u>file path</u></b> <b style=\"color:red;\">%site</b>, don't forget to add <b>%site</b><br>" +
-            "Example for Google Chrome: <b style=\"color:green;\">start chrome \"%site\"</b></body></html>";
+    private String toolTipText = "" +
+            "<html>" +
+            "  <body style=\"font-size:10px;\">Syntax: <b><u>file path</u></b> <b style=\"color:red;\">%site</b>, don't forget to add <b>%site</b>" +
+            "  <br>Example for Google Chrome: <b style=\"color:green;\">start chrome \"%site\"</b>" +
+            "  </body>" +
+            "</html>";
 
     private String chooseAFile = "Choose a file:";
 
