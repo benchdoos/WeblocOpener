@@ -107,11 +107,9 @@ public class Main {
                         if (args.length > 1) {
                             String url = runAnalyzer(args[1]);
 
-                            ;
-
                             ShowQrDialog qrDialog = null;
                             try {
-                                qrDialog = new ShowQrDialog(UrlsProceed.generateQrCode(url));
+                                qrDialog = new ShowQrDialog(url,UrlsProceed.generateQrCode(url));
                                 qrDialog.setVisible(true);
                             } catch (Exception e) {
                                 log.warn("Can not create a qr-code from url: [" + url + "]", e);
