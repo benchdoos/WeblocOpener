@@ -51,7 +51,13 @@ Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "FileName"
 Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "NullFile"; ValueData: ""; Flags: uninsdeletevalue
 
 ; Add edit file menu
+
 Root: HKCR; Subkey: "Webloc\shell\edit\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-edit"" ""%1"" "; Flags: uninsdeletevalue
+
+; Add edit file menu
+Root: HKCR; Subkey: "Webloc\shell\GenerateQRCode"; ValueType: string; ValueName: ""; ValueData: {cm:GenerateQrCode}; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Webloc\shell\GenerateQRCode"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",5"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Webloc\shell\GenerateQRCode\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-qr"" ""%1"" "; Flags: uninsdeletevalue
 
 ; Add updater autorun
 Root: HKCU; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "WeblocOpenerUpdater"; ValueData: """{app}\Updater.jar"" ""-s"""; Flags: uninsdeletevalue
