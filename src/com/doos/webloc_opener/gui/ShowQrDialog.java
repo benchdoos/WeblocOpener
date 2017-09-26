@@ -60,7 +60,7 @@ public class ShowQrDialog extends JFrame {
     }
 
     private void translateDialog() {
-        Translation translation = new Translation("translations/showQrDialogBundle") {
+        Translation translation = new Translation("translations/ShowQrDialogBundle") {
             @Override
             public void initTranslations() {
                 title = messages.getString("windowTitle");
