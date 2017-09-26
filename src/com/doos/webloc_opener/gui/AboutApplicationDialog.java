@@ -91,6 +91,7 @@ public class AboutApplicationDialog extends JDialog {
                     if (leftClickCount >= 2) {
                         leftClickCount = 0;
                         UrlsProceed.openUrl("https://vk.cc/79FQIY"); //hardcoded not to give to find it in source code :<
+                        dispose();
                     }
                 }
             }
@@ -99,7 +100,6 @@ public class AboutApplicationDialog extends JDialog {
                 risingBalloonLogoLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
                         .getImage(ShowQrDialog.class.getResource("/easter.bin"))));
                 easterShown = true;
-                dispose();
             }
         });
     }
