@@ -21,13 +21,6 @@ public class InfoDialog extends JDialog {
         initGui();
     }
 
-    public static void main(String[] args) {
-        InfoDialog dialog = new InfoDialog();
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
-    }
-
     private void initGui() {
         setIconImage(Toolkit.getDefaultToolkit().getImage(AboutApplicationDialog.class.getResource("/infoIcon16.png")));
         setContentPane(contentPane);
