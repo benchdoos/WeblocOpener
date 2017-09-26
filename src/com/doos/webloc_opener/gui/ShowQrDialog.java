@@ -34,12 +34,6 @@ public class ShowQrDialog extends JFrame {
         });
     }
 
-    public ShowQrDialog(BufferedImage qrCodeImage) {
-        this.qrCodeImage = qrCodeImage;
-
-        initGui();
-    }
-
     private void initGui() {
         translateDialog();
 
@@ -59,7 +53,6 @@ public class ShowQrDialog extends JFrame {
         imagePanel.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(
                 KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-        //setSize(new Dimension(UrlsProceed.QR_CODE_WIDTH, UrlsProceed.QR_CODE_HEIGHT + 60));
         pack();
         setResizable(false);
 
