@@ -47,6 +47,7 @@ public class AboutApplicationDialog extends JDialog {
     private JLabel librariesLabel;
     private JLabel telegramLabel;
     private JLabel shareLabel;
+    private JLabel risingBalloonLogoLabel;
     private String shareLabelText;
     private String shareBalloonMessage;
 
@@ -55,6 +56,51 @@ public class AboutApplicationDialog extends JDialog {
         translateDialog();
 
         initGui();
+
+    }
+
+    private void addEasterListener() {
+        risingBalloonLogoLabel.addMouseListener(new MouseAdapter() {
+            int clickCount = 0;
+            int leftClickCount = 0;
+            boolean easterShown = false;
+            Timer timer = new Timer(500, e -> {
+                if (clickCount < 3) {
+                    clickCount = 0;
+                } else {
+                    showEaster();
+                }
+
+                if (leftClickCount < 2) {
+                    leftClickCount = 0;
+                }
+            });
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getButton() == MouseEvent.BUTTON3) {
+                    if (!timer.isRunning()) {
+                        timer.setRepeats(true);
+                        timer.start();
+                    }
+                    clickCount++;
+                }
+
+                if (e.getButton() == MouseEvent.BUTTON1 && easterShown) {
+                    leftClickCount++;
+                    if (leftClickCount >= 2) {
+                        leftClickCount = 0;
+                        UrlsProceed.openUrl("https://vk.cc/79FQIY"); //hardcoded not to give to find it in source code :<
+                    }
+                }
+            }
+
+            private void showEaster() {
+                risingBalloonLogoLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
+                        .getImage(ShowQrDialog.class.getResource("/easter.png"))));
+                easterShown = true;
+            }
+        });
     }
 
     private void addWindowMoveListeners() {
@@ -101,6 +147,7 @@ public class AboutApplicationDialog extends JDialog {
         setSize(550, 300);
         setResizable(false);
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
+        addEasterListener();
         log.debug("GUI created");
     }
 
