@@ -1,0 +1,18 @@
+<component name="libraryTable">
+  <library name="com.google.zxing:javase:3.3.0" type="repository">
+    <properties maven-id="com.google.zxing:javase:3.3.0" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/javase-3.3.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/core-3.3.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jcommander-1.48.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jai-imageio-core-1.3.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/javase-3.3.0-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/core-3.3.0-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jcommander-1.48-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jai-imageio-core-1.3.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>

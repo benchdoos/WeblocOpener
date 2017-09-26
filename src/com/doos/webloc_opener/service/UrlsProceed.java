@@ -6,21 +6,34 @@ import com.doos.commons.core.ApplicationConstants;
 import com.doos.commons.registry.RegistryManager;
 import com.doos.commons.utils.Logging;
 import com.doos.commons.utils.UserUtils;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.apache.log4j.Logger;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Eugene Zrazhevsky on 30.10.2016.
  */
 public class UrlsProceed {
     private static final Logger log = Logger.getLogger(Logging.getCurrentClassName());
+
+    public static final int QR_CODE_HEIGHT = 300, QR_CODE_WIDTH = 300;
+    private static final String QR_CODE_CHARSET = "UTF-8";
 
 
     /**
@@ -145,5 +158,21 @@ public class UrlsProceed {
         log.info("Got URL: [" + url + "] from file: " + file);
 
         return url;
+    }
+
+    public static BufferedImage generateQrCode(String url) throws IOException, WriterException {
+        Map hintMap = new HashMap();
+        hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+        hintMap.put(EncodeHintType.MARGIN, 1);
+        return createQRCode(url, QR_CODE_CHARSET, hintMap, QR_CODE_HEIGHT, QR_CODE_WIDTH);
+    }
+
+    private static BufferedImage createQRCode(String url, String charset,
+                                              Map hintMap, int height, int width)
+            throws WriterException, IOException {
+        BitMatrix matrix = new MultiFormatWriter().encode(
+                new String(url.getBytes(charset), charset),
+                BarcodeFormat.QR_CODE, width, height, hintMap);
+        return MatrixToImageWriter.toBufferedImage(matrix);
     }
 }
