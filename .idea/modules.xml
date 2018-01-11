@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Commons/Commons.iml" filepath="$PROJECT_DIR$/Commons/Commons.iml" />
       <module fileurl="file://$PROJECT_DIR$/UpdateModule/UpdateModule.iml" filepath="$PROJECT_DIR$/UpdateModule/UpdateModule.iml" />
-      <module fileurl="file://$PROJECT_DIR$/WeblocOpener.iml" filepath="$PROJECT_DIR$/WeblocOpener.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WeblocOpener/WeblocOpener.iml" filepath="$PROJECT_DIR$/WeblocOpener/WeblocOpener.iml" />
     </modules>
   </component>
 </project>

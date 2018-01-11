@@ -1,7 +1,6 @@
 
-import com.doos.commons.core.ApplicationConstants;
-import com.doos.commons.registry.RegistryManager;
-import jdk.nashorn.internal.ir.annotations.Ignore;
+import com.github.benchdoos.weblocopener.commons.core.ApplicationConstants;
+import com.github.benchdoos.weblocopener.commons.registry.RegistryManager;
 import org.testng.annotations.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -15,7 +14,7 @@ public class RegistryManagerTest {
         final String expected = "C:\\Program Files (x86)\\WeblocOpener";
 
         String actual = RegistryManager.getInstallLocationValue();
-        assertEquals("Checking com.doos.com.doos.commons.core.commons.registry APP_ROOT_HKEY",
+        assertEquals("Checking com.benchdoos.com.benchdoos.commons.core.commons.registry APP_ROOT_HKEY",
                      expected,
                      actual);
     }
@@ -36,7 +35,6 @@ public class RegistryManagerTest {
         assertEquals(true, result);
     }
 
-    @Ignore()
     @Test
     public void testCreateRegistryEntry() throws Exception {
         RegistryManager.createRegistryEntry("AutoUpdateEnabled", Boolean.toString(true));
@@ -44,7 +42,6 @@ public class RegistryManagerTest {
         assertEquals(isActive, true);
     }
 
-    @Ignore()
     @Test
     public void testGetCurrentVersion() throws Exception {
         String expected = ApplicationConstants.APP_VERSION;
@@ -52,7 +49,6 @@ public class RegistryManagerTest {
         assertEquals(expected, result);
     }
 
-    @Ignore()
     @Test
     public void testSetCurrentVersion() throws Exception {
         String expected = ApplicationConstants.APP_VERSION;

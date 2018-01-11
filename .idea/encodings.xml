@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="windows-1251">
-    <file url="file://$PROJECT_DIR$/src/resources/pages/libs.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Commons" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/UpdateModule" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/WeblocOpener" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/WeblocOpener/src/main/resources/pages/libs.html" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

@@ -10,11 +10,8 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/jna-4.2.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/jna-platform-4.2.2.jar" path-in-jar="/" />
       <element id="module-output" name="Commons" />
-      <element id="library" level="project" name="jna-4.2.2" />
       <element id="module-output" name="UpdateModule" />
-      <element id="library" level="project" name="com.google.code.gson:gson:2.8.0" />
       <element id="library" level="module" name="testng" module-name="UpdateModule" />
-      <element id="library" level="project" name="commons-io-2.5" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/bridj-0.7.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/log4j-1.2.8.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/oshi-core-3.2.jar" path-in-jar="/" />
