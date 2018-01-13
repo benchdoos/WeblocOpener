@@ -46,9 +46,9 @@ public class SystemUtils {
         }
 
         Attributes attributes = mf.getMainAttributes();
-       /* for (int i = 0; i < attributes.size(); i++) {
+        for (int i = 0; i < attributes.size(); i++) {
             log.debug("attribute: " + attributes.entrySet());
-        }*/
+        }
 
         String buildVersion = attributes.getValue(Attributes.Name.IMPLEMENTATION_VERSION);
         return buildVersion != null ? buildVersion : ApplicationConstants.APP_VERSION;
