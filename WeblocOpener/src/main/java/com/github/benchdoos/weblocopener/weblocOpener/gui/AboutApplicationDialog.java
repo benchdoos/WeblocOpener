@@ -33,6 +33,7 @@ import java.net.URISyntaxException;
 import java.util.ResourceBundle;
 
 import static com.github.benchdoos.weblocopener.commons.utils.Logging.getCurrentClassName;
+import static com.github.benchdoos.weblocopener.commons.utils.system.SystemUtils.getCurrentBuildVersion;
 
 
 public class AboutApplicationDialog extends JDialog {
@@ -59,7 +60,6 @@ public class AboutApplicationDialog extends JDialog {
         $$$setupUI$$$();
         addWindowMoveListeners();
         translateDialog();
-
         initGui();
 
     }
@@ -294,7 +294,7 @@ public class AboutApplicationDialog extends JDialog {
             @Override
             public void initTranslations() {
                 setTitle(messages.getString("windowTitle"));
-                versionLabel.setText(messages.getString("appVersionLabel") + " " + ApplicationConstants.APP_VERSION);
+                versionLabel.setText(messages.getString("appVersionLabel") + " " + getCurrentBuildVersion());
 
                 siteLinkLabel.setText("<html><a href=\"\">" + messages.getString("visitLabel") + "</a></html>");
 
