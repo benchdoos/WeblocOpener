@@ -1,8 +1,6 @@
 package com.github.benchdoos.weblocopener.weblocOpener.gui;
 
 import com.github.benchdoos.weblocopener.commons.utils.FrameUtils;
-import com.github.benchdoos.weblocopener.commons.utils.Internal;
-import com.github.benchdoos.weblocopener.commons.utils.system.SystemUtils;
 import com.github.benchdoos.weblocopener.weblocOpener.service.UrlsProceed;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -16,6 +14,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import static com.github.benchdoos.weblocopener.commons.utils.system.SystemUtils.IS_WINDOWS_XP;
+
 public class InfoDialog extends JDialog {
     public String content;
     private JPanel contentPane;
@@ -28,7 +28,7 @@ public class InfoDialog extends JDialog {
 
     private void initGui() {
         //compares, if it is windows xp 32/64bit or server 2003 32/64bit
-        if (Internal.versionCompare(SystemUtils.CURRENT_OS_VERSION, "6.0") < 0) {
+        if (IS_WINDOWS_XP) {
             //for windows xp&server 2003
             setIconImage(Toolkit.getDefaultToolkit().getImage(AboutApplicationDialog.class.getResource("/infoIcon16_white.png")));
         } else {
