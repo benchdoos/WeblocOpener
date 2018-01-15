@@ -13,6 +13,7 @@ import com.github.benchdoos.weblocopener.updater.update.Updater;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
@@ -20,6 +21,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ResourceBundle;
 
 import static com.github.benchdoos.weblocopener.commons.utils.system.SystemUtils.IS_WINDOWS_XP;
@@ -45,6 +48,7 @@ public class UpdateDialog extends JFrame implements MessagePushable {
     private JLabel availableVersionStringLabel;
     private JTextPane errorTextPane;
     private JButton updateInfoButton;
+    Updater updater = null;
     private Thread updateThread;
     private String successUpdatedMessage = "WeblocOpener successfully updated to version: ";
     private String successTitle = "Success";
@@ -56,6 +60,7 @@ public class UpdateDialog extends JFrame implements MessagePushable {
     private String installationCancelledByErrorMessage3 = "visit " + ApplicationConstants.GITHUB_WEB_URL + " for more info.";
     private String lostConnectionTitle = "Unable to update.";
     private String lostConnectionMessage = "Can not download update \nLost connection, retry.";
+    private JButton manualDownloadButton;
 
     public UpdateDialog() {
         serverAppVersion = new AppVersion();
@@ -63,11 +68,11 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         createGUI();
         loadProperties();
         translateDialog();
+
     }
 
     public void checkForUpdates() {
         progressBar1.setIndeterminate(true);
-        Updater updater = null;
         try {
             updater = new Updater();
             createDefaultActionListeners();
@@ -142,9 +147,9 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         getRootPane().setDefaultButton(buttonOK);
         if (IS_WINDOWS_XP) {
             //for windows xp&server 2003
-            setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/updaterIcon16_white.png")));
+            setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/updaterIcon64_white.png")));
         } else {
-            setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/updaterIcon16.png")));
+            setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/updaterIcon64.png")));
 
         }
 
@@ -170,6 +175,37 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         });
 
         updateInfoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        manualDownloadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openSetupUrl();
+            }
+
+            private void openSetupUrl() {
+                log.debug("Calling to download setup manually");
+                URL url = null;
+                if (updater != null) {
+                    if (updater.getAppVersion() != null) {
+                        try {
+                            log.debug("Trying to open [" + updater.getAppVersion().getDownloadUrl() + "]");
+                            url = new URL(updater.getAppVersion().getDownloadUrl());
+                            UrlValidator urlValidator = new UrlValidator();
+                            UserUtils.openWebUrl(url);
+                        } catch (MalformedURLException e1) {
+                            openWebsite(url);
+                        }
+                    } else UserUtils.openWebUrl(ApplicationConstants.UPDATE_WEB_URL);
+
+                } else UserUtils.openWebUrl(ApplicationConstants.UPDATE_WEB_URL);
+            }
+
+            private void openWebsite(URL url) {
+                log.warn("Could not open setup url: [" + url + "]\n" +
+                        "Opening " + ApplicationConstants.UPDATE_WEB_URL);
+                UserUtils.openWebUrl(ApplicationConstants.UPDATE_WEB_URL);
+            }
+        });
 
         pack();
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
@@ -424,7 +460,7 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         panel1.setLayout(new GridLayoutManager(1, 1, new Insets(0, 10, 10, 10), -1, -1));
         contentPane.add(panel1, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
         final JPanel panel2 = new JPanel();
-        panel2.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1, true, false));
+        panel2.setLayout(new GridLayoutManager(2, 3, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         buttonOK = new JButton();
         buttonOK.setActionCommand(ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("buttonOk"));
@@ -432,19 +468,30 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         Font buttonOKFont = this.$$$getFont$$$(null, Font.BOLD, -1, buttonOK.getFont());
         if (buttonOKFont != null) buttonOK.setFont(buttonOKFont);
         this.$$$loadButtonText$$$(buttonOK, ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("buttonOk"));
-        panel2.add(buttonOK, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(buttonOK, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         buttonCancel = new JButton();
         buttonCancel.setActionCommand(ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("buttonCancel"));
         this.$$$loadButtonText$$$(buttonCancel, ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("buttonCancel"));
-        panel2.add(buttonCancel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayoutManager(4, 8, new Insets(10, 10, 0, 10), -1, -1));
-        contentPane.add(panel3, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel2.add(buttonCancel, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        manualDownloadButton = new JButton();
+        manualDownloadButton.setIcon(new ImageIcon(getClass().getResource("/downloadsIcon16.png")));
+        manualDownloadButton.setInheritsPopupMenu(false);
+        manualDownloadButton.setMargin(new Insets(2, 2, 2, 8));
+        manualDownloadButton.setOpaque(true);
+        manualDownloadButton.setRequestFocusEnabled(false);
+        this.$$$loadButtonText$$$(manualDownloadButton, ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("manualDownloadButtonText"));
+        manualDownloadButton.setToolTipText(ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("manualDownloadButtonToolTip"));
+        panel2.add(manualDownloadButton, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
-        panel3.add(spacer1, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel2.add(spacer1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final JPanel panel3 = new JPanel();
+        panel3.setLayout(new GridLayoutManager(4, 9, new Insets(10, 10, 0, 10), -1, -1));
+        contentPane.add(panel3, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        final Spacer spacer2 = new Spacer();
+        panel3.add(spacer2, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         progressBar1 = new JProgressBar();
         progressBar1.setStringPainted(false);
-        panel3.add(progressBar1, new GridConstraints(2, 0, 1, 8, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(progressBar1, new GridConstraints(2, 0, 1, 9, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         currentVersionStringLabel = new JLabel();
         this.$$$loadLabelText$$$(currentVersionStringLabel, ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("currentVersionStringLabel"));
         panel3.add(currentVersionStringLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -461,8 +508,8 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         if (availableVersionLabelFont != null) availableVersionLabel.setFont(availableVersionLabelFont);
         availableVersionLabel.setText("");
         panel3.add(availableVersionLabel, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer2 = new Spacer();
-        panel3.add(spacer2, new GridConstraints(1, 4, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer3 = new Spacer();
+        panel3.add(spacer3, new GridConstraints(1, 4, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         newVersionSizeLabel = new JLabel();
         newVersionSizeLabel.setText("");
         panel3.add(newVersionSizeLabel, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -479,7 +526,7 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         updateInfoButton.setMargin(new Insets(2, 2, 2, 2));
         updateInfoButton.setRequestFocusEnabled(false);
         updateInfoButton.setText("");
-        panel3.add(updateInfoButton, new GridConstraints(1, 7, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(updateInfoButton, new GridConstraints(1, 8, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         errorPanel = new JPanel();
         errorPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         errorPanel.setBackground(new Color(-65536));
