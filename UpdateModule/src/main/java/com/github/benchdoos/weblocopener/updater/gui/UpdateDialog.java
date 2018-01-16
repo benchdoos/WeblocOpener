@@ -273,11 +273,13 @@ public class UpdateDialog extends JFrame implements MessagePushable {
     }
 
     private void onUpdateInfoButton() {
+        //updateInfoButton.setIcon(new ImageIcon(getClass().getResource("/clockAnimated16.gif"))); //TODO add this or not???
         if (serverAppVersion != null) {
             if (!serverAppVersion.getUpdateInfo().isEmpty()) {
                 UpdateInfoDialog dialog = new UpdateInfoDialog(serverAppVersion);
             }
         }
+        //updateInfoButton.setIcon(new ImageIcon(getClass().getResource("/infoIcon16.png"))); //TODO add this or not???
     }
 
     private void processUpdateResult(int installationCode) {

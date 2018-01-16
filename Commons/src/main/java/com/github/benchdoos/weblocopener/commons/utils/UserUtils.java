@@ -8,6 +8,8 @@ import javax.swing.event.HyperlinkEvent;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 /**
  * Created by Eugene Zrazhevsky on 03.12.2016.
@@ -121,6 +123,19 @@ public class UserUtils {
             final String message = "URL is corrupt: ";
             showErrorMessageToUser(null, message, message + url);
         }
+    }
 
+    public static void openWebUrl(URL url) {
+        if (!Desktop.isDesktopSupported()) {
+            return;
+        }
+        Desktop desktop = Desktop.getDesktop();
+
+        try {
+            desktop.browse(url.toURI());
+        } catch (IOException | URISyntaxException e) {
+            final String message = "URL is corrupt: ";
+            showErrorMessageToUser(null, message, message + url);
+        }
     }
 }
