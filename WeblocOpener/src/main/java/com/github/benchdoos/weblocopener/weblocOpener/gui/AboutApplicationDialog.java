@@ -119,7 +119,7 @@ public class AboutApplicationDialog extends JDialog {
 
             private void showEaster() {
                 risingBalloonLogoLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-                        .getImage(ShowQrDialog.class.getResource("/easter.bin"))));
+                        .getImage(ShowQrDialog.class.getResource("/easter.png"))));
                 easterShown = true;
             }
         });
