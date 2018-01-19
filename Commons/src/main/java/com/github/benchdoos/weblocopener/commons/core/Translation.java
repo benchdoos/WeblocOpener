@@ -26,6 +26,7 @@ import static com.github.benchdoos.weblocopener.commons.utils.Logging.getCurrent
 /**
  * Created by Eugene Zrazhevsky on 01.12.2016.
  */
+
 public abstract class Translation {
     private static final Logger log = Logger.getLogger(getCurrentClassName());
 

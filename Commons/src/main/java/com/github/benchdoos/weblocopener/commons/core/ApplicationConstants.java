@@ -26,6 +26,7 @@ public interface ApplicationConstants {
     String UPDATER_APPLICATION_NAME = "Updater";
     String APP_VERSION = "1.4.2";
     /*String APP_VERSION = SystemUtils.getCurrentVersion();*/
+
     String APP_LOG_FOLDER_PATH = System
             .getProperty("java.io.tmpdir") + WEBLOC_OPENER_APPLICATION_NAME + File.separator + "Log";
     String APP_LOG_PROPERTY = "WeblocOpener.log.folder";
