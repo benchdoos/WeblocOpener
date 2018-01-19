@@ -176,14 +176,14 @@ public class UrlsProceed {
     }
 
     public static BufferedImage generateQrCode(String url) throws IOException, WriterException {
-        Map hintMap = new HashMap();
+        Map<EncodeHintType, Comparable> hintMap = new HashMap<>();
         hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
         hintMap.put(EncodeHintType.MARGIN, 1);
         return createQRCode(url, QR_CODE_CHARSET, hintMap, QR_CODE_HEIGHT, QR_CODE_WIDTH);
     }
 
     private static BufferedImage createQRCode(String url, String charset,
-                                              Map hintMap, int height, int width)
+                                              Map<EncodeHintType, Comparable> hintMap, int height, int width)
             throws WriterException, IOException {
         BitMatrix matrix = new MultiFormatWriter().encode(
                 new String(url.getBytes(charset), charset),
