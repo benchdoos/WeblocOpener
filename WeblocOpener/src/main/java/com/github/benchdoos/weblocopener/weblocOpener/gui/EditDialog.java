@@ -79,7 +79,7 @@ public class EditDialog extends JFrame implements MessagePushable {
     }
 
     private void initGui(String pathToEditingFile) {
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/icon96.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/icon96.png")));
 
         this.path = pathToEditingFile;
         setContentPane(contentPane);
@@ -414,7 +414,7 @@ public class EditDialog extends JFrame implements MessagePushable {
         textField.setText("");
         panel4.add(textField, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 1, false));
         iconLabel = new JLabel();
-        iconLabel.setIcon(new ImageIcon(getClass().getResource("/icon96.png")));
+        iconLabel.setIcon(new ImageIcon(getClass().getResource("/images/icon96.png")));
         iconLabel.setText("");
         panel3.add(iconLabel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         errorPanel = new JPanel();

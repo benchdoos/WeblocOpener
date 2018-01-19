@@ -27,7 +27,9 @@ import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -56,7 +58,7 @@ public class ShowQrDialog extends JFrame {
         translateDialog();
 
         setTitle(title);
-        setIconImage(Toolkit.getDefaultToolkit().getImage(ShowQrDialog.class.getResource("/balloonIcon64.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(ShowQrDialog.class.getResource("/images/balloonIcon64.png")));
 
 
         setContentPane(contentPane);

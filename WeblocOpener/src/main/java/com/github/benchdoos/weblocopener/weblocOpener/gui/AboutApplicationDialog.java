@@ -119,7 +119,7 @@ public class AboutApplicationDialog extends JDialog {
 
             private void showEaster() {
                 risingBalloonLogoLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-                        .getImage(ShowQrDialog.class.getResource("/easter.png"))));
+                        .getImage(ShowQrDialog.class.getResource("/images/easter.png"))));
                 easterShown = true;
             }
         });
@@ -154,7 +154,7 @@ public class AboutApplicationDialog extends JDialog {
     private void initGui() {
         log.debug("Creating GUI");
         setContentPane(contentPane);
-        setIconImage(Toolkit.getDefaultToolkit().getImage(AboutApplicationDialog.class.getResource("/balloonIcon64.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(AboutApplicationDialog.class.getResource("/images/balloonIcon64.png")));
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
@@ -251,13 +251,13 @@ public class AboutApplicationDialog extends JDialog {
             @Override
             public void mousePressed(MouseEvent e) {
                 feedbackLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-                        .getImage(getClass().getResource("/feedbackIconPressed.png"))));
+                        .getImage(getClass().getResource("/images/feedbackIconPressed.png"))));
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 feedbackLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-                        .getImage(getClass().getResource("/feedbackIcon.png"))));
+                        .getImage(getClass().getResource("/images/feedbackIcon.png"))));
 
                 callMail();
             }
@@ -288,14 +288,14 @@ public class AboutApplicationDialog extends JDialog {
             @Override
             public void mousePressed(MouseEvent e) {
                 shareLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-                        .getImage(getClass().getResource("/shareIconPressed.png"))));
+                        .getImage(getClass().getResource("/images/shareIconPressed.png"))));
 
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 shareLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-                        .getImage(getClass().getResource("/shareIcon.png"))));
+                        .getImage(getClass().getResource("/images/shareIcon.png"))));
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 StringSelection stringSelection = new StringSelection(shareLabelText);
                 clipboard.setContents(stringSelection, null);
@@ -440,18 +440,18 @@ public class AboutApplicationDialog extends JDialog {
         this.$$$loadLabelText$$$(logLabel, ResourceBundle.getBundle("translations/AboutApplicationDialogBundle").getString("logLabelTooltip"));
         panel5.add(logLabel, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         feedbackLabel = new JLabel();
-        feedbackLabel.setIcon(new ImageIcon(getClass().getResource("/feedbackIcon.png")));
+        feedbackLabel.setIcon(new ImageIcon(getClass().getResource("/images/feedbackIcon.png")));
         feedbackLabel.setText("");
         panel5.add(feedbackLabel, new GridConstraints(0, 5, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         librariesLabel = new JLabel();
         this.$$$loadLabelText$$$(librariesLabel, ResourceBundle.getBundle("translations/AboutApplicationDialogBundle").getString("librariesLabel"));
         panel5.add(librariesLabel, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         telegramLabel = new JLabel();
-        telegramLabel.setIcon(new ImageIcon(getClass().getResource("/telegramIcon16.png")));
+        telegramLabel.setIcon(new ImageIcon(getClass().getResource("/images/telegramIcon16.png")));
         telegramLabel.setText("");
         panel5.add(telegramLabel, new GridConstraints(0, 6, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         shareLabel = new JLabel();
-        shareLabel.setIcon(new ImageIcon(getClass().getResource("/shareIcon.png")));
+        shareLabel.setIcon(new ImageIcon(getClass().getResource("/images/shareIcon.png")));
         shareLabel.setText("");
         panel5.add(shareLabel, new GridConstraints(0, 7, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }

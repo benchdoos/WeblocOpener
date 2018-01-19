@@ -46,9 +46,9 @@ public class InfoDialog extends JDialog {
         //compares, if it is windows xp 32/64bit or server 2003 32/64bit
         if (IS_WINDOWS_XP) {
             //for windows xp&server 2003
-            setIconImage(Toolkit.getDefaultToolkit().getImage(AboutApplicationDialog.class.getResource("/infoIcon16_white.png")));
+            setIconImage(Toolkit.getDefaultToolkit().getImage(AboutApplicationDialog.class.getResource("/images/infoIcon16_white.png")));
         } else {
-            setIconImage(Toolkit.getDefaultToolkit().getImage(AboutApplicationDialog.class.getResource("/infoIcon16.png")));
+            setIconImage(Toolkit.getDefaultToolkit().getImage(AboutApplicationDialog.class.getResource("/images/infoIcon16.png")));
         }
         setContentPane(contentPane);
 

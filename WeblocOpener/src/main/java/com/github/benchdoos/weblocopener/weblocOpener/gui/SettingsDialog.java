@@ -192,7 +192,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
 
 
         getRootPane().setDefaultButton(buttonOK);
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/balloonIcon64.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/balloonIcon64.png")));
 
         syntaxInfoLabel.setVisible(false);
         updateListButton.setVisible(false);
@@ -321,7 +321,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
 
         FileDialog fd = new FileDialog(this, chooseAFile, FileDialog.LOAD);
         fd.setIconImage(Toolkit.getDefaultToolkit()
-                .getImage(getClass().getResource("/balloonIcon64.png")));
+                .getImage(getClass().getResource("/images/balloonIcon64.png")));
         fd.setDirectory(System.getProperty("user.dir"));
         fd.setFile("*.exe");
         fd.setMultipleMode(false);
@@ -526,7 +526,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         this.$$$loadLabelText$$$(label1, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("openInBrowser"));
         panel3.add(label1, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         updateListButton = new JButton();
-        updateListButton.setIcon(new ImageIcon(getClass().getResource("/refresh16.png")));
+        updateListButton.setIcon(new ImageIcon(getClass().getResource("/images/refresh16.png")));
         updateListButton.setMargin(new Insets(2, 2, 2, 2));
         updateListButton.setText("");
         updateListButton.setToolTipText(ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("updateList"));
@@ -551,7 +551,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         final JSeparator separator1 = new JSeparator();
         panel3.add(separator1, new GridConstraints(3, 0, 1, 6, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         syntaxInfoLabel = new JLabel();
-        syntaxInfoLabel.setIcon(new ImageIcon(getClass().getResource("/infoIcon16.png")));
+        syntaxInfoLabel.setIcon(new ImageIcon(getClass().getResource("/images/infoIcon16.png")));
         syntaxInfoLabel.setText("");
         panel3.add(syntaxInfoLabel, new GridConstraints(5, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         errorPanel = new JPanel();
