@@ -163,9 +163,9 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         getRootPane().setDefaultButton(buttonOK);
         if (IS_WINDOWS_XP) {
             //for windows xp&server 2003
-            setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/updaterIcon64_white.png")));
+            setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/images/updaterIcon64_white.png")));
         } else {
-            setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/updaterIcon64.png")));
+            setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/images/updaterIcon64.png")));
 
         }
 
@@ -289,13 +289,13 @@ public class UpdateDialog extends JFrame implements MessagePushable {
     }
 
     private void onUpdateInfoButton() {
-        //updateInfoButton.setIcon(new ImageIcon(getClass().getResource("/clockAnimated16.gif"))); //TODO add this or not???
+        //updateInfoButton.setIcon(new ImageIcon(getClass().getResource("/images/clockAnimated16.gif"))); //TODO add this or not???
         if (serverAppVersion != null) {
             if (!serverAppVersion.getUpdateInfo().isEmpty()) {
                 UpdateInfoDialog dialog = new UpdateInfoDialog(serverAppVersion);
             }
         }
-        //updateInfoButton.setIcon(new ImageIcon(getClass().getResource("/infoIcon16.png"))); //TODO add this or not???
+        //updateInfoButton.setIcon(new ImageIcon(getClass().getResource("/images/infoIcon16.png"))); //TODO add this or not???
     }
 
     private void processUpdateResult(int installationCode) {
@@ -492,7 +492,7 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         this.$$$loadButtonText$$$(buttonCancel, ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("buttonCancel"));
         panel2.add(buttonCancel, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         manualDownloadButton = new JButton();
-        manualDownloadButton.setIcon(new ImageIcon(getClass().getResource("/downloadsIcon16.png")));
+        manualDownloadButton.setIcon(new ImageIcon(getClass().getResource("/images/downloadsIcon16.png")));
         manualDownloadButton.setInheritsPopupMenu(false);
         manualDownloadButton.setMargin(new Insets(2, 2, 2, 8));
         manualDownloadButton.setOpaque(true);
@@ -540,7 +540,7 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         updateInfoButton.setDefaultCapable(true);
         updateInfoButton.setDoubleBuffered(false);
         updateInfoButton.setEnabled(false);
-        updateInfoButton.setIcon(new ImageIcon(getClass().getResource("/infoIcon16.png")));
+        updateInfoButton.setIcon(new ImageIcon(getClass().getResource("/images/infoIcon16.png")));
         updateInfoButton.setMargin(new Insets(2, 2, 2, 2));
         updateInfoButton.setRequestFocusEnabled(false);
         updateInfoButton.setText("");

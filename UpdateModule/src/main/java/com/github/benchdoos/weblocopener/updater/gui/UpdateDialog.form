@@ -49,7 +49,7 @@
                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <icon value="downloadsIcon16.png"/>
+                  <icon value="images/downloadsIcon16.png"/>
                   <inheritsPopupMenu value="false"/>
                   <margin top="2" left="2" bottom="2" right="8"/>
                   <opaque value="true"/>
@@ -153,7 +153,7 @@
               <defaultCapable value="true"/>
               <doubleBuffered value="false"/>
               <enabled value="false"/>
-              <icon value="infoIcon16.png"/>
+              <icon value="images/infoIcon16.png"/>
               <margin top="2" left="2" bottom="2" right="2"/>
               <requestFocusEnabled value="false"/>
               <text value=""/>
