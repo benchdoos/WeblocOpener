@@ -443,7 +443,7 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         try {
             RegistryFixer.fixRegistry();
         } catch (Exception ignore) {
-            /*NOP*/
+            log.warn("Could not update registry after update");
         }
 
 
