@@ -25,6 +25,8 @@ public interface ApplicationConstants {
     String WEBLOC_OPENER_APPLICATION_NAME = "WeblocOpener";
     String UPDATER_APPLICATION_NAME = "Updater";
     String APP_VERSION = "1.4.2";
+
+    String WEBLOC_FILE_EXTENSION = "webloc";
     /*String APP_VERSION = SystemUtils.getCurrentVersion();*/
 
     String APP_LOG_FOLDER_PATH = System

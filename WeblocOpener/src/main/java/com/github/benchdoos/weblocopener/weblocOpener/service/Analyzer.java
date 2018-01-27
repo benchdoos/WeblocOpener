@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 import java.io.File;
 import java.io.IOException;
 
+import static com.github.benchdoos.weblocopener.commons.core.ApplicationConstants.WEBLOC_FILE_EXTENSION;
 import static com.github.benchdoos.weblocopener.commons.utils.Logging.getCurrentClassName;
 
 /**
@@ -50,8 +51,10 @@ public class Analyzer {
         File file = null;
         try {
             file = getWeblocFile(filePath);
-            String url;
-            url = UrlsProceed.takeUrl(file);
+            String url = "";
+            if (file != null) {
+                url = UrlsProceed.takeUrl(file);
+            }
             if (url.isEmpty()) {
                 throw new NullPointerException("Url is empty, just editing");
             }
@@ -85,8 +88,9 @@ public class Analyzer {
     private File getWeblocFile(String arg) {
 
         File currentFile = new File(arg);
+        log.info("File [" + arg + "] exists: " + currentFile.exists() + " file?: " + currentFile.isFile());
         if (currentFile.isFile() && currentFile.exists()) {
-            if (getFileExtension(currentFile).equals("webloc")) {
+            if (getFileExtension(currentFile).equals(WEBLOC_FILE_EXTENSION)) {
                 log.info("File added to proceed: " + currentFile.getAbsolutePath());
                 return currentFile;
             } else {

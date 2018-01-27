@@ -89,6 +89,7 @@ public class Main {
      */
     private static void manageArguments(String[] args) {
         if (args.length > 0) {
+            log.info("Got args: " + Arrays.toString(args));
             if (!args[0].isEmpty()) {
                 switch (args[0]) {
                     case OPENER_EDIT_ARGUMENT:
