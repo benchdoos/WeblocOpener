@@ -6,7 +6,7 @@ Visit website: [https://benchdoos.github.io/](https://vk.cc/6wK76Z)
 
 Subscribe on telegram [channel](https://vk.cc/6wK7k1)
 
-Download [Latest version](https://vk.cc/6wK3sP)
+Download [Latest version](https://vk.cc/7Flxoe)
 
 ## Introduction:
 WeblocOpener is a simple way to open, edit, create MacOS Safari `.webloc` files on Windows.
@@ -46,6 +46,9 @@ So that's why this application was created - for these users.
 - **Edit created files. Unlike `.webloc` files on MacOS that can not be edited by default (except for text editors), WeblocOpener provides the ability to edit `.webloc` files on Windows.** 
 [<img src="https://benchdoos.github.io/img/faq/faq_5.png"  width="888" />](#what-can-weblocopener-do)
 
+- **Generate QR-Code from `.webloc` context menu. Just make a right-click on a .webloc file and select "Generate QR-Code". You can simply use it to open the link directly on your phone!** 
+[<img src="https://benchdoos.github.io/img/faq/faq_qr.png"  width="888" />](#what-can-weblocopener-do)
+
 - **Auto-paste URL from clipboard when you created a new file. When you've just created an empty file, WeblocOpener helps you to paste copied URL into ULR-field. It automatically finds an URL in your clipboard.** 
 [<img src="https://benchdoos.github.io/img/faq/faq_6.png"  width="888" />](#what-can-weblocopener-do)
 
@@ -63,6 +66,7 @@ So that's why this application was created - for these users.
 | Open           | Yes           | In development | Safari only |
 | Edit           | Yes           | In development |   No    |
 | Create new     | Yes           | In development | Default |
+| Generate QR-Code | Yes           | In development | WO feature |
 | URL auto-paste | Yes           | In development | WO feature |
 | Auto-update    | Yes           | In development | WO feature |
 | Open in not default browser    | Yes           | Not yet | Not |
