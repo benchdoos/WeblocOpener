@@ -72,7 +72,7 @@ public class SystemUtils {
     }
 
     private static String getApplicationInfo() {
-        return "\n==========================Application=========================" + "\r\n" +
+        return "\n=======================Application=======================" + "\r\n" +
                 "\n" + ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME + " v." + getCurrentBuildVersion() +
                 "\n=========================================================" + "\r\n";
     }
