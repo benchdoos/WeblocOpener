@@ -25,10 +25,7 @@ import com.github.benchdoos.weblocopener.commons.utils.browser.BrowserManager;
 import com.github.benchdoos.weblocopener.commons.utils.system.SystemUtils;
 import com.github.benchdoos.weblocopener.commons.utils.system.UnsupportedOsSystemException;
 import com.github.benchdoos.weblocopener.commons.utils.system.UnsupportedSystemVersionException;
-import com.github.benchdoos.weblocopener.weblocOpener.gui.AboutApplicationDialog;
-import com.github.benchdoos.weblocopener.weblocOpener.gui.EditDialog;
-import com.github.benchdoos.weblocopener.weblocOpener.gui.SettingsDialog;
-import com.github.benchdoos.weblocopener.weblocOpener.gui.ShowQrDialog;
+import com.github.benchdoos.weblocopener.weblocOpener.gui.*;
 import com.github.benchdoos.weblocopener.weblocOpener.service.Analyzer;
 import com.github.benchdoos.weblocopener.weblocOpener.service.UrlsProceed;
 import org.apache.log4j.Logger;
@@ -97,6 +94,10 @@ public class Main {
                         break;
                     case OPENER_SETTINGS_ARGUMENT:
                         runSettingsDialog();
+                        break;
+
+                    case OPENER_SUCCESS_UPDATE_ARGUMENT:
+                        new SuccessUpdateInstalledDialog().setVisible(true);
                         break;
                     case OPENER_ABOUT_ARGUMENT:
                         new AboutApplicationDialog().setVisible(true);

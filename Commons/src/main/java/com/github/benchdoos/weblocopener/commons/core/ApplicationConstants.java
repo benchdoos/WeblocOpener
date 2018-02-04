@@ -52,6 +52,7 @@ public interface ApplicationConstants {
     String OPENER_CREATE_ARGUMENT = "-create";
     String OPENER_EDIT_ARGUMENT = "-edit";
     String OPENER_SETTINGS_ARGUMENT = "-settings";
+    String OPENER_SUCCESS_UPDATE_ARGUMENT = "-success";
     String OPENER_UPDATE_ARGUMENT = "-update";
     String OPENER_ABOUT_ARGUMENT = "-about";
     String OPENER_HELP_ARGUMENT_HYPHEN = "-help";
