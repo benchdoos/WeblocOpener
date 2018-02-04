@@ -63,7 +63,7 @@ public class Updater {
         translateMessages();
         createConnection();
 
-        getServerApllicationVersion();
+        getServerApplicationVersion();
     }
 
     public static void canNotConnectManage(Exception e) {
@@ -244,8 +244,8 @@ public class Updater {
         return installerFile;
     }
 
-    public void getServerApllicationVersion() throws IOException {
-        log.debug("Getting current server apllication version");
+    public void getServerApplicationVersion() throws IOException {
+        log.debug("Getting current server application version");
         String input;
         BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING));
