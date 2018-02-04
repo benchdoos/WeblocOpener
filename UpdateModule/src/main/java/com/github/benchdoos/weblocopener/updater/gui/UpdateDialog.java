@@ -281,6 +281,7 @@ public class UpdateDialog extends JFrame implements MessagePushable {
             }
             buttonOK.setEnabled(true);
             buttonCancel.setEnabled(true);
+            dispose();
         } else {
             buttonOK.setEnabled(true);
             buttonCancel.setEnabled(true);
@@ -297,7 +298,7 @@ public class UpdateDialog extends JFrame implements MessagePushable {
     }
 
     private void processUpdateResult(int installationCode) {
-        System.out.println("Installation code: " + installationCode);
+        log.info("Installation code: " + installationCode);
         switch (installationCode) {
             case ApplicationConstants.UPDATE_CODE_SUCCESS:
                 updateSuccessfullyInstalled();
@@ -443,14 +444,16 @@ public class UpdateDialog extends JFrame implements MessagePushable {
         } catch (Exception ignore) {
             log.warn("Could not update registry after update");
         }
-
-
-        UserUtils.showSuccessMessageToUser(this, successTitle,
-                successUpdatedMessage + serverAppVersion.getVersion());
-
         if (Main.mode != Main.Mode.AFTER_UPDATE) {
             //dispose(); //TODO test it, if ok, delete
             runCleanTempUpdaterFile();
+        }
+
+        try {
+            UserUtils.openWeblocOpener(ApplicationConstants.OPENER_SUCCESS_UPDATE_ARGUMENT);
+        } catch (Exception e) {
+            log.warn("Could not launch WeblocOpener with param: "
+                    + ApplicationConstants.OPENER_SUCCESS_UPDATE_ARGUMENT, e);
         }
 
     }

@@ -37,7 +37,6 @@ import org.bridj.jawt.JAWTUtils;
 import javax.net.ssl.HttpsURLConnection;
 import javax.swing.*;
 import java.io.*;
-import java.lang.reflect.Type;
 import java.net.URL;
 
 /**
@@ -77,13 +76,15 @@ public class Updater {
     }
 
     public static int startUpdate(AppVersion appVersion) throws IOException {
+        log.info("Starting update to " + appVersion.getVersion());
         installerFile = new File(ApplicationConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
                 + appVersion.getVersion() + ".exe");
         if (!Thread.currentThread().isInterrupted()) {
-            if (redownloadOnCorrupt(appVersion)) return ApplicationConstants.UPDATE_CODE_INTERRUPT;
+            /*if (redownloadOnCorrupt(appVersion)) return ApplicationConstants.UPDATE_CODE_INTERRUPT;*/
+            redownloadOnCorrupt(appVersion);
 
             if (!Thread.currentThread().isInterrupted()) {
-                int installationResult = 0;
+                int installationResult = ApplicationConstants.UPDATE_CODE_SUCCESS;
 
                 try {
                     if (!Thread.currentThread().isInterrupted()) {
@@ -170,7 +171,8 @@ public class Updater {
         } catch (ClassNotFoundException ignore) {/*WINDOWS<WINDOWS 7*/}
 
         long hwndVal = JAWTUtils.getNativePeerHandle(UpdateDialog.updateDialog);
-        hwnd = Pointer.pointerToAddress(hwndVal, (Type) PointerIO.getSizeTInstance());
+        hwnd = Pointer.pointerToAddress(hwndVal, PointerIO.getSizeTInstance().getTargetSize());
+
 
         if (progressBar != null) {
             progressBar.setStringPainted(true);
