@@ -18,6 +18,8 @@ package com.github.benchdoos.weblocopener.commons.utils;
 
 import com.github.benchdoos.weblocopener.commons.core.ApplicationConstants;
 import com.github.benchdoos.weblocopener.commons.core.Translation;
+import com.github.benchdoos.weblocopener.commons.registry.RegistryCanNotReadInfoException;
+import com.github.benchdoos.weblocopener.commons.registry.RegistryManager;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
@@ -153,5 +155,18 @@ public class UserUtils {
             final String message = "URL is corrupt: ";
             showErrorMessageToUser(null, message, message + url);
         }
+    }
+
+    public static void openWeblocOpener(String params) throws RegistryCanNotReadInfoException, IOException {
+        String appPath = RegistryManager.getInstallLocationValue() + ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME
+                + ".exe";
+        Runtime runtime = Runtime.getRuntime();
+        String command = appPath + " " + params;
+        System.out.println("running: " + command);
+        runtime.exec(command);
+    }
+
+    public static void openWeblocOpener() throws IOException, RegistryCanNotReadInfoException {
+        openWeblocOpener("");
     }
 }
