@@ -34,7 +34,7 @@ import static com.github.benchdoos.weblocopener.commons.utils.Logging.getCurrent
 /**
  * Created by Eugene Zrazhevsky on 24.11.2016.
  */
-public class RegistryFixer { //TODO Enable logging
+public class RegistryFixer {
     private static final Logger log = Logger.getLogger(getCurrentClassName());
 
     private static final String DEFAULT_INSTALLER_UNINSTALL_LOCATION_PATH_64 =
