@@ -17,12 +17,15 @@
 package com.github.benchdoos.weblocopener.updater.gui;
 
 import com.github.benchdoos.weblocopener.commons.utils.FrameUtils;
+import com.github.benchdoos.weblocopener.commons.utils.UserUtils;
 import com.github.benchdoos.weblocopener.updater.update.AppVersion;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -57,6 +60,14 @@ public class UpdateInfoDialog extends JDialog {
         textPane.registerKeyboardAction(e -> {
             onOK();
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), JComponent.WHEN_FOCUSED);
+        textPane.addHyperlinkListener(new HyperlinkListener() {
+            public void hyperlinkUpdate(HyperlinkEvent e) {
+                if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                    UserUtils.openWebUrl(e.getURL());
+                }
+            }
+        });
+
         buttonOK.addActionListener(e -> onOK());
 
         setMinimumSize(new Dimension(550, 300));
