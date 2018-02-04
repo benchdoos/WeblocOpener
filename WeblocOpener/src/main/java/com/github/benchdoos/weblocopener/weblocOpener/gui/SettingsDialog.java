@@ -326,7 +326,6 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         fd.setFile("*.exe");
         fd.setMultipleMode(false);
         fd.setVisible(true);
-        String filename = fd.getFile();
         File[] f = fd.getFiles();
         if (f.length > 0) {
             log.debug("Choice: " + fd.getFiles()[0].getAbsolutePath());
