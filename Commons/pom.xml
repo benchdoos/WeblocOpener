@@ -116,17 +116,17 @@
             <version>1.6</version>
         </dependency>
 
-        <dependency>
+        <!--<dependency>
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
             <version>3.5.0-SNAPSHOT</version>
-            <!--<exclusions>
+            &lt;!&ndash;<exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-jdk14</artifactId>
                 </exclusion>
-            </exclusions>-->
-        </dependency>
+            </exclusions>&ndash;&gt;
+        </dependency>-->
         <dependency>
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
