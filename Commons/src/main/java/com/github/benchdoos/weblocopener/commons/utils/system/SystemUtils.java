@@ -87,12 +87,18 @@ public class SystemUtils {
     }
 
     public static String getRealSystemArch() {
-        String arch = System.getenv("PROCESSOR_ARCHITECTURE");
-        String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
+        if (SystemUtils.isWindows()) {
+            String arch = System.getenv("PROCESSOR_ARCHITECTURE");
+            String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
 
-        return arch.endsWith("64")
-                || wow64Arch != null && wow64Arch.endsWith("64")
-                ? "64" : "32";
+            return arch.endsWith("64")
+                    || wow64Arch != null && wow64Arch.endsWith("64")
+                    ? "64" : "32";
+        } else if (SystemUtils.isUnix()) {
+            return System.getProperty("os.arch");
+        } else {
+            return "";
+        }
     }
 
     public static void checkIfSystemIsSupported() throws UnsupportedOsSystemException, UnsupportedSystemVersionException {
