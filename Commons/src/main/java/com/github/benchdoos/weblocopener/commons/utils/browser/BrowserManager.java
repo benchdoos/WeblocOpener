@@ -172,28 +172,44 @@ public class BrowserManager {
     }
 
     private static ArrayList<Browser> createBrowserListForUnix(ArrayList<Browser> result) {
-        final String chromeCall = "google-chrome " + "%site";
-        Browser chrome = new Browser("Google Chrome", chromeCall, chromeCall + " --incognito");
-        result.add(chrome);
 
-        final String chromiumCall = "chromium-browser " + "%site";
-        Browser chromium = new Browser("Chromium", chromiumCall, chromiumCall + " --incognito");
-        result.add(chromium);
+        if (commandExists("google-chrome")) {
+            final String chromeCall = "google-chrome " + "%site";
+            Browser chrome = new Browser("Google Chrome", chromeCall, chromeCall + " --incognito");
+            result.add(chrome);
+        }
 
-        Browser firefox = new Browser("Firefox", "firefox " + "%site", "firefox -private-window " + "%site");
-        result.add(firefox);
+        if (commandExists("chromium-browser")) {
+            final String chromiumCall = "chromium-browser " + "%site";
+            Browser chromium = new Browser("Chromium", chromiumCall, chromiumCall + " --incognito");
+            result.add(chromium);
+        }
 
-        Browser opera = new Browser("Opera", "opera " + "%site", "opera --private " + "%site");
-        result.add(opera);
+        if (commandExists("firefox")) {
+            Browser firefox = new Browser("Firefox", "firefox " + "%site", "firefox -private-window " + "%site");
+            result.add(firefox);
+        }
 
-        Browser yandex = new Browser("Yandex Browser", "yandex-browser " + "%site",
-                "yandex-browser -incognito " + "%site");
-        result.add(yandex);
+        if (commandExists("opera")) {
+            Browser opera = new Browser("Opera", "opera " + "%site", "opera --private " + "%site");
+            result.add(opera);
+        }
 
-        Browser vivaldi = new Browser("Vivaldi", "vivaldi " + "%site", "vivaldi -incognito " + "%site");
-        result.add(vivaldi);
+        if (commandExists("yandex-browser")) {
+            Browser yandex = new Browser("Yandex Browser", "yandex-browser " + "%site",
+                    "yandex-browser -incognito " + "%site");
+            result.add(yandex);
+        }
 
+        if (commandExists("vivaldi")) {
+            Browser vivaldi = new Browser("Vivaldi", "vivaldi " + "%site", "vivaldi -incognito " + "%site");
+            result.add(vivaldi);
+        }
         return result;
+    }
+
+    private static boolean commandExists(String command) { //TODO Make for Windows when ready
+        return new File("/usr/bin/" + command).exists();
     }
 
     private static ArrayList<Browser> createBrowserListForWindows(ArrayList<Browser> result) {
