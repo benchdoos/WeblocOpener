@@ -30,8 +30,9 @@ public interface ApplicationConstants {
     /*String APP_VERSION = SystemUtils.getCurrentVersion();*/
 
     String APP_LOG_FOLDER_PATH = System
-            .getProperty("java.io.tmpdir") + WEBLOC_OPENER_APPLICATION_NAME + File.separator + "Log";
+            .getProperty("java.io.tmpdir") + File.separator + WEBLOC_OPENER_APPLICATION_NAME + File.separator + "Log";
     String APP_LOG_PROPERTY = "WeblocOpener.log.folder";
+    String APP_UNIX_SETTINGS_FILE = System.getProperty("user.home") + File.separator + "." + WEBLOC_OPENER_APPLICATION_NAME + File.separator + "settings.xml";
     String UPDATE_PATH_FILE = System.getProperty("java.io.tmpdir") + WEBLOC_OPENER_APPLICATION_NAME + File.separator;
     String UPDATE_WEB_URL = "https://benchdoos.github.io/";
     String GITHUB_WEB_URL = "https://github.com/benchdoos/WeblocOpener/";

@@ -38,7 +38,7 @@ import oshi.software.os.OperatingSystem;*/
  */
 public class SystemUtils {
     static final String MINIMUM_WINDOWS_VERSION = "5.1"; //Windows XP
-    private static final OS[] SUPPORTED = new OS[]{OS.WINDOWS};
+    private static final OS[] SUPPORTED = new OS[]{OS.WINDOWS, OS.UNIX};
     private static final Logger log = Logger.getLogger(getCurrentClassName());
     private static final String CURRENT_OS_VERSION = getOsVersion();
     public static final boolean IS_WINDOWS_XP = isWindows()
@@ -98,13 +98,19 @@ public class SystemUtils {
     public static void checkIfSystemIsSupported() throws UnsupportedOsSystemException, UnsupportedSystemVersionException {
         initSystem();
         if (isSupported(CURRENT_OS)) {
-            if (CURRENT_OS == OS.WINDOWS) {
+            if (isWindows()) {
                 checkWindows();
+            } else if (isUnix()) {
+                checkUnix();
             }
         } else {
             log.warn(getOsName() + " v" + getOsVersion() + " is not supported yet.");
             throw new UnsupportedOsSystemException();
         }
+    }
+
+    private static void checkUnix() {
+        //TODO add version compare + distributive check
     }
 
     private static void initSystem() {
@@ -130,7 +136,7 @@ public class SystemUtils {
         return false;
     }
 
-    private static boolean isWindows() {
+    public static boolean isWindows() {
         return (getOsName().contains("win"));
     }
 
@@ -138,7 +144,7 @@ public class SystemUtils {
         return (getOsName().contains("mac"));
     }
 
-    private static boolean isUnix() {
+    public static boolean isUnix() {
         return (getOsName().contains("nix")
                 || getOsName().contains("nux")
                 || getOsName().contains("aix"));

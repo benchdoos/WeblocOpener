@@ -194,9 +194,17 @@ public class Main {
             if (file.getName().equals(ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME)) {
                 JAR_FILE_DEFAULT_LOCATION = new File(file.getAbsolutePath() + File.separator + "Updater.jar");
             } else {
-                String programFilesPath = getProgramFilesPath();
-                JAR_FILE_DEFAULT_LOCATION = new File(
-                        programFilesPath + "WeblocOpener" + File.separator + "Updater.jar"); //TODO find better solution
+
+                if (SystemUtils.isWindows()) {
+                    String programFilesPath = getProgramFilesPath();
+                    JAR_FILE_DEFAULT_LOCATION = new File(
+                            programFilesPath + ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME + File.separator + ApplicationConstants.UPDATER_APPLICATION_NAME + ".jar"); //TODO find better solution
+                } else if (SystemUtils.isUnix()) {
+                    JAR_FILE_DEFAULT_LOCATION = new File("/usr/share/" + ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME
+                            + File.separator + ApplicationConstants.UPDATER_APPLICATION_NAME + ".jar");
+                } else {
+                    JAR_FILE_DEFAULT_LOCATION = new File("."); //TODO FIX THIS FASTER!
+                }
             }
         }
         return JAR_FILE_DEFAULT_LOCATION;

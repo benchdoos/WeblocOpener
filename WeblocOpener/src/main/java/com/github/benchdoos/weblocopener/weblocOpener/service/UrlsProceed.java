@@ -22,6 +22,7 @@ import com.github.benchdoos.weblocopener.commons.core.ApplicationConstants;
 import com.github.benchdoos.weblocopener.commons.registry.RegistryManager;
 import com.github.benchdoos.weblocopener.commons.utils.Logging;
 import com.github.benchdoos.weblocopener.commons.utils.UserUtils;
+import com.github.benchdoos.weblocopener.commons.utils.system.SystemUtils;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -80,28 +81,36 @@ public class UrlsProceed {
         if (!url.isEmpty()) {
             String call = RegistryManager.getBrowserValue().replace("%site", url);
             Runtime runtime = Runtime.getRuntime();
-            final String command = "cmd /c " + call;
-            if (call.startsWith("start")) {
-                Process process = runtime.exec(command);
-
-                BufferedReader stdError = new BufferedReader(new
-                        InputStreamReader(process.getErrorStream()));
-
-                // read the output from the command
-                String errorMessage = null;
-                boolean error = false;
-                while ((errorMessage = stdError.readLine()) != null) {
-                    error = true;
-                    log.warn("Can not start this browser: " + errorMessage);
-                    log.info("Opening in default browser: " + url);
+            if (SystemUtils.isWindows()) {
+                final String command = "cmd /c " + call;
+                if (call.startsWith("start")) {
+                    runBrowser(url, runtime, command);
+                } else {
+                    runtime.exec(call);
                 }
-                if (error) {
-                    openUrlInDefaultBrowser(url);
-                }
-            } else {
-                runtime.exec(call);
+            } else if (SystemUtils.isUnix()) {
+                runBrowser(url, runtime, call);
             }
 
+        }
+    }
+
+    private static void runBrowser(String url, Runtime runtime, String command) throws IOException {
+        Process process = runtime.exec(command);
+
+        BufferedReader stdError = new BufferedReader(new
+                InputStreamReader(process.getErrorStream()));
+
+        // read the output from the command
+        String errorMessage = null;
+        boolean error = false;
+        while ((errorMessage = stdError.readLine()) != null) {
+            error = true;
+            log.warn("Can not start this browser: " + errorMessage);
+            log.info("Opening in default browser: " + url);
+        }
+        if (error) {
+            openUrlInDefaultBrowser(url);
         }
     }
 
