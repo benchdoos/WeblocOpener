@@ -69,6 +69,7 @@
                         <properties>
                           <background color="-9923881"/>
                           <caretColor color="-1118482"/>
+                          <caretPosition value="0"/>
                           <contentType value="text/html"/>
                           <dragEnabled value="false"/>
                           <editable value="false"/>

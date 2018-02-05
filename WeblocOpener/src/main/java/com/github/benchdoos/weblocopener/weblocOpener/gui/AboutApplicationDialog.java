@@ -384,6 +384,7 @@ public class AboutApplicationDialog extends JDialog {
         panel2.add(scrollPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(400, 160), null, 0, false));
         weblocOpenerBWillTextPane.setBackground(new Color(-9923881));
         weblocOpenerBWillTextPane.setCaretColor(new Color(-1118482));
+        weblocOpenerBWillTextPane.setCaretPosition(0);
         weblocOpenerBWillTextPane.setContentType("text/html");
         weblocOpenerBWillTextPane.setDragEnabled(false);
         weblocOpenerBWillTextPane.setEditable(false);
