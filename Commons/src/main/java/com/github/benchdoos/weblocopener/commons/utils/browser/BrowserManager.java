@@ -23,6 +23,7 @@ import com.dd.plist.PropertyListParser;
 import com.github.benchdoos.weblocopener.commons.core.ApplicationConstants;
 import com.github.benchdoos.weblocopener.commons.core.Translation;
 import com.github.benchdoos.weblocopener.commons.utils.Logging;
+import com.github.benchdoos.weblocopener.commons.utils.system.SystemUtils;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -160,56 +161,71 @@ public class BrowserManager {
     static ArrayList<Browser> generateDefaultBrowserArrayList() {
         ArrayList<Browser> result = new ArrayList<>();
 
-        //Chrome
-        //HKEY_LOCAL_MACHINE\SOFTWARE\Classes\ChromeHTML\shell\open\command
-        //https://stackoverflow.com/questions/14348840/opening-chrome-from-command-line //start chrome "site1.com"
-
-        //HKLM\Software\Microsoft\Windows\CurrentVersion\Uninstall
-        Browser chrome = new Browser();
-        chrome.setName("Google Chrome");
-        final String call = "start chrome " + "\"" + "%site" + "\"";
-        chrome.setCall(call);
-        chrome.setIncognitoCall(call + " --incognito");
-        result.add(chrome);
-
-        Browser firefox = new Browser();
-        firefox.setName("Firefox");
-        firefox.setCall("start firefox " + "\"" + "%site" + "\"");
-        firefox.setIncognitoCall("start firefox -private-window " + "\"" + "%site" + "\"");
-        result.add(firefox);
-
-        Browser edge = new Browser();
-        edge.setName("Microsoft Edge");
-        edge.setCall("start microsoft-edge:" + "\"" + "%site" + "\"");
-        result.add(edge);
-
-        Browser iexplorer = new Browser();
-        iexplorer.setName("Internet Explorer");
-        iexplorer.setCall("start iexplore " + "\"" + "%site" + "\"");
-        iexplorer.setIncognitoCall("start iexplore " + "\"" + "%site" + "\"" + " -private");
-        result.add(iexplorer);
-
-        Browser opera = new Browser();
-        opera.setName("Opera");
-        opera.setCall("start opera " + "\"" + "%site" + "\"");
-        opera.setIncognitoCall("start opera --private " + "\"" + "%site" + "\"");
-        result.add(opera);
-
-        Browser yandex = new Browser();
-        yandex.setName("Yandex Browser");
-        yandex.setCall("start browser " + "\"" + "%site" + "\"");
-        yandex.setIncognitoCall("start browser -incognito " + "\"" + "%site" + "\"");
-        result.add(yandex);
-
-        Browser vivaldi = new Browser();
-        vivaldi.setName("Vivaldi");
-        vivaldi.setCall("start vivaldi " + "\"" + "%site" + "\"");
-        vivaldi.setIncognitoCall("start vivaldi -incognito " + "\"" + "%site" + "\"");
-        result.add(vivaldi);
+        if (SystemUtils.isWindows()) {
+            result = createBrowserListForWindows(result);
+        } else if (SystemUtils.isUnix()) {
+            result = createBrowserListForUnix(result);
+        }
 
 
         return result;
     }
+
+    private static ArrayList<Browser> createBrowserListForUnix(ArrayList<Browser> result) {
+        final String chromeCall = "google-chrome " + "%site";
+        Browser chrome = new Browser("Google Chrome", chromeCall, chromeCall + " --incognito");
+        result.add(chrome);
+
+        final String chromiumCall = "chromium-browser " + "%site";
+        Browser chromium = new Browser("Chromium", chromiumCall, chromiumCall + " --incognito");
+        result.add(chromium);
+
+        Browser firefox = new Browser("Firefox", "firefox " + "%site", "firefox -private-window " + "%site");
+        result.add(firefox);
+
+        Browser opera = new Browser("Opera", "opera " + "%site", "opera --private " + "%site");
+        result.add(opera);
+
+        Browser yandex = new Browser("Yandex Browser", "yandex-browser " + "%site",
+                "yandex-browser -incognito " + "%site");
+        result.add(yandex);
+
+        Browser vivaldi = new Browser("Vivaldi", "vivaldi " + "%site", "vivaldi -incognito " + "%site");
+        result.add(vivaldi);
+
+        return result;
+    }
+
+    private static ArrayList<Browser> createBrowserListForWindows(ArrayList<Browser> result) {
+        final String chromeCall = "start chrome " + "\"" + "%site" + "\"";
+        Browser chrome = new Browser("Google Chrome", chromeCall, chromeCall + " --incognito");
+        result.add(chrome);
+
+        Browser firefox = new Browser("Firefox", "start firefox " + "\"" + "%site" + "\"",
+                "start firefox -private-window " + "\"" + "%site" + "\"");
+        result.add(firefox);
+
+        Browser edge = new Browser("Microsoft Edge", "start microsoft-edge:" + "\"" + "%site" + "\"");
+        result.add(edge);
+
+        Browser iExplorer = new Browser("Internet Explorer", "start iexplore " + "\"" + "%site" + "\"",
+                "start iexplore " + "\"" + "%site" + "\"" + " -private");
+        result.add(iExplorer);
+
+        Browser opera = new Browser("Opera", "start opera " + "\"" + "%site" + "\"",
+                "start opera --private " + "\"" + "%site" + "\"");
+        result.add(opera);
+
+        Browser yandex = new Browser("Yandex Browser", "start browser " + "\"" + "%site" + "\"",
+                "start browser -incognito " + "\"" + "%site" + "\"");
+        result.add(yandex);
+
+        Browser vivaldi = new Browser("Vivaldi", "start vivaldi " + "\"" + "%site" + "\"",
+                "start vivaldi -incognito " + "\"" + "%site" + "\"");
+        result.add(vivaldi);
+        return result;
+    }
+
 
     private static void initTranslation() {
         translation = new Translation("translations/CommonsBundle") {

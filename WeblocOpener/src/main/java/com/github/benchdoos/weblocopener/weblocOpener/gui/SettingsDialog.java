@@ -421,7 +421,6 @@ public class SettingsDialog extends JFrame implements MessagePushable {
         }
         Browser browser = (Browser) comboBox.getSelectedItem();
         if (browser != null) {
-            log.info("browser call: " + browser.getCall());
             if (comboBox.getSelectedIndex() != comboBox.getItemCount() - 1) {
                 if (browser.getCall() != null) {
                     if (!RegistryManager.getBrowserValue().equals(browser.getCall())) {
@@ -437,6 +436,9 @@ public class SettingsDialog extends JFrame implements MessagePushable {
                         }
                     }
                 }
+
+                log.info("browser call was set to: " + RegistryManager.getBrowserValue());
+
             } else {
                 if (!callTextField.getText().equals(browser.getIncognitoCall())) {
                     RegistryManager.setBrowserValue(callTextField.getText());

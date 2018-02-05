@@ -89,7 +89,9 @@ public class UrlsProceed {
                     runtime.exec(call);
                 }
             } else if (SystemUtils.isUnix()) {
-                runBrowser(url, runtime, call);
+                final String command = "bash /usr/bin/" + call;
+                log.debug("Final browser call command: " + command);
+                runBrowser(url, runtime, command);
             }
 
         }
@@ -109,8 +111,12 @@ public class UrlsProceed {
             log.warn("Can not start this browser: " + errorMessage);
             log.info("Opening in default browser: " + url);
         }
-        if (error) {
-            openUrlInDefaultBrowser(url);
+        if (SystemUtils.isWindows()) {
+            if (error) {
+                openUrlInDefaultBrowser(url);
+            }
+        } else if (SystemUtils.isUnix()) {
+            //TODO FIX THIS! //double launch
         }
     }
 

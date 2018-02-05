@@ -30,6 +30,12 @@ public class Browser {
         this.call = call;
     }
 
+    public Browser(String name, String call, String incognitoCall) {
+        this.name = name;
+        this.call = call;
+        this.incognitoCall = incognitoCall;
+    }
+
     public Browser() {/*NOP*/}
 
     public String getBrowserInfo() {
