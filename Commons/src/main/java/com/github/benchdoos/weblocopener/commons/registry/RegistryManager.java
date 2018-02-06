@@ -73,6 +73,7 @@ public class RegistryManager {
     private static void loadSettings() throws IOException {
         File settingsFile = new File(ApplicationConstants.APP_UNIX_SETTINGS_FILE);
         if (settingsFile.exists()) {
+            SETTINGS.clear();
             SETTINGS.loadFromXML(new FileInputStream(settingsFile));
         } else {
             setDefaultSettings();
@@ -139,7 +140,12 @@ public class RegistryManager {
                     }
                     SETTINGS.setProperty(KEY_INSTALL_LOCATION, value);
                     return value;
-                } else return getUnixKeyValue(KEY_INSTALL_LOCATION);
+                } else if (isUnix()) {
+                    String value = getUnixKeyValue(KEY_INSTALL_LOCATION);
+                    if (value != null) {
+                        return value;
+                    } else throw new RegistryCanNotReadInfoException("Can not read Installed Location value");
+                } else return "System not supported yet.";
             } catch (Win32Exception e) {
                 throw new RegistryCanNotReadInfoException("Can not read Installed Location value : " +
                         "HKCU\\" + REGISTRY_APP_PATH + "" +
@@ -170,7 +176,12 @@ public class RegistryManager {
                 } catch (Win32Exception e) {
                     throw new RegistryCanNotReadInfoException("Can not get app version value", e);
                 }
-            } else return getUnixKeyValue(KEY_CURRENT_VERSION);
+            } else if (isUnix()) {
+                String value = getUnixKeyValue(KEY_CURRENT_VERSION);
+                if (value != null) {
+                    return value;
+                } else throw new RegistryCanNotReadInfoException("Can not get app version value");
+            } else return "System is not supported yet.";
 
         } else return SETTINGS.getProperty(KEY_CURRENT_VERSION);
     }
@@ -190,6 +201,7 @@ public class RegistryManager {
                     setDefaultSettings();
                     try {
                         updateSettings();
+                        log.debug("Settings key " + key + " is " + SETTINGS.getProperty(key));
                         return SETTINGS.getProperty(key);
                     } catch (IOException e1) {
                         throw new RegistryCanNotReadInfoException("Can not load and store settings.xml default entries", e);
@@ -215,7 +227,11 @@ public class RegistryManager {
         } else if (isUnix()) {
             try {
                 loadSettings();
-                return Boolean.parseBoolean(SETTINGS.getProperty(KEY_AUTO_UPDATE));
+                String value = SETTINGS.getProperty(KEY_AUTO_UPDATE);
+                if (value != null) {
+                    return Boolean.parseBoolean(value);
+                } else
+                    throw new RegistryCanNotReadInfoException("Can not read " + RegistryManager.KEY_APP_NAME + " value");
             } catch (IOException e) {
                 setDefaultSettings();
                 try {
@@ -236,11 +252,7 @@ public class RegistryManager {
 
     @SuppressWarnings("UnusedReturnValue")
     public static String getAppNameValue() throws RegistryCanNotReadInfoException {
-        if (SETTINGS.getProperty(KEY_APP_NAME) == null || SETTINGS.getProperty(KEY_APP_NAME).isEmpty()) {
-            if (isWindows()) {
-                return getRegistryEntry(KEY_APP_NAME);
-            } else return getUnixKeyValue(KEY_APP_NAME);
-        } else return SETTINGS.getProperty(KEY_APP_NAME);
+        return getSimpleValue(KEY_APP_NAME);
     }
 
     private static String getRegistryEntry(String key) throws RegistryCanNotReadInfoException {
@@ -263,10 +275,16 @@ public class RegistryManager {
     @SuppressWarnings("UnusedReturnValue")
     public static String getURLUpdateValue() throws RegistryCanNotReadInfoException {
 
-        if (SETTINGS.getProperty(KEY_URL_UPDATE_LINK) == null || SETTINGS.getProperty(KEY_URL_UPDATE_LINK).isEmpty()) {
-            return getRegistryEntry(KEY_URL_UPDATE_LINK);
-        } else return SETTINGS.getProperty(KEY_URL_UPDATE_LINK);
+        return getSimpleValue(KEY_URL_UPDATE_LINK);
 
+    }
+
+    private static String getSimpleValue(String key) throws RegistryCanNotReadInfoException {
+        if (SETTINGS.getProperty(key) == null || SETTINGS.getProperty(key).isEmpty()) {
+            if (isWindows()) {
+                return getRegistryEntry(key);
+            } else return getUnixKeyValue(key);
+        } else return SETTINGS.getProperty(key);
     }
 
     public static void setURLUpdateValue() throws RegistryCanNotWriteInfoException {
@@ -310,8 +328,10 @@ public class RegistryManager {
         } else if (isUnix()) {
             File file = new File(ApplicationConstants.APP_UNIX_SETTINGS_FILE);
             File parent = new File(file.getParent());
-            if (!parent.mkdirs()) {
-                throw new RegistryCanNotWriteInfoException("Can not create root folder for settings.xml: " + parent.getPath());
+            if (!parent.exists()) {
+                if (!parent.mkdirs()) {
+                    throw new RegistryCanNotWriteInfoException("Can not create root folder for settings.xml: " + parent.getPath());
+                }
             }
         }
     }

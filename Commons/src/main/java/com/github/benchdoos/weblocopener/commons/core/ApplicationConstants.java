@@ -72,4 +72,5 @@ public interface ApplicationConstants {
     String FILE_LIST_NAME = "browser_list.plist";
     String DEFAULT_LIST_LOCATION = System.getProperty("java.io.tmpdir")
             + WEBLOC_OPENER_APPLICATION_NAME + File.separator + FILE_LIST_NAME;
+    String UNIX_DEFAULT_INSTALL_LOCATION_PATH = "/usr/lib/" + WEBLOC_OPENER_APPLICATION_NAME + File.separator;
 }

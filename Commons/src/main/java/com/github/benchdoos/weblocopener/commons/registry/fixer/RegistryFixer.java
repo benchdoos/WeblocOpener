@@ -49,7 +49,7 @@ public class RegistryFixer {
         try {
             checkRegistry();
         } catch (RegistryException e) {
-            log.info("Something is wrong with registry.", e);
+            log.warn("Something is wrong with registry.", e);
             fixRegistryAnyway();
         }
     }
@@ -162,28 +162,32 @@ public class RegistryFixer {
     private static String getLocationFromInstallerValue()
             throws RegistryCanNotReadInfoException {
         String path;
-        String pathValue;
-        pathValue = getUninstallLocationForCurrentSystemArch();
+        if (SystemUtils.isWindows()) {
+            String pathValue;
+            pathValue = getUninstallLocationForCurrentSystemArch();
 
-        try {
-            path = WinReg.HKEY_LOCAL_MACHINE + "\\" +
-                    pathValue + "\\" +
-                    RegistryManager.KEY_INSTALL_LOCATION;
-            System.out.println("Default installer value:" + path);
-            path = Advapi32Util
-                    .registryGetStringValue(WinReg.HKEY_LOCAL_MACHINE,
-                            pathValue,
-                            RegistryManager.KEY_INSTALL_LOCATION);
-            System.out.println("Default installer path: '" + path + "'");
+            try {
+                path = WinReg.HKEY_LOCAL_MACHINE + "\\" +
+                        pathValue + "\\" +
+                        RegistryManager.KEY_INSTALL_LOCATION;
+                System.out.println("Default installer value:" + path);
+                path = Advapi32Util
+                        .registryGetStringValue(WinReg.HKEY_LOCAL_MACHINE,
+                                pathValue,
+                                RegistryManager.KEY_INSTALL_LOCATION);
+                System.out.println("Default installer path: '" + path + "'");
 
-        } catch (Exception e) {
-            final String message = "Can not read value from Windows UnInstaller: " + "HKLM\\" +
-                    pathValue;
-            log.warn(message, e);
-            throw new RegistryCanNotReadInfoException(
-                    message, e);
+            } catch (Exception e) {
+                final String message = "Can not read value from Windows UnInstaller: " + "HKLM\\" +
+                        pathValue;
+                log.warn(message, e);
+                throw new RegistryCanNotReadInfoException(
+                        message, e);
+            }
+        } else if (SystemUtils.isUnix()) {
+            return ApplicationConstants.UNIX_DEFAULT_INSTALL_LOCATION_PATH;
         }
-        return path;
+        throw new RegistryCanNotReadInfoException();
     }
 
     private static String getUninstallLocationForCurrentSystemArch() {
@@ -275,14 +279,20 @@ public class RegistryFixer {
 
 
     private static void checkRegistry() throws RegistryException {
-        log.info("Checking important registry info.");
-        RegistryManager.getAppNameValue();
-        String version = RegistryManager.getAppVersionValue();
-        if (!version.equals(ApplicationConstants.APP_VERSION)) {
-            RegistryManager.setAppVersionValue(ApplicationConstants.APP_VERSION);
+        try {
+            log.info("Checking important registry info.");
+            RegistryManager.getAppNameValue();
+            RegistryManager.isAutoUpdateActive();
+            String version = RegistryManager.getAppVersionValue();
+            if (!version.equals(ApplicationConstants.APP_VERSION)) {
+                RegistryManager.setAppVersionValue(ApplicationConstants.APP_VERSION);
+            }
+            RegistryManager.getInstallLocationValue();
+            RegistryManager.getURLUpdateValue();
+            log.info("Registry is alright.");
+        } catch (Exception e) {
+            log.warn("Got some troubles in registry", e);
+            throw new RegistryException("Registry is not valid", e);
         }
-        RegistryManager.getInstallLocationValue();
-        RegistryManager.getURLUpdateValue();
-        log.info("Registry is alright.");
     }
 }
