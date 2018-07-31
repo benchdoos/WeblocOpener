@@ -119,7 +119,7 @@
         <dependency>
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
-            <version>3.5.0-SNAPSHOT</version>
+            <version>3.7.1</version>
             <!--<exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>

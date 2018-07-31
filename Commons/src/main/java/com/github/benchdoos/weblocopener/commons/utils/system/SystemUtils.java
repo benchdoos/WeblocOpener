@@ -20,7 +20,6 @@ import com.github.benchdoos.weblocopener.commons.core.ApplicationConstants;
 import com.github.benchdoos.weblocopener.commons.utils.Internal;
 import org.apache.log4j.Logger;
 import oshi.SystemInfo;
-import oshi.hardware.HardwareAbstractionLayer;
 import oshi.software.os.OperatingSystem;
 
 import java.io.InputStream;
@@ -109,9 +108,13 @@ public class SystemUtils {
 
     private static void initSystem() {
         log.info("Initializing system...");
-        getCurrentOS();
-        log.info(getSystemParameters());
-        log.info(getApplicationInfo());
+        try {
+            getCurrentOS();
+            log.info(getSystemParameters());
+            log.info(getApplicationInfo());
+        } catch (Exception e) {
+            log.warn("Could not properly init system, but anyway continuing...", e);
+        }
     }
 
     private static void checkWindows() throws UnsupportedSystemVersionException {
@@ -152,7 +155,6 @@ public class SystemUtils {
         try {
             SystemInfo si = new SystemInfo();
             OperatingSystem os = si.getOperatingSystem();
-            HardwareAbstractionLayer hal = si.getHardware();
             int megabyte = 1024 * 1024;
 
 
