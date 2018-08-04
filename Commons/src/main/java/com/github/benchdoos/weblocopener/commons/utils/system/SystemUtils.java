@@ -19,18 +19,12 @@ package com.github.benchdoos.weblocopener.commons.utils.system;
 import com.github.benchdoos.weblocopener.commons.core.ApplicationConstants;
 import com.github.benchdoos.weblocopener.commons.utils.Internal;
 import org.apache.log4j.Logger;
-import oshi.SystemInfo;
-import oshi.software.os.OperatingSystem;
 
 import java.io.InputStream;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 import static com.github.benchdoos.weblocopener.commons.utils.Logging.getCurrentClassName;
-
-/*import oshi.SystemInfo;
-import oshi.hardware.HardwareAbstractionLayer;
-import oshi.software.os.OperatingSystem;*/
 
 /**
  * Created by Eugene Zrazhevsky on 03.12.2016.
@@ -96,7 +90,7 @@ public class SystemUtils {
 
     public static void checkIfSystemIsSupported() throws UnsupportedOsSystemException, UnsupportedSystemVersionException {
         initSystem();
-        if (isSupported(CURRENT_OS)) {
+        if (isSupported()) {
             if (CURRENT_OS == OS.WINDOWS) {
                 checkWindows();
             }
@@ -124,9 +118,9 @@ public class SystemUtils {
         }
     }
 
-    private static boolean isSupported(OS os) {
+    private static boolean isSupported() {
         for (OS supportedSystems : SUPPORTED) {
-            if (os.equals(supportedSystems)) {
+            if (SystemUtils.CURRENT_OS.equals(supportedSystems)) {
                 return true;
             }
         }
@@ -153,19 +147,18 @@ public class SystemUtils {
 
     private static String getSystemParameters() {
         try {
-            SystemInfo si = new SystemInfo();
-            OperatingSystem os = si.getOperatingSystem();
             int megabyte = 1024 * 1024;
 
 
+            final Runtime runtime = Runtime.getRuntime();
             return "\n==========================System=========================" + "\r\n" +
                     "System:" + "\r\n" +
-                    "\tOS: " + os.getManufacturer() + " " + os.getFamily() + " " +
-                    os.getVersion() + " x" + getRealSystemArch() + "\r\n" +
+                    "\tOS: " + System.getProperty("os.name") + " " + System.getProperty("os.version")
+                    + " x" + getRealSystemArch() + "\r\n" +
                     "Hardware:" + "\r\n" +
-                    "\tProcessors: " + Runtime.getRuntime().availableProcessors() + "\r\n" +
-                    "\tTotal JVM memory: " + Runtime.getRuntime().maxMemory() / megabyte + " MB " +
-                    "free:" + Runtime.getRuntime().freeMemory() / megabyte + " MB \r\n" +
+                    "\tProcessors: " + runtime.availableProcessors() + "\r\n" +
+                    "\tTotal JVM memory: " + runtime.maxMemory() / megabyte + " MB " +
+                    "free:" + runtime.freeMemory() / megabyte + " MB \r\n" +
                     "Java:" + "\r\n" +
                     "\tJava version: " + System.getProperty("java.specification.version") + "(" +
                     System.getProperty("java.version") + ")" + "\r\n" +
