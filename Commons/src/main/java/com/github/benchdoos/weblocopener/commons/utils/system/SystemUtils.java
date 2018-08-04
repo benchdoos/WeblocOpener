@@ -112,7 +112,7 @@ public class SystemUtils {
             getCurrentOS();
             log.info(getSystemParameters());
             log.info(getApplicationInfo());
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.warn("Could not properly init system, but anyway continuing...", e);
         }
     }
