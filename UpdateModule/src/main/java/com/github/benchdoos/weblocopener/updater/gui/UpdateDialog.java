@@ -21,7 +21,6 @@ import com.github.benchdoos.weblocopener.commons.core.Translation;
 import com.github.benchdoos.weblocopener.commons.registry.RegistryCanNotReadInfoException;
 import com.github.benchdoos.weblocopener.commons.registry.RegistryException;
 import com.github.benchdoos.weblocopener.commons.registry.RegistryManager;
-import com.github.benchdoos.weblocopener.commons.registry.fixer.RegistryFixer;
 import com.github.benchdoos.weblocopener.commons.utils.*;
 import com.github.benchdoos.weblocopener.updater.core.Main;
 import com.github.benchdoos.weblocopener.updater.update.AppVersion;
@@ -439,11 +438,6 @@ public class UpdateDialog extends JFrame implements MessagePushable {
     }
 
     private void updateSuccessfullyInstalled() {
-        try {
-            RegistryFixer.fixRegistry();
-        } catch (Exception ignore) {
-            log.warn("Could not update registry after update");
-        }
         if (Main.mode != Main.Mode.AFTER_UPDATE) {
             //dispose(); //TODO test it, if ok, delete
             runCleanTempUpdaterFile();

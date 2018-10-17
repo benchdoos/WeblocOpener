@@ -18,12 +18,7 @@ package com.github.benchdoos.weblocopener.updater.core;
 
 import com.github.benchdoos.weblocopener.commons.core.ApplicationConstants;
 import com.github.benchdoos.weblocopener.commons.registry.RegistryCanNotReadInfoException;
-import com.github.benchdoos.weblocopener.commons.registry.RegistryCanNotWriteInfoException;
 import com.github.benchdoos.weblocopener.commons.registry.RegistryManager;
-import com.github.benchdoos.weblocopener.commons.registry.fixer.RegistryFixer;
-import com.github.benchdoos.weblocopener.commons.registry.fixer.RegistryFixerAppVersionKeyFailException;
-import com.github.benchdoos.weblocopener.commons.registry.fixer.RegistryFixerAutoUpdateKeyFailException;
-import com.github.benchdoos.weblocopener.commons.registry.fixer.RegistryFixerInstallPathKeyFailException;
 import com.github.benchdoos.weblocopener.commons.utils.Internal;
 import com.github.benchdoos.weblocopener.commons.utils.Logging;
 import com.github.benchdoos.weblocopener.commons.utils.UserUtils;
@@ -39,7 +34,6 @@ import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -79,14 +73,7 @@ public class Main {
                     mode = Mode.SILENT;
                     boolean isAutoUpdate = ApplicationConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE;
 
-                    try {
-                        isAutoUpdate = RegistryManager.isAutoUpdateActive();
-                    } catch (RegistryCanNotReadInfoException e) {
-                        try {
-                            RegistryManager
-                                    .setAutoUpdateActive(ApplicationConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE);
-                        } catch (RegistryCanNotWriteInfoException ignore) {/*NOP*/}
-                    }
+                    isAutoUpdate = RegistryManager.isAutoUpdateActive();
 
                     log.debug(RegistryManager.KEY_AUTO_UPDATE + " : " + isAutoUpdate);
                     if (isAutoUpdate) {
@@ -130,7 +117,7 @@ public class Main {
     }
 
     private static void tryLoadProperties() {
-        try {
+       /* try {
             RegistryFixer.fixRegistry();
         } catch (RegistryFixerAutoUpdateKeyFailException | RegistryFixerAppVersionKeyFailException e1) {
             log.warn("Can not fix registry on startup", e1);
@@ -141,7 +128,7 @@ public class Main {
                     "Registry application data is corrupt. " +
                             "Please re-install the " + "application.");
             System.exit(-1);
-        }
+        }*/
     }
 
     /**

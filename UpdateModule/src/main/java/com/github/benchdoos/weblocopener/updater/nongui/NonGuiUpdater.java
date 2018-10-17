@@ -18,8 +18,6 @@ package com.github.benchdoos.weblocopener.updater.nongui;
 
 import com.github.benchdoos.weblocopener.commons.core.ApplicationConstants;
 import com.github.benchdoos.weblocopener.commons.core.Translation;
-import com.github.benchdoos.weblocopener.commons.registry.RegistryCanNotReadInfoException;
-import com.github.benchdoos.weblocopener.commons.registry.RegistryCanNotWriteInfoException;
 import com.github.benchdoos.weblocopener.commons.registry.RegistryManager;
 import com.github.benchdoos.weblocopener.commons.utils.Internal;
 import com.github.benchdoos.weblocopener.commons.utils.Logging;
@@ -84,23 +82,11 @@ public class NonGuiUpdater {
         PopupMenu trayMenu = new PopupMenu();
 
         final CheckboxMenuItem autoUpdateCheckBox = new CheckboxMenuItem("Auto-update");
-        try {
-            log.debug(RegistryManager.KEY_AUTO_UPDATE + ": " + RegistryManager.isAutoUpdateActive());
-        } catch (RegistryCanNotReadInfoException ignore) {/*NOP*/}
-
-        try {
-            autoUpdateCheckBox.setState(RegistryManager.isAutoUpdateActive());
-        } catch (RegistryCanNotReadInfoException e) {
-            RegistryManager.setDefaultSettings();
-            autoUpdateCheckBox.setState(ApplicationConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE);
-        }
+        log.debug(RegistryManager.KEY_AUTO_UPDATE + ": " + RegistryManager.isAutoUpdateActive());
+        autoUpdateCheckBox.setState(RegistryManager.isAutoUpdateActive());
         autoUpdateCheckBox.addItemListener(e -> {
             log.debug(RegistryManager.KEY_AUTO_UPDATE + ": " + autoUpdateCheckBox.getState());
-            try {
-                RegistryManager.setAutoUpdateActive(autoUpdateCheckBox.getState());
-            } catch (RegistryCanNotWriteInfoException e1) {
-                RegistryManager.setDefaultSettings();
-            }
+            RegistryManager.setAutoUpdateActive(autoUpdateCheckBox.getState());
         });
         trayMenu.add(autoUpdateCheckBox);
         trayMenu.addSeparator();

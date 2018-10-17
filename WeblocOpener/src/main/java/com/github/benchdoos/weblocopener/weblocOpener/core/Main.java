@@ -16,9 +16,6 @@
 
 package com.github.benchdoos.weblocopener.weblocOpener.core;
 
-import com.github.benchdoos.weblocopener.commons.registry.RegistryManager;
-import com.github.benchdoos.weblocopener.commons.registry.fixer.RegistryFixer;
-import com.github.benchdoos.weblocopener.commons.registry.fixer.RegistryFixerException;
 import com.github.benchdoos.weblocopener.commons.utils.Logging;
 import com.github.benchdoos.weblocopener.commons.utils.UserUtils;
 import com.github.benchdoos.weblocopener.commons.utils.browser.BrowserManager;
@@ -32,7 +29,6 @@ import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -63,20 +59,6 @@ public class Main {
     private static void initLogging() {
         new Logging(WEBLOC_OPENER_APPLICATION_NAME);
         log = Logger.getLogger(Logging.getCurrentClassName());
-    }
-
-
-    /**
-     * Loads registry info, trys to fix if can no load.
-     * If registryFixer crashes - uses  default properties.
-     * If registryFixer can not fix install location - calls System.exit(-1);
-     */
-    private static void tryLoadProperties() {
-        try {
-            RegistryFixer.fixRegistry();
-        } catch (FileNotFoundException | RegistryFixerException e) {
-            RegistryManager.setDefaultSettings();
-        }
     }
 
     /**
@@ -170,7 +152,6 @@ public class Main {
     }
 
     private static void runSettingsDialog() {
-        tryLoadProperties();
         SettingsDialog settingsDialog = new SettingsDialog();
         settingsDialog.setVisible(true);
     }
