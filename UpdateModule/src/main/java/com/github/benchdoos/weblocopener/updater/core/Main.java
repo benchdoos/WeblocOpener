@@ -62,6 +62,8 @@ public class Main {
             manageArguments(args);
         } catch (UnsupportedOsSystemException | UnsupportedSystemVersionException e) {
             UserUtils.showErrorMessageToUser(null, "Error", e.getMessage());
+        } catch (Throwable throwable) {
+            log.fatal("Got an FATAL ERROR", throwable);
         }
     }
 

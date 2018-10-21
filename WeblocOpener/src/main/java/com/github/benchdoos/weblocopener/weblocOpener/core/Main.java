@@ -53,6 +53,8 @@ public class Main {
             manageArguments(args);
         } catch (UnsupportedOsSystemException | UnsupportedSystemVersionException e) {
             UserUtils.showErrorMessageToUser(null, "System is not supported", e.getMessage());
+        } catch (Throwable throwable) {
+            log.fatal("Got an FATAL ERROR", throwable);
         }
     }
 
@@ -67,6 +69,7 @@ public class Main {
      * @param args App start arguments
      */
     private static void manageArguments(String[] args) {
+        log.debug("Managing arguments: " + Arrays.toString(args));
         if (args.length > 0) {
             log.info("Got args: " + Arrays.toString(args));
             if (!args[0].isEmpty()) {
@@ -121,19 +124,21 @@ public class Main {
                         UrlsProceed.shutdownLogout();
                         break;
                 }
+            } else {
+                log.warn("Illegal argument at index 0 : Argument is empty!");
             }
         } else {
+            log.debug("No arguments found, launching settings");
             runSettingsDialog();
         }
     }
 
     private static String helpText() {
-        String text = OPENER_CREATE_ARGUMENT + "\t[filepath] [link] \tCreates a new .webloc file on [filepath]. " +
+        return OPENER_CREATE_ARGUMENT + "\t[filepath] [link] \tCreates a new .webloc file on [filepath]. " +
                 "[filepath] should end with [\\filename.webloc]\n" +
                 OPENER_EDIT_ARGUMENT + "\t[filepath] \t\t\tCalls Edit window to edit given .webloc file.\n" +
                 OPENER_SETTINGS_ARGUMENT + "\t\t\t\t\tCalls Settings window of WeblocOpener.\n" +
                 OPENER_UPDATE_ARGUMENT + "\t\t\t\t\t\tCalls update-tool for WeblocOpener.";
-        return text;
     }
 
     private static void manageCreateArgument(String[] args) throws Exception {

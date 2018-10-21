@@ -253,13 +253,14 @@ public class EditDialog extends JFrame implements MessagePushable {
 
     private void fillTextField(String pathToEditingFile) {
         try {
+            log.debug("Filling textfield by file content: " + pathToEditingFile);
             URL url = new URL(UrlsProceed.takeUrl(new File(pathToEditingFile)));
             textField.setText(url.toString());
             textField.setCaretPosition(textField.getText().length());
             textField.selectAll();
             log.debug("Got URL [" + url + "] from [" + pathToEditingFile + "]");
         } catch (Exception e) {
-            log.warn("Can not read url from: [" + pathToEditingFile + "]");
+            log.warn("Can not read url from: [" + pathToEditingFile + "]: ", e);
             fillTextFieldWithClipboard();
         }
     }
