@@ -20,7 +20,6 @@ package com.github.benchdoos.weblocopener.commons.registry;
 
 import com.github.benchdoos.weblocopener.commons.core.ApplicationConstants;
 import com.github.benchdoos.weblocopener.commons.utils.Logging;
-import com.sun.jna.platform.win32.WinReg;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -41,7 +40,6 @@ public class RegistryManager {
     public static final String KEY_BROWSER = "browser";
 
 
-    private static final WinReg.HKEY APP_ROOT_HKEY = WinReg.HKEY_CURRENT_USER;
 
     //    private static final Properties SETTINGS = new Properties();
     private static final Preferences PREFERENCES = Preferences.userRoot().node(ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME.toLowerCase());

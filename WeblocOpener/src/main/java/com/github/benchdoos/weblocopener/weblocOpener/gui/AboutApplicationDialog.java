@@ -214,13 +214,6 @@ public class AboutApplicationDialog extends JDialog {
     /**
      * @noinspection ALL
      */
-    public JComponent $$$getRootComponent$$$() {
-        return contentPane;
-    }
-
-    /**
-     * @noinspection ALL
-     */
     private void $$$loadLabelText$$$(JLabel component, String text) {
         StringBuffer result = new StringBuffer();
         boolean haveMnemonic = false;
@@ -243,6 +236,13 @@ public class AboutApplicationDialog extends JDialog {
             component.setDisplayedMnemonic(mnemonic);
             component.setDisplayedMnemonicIndex(mnemonicIndex);
         }
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    public JComponent $$$getRootComponent$$$() {
+        return contentPane;
     }
 
     private void addEasterListener() {

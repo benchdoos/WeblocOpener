@@ -291,7 +291,7 @@ public class SettingsDialog extends JFrame implements MessagePushable {
     }
 
     private int findBrowser(String browserValue) {
-        int result = 0;
+        int result;
         for (int i = 0; i < BrowserManager.getBrowserList().size(); i++) {
             Browser browser = BrowserManager.getBrowserList().get(i);
             log.debug("Selected value in comboBox: " + browser);
