@@ -38,7 +38,7 @@ public class RegistryManager {
     public static final String KEY_APP_ROOT_FOLDER_NAME = ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME;
     public final static String REGISTRY_APP_PATH
             = "SOFTWARE\\" + ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME + "\\";
-    public static final String KEY_BROWSER = "Browser";
+    public static final String KEY_BROWSER = "browser";
 
 
     private static final WinReg.HKEY APP_ROOT_HKEY = WinReg.HKEY_CURRENT_USER;
