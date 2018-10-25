@@ -24,10 +24,9 @@ import java.io.File;
 public interface ApplicationConstants {
     String WEBLOC_OPENER_APPLICATION_NAME = "WeblocOpener";
     String UPDATER_APPLICATION_NAME = "Updater";
-    String APP_VERSION = "1.4.5";
+    String APP_VERSION = "1.4.6";
 
     String WEBLOC_FILE_EXTENSION = "webloc";
-    /*String APP_VERSION = SystemUtils.getCurrentVersion();*/
 
     String APP_LOG_FOLDER_PATH = System
             .getProperty("java.io.tmpdir") + WEBLOC_OPENER_APPLICATION_NAME + File.separator + "Log";
@@ -58,6 +57,7 @@ public interface ApplicationConstants {
     String OPENER_HELP_ARGUMENT_HYPHEN = "-help";
     String OPENER_HELP_ARGUMENT_SLASH = "/help";
     String OPENER_QR_ARGUMENT = "-qr";
+    String OPENER_COPY_ARGUMENT = "-copy";
 
     String WINDOWS_WEBLOCOPENER_SETUP_NAME = "WeblocOpenerSetup";
 

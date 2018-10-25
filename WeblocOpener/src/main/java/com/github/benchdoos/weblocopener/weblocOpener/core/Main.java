@@ -29,6 +29,8 @@ import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -116,6 +118,16 @@ public class Main {
                             } catch (Exception e) {
                                 log.warn("Can not create a qr-code from url: [" + url + "]", e);
                             }
+                        }
+                        break;
+                    case OPENER_COPY_ARGUMENT:
+                        if (args.length > 1) {
+                            final String path = args[1];
+                            String url = runAnalyzer(path);
+                            StringSelection stringSelection = new StringSelection(url);
+                            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                            clipboard.setContents(stringSelection, null);
+                            log.info("Successfully copied url to clipboard from: " + path);
                         }
                         break;
                     default:
