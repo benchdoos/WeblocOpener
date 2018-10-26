@@ -218,7 +218,7 @@ public class Main {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.warn("Could not enable look and feel", e);
         }
     }
 
