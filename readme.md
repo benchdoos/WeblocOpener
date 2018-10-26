@@ -66,8 +66,9 @@ So that's why this application was created - for these users.
 | Open           | Yes           | In development | Safari only |
 | Edit           | Yes           | In development |   No    |
 | Create new     | Yes           | In development | Default |
-| Generate QR-Code | Yes           | In development | WO feature |
+| Generate QR-Code | Yes           | In development |   No    |
 | URL auto-paste | Yes           | In development | WO feature |
+| Instant URL copy | Yes           | In development | No |
 | Auto-update    | Yes           | In development | WO feature |
 | Open in not default browser    | Yes           | Not yet | Not |
 
