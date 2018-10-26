@@ -63,9 +63,11 @@ public class EditDialog extends JFrame {
     private String errorTitle = "Error";
     private Timer messageTimer;
     private JLabel createWeblocFileTextPane;
+    private String pathToEditingFile;
 
     @SuppressWarnings("unchecked")
     public EditDialog(String pathToEditingFile) {
+        this.pathToEditingFile = pathToEditingFile;
         translateDialog();
 
         initGui(pathToEditingFile);
@@ -448,7 +450,13 @@ public class EditDialog extends JFrame {
         Translation translation = new Translation("translations/EditDialogBundle") {
             @Override
             public void initTranslations() {
-                setTitle(messages.getString("windowTitle"));
+                String path = "";
+                try {
+                    path = new File(pathToEditingFile).getName();
+                } catch (Exception e) {
+                    log.warn("Could not get file name for: " + pathToEditingFile, e);
+                }
+                setTitle(messages.getString("windowTitle") + " " + path);
                 buttonOK.setText(messages.getString("buttonOk"));
                 buttonCancel.setText(messages.getString("buttonCancel"));
                 incorrectUrlMessage = messages.getString("incorrectUrlMessage");
@@ -457,19 +465,4 @@ public class EditDialog extends JFrame {
         };
         translation.initTranslations();
     }
-
-    private void updateSize(SettingsDialog.UpdateMode mode) {
-
-        setResizable(true);
-
-        revalidate();
-        if (mode == SettingsDialog.UpdateMode.BEFORE_HIDE) {
-            pack();
-            setSize(new Dimension(DEFAULT_APPLICATION_WIDTH, getHeight()));
-        } else if (mode == SettingsDialog.UpdateMode.AFTER_HIDE) {
-            setSize(new Dimension(DEFAULT_APPLICATION_WIDTH, DEFAULT_APPLICATION_HEIGHT));
-        }
-        setResizable(false);
-    }
-
 }
