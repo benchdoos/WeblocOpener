@@ -393,15 +393,24 @@ public class EditDialog extends JFrame {
         } catch (MalformedURLException e) {
             log.warn("Can not parse URL: [" + textField.getText() + "]", e);
 
-            String message = incorrectUrlMessage + ": [";
+
+            final String[] message = {""};
+            Translation translation = new Translation("translations/EditDialogBundle") {
+                @Override
+                public void initTranslations() {
+                    message[0] = messages.getString("incorrectUrlMessage") + ": [";
+                }
+            };
+            translation.initTranslations();
+
             String incorrectUrl = textField.getText()
-                    .substring(0, Math.min(textField.getText().length(), 10));
+                    .substring(0, Math.min(textField.getText().length(), 50));
             //Fixes EditDialog long url message showing issue
-            message += textField.getText().length() > incorrectUrl.length() ? incorrectUrl + "...]" : incorrectUrl + "]";
+            message[0] += textField.getText().length() > incorrectUrl.length() ? incorrectUrl + "...]" : incorrectUrl + "]";
 
 
             UserUtils.showWarningMessageToUser(this, errorTitle,
-                    message);
+                    message[0]);
         }
 
     }
@@ -417,31 +426,6 @@ public class EditDialog extends JFrame {
         FrameUtils.showOnTop(this);
         super.setVisible(b);
     }
-
-    /*@Override
-    public void showMessage(String message, int messageValue) {
-        errorPanel.setBackground(MessagePushable.getMessageColor(messageValue));
-
-        boolean wasVisible = errorPanel.isVisible();
-        errorPanel.setVisible(true);
-        errorTextPane.setText(message);
-
-        if (!wasVisible) {
-            updateSize(SettingsDialog.UpdateMode.BEFORE_HIDE);
-        }
-
-        if (messageTimer != null) {
-            messageTimer.stop();
-        }
-
-        messageTimer = new Timer(DEFAULT_TIMER_DELAY, e -> {
-            errorTextPane.setText("");
-            errorPanel.setVisible(false);
-            updateSize(SettingsDialog.UpdateMode.AFTER_HIDE);
-        });
-        messageTimer.setRepeats(false);
-        messageTimer.start();
-    }*/
 
     private void translateDialog() {
         Translation translation = new Translation("translations/EditDialogBundle") {
