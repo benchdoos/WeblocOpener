@@ -58,10 +58,8 @@ public class EditDialog extends JFrame {
     private JButton buttonOK;
     private JButton buttonCancel;
     private JTextField textField;
-    private JLabel urlLabel;
     private String incorrectUrlMessage = "Incorrect URL";
     private String errorTitle = "Error";
-    private Timer messageTimer;
     private JLabel createWeblocFileTextPane;
     private String pathToEditingFile;
 
@@ -456,6 +454,7 @@ public class EditDialog extends JFrame {
                     log.warn("Could not get file name for: " + pathToEditingFile, e);
                 }
                 setTitle(messages.getString("windowTitle") + " " + path);
+                ((PlaceholderTextField) textField).setPlaceholder(messages.getString("textField"));
                 buttonOK.setText(messages.getString("buttonOk"));
                 buttonCancel.setText(messages.getString("buttonCancel"));
                 incorrectUrlMessage = messages.getString("incorrectUrlMessage");
