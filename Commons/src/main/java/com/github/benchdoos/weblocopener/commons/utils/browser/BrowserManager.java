@@ -181,6 +181,7 @@ public class BrowserManager {
         Browser edge = new Browser();
         edge.setName("Microsoft Edge");
         edge.setCall("start microsoft-edge:" + "\"" + "%site" + "\"");
+        edge.setIncognitoCall("start shell:AppsFolder\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe!MicrosoftEdge -private " + "%site");
         result.add(edge);
 
         Browser iexplorer = new Browser();
