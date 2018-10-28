@@ -49,9 +49,6 @@ You can use any custom browser by your own with custom call, using syntax: `<fil
 [<img src="https://benchdoos.github.io/img/faq/faq_edit.png"  width="888" />](#what-can-weblocopener-do)
 
 - **Auto-paste URL from clipboard when you created a new file. When you've just created an empty file, WeblocOpener helps you to paste copied URL into ULR-field. It automatically finds an URL in your clipboard.** 
-[<img src="https://benchdoos.github.io/faq_auto_paste.png"  width="888" />](#what-can-weblocopener-do)
-
-- **Auto-paste URL from clipboard when you created a new file. When you've just created an empty file, WeblocOpener helps you to paste copied URL into ULR-field. It automatically finds an URL in your clipboard.** 
 [<img src="https://benchdoos.github.io/img/faq/faq_auto_paste.png"  width="888" />](#what-can-weblocopener-do)
 
 - **Generate QR-Code from `.webloc` context menu. Just make a right-click on a .webloc file and select "Generate QR-Code". You can simply use it to open the link directly on your phone!** 
