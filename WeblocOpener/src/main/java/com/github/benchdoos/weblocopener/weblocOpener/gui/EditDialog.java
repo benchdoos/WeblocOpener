@@ -30,8 +30,6 @@ import org.apache.log4j.Logger;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
@@ -50,15 +48,13 @@ import java.util.ResourceBundle;
 import static com.github.benchdoos.weblocopener.commons.utils.Logging.getCurrentClassName;
 
 public class EditDialog extends JFrame {
-    final static int DEFAULT_APPLICATION_WIDTH = 450;
+    private final static int DEFAULT_APPLICATION_WIDTH = 450;
     private static final Logger log = Logger.getLogger(getCurrentClassName());
-    private final static int DEFAULT_APPLICATION_HEIGHT = 130;
     private String path = "";
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JTextField textField;
-    private String incorrectUrlMessage = "Incorrect URL";
     private String errorTitle = "Error";
     private JLabel createWeblocFileTextPane;
     private String pathToEditingFile;
@@ -72,13 +68,6 @@ public class EditDialog extends JFrame {
         initGui(pathToEditingFile);
 
         log.debug("Got path: [" + pathToEditingFile + "]");
-    }
-
-    /**
-     * @noinspection ALL
-     */
-    public JComponent $$$getRootComponent$$$() {
-        return contentPane;
     }
 
     /**
@@ -98,6 +87,13 @@ public class EditDialog extends JFrame {
             }
         }
         return new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    public JComponent $$$getRootComponent$$$() {
+        return contentPane;
     }
 
     /**
@@ -337,13 +333,7 @@ public class EditDialog extends JFrame {
         });
 
         UndoManager undoManager = new UndoManager();
-        textField.getDocument().addUndoableEditListener(new UndoableEditListener() {
-
-            public void undoableEditHappened(UndoableEditEvent evt) {
-                undoManager.addEdit(evt.getEdit());
-            }
-
-        });
+        textField.getDocument().addUndoableEditListener(evt -> undoManager.addEdit(evt.getEdit()));
 
         textField.getActionMap().put("Undo",
                 new AbstractAction("Undo") {
@@ -352,7 +342,8 @@ public class EditDialog extends JFrame {
                             if (undoManager.canUndo()) {
                                 undoManager.undo();
                             }
-                        } catch (CannotUndoException e) {
+                        } catch (CannotUndoException ignore) {
+                            /*NOP*/
                         }
                     }
                 });
@@ -366,7 +357,8 @@ public class EditDialog extends JFrame {
                             if (undoManager.canRedo()) {
                                 undoManager.redo();
                             }
-                        } catch (CannotRedoException e) {
+                        } catch (CannotRedoException ignore) {
+                            /*NOP*/
                         }
                     }
                 });
@@ -417,7 +409,7 @@ public class EditDialog extends JFrame {
 
     private void setTextFieldFont(Font font, TextAttribute attribute1, int attribute2) {
         Map attributes = font.getAttributes();
-        attributes.put(attribute1, attribute2);
+        attributes.put(attribute1, attribute2 + "");
         textField.setFont(font.deriveFont(attributes));
     }
 
@@ -437,11 +429,10 @@ public class EditDialog extends JFrame {
                 } catch (Exception e) {
                     log.warn("Could not get file name for: " + pathToEditingFile, e);
                 }
-                setTitle(messages.getString("windowTitle") + " " + path);
+                setTitle(path + " — WeblocOpener");
                 ((PlaceholderTextField) textField).setPlaceholder(messages.getString("textField"));
                 buttonOK.setText(messages.getString("buttonOk"));
                 buttonCancel.setText(messages.getString("buttonCancel"));
-                incorrectUrlMessage = messages.getString("incorrectUrlMessage");
                 errorTitle = messages.getString("errorTitle");
             }
         };
