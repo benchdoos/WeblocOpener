@@ -31,32 +31,37 @@ So that's why this application was created - for these users.
 ## What can WeblocOpener do?
 
 
-- **Full `.webloc` file support on Windows.**
-[<img src="https://benchdoos.github.io/img/faq/faq_1.png"  width="888" />](#what-can-weblocopener-do)
+- **WeblocOpener gives full MacOs `.webloc` files support on Windows.**
+[<img src="https://benchdoos.github.io/img/faq/faq_support.png"  width="888" />](#what-can-weblocopener-do)
 
-- **Open  MacOS Safari `.webloc` link on Windows on your default browser.** 
-[<img src="https://benchdoos.github.io/img/faq/faq_2.png"  width="888" />](#what-can-weblocopener-do)
+- **Open `.webloc` files.** 
+[<img src="https://benchdoos.github.io/img/faq/faq_open.png"  width="888" />](#what-can-weblocopener-do)
 
-- **Choose not default browser to open URL. Open in browser from presets or use custom.** 
-[<img src="https://benchdoos.github.io/img/faq/faq_3.png"  width="888" />](#what-can-weblocopener-do)
+- **Choose not default browser to open URL. Open in browser from preset or use custom. 
+Browsers in preset: Google Chrome (Chromium project), Opera, Edge, Mozilla Firefox, Internet Explorer and more...  or you can use your custom browser. 
+You can use any custom browser by your own with custom call, using syntax: `<file_path> %site.`** 
+[<img src="https://benchdoos.github.io/img/faq/faq_select_browser.png"  width="888" />](#what-can-weblocopener-do)
 
 - **Create new `.webloc` files. Created files are fully supported by Safari on MacOS and WeblocOpener on Windows.** 
-[<img src="https://benchdoos.github.io/img/faq/faq_4.png"  width="888" />](#what-can-weblocopener-do)
+[<img src="https://benchdoos.github.io/img/faq/faq_create.png"  width="888" />](#what-can-weblocopener-do)
 
 - **Edit created files. Unlike `.webloc` files on MacOS that can not be edited by default (except for text editors), WeblocOpener provides the ability to edit `.webloc` files on Windows.** 
-[<img src="https://benchdoos.github.io/img/faq/faq_5.png"  width="888" />](#what-can-weblocopener-do)
+[<img src="https://benchdoos.github.io/img/faq/faq_edit.png"  width="888" />](#what-can-weblocopener-do)
+
+- **Auto-paste URL from clipboard when you created a new file. When you've just created an empty file, WeblocOpener helps you to paste copied URL into ULR-field. It automatically finds an URL in your clipboard.** 
+[<img src="https://benchdoos.github.io/faq_auto_paste.png"  width="888" />](#what-can-weblocopener-do)
+
+- **Auto-paste URL from clipboard when you created a new file. When you've just created an empty file, WeblocOpener helps you to paste copied URL into ULR-field. It automatically finds an URL in your clipboard.** 
+[<img src="https://benchdoos.github.io/img/faq/faq_auto_paste.png"  width="888" />](#what-can-weblocopener-do)
 
 - **Generate QR-Code from `.webloc` context menu. Just make a right-click on a .webloc file and select "Generate QR-Code". You can simply use it to open the link directly on your phone!** 
 [<img src="https://benchdoos.github.io/img/faq/faq_qr.png"  width="888" />](#what-can-weblocopener-do)
 
-- **Auto-paste URL from clipboard when you created a new file. When you've just created an empty file, WeblocOpener helps you to paste copied URL into ULR-field. It automatically finds an URL in your clipboard.** 
-[<img src="https://benchdoos.github.io/img/faq/faq_6.png"  width="888" />](#what-can-weblocopener-do)
-
 - **Auto-update tool will help you receive new updates just from the server. You should not check, if there is an update, WeblocOpener updater will notify you if there is a new version of the app.** 
-[<img src="https://benchdoos.github.io/img/faq/faq_7.png"  width="888" />](#what-can-weblocopener-do)
+[<img src="https://benchdoos.github.io/img/faq/faq_update.png"  width="888" />](#what-can-weblocopener-do)
 
 - **Find out, what's new in new update. Use info icon on Updater to check it out.** 
-[<img src="https://benchdoos.github.io/img/faq/faq_8.png"  width="888" />](#what-can-weblocopener-do)
+[<img src="https://benchdoos.github.io/img/faq/faq_update_info.png"  width="888" />](#what-can-weblocopener-do)
 
 
 ## Supported features
