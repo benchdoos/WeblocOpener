@@ -24,7 +24,7 @@ import org.apache.logging.log4j.Logger;
 
 
 public class SystemUtils {
-    static final String MINIMUM_WINDOWS_VERSION = "5.1"; //Windows XP
+    private static final String MINIMUM_WINDOWS_VERSION = "5.1"; //Windows XP
     private static final OS[] SUPPORTED = new OS[]{OS.WINDOWS};
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static final String CURRENT_OS_VERSION = getOsVersion();
