@@ -6,15 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Commons" />
-        <module name="UpdateModule" />
         <module name="WeblocOpener" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.8">
-      <module name="Commons" target="1.8" />
-      <module name="UpdateModule" target="1.8" />
-      <module name="WeblocOpener" target="1.8" />
+    <bytecodeTargetLevel>
+      <module name="WeblocOpener" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>
