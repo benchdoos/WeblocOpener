@@ -19,7 +19,6 @@
     </properties>
 
     <scm>
-        //https://github.com/benchdoos/WeblocOpener.git
         <connection>scm:git:https://github.com/benchdoos/WeblocOpener.git
         </connection>
         <developerConnection>scm:git:https://github.com/benchdoos/WeblocOpener.git
@@ -78,7 +77,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.github.benchdoos.webloc_opener.Main</mainClass>
+                            <mainClass>com.github.benchdoos.webloc_opener.core.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
