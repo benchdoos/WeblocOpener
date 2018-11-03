@@ -19,8 +19,8 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d %p %C{1.}:%L [%t] - %msg%n" charset="UTF-8"/>
         </Console>
-        <RollingFile name="Trace" fileName="${sys:com.mmz.specs:log.folder}trace.log"
-                     filePattern="${sys:com.mmz.specs:log.folder}/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+        <RollingFile name="Trace" fileName="${sys:com.github.benchdoos.weblocopener.log.folder}trace.log"
+                     filePattern="${sys:com.github.benchdoos.weblocopener.log.folder}/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout header="${java:runtime} - ${java:vm} - ${java:os}" charset="UTF-8">
                 <pattern>%d %p %C{1.}:%L [%t] - %msg%n</pattern>
             </PatternLayout>
@@ -30,8 +30,8 @@
             <DefaultRolloverStrategy max="3"/>
         </RollingFile>
 
-        <RollingFile name="Debug" fileName="${sys:com.mmz.specs:log.folder}debug.log"
-                     filePattern="${sys:com.mmz.specs:log.folder}/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+        <RollingFile name="Debug" fileName="${sys:com.github.benchdoos.weblocopener.log.folder}debug.log"
+                     filePattern="${sys:com.github.benchdoos.weblocopener.log.folder}/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout header="${java:runtime} - ${java:vm} - ${java:os}" charset="UTF-8">
                 <pattern>%d %p %C{1.}:%L [%t] - %msg%n</pattern>
             </PatternLayout>
@@ -41,8 +41,8 @@
             <DefaultRolloverStrategy max="2"/>
         </RollingFile>
 
-        <RollingFile name="Important" fileName="${sys:com.mmz.specs:log.folder}application.log"
-                     filePattern="${sys:com.mmz.specs:log.folder}/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+        <RollingFile name="Important" fileName="${sys:com.github.benchdoos.weblocopener.log.folder}application.log"
+                     filePattern="${sys:com.github.benchdoos.weblocopener.log.folder}/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout header="${java:runtime} - ${java:vm} - ${java:os}" charset="UTF-8">
                 <pattern>%d %p %C{1.}:%L [%t] - %msg%n</pattern>
             </PatternLayout>
@@ -54,9 +54,9 @@
     </Appenders>
 
     <Loggers>
-        <Logger name="WeblocOpener.log.folder" level="trace" additivity="true"/>
+        <Logger name="com.github.benchdoos.weblocopener.logger" level="trace" additivity="true"/>
 
-        <Root level="error">
+        <Root level="Debug">
             <AppenderRef ref="Console" level="debug"/>
             <appender-ref ref="Trace" level="trace"/>
             <appender-ref ref="Debug" level="debug"/>
