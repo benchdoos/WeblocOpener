@@ -21,4 +21,7 @@ public interface ApplicationConstants {
 
     String WINDOWS_WEBLOC_OPENER_SETUP_NAME = "WeblocOpenerSetup";
 
+    String WEBLOC_FILE_EXTENSION = "webloc";
+
+
 }

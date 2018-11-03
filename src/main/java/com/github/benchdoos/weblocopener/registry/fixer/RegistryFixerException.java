@@ -13,21 +13,24 @@
  * Eugene Zrazhevsky <eugene.zrazhevsky@gmail.com>
  */
 
-package com.github.benchdoos.weblocopener.core.constants;
+package com.github.benchdoos.weblocopener.registry.fixer;
 
-public interface ArgumentConstants {
-    String OPENER_CREATE_ARGUMENT = "-create";
-    String OPENER_EDIT_ARGUMENT = "-edit";
-    String OPENER_SETTINGS_ARGUMENT = "-settings";
-    String OPENER_UPDATE_ARGUMENT = "-update";
-    String OPENER_ABOUT_ARGUMENT = "-about";
-    String OPENER_HELP_ARGUMENT_HYPHEN = "-help";
-    String OPENER_QR_ARGUMENT = "-qr";
-    String OPENER_COPY_ARGUMENT = "-copy";
+import com.github.benchdoos.weblocopener.registry.RegistryException;
 
-    String UPDATE_SILENT_ARGUMENT = "-update-silent";
-    String UPDATE_DELETE_TEMP_FILE_ARGUMENT = "-clean";
+/**
+ * Created by Eugene Zrazhevsky on 23.11.2016.
+ */
+@SuppressWarnings("WeakerAccess")
+public class RegistryFixerException extends RegistryException {
+    public RegistryFixerException() {
+        super("[REGISTRY FIXER]");
+    }
 
-    String INSTALLER_SILENT_KEY = " /VERYSILENT";
+    public RegistryFixerException(String message) {
+        super("[REGISTRY FIXER] " + message);
+    }
 
+    public RegistryFixerException(String message, Throwable caused) {
+        super("[REGISTRY FIXER] " + message, caused);
+    }
 }

@@ -16,6 +16,7 @@
 package com.github.benchdoos.weblocopener.utils;
 
 import com.github.benchdoos.weblocopener.core.constants.PathConstants;
+import com.github.benchdoos.weblocopener.core.constants.StringConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,6 +27,8 @@ import java.io.File;
  */
 public class Logging {
     private final String collingApp;
+    public static final File LOG_FOLDER = new File(PathConstants.APP_LOG_FOLDER_PATH);
+
 
     public Logging(String collingAppName) {
         collingApp = collingAppName;
@@ -55,7 +58,7 @@ public class Logging {
         System.out.println("Logging starts at: " + path);
         System.setProperty(PathConstants.APP_LOG_PROPERTY, path);
         final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-        log.info("Logging successfully started. Welcome to {}", CoreUtils.getApplicationVersionString());
+        log.info("Logging successfully started. Welcome to {}", CoreUtils.getApplicationVersionFullInformationString());
 
     }
 

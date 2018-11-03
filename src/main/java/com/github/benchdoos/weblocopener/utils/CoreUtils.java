@@ -19,12 +19,13 @@ import com.github.benchdoos.weblocopener.core.Main;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.swing.*;
 import java.util.Properties;
 
 public class CoreUtils {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
-    public static String getApplicationVersionString() {
+    public static String getApplicationVersionFullInformationString() {
         Properties properties = new Properties();
         try {
             properties.load(Main.class.getResourceAsStream("/application.properties"));
@@ -40,6 +41,39 @@ public class CoreUtils {
         } catch (Exception e) {
             log.warn("Could not load application version info", e);
             return null;
+        }
+    }
+
+
+    public static String getApplicationVersionString() {
+        Properties properties = new Properties();
+        try {
+            properties.load(Main.class.getResourceAsStream("/application.properties"));
+            String version = properties.getProperty("application.version");
+            String build = properties.getProperty("application.build");
+
+            if (version != null && build != null) {
+                return version + "." + build;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            log.warn("Could not load application version info", e);
+            return null;
+        }
+    }
+
+    /**
+     * Enables LookAndFeel for current OS.
+     *
+     * @see javax.swing.UIManager.LookAndFeelInfo
+     */
+    public static void enableLookAndFeel() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            log.debug("Look and Feel enabled");
+        } catch (Exception e) {
+            log.warn("Could not enable look and feel", e);
         }
     }
 }
