@@ -26,9 +26,7 @@ public interface ArgumentConstants {
     String OPENER_COPY_ARGUMENT = "-copy";
 
     String UPDATE_SILENT_ARGUMENT = "-update-silent";
-    String UPDATE_DELETE_TEMP_FILE_ARGUMENT = "-clean";
 
     String INSTALLER_SILENT_KEY = " /VERYSILENT";
 
-    String UPDATE_START_ARGUMENT = "-update-start";
 }

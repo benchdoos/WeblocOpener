@@ -35,6 +35,7 @@ public class RegistryManager {
     public static final String KEY_AUTO_UPDATE = "auto_update_enabled";
     private static final String KEY_APP_NAME = "name";
     private static final String KEY_URL_UPDATE_LINK = "url_update_info";
+    private static final String DEV_MODE_KEY = "dev_mode";
     public static final String KEY_APP_ROOT_FOLDER_NAME = ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
     public final static String REGISTRY_APP_PATH
             = "SOFTWARE\\" + ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME + "\\";
@@ -116,6 +117,10 @@ public class RegistryManager {
         PREFERENCES.put(KEY_URL_UPDATE_LINK, StringConstants.UPDATE_WEB_URL);
     }
 
+
+    public static boolean isDevMode() {
+        return PREFERENCES.getBoolean(DEV_MODE_KEY, false);
+    }
 
 
     /**

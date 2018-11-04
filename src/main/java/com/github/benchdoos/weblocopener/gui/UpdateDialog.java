@@ -15,16 +15,13 @@
 
 package com.github.benchdoos.weblocopener.gui;
 
-import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.core.Translation;
-import com.github.benchdoos.weblocopener.core.constants.*;
-import com.github.benchdoos.weblocopener.registry.RegistryCanNotReadInfoException;
-import com.github.benchdoos.weblocopener.registry.RegistryException;
+import com.github.benchdoos.weblocopener.core.constants.PathConstants;
+import com.github.benchdoos.weblocopener.core.constants.StringConstants;
 import com.github.benchdoos.weblocopener.registry.RegistryManager;
-import com.github.benchdoos.weblocopener.utils.*;
-import com.github.benchdoos.weblocopener.core.Main;
 import com.github.benchdoos.weblocopener.update.AppVersion;
 import com.github.benchdoos.weblocopener.update.Updater;
+import com.github.benchdoos.weblocopener.utils.*;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -48,7 +45,7 @@ public class UpdateDialog extends JFrame {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
     public static UpdateDialog updateDialog = null;
-    public JProgressBar progressBar1;
+    public JProgressBar progressBar;
     public JButton buttonOK;
     public JButton buttonCancel;
     Timer messageTimer;
@@ -57,14 +54,12 @@ public class UpdateDialog extends JFrame {
     private Translation translation;
     private AppVersion serverAppVersion;
     private JPanel contentPane;
-    private JPanel errorPanel;
     private JLabel currentVersionLabel;
     private JLabel availableVersionLabel;
     private JLabel newVersionSizeLabel;
     private JLabel unitLabel;
     private JLabel currentVersionStringLabel;
     private JLabel availableVersionStringLabel;
-    private JTextPane errorTextPane;
     private JButton updateInfoButton;
     private Thread updateThread;
     private String successUpdatedMessage = "WeblocOpener successfully updated to version: ";
@@ -104,10 +99,10 @@ public class UpdateDialog extends JFrame {
      */
     private void $$$setupUI$$$() {
         contentPane = new JPanel();
-        contentPane.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        contentPane.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new GridLayoutManager(1, 1, new Insets(0, 10, 10, 10), -1, -1));
-        contentPane.add(panel1, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
+        contentPane.add(panel1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayoutManager(2, 3, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -134,13 +129,13 @@ public class UpdateDialog extends JFrame {
         final Spacer spacer1 = new Spacer();
         panel2.add(spacer1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayoutManager(4, 9, new Insets(10, 10, 0, 10), -1, -1));
-        contentPane.add(panel3, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel3.setLayout(new GridLayoutManager(4, 6, new Insets(10, 10, 0, 10), -1, -1));
+        contentPane.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
         panel3.add(spacer2, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        progressBar1 = new JProgressBar();
-        progressBar1.setStringPainted(false);
-        panel3.add(progressBar1, new GridConstraints(2, 0, 1, 9, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        progressBar = new JProgressBar();
+        progressBar.setStringPainted(false);
+        panel3.add(progressBar, new GridConstraints(2, 0, 1, 6, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         currentVersionStringLabel = new JLabel();
         this.$$$loadLabelText$$$(currentVersionStringLabel, ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("currentVersionStringLabel"));
         panel3.add(currentVersionStringLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -158,7 +153,7 @@ public class UpdateDialog extends JFrame {
         availableVersionLabel.setText("");
         panel3.add(availableVersionLabel, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer3 = new Spacer();
-        panel3.add(spacer3, new GridConstraints(1, 4, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        panel3.add(spacer3, new GridConstraints(1, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         newVersionSizeLabel = new JLabel();
         newVersionSizeLabel.setText("");
         panel3.add(newVersionSizeLabel, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -173,27 +168,10 @@ public class UpdateDialog extends JFrame {
         updateInfoButton.setEnabled(false);
         updateInfoButton.setIcon(new ImageIcon(getClass().getResource("/images/infoIcon16.png")));
         updateInfoButton.setMargin(new Insets(2, 2, 2, 2));
+        updateInfoButton.setOpaque(false);
         updateInfoButton.setRequestFocusEnabled(false);
         updateInfoButton.setText("");
-        panel3.add(updateInfoButton, new GridConstraints(1, 8, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        errorPanel = new JPanel();
-        errorPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        errorPanel.setBackground(new Color(-65536));
-        errorPanel.setVisible(false);
-        contentPane.add(errorPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(-1, 65), new Dimension(-1, 65), 0, false));
-        errorTextPane = new JTextPane();
-        errorTextPane.setBackground(new Color(-16777216));
-        errorTextPane.setEditable(false);
-        errorTextPane.setEnabled(true);
-        errorTextPane.setFocusCycleRoot(false);
-        errorTextPane.setFocusable(false);
-        Font errorTextPaneFont = this.$$$getFont$$$("Segoe UI", Font.BOLD, 14, errorTextPane.getFont());
-        if (errorTextPaneFont != null) errorTextPane.setFont(errorTextPaneFont);
-        errorTextPane.setForeground(new Color(-1));
-        errorTextPane.setOpaque(false);
-        errorTextPane.setRequestFocusEnabled(false);
-        errorTextPane.setVerifyInputWhenFocusTarget(false);
-        errorPanel.add(errorTextPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+        panel3.add(updateInfoButton, new GridConstraints(1, 5, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
@@ -277,36 +255,30 @@ public class UpdateDialog extends JFrame {
     }
 
     public void checkForUpdates() {
-        progressBar1.setIndeterminate(true);
+        progressBar.setIndeterminate(true);
         try {
             updater = new Updater();
             createDefaultActionListeners();
 
             serverAppVersion = updater.getAppVersion();
-            progressBar1.setIndeterminate(false);
+            progressBar.setIndeterminate(false);
             availableVersionLabel.setText(serverAppVersion.getVersion());
             setNewVersionSizeInfo();
 
             updateInfoButton.setEnabled(true);
 
 
-            String str;
-            try {
-                str = RegistryManager.getAppVersionValue();
-            } catch (RegistryCanNotReadInfoException e) {
-                RegistryManager.setDefaultSettings();
-                str = CoreUtils.getApplicationVersionString();
-            }
+            String str = CoreUtils.getApplicationVersionString();
             compareVersions(str);
         } catch (IOException e) {
             removeAllListeners(buttonOK);
 
             Updater.canNotConnectManage(e);
-            progressBar1.setIndeterminate(false);
+            progressBar.setIndeterminate(false);
             buttonOK.setEnabled(true);
             buttonOK.setText(retryButton);
             buttonOK.addActionListener(e1 -> {
-                progressBar1.setIndeterminate(true);
+                progressBar.setIndeterminate(true);
                 checkForUpdates();
             });
         }
@@ -320,8 +292,7 @@ public class UpdateDialog extends JFrame {
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) > 0) {
             //App version is bigger then on server
             buttonOK.setText(translation.messages.getString("buttonOkDev"));
-//            buttonOK.setEnabled(true);
-            buttonOK.setEnabled(false); //TODO TURN TO FALSE BACK BEFORE RELEASE
+            buttonOK.setEnabled(RegistryManager.isDevMode());
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
             //No reason to update;
             buttonOK.setText(translation.messages.getString("buttonOkUp2Date"));
@@ -351,10 +322,9 @@ public class UpdateDialog extends JFrame {
         setContentPane(contentPane);
         getRootPane().setDefaultButton(buttonOK);
         if (IS_WINDOWS_XP) {
-            //for windows xp&server 2003
-            setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/images/updaterIcon64_white.png")));
+            setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/images/updateIconWhite256.png")));
         } else {
-            setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/images/updaterIcon64.png")));
+            setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/images/updateIconBlue256.png")));
 
         }
 
@@ -423,11 +393,7 @@ public class UpdateDialog extends JFrame {
     }
 
     private void loadProperties() {
-        try {
-            currentVersionLabel.setText(RegistryManager.getAppVersionValue());
-        } catch (RegistryException e) {
-            currentVersionLabel.setText(CoreUtils.getApplicationVersionString());
-        }
+        currentVersionLabel.setText(CoreUtils.getApplicationVersionString());
         availableVersionLabel.setText("Unknown");
     }
 
@@ -435,7 +401,7 @@ public class UpdateDialog extends JFrame {
         if (updateThread != null) {
             if (!updateThread.isInterrupted()) {
                 updateThread.interrupt();
-                System.out.println("Installation was interrupted: " + updateThread.isInterrupted());
+                log.info("Installation was interrupted: " + updateThread.isInterrupted());
                 if (!updateThread.isInterrupted()) {
                     System.out.println("dispose>>");
                     dispose();
@@ -444,32 +410,18 @@ public class UpdateDialog extends JFrame {
             }
             runCleanInstallerFile();
         }
-        File updateJar = new File(StringConstants.UPDATE_PATH_FILE + "Updater_.jar");
-        if (updateJar.exists()) {
-            runCleanTempUpdaterFile();
-        }
         dispose();
     }
 
     private void onOK() {
         buttonOK.setEnabled(false);
         if (!Thread.currentThread().isInterrupted()) {
-            //TODO make this beautifull: call downloader, return file, then call installation
-            int result = 0;
             try {
-                result = Updater.startUpdate(serverAppVersion);
+                Updater.startUpdate(serverAppVersion);
             } catch (IOException e) {
                 log.warn(e);
-                result = ApplicationConstants.UPDATE_CODE_INTERRUPT;
                 UserUtils.showErrorMessageToUser(this, lostConnectionTitle, lostConnectionMessage); //TODO translate this
             }
-            if (Thread.currentThread().isInterrupted()) {
-                result = ApplicationConstants.UPDATE_CODE_INTERRUPT;
-            } else {
-                processUpdateResult(result);
-            }
-            buttonOK.setEnabled(true);
-            buttonCancel.setEnabled(true);
             dispose();
         } else {
             buttonOK.setEnabled(true);
@@ -486,35 +438,6 @@ public class UpdateDialog extends JFrame {
         }
     }
 
-    private void processUpdateResult(int installationCode) {
-        log.info("Installation code: " + installationCode);
-        switch (installationCode) {
-            case ApplicationConstants.UPDATE_CODE_SUCCESS:
-                updateSuccessfullyInstalled();
-                break;
-            case ApplicationConstants.UPDATE_CODE_CANCEL:
-                UserUtils.showErrorMessageToUser(this, installationCancelledTitle,
-                        installationCancelledMessage);
-                Updater.installerFile.delete();
-                break;
-            case ApplicationConstants.UPDATE_CODE_NO_FILE:
-                UserUtils.showErrorMessageToUser(this, installationCancelledTitle, noPermissionsMessage);
-                break;
-
-            case ApplicationConstants.UPDATE_CODE_CORRUPT:
-                UserUtils.showErrorMessageToUser(this, installationCancelledTitle, noPermissionsMessage);
-                break;
-            case ApplicationConstants.UPDATE_CODE_INTERRUPT:/*NOP*/
-                break;
-            default:
-                String message = installationCancelledByErrorMessage1
-                        + "\n" + installationCancelledByErrorMessage2 +
-                        installationCode
-                        + "\n" + installationCancelledByErrorMessage3;
-                UserUtils.showErrorMessageToUser(this, installationCancelledTitle, message);
-                break;
-        }
-    }
 
     private void removeAllListeners(JButton button) {
         for (ActionListener al :
@@ -524,25 +447,13 @@ public class UpdateDialog extends JFrame {
     }
 
     private void runCleanInstallerFile() {
-        log.info("Deleting file: " + PathConstants.UPDATE_PATH_FILE + StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME + "V"
+        log.info("Deleting file: " + PathConstants.UPDATE_PATH_FILE + StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME
                 + serverAppVersion.getVersion() + "" + ".exe");
-        File installer = new File(PathConstants.UPDATE_PATH_FILE + StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME + "V"
+        File installer = new File(PathConstants.UPDATE_PATH_FILE + StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME
                 + serverAppVersion.getVersion() + ".exe");
         installer.deleteOnExit();
     }
 
-    private void runCleanTempUpdaterFile() {
-        try {
-            String value = RegistryManager.getInstallLocationValue();
-            final String command
-                    = "java -jar \"" + value + "Updater.jar\" " + ArgumentConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT;
-            System.out.println("running " + ArgumentConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT + " " +
-                    "argument: " + command);
-            Runtime.getRuntime().exec(command);
-        } catch (RegistryCanNotReadInfoException | IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void setNewVersionSizeInfo() {
         if (serverAppVersion.getSize() > 1024 * 1024) {
@@ -587,28 +498,4 @@ public class UpdateDialog extends JFrame {
         };
         translation.initTranslations();
     }
-
-    private void updateSize(UpdateSizeMode mode) {
-
-        setResizable(true);
-        revalidate();
-        final int DEFAULT_APPLICATION_WIDTH = 400;
-        if (mode == UpdateSizeMode.BEFORE_HIDE) {
-            pack();
-            setSize(new Dimension(DEFAULT_APPLICATION_WIDTH, getHeight()));
-        } else if (mode == UpdateSizeMode.AFTER_HIDE) {
-            setSize(new Dimension(DEFAULT_APPLICATION_WIDTH, 170));
-        }
-        setResizable(false);
-
-    }
-
-    private void updateSuccessfullyInstalled() {
-        if (Application.updateMode != Application.UPDATE_MODE.AFTER_UPDATE) {
-            //dispose(); //TODO test it, if ok, delete
-            runCleanTempUpdaterFile();
-        }
-    }
-
-    enum UpdateSizeMode {BEFORE_HIDE, AFTER_HIDE}
 }

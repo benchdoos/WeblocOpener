@@ -81,7 +81,7 @@ public class SettingsDialog extends JFrame {
     public static void runUpdater() {
         String run;
         try {
-            run = "java -jar \"" + RegistryManager.getInstallLocationValue() + "WeblocOpener.exe\" " + ArgumentConstants.UPDATE_START_ARGUMENT;
+            run = "java -jar \"" + RegistryManager.getInstallLocationValue() + "WeblocOpener.exe\"";
         } catch (RegistryCanNotReadInfoException e) {
             run = new File(SettingsDialog.class.getProtectionDomain()
                     .getCodeSource().getLocation().getPath()).getAbsolutePath().replace("%20", " ");

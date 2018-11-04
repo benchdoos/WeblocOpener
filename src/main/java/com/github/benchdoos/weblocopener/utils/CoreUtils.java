@@ -53,7 +53,7 @@ public class CoreUtils {
             String build = properties.getProperty("application.build");
 
             if (version != null && build != null) {
-                return version + "." + build;
+                return version + "." + build.split(" ")[0];
             } else {
                 return null;
             }

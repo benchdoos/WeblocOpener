@@ -24,10 +24,7 @@ import com.github.benchdoos.weblocopener.registry.RegistryCanNotReadInfoExceptio
 import com.github.benchdoos.weblocopener.registry.RegistryManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
-import com.github.benchdoos.weblocopener.utils.CoreUtils;
-import com.github.benchdoos.weblocopener.utils.Internal;
-import com.github.benchdoos.weblocopener.utils.Logging;
-import com.github.benchdoos.weblocopener.utils.UserUtils;
+import com.github.benchdoos.weblocopener.utils.*;
 import com.github.benchdoos.weblocopener.utils.browser.BrowserManager;
 import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
 import org.apache.commons.io.FileUtils;
@@ -104,16 +101,16 @@ public class Application {
         File JAR_FILE_DEFAULT_LOCATION;
         if (property != null) {
             JAR_FILE_DEFAULT_LOCATION = new File(property
-                    + File.separator + "Updater.jar");
+                    + File.separator + ApplicationConstants.WEBLOCOPENER_EXE_FILE_NAME);
         } else {
             File file = JAR_FILE.getParentFile();
             log.info("Parent file is: " + file.getAbsolutePath());
             if (file.getName().equals(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME)) {
-                JAR_FILE_DEFAULT_LOCATION = new File(file.getAbsolutePath() + File.separator + "Updater.jar");
+                JAR_FILE_DEFAULT_LOCATION = new File(file.getAbsolutePath() + File.separator + ApplicationConstants.WEBLOCOPENER_EXE_FILE_NAME);
             } else {
                 String programFilesPath = getProgramFilesPath();
                 JAR_FILE_DEFAULT_LOCATION = new File(
-                        programFilesPath + "WeblocOpener" + File.separator + "Updater.jar"); //TODO find better solution
+                        programFilesPath + "WeblocOpener" + File.separator + ApplicationConstants.WEBLOCOPENER_EXE_FILE_NAME); //TODO find better solution
             }
         }
         return JAR_FILE_DEFAULT_LOCATION;
@@ -176,6 +173,7 @@ public class Application {
                         manageEditArgument(args);
                         break;
                     case OPENER_SETTINGS_ARGUMENT:
+                        CleanManager.clean();
                         runSettingsDialog();
                         break;
 
@@ -193,7 +191,7 @@ public class Application {
                         break;
 
                     case OPENER_UPDATE_ARGUMENT:
-                        SettingsDialog.runUpdater();
+                        createUpdateDialog();
                         break;
                     case OPENER_HELP_ARGUMENT_HYPHEN: {
                         System.out.println(helpText());
@@ -222,16 +220,6 @@ public class Application {
                         }
                         break;
 
-                    case ArgumentConstants.UPDATE_START_ARGUMENT:
-                        updateMode = UPDATE_MODE.NORMAL;
-                        /*-----*/
-                        try {
-                            System.out.println("Installation folder: " + RegistryManager.getInstallLocationValue());
-                        } catch (RegistryCanNotReadInfoException ignore) {/*NOP*/}
-                        /*-----*/
-                        initUpdateJar();
-                        break;
-
                     case ArgumentConstants.UPDATE_SILENT_ARGUMENT:
                         updateMode = UPDATE_MODE.SILENT;
                         boolean isAutoUpdate = RegistryManager.isAutoUpdateActive();
@@ -239,20 +227,6 @@ public class Application {
                         log.debug(RegistryManager.KEY_AUTO_UPDATE + " : " + isAutoUpdate);
                         if (isAutoUpdate) {
                             new NonGuiUpdater();
-                        }
-                        break;
-                    case ArgumentConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT:
-                        updateMode = UPDATE_MODE.AFTER_UPDATE;
-                        new File(PathConstants.UPDATE_PATH_FILE + "Updater_.jar").delete(); //todo fix this
-                        File[] files = new File(PathConstants.UPDATE_PATH_FILE).listFiles();
-                        if (files != null) {
-                            for (File current : files) {
-                                if (current.isFile() && current.getName().toLowerCase().contains(
-                                        ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME.toLowerCase()) &&
-                                        current.getName().toLowerCase().contains("exe")) {
-                                    current.delete();
-                                }
-                            }
                         }
                         break;
                     default:
@@ -334,7 +308,7 @@ public class Application {
             try {
                 log.info("Creating itself at: " + new File(PathConstants.UPDATE_PATH_FILE + WEBLOCOPENER_EXE_FILE_NAME).getAbsolutePath());
                 FileUtils.copyFile(new File(JAR_FILE.getAbsolutePath().replace("%20", " ")),
-                        new File(PathConstants.UPDATE_PATH_FILE + "Updater_.jar"));
+                        new File(PathConstants.UPDATE_PATH_FILE + WEBLOCOPENER_EXE_FILE_NAME));
                 Runtime.getRuntime().exec("java -jar " + PathConstants.UPDATE_PATH_FILE + WEBLOCOPENER_EXE_FILE_NAME);
                 System.exit(0);
             } catch (IOException e) {

@@ -77,21 +77,19 @@ public class Updater {
         }
     }
 
-    public static int startUpdate(AppVersion appVersion) throws IOException {
+    public static void startUpdate(AppVersion appVersion) throws IOException {
         log.info("Starting update to " + appVersion.getVersion());
-        installerFile = new File(PathConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV"
-                + appVersion.getVersion() + ".exe");
+        installerFile = new File(
+                PathConstants.UPDATE_PATH_FILE + "WeblocOpenerSetupV" + appVersion.getVersion() + ".exe");
         if (!Thread.currentThread().isInterrupted()) {
-            /*if (redownloadOnCorrupt(appVersion)) return ApplicationConstants.UPDATE_CODE_INTERRUPT;*/
             redownloadOnCorrupt(appVersion);
 
             if (!Thread.currentThread().isInterrupted()) {
-                int installationResult = ApplicationConstants.UPDATE_CODE_SUCCESS;
 
                 try {
                     if (!Thread.currentThread().isInterrupted()) {
                         if (installerFile.length() == appVersion.getSize()) {
-                            installationResult = update(installerFile);
+                            update(installerFile);
                         }
                     }
                 } catch (IOException e) {
@@ -99,27 +97,18 @@ public class Updater {
                         try {
                             if (!Thread.currentThread().isInterrupted()) {
                                 installerFile.delete();
-                                installerFile = downloadNewVersionInstaller(appVersion); //Fixes corrupt file
-                                installationResult = update(installerFile);
-                            } else {
-                                return ApplicationConstants.UPDATE_CODE_INTERRUPT;
+                                installerFile = downloadNewVersionInstaller(appVersion);
+                                update(installerFile);
                             }
                         } catch (IOException e1) {
-                            if (e1.getMessage().contains("CreateProcess error=193")) {
-                                installerFile.delete();
-                                return 193;
-                            }
+                            log.warn("Could not redownload new version", e1);
+                            installerFile.delete();
                         }
                     }
                 }
-                deleteFileIfSuccess(installationResult);
-                return installationResult;
-            } else {
-                return ApplicationConstants.UPDATE_CODE_INTERRUPT;
-            }
+                installerFile.deleteOnExit();
 
-        } else {
-            return ApplicationConstants.UPDATE_CODE_INTERRUPT;
+            }
         }
     }
 
@@ -133,36 +122,16 @@ public class Updater {
         return false;
     }
 
-    private static void deleteFileIfSuccess(int installationResult) {
-        if (installationResult == 0) {
-            installerFile.deleteOnExit();
-        }
-    }
-
-    private static int update(File file) throws IOException {
+    private static void update(File file) throws IOException {
         Runtime runtime = Runtime.getRuntime();
         UpdateDialog.updateDialog.buttonCancel.setEnabled(false);
-        Process updateProcess;
-        updateProcess = runtime.exec(file.getAbsolutePath() + ArgumentConstants.INSTALLER_SILENT_KEY);
-
-        int result = -1;
-        try {
-            if (!Thread.currentThread().isInterrupted()) {
-                result = updateProcess.waitFor();
-                log.warn("Update interrupted by user.");
-            }
-            return result;
-        } catch (InterruptedException e) {
-            log.warn(e);
-            return ApplicationConstants.UPDATE_CODE_INTERRUPT;
-        }
-
+        runtime.exec(file.getAbsolutePath() + ArgumentConstants.INSTALLER_SILENT_KEY);
     }
 
     private static File downloadNewVersionInstaller(AppVersion appVersion) throws IOException {
         JProgressBar progressBar = null;
         if (UpdateDialog.updateDialog != null) {
-            progressBar = UpdateDialog.updateDialog.progressBar1;
+            progressBar = UpdateDialog.updateDialog.progressBar;
         }
 
         ITaskbarList3 list = null;
