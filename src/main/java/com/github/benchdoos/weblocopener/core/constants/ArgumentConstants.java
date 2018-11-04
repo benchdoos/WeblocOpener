@@ -30,4 +30,5 @@ public interface ArgumentConstants {
 
     String INSTALLER_SILENT_KEY = " /VERYSILENT";
 
+    String UPDATE_START_ARGUMENT = "-update-start";
 }

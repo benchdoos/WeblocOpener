@@ -17,7 +17,7 @@ package com.github.benchdoos.weblocopener.core.constants;
 
 import java.io.File;
 
-import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME;
+import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
 
 public interface StringConstants {
     String UPDATE_WEB_URL = "https://benchdoos.github.io/";
@@ -27,7 +27,7 @@ public interface StringConstants {
     String DONATE_PAYPAL_URL = "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=eugeny.zrazhevsky@icloud.com&item_name=Donation+for+WeblocOpener&cy_code=USD";
 
 
-    String UPDATE_PATH_FILE = System.getProperty("java.io.tmpdir") + WEBLOC_OPENER_APPLICATION_NAME + File.separator;
+    String UPDATE_PATH_FILE = System.getProperty("java.io.tmpdir") + WEBLOCOPENER_APPLICATION_NAME + File.separator;
 
     String WINDOWS_WEBLOCOPENER_SETUP_NAME = "WeblocOpenerSetup";
 

@@ -16,7 +16,6 @@
 package com.github.benchdoos.weblocopener.core;
 
 import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
-import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.UserUtils;
 import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
@@ -27,7 +26,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Arrays;
 
 import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.UPDATER_APPLICATION_NAME;
-import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME;
+import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
 
 public class Main {
     private static MODE currentMode;
@@ -51,7 +50,7 @@ public class Main {
     private static void initLogging(MODE mode) {
         switch (mode) {
             case WEBLOCOPENER:
-                new Logging(WEBLOC_OPENER_APPLICATION_NAME);
+                new Logging(WEBLOCOPENER_APPLICATION_NAME);
                 break;
             case UPDATE:
                 new Logging(UPDATER_APPLICATION_NAME);

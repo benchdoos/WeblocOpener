@@ -17,14 +17,14 @@ package com.github.benchdoos.weblocopener.core.constants;
 
 import java.io.File;
 
-import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME;
+import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
 import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WINDOWS_WEBLOC_OPENER_SETUP_NAME;
 
 public interface PathConstants {
     String APP_LOG_FOLDER_PATH = System
-            .getProperty("java.io.tmpdir") + WEBLOC_OPENER_APPLICATION_NAME + File.separator + "Log";
+            .getProperty("java.io.tmpdir") + WEBLOCOPENER_APPLICATION_NAME + File.separator + "Log";
     String APP_LOG_PROPERTY = "com.github.benchdoos.weblocopener.log.folder";
 
-    String UPDATE_PATH_FILE = System.getProperty("java.io.tmpdir") + WEBLOC_OPENER_APPLICATION_NAME + File.separator
+    String UPDATE_PATH_FILE = System.getProperty("java.io.tmpdir") + WEBLOCOPENER_APPLICATION_NAME + File.separator
             + WINDOWS_WEBLOC_OPENER_SETUP_NAME + ".exe";
 }

@@ -30,10 +30,9 @@ import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.UserUtils;
 import com.github.benchdoos.weblocopener.utils.browser.BrowserManager;
 import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.commons.io.FileUtils;
-
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -43,9 +42,9 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Path;
 import java.util.Arrays;
 
+import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOCOPENER_EXE_FILE_NAME;
 import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants.*;
 import static java.awt.Frame.MAXIMIZED_HORIZ;
 
@@ -57,8 +56,8 @@ public class Application {
 
 
     public Application(String[] args) {
-        log.info("{} starts in updateMode: {}", ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME, Main.getCurrentMode());
-        log.info("{} starts with arguments: {}", ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME, Arrays.toString(args));
+        log.info("{} starts in updateMode: {}", ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, Main.getCurrentMode());
+        log.info("{} starts with arguments: {}", ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, Arrays.toString(args));
 
         BrowserManager.loadBrowserList();
 
@@ -66,6 +65,39 @@ public class Application {
 
         manageArguments(args);
 
+    }
+
+    private static void createUpdateDialog() {
+        final UpdateDialog updateDialog = new UpdateDialog();
+
+
+        updateDialog.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                String str;
+                try {
+                    str = RegistryManager.getAppVersionValue();
+                } catch (RegistryCanNotReadInfoException e1) {
+                    str = CoreUtils.getApplicationVersionString();
+                }
+                if (str == null) {
+                    str = CoreUtils.getApplicationVersionString();
+                } else if (str.isEmpty()) {
+                    str = CoreUtils.getApplicationVersionString();
+                }
+                if (Internal.versionCompare(str, updateDialog.getAppVersion().getVersion()) == 0) {
+                    NonGuiUpdater.tray.remove(NonGuiUpdater.trayIcon);
+                    System.exit(0);
+                }
+                super.windowClosed(e);
+
+            }
+
+        });
+        UpdateDialog.updateDialog = updateDialog;
+
+        updateDialog.setVisible(true);
+        updateDialog.checkForUpdates();
     }
 
     private static File getFileLocation(File JAR_FILE, String property) {
@@ -76,7 +108,7 @@ public class Application {
         } else {
             File file = JAR_FILE.getParentFile();
             log.info("Parent file is: " + file.getAbsolutePath());
-            if (file.getName().equals(ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME)) {
+            if (file.getName().equals(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME)) {
                 JAR_FILE_DEFAULT_LOCATION = new File(file.getAbsolutePath() + File.separator + "Updater.jar");
             } else {
                 String programFilesPath = getProgramFilesPath();
@@ -115,18 +147,18 @@ public class Application {
      * Finds out, where app is located.
      */
     public static void initUpdateJar() {
-        final File JAR_FILE = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+        final File FILE = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath());
         String property = null;
         try {
             property = RegistryManager.getInstallLocationValue();
         } catch (RegistryCanNotReadInfoException e) {
             e.printStackTrace();
         }
-        File JAR_FILE_DEFAULT_LOCATION = getFileLocation(JAR_FILE, property);
+        File EXE_FILE_DEFAULT_LOCATION = getFileLocation(FILE, property);
 
-        log.info("Jar: " + JAR_FILE.getAbsolutePath() + " def: " + JAR_FILE_DEFAULT_LOCATION.getAbsolutePath());
+        log.info("Exe: " + FILE.getAbsolutePath() + " def: " + EXE_FILE_DEFAULT_LOCATION.getAbsolutePath());
 
-        runUpdater(JAR_FILE, JAR_FILE_DEFAULT_LOCATION);
+        runUpdater(FILE, EXE_FILE_DEFAULT_LOCATION);
     }
 
     /**
@@ -171,9 +203,8 @@ public class Application {
                         if (args.length > 1) {
                             String url = runAnalyzer(args[1]);
 
-                            ShowQrDialog qrDialog = null;
                             try {
-                                qrDialog = new ShowQrDialog(url, UrlsProceed.generateQrCode(url));
+                                ShowQrDialog qrDialog = new ShowQrDialog(url, UrlsProceed.generateQrCode(url));
                                 qrDialog.setVisible(true);
                             } catch (Exception e) {
                                 log.warn("Can not create a qr-code from url: [" + url + "]", e);
@@ -191,6 +222,16 @@ public class Application {
                         }
                         break;
 
+                    case ArgumentConstants.UPDATE_START_ARGUMENT:
+                        updateMode = UPDATE_MODE.NORMAL;
+                        /*-----*/
+                        try {
+                            System.out.println("Installation folder: " + RegistryManager.getInstallLocationValue());
+                        } catch (RegistryCanNotReadInfoException ignore) {/*NOP*/}
+                        /*-----*/
+                        initUpdateJar();
+                        break;
+
                     case ArgumentConstants.UPDATE_SILENT_ARGUMENT:
                         updateMode = UPDATE_MODE.SILENT;
                         boolean isAutoUpdate = RegistryManager.isAutoUpdateActive();
@@ -202,12 +243,12 @@ public class Application {
                         break;
                     case ArgumentConstants.UPDATE_DELETE_TEMP_FILE_ARGUMENT:
                         updateMode = UPDATE_MODE.AFTER_UPDATE;
-                        new File(PathConstants.UPDATE_PATH_FILE + "Updater_.jar").delete();
+                        new File(PathConstants.UPDATE_PATH_FILE + "Updater_.jar").delete(); //todo fix this
                         File[] files = new File(PathConstants.UPDATE_PATH_FILE).listFiles();
                         if (files != null) {
                             for (File current : files) {
                                 if (current.isFile() && current.getName().toLowerCase().contains(
-                                        ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME.toLowerCase()) &&
+                                        ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME.toLowerCase()) &&
                                         current.getName().toLowerCase().contains("exe")) {
                                     current.delete();
                                 }
@@ -291,11 +332,10 @@ public class Application {
         if (JAR_FILE.getAbsolutePath().replace("%20", " ").equals(
                 JAR_FILE_DEFAULT_LOCATION.getAbsolutePath().replace("%20", " "))) {
             try {
-                log.info(
-                        "Creating itself at: " + new File(PathConstants.UPDATE_PATH_FILE + "Updater_.jar").getAbsolutePath());
+                log.info("Creating itself at: " + new File(PathConstants.UPDATE_PATH_FILE + WEBLOCOPENER_EXE_FILE_NAME).getAbsolutePath());
                 FileUtils.copyFile(new File(JAR_FILE.getAbsolutePath().replace("%20", " ")),
                         new File(PathConstants.UPDATE_PATH_FILE + "Updater_.jar"));
-                Runtime.getRuntime().exec("java -jar " + PathConstants.UPDATE_PATH_FILE + "Updater_.jar");
+                Runtime.getRuntime().exec("java -jar " + PathConstants.UPDATE_PATH_FILE + WEBLOCOPENER_EXE_FILE_NAME);
                 System.exit(0);
             } catch (IOException e) {
                 log.warn(e);
@@ -303,39 +343,6 @@ public class Application {
         } else {
             createUpdateDialog();
         }
-    }
-
-    private static void createUpdateDialog() {
-        final UpdateDialog updateDialog = new UpdateDialog();
-
-
-        updateDialog.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                String str;
-                try {
-                    str = RegistryManager.getAppVersionValue();
-                } catch (RegistryCanNotReadInfoException e1) {
-                    str = CoreUtils.getApplicationVersionString();
-                }
-                if (str == null) {
-                    str = CoreUtils.getApplicationVersionString();
-                } else if (str.isEmpty()) {
-                    str = CoreUtils.getApplicationVersionString();
-                }
-                if (Internal.versionCompare(str, updateDialog.getAppVersion().getVersion()) == 0) {
-                    NonGuiUpdater.tray.remove(NonGuiUpdater.trayIcon);
-                    System.exit(0);
-                }
-                super.windowClosed(e);
-
-            }
-
-        });
-        UpdateDialog.updateDialog = updateDialog;
-
-        updateDialog.setVisible(true);
-        updateDialog.checkForUpdates();
     }
 
     public enum UPDATE_MODE {NORMAL, SILENT, AFTER_UPDATE, ERROR}

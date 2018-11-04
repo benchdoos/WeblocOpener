@@ -112,7 +112,7 @@ public class UserUtils {
 
         JOptionPane.showMessageDialog(parentComponent,
                 jEditorPane,
-                "[" + ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME + "] " + title, messageType);
+                "[" + ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME + "] " + title, messageType);
     }
 
     public static void openWebUrl(String url) {

@@ -35,15 +35,15 @@ public class RegistryManager {
     public static final String KEY_AUTO_UPDATE = "auto_update_enabled";
     private static final String KEY_APP_NAME = "name";
     private static final String KEY_URL_UPDATE_LINK = "url_update_info";
-    public static final String KEY_APP_ROOT_FOLDER_NAME = ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME;
+    public static final String KEY_APP_ROOT_FOLDER_NAME = ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
     public final static String REGISTRY_APP_PATH
-            = "SOFTWARE\\" + ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME + "\\";
+            = "SOFTWARE\\" + ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME + "\\";
     private static final String KEY_BROWSER = "browser";
 
 
 
     //    private static final Properties SETTINGS = new Properties();
-    private static final Preferences PREFERENCES = Preferences.userRoot().node(ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME.toLowerCase());
+    private static final Preferences PREFERENCES = Preferences.userRoot().node(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME.toLowerCase());
 
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
@@ -100,11 +100,11 @@ public class RegistryManager {
 
     @SuppressWarnings("UnusedReturnValue")
     public static String getAppNameValue() {
-        return PREFERENCES.get(KEY_APP_NAME, ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME);
+        return PREFERENCES.get(KEY_APP_NAME, ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME);
     }
 
     public static void setAppNameValue() {
-        PREFERENCES.put(KEY_APP_NAME, ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME);
+        PREFERENCES.put(KEY_APP_NAME, ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME);
     }
 
     @SuppressWarnings("UnusedReturnValue")
@@ -126,7 +126,7 @@ public class RegistryManager {
         log.info("[REGISTRY MANAGER] Setting default SETTINGS for app");
         PREFERENCES.put(KEY_CURRENT_VERSION, CoreUtils.getApplicationVersionFullInformationString());
         PREFERENCES.putBoolean(KEY_AUTO_UPDATE, SettingsConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE);
-        PREFERENCES.put(KEY_APP_NAME, ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME);
+        PREFERENCES.put(KEY_APP_NAME, ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME);
         PREFERENCES.put(KEY_URL_UPDATE_LINK, StringConstants.UPDATE_WEB_URL);
     }
 }

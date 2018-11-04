@@ -74,7 +74,7 @@ public class NonGuiUpdater {
                 }
             };
             translation.initTranslations();
-            trayIcon.displayMessage(ApplicationConstants.WEBLOC_OPENER_APPLICATION_NAME + " - Updater",
+            trayIcon.displayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME + " - Updater",
                     displayMessage[0] + ": " + serverAppVersion.getVersion(),
                     TrayIcon.MessageType.INFO);
         }
