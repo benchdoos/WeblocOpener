@@ -162,7 +162,7 @@ public class UpdateDialog extends JFrame {
         panel3.add(unitLabel, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         updateInfoButton = new JButton();
         updateInfoButton.setBorderPainted(false);
-        updateInfoButton.setContentAreaFilled(true);
+        updateInfoButton.setContentAreaFilled(false);
         updateInfoButton.setDefaultCapable(true);
         updateInfoButton.setDoubleBuffered(false);
         updateInfoButton.setEnabled(false);
@@ -402,11 +402,6 @@ public class UpdateDialog extends JFrame {
             if (!updateThread.isInterrupted()) {
                 updateThread.interrupt();
                 log.info("Installation was interrupted: " + updateThread.isInterrupted());
-                if (!updateThread.isInterrupted()) {
-                    System.out.println("dispose>>");
-                    dispose();
-                    System.exit(0);//TODO FIXME
-                }
             }
             runCleanInstallerFile();
         }
@@ -420,9 +415,11 @@ public class UpdateDialog extends JFrame {
                 Updater.startUpdate(serverAppVersion);
             } catch (IOException e) {
                 log.warn(e);
-                UserUtils.showErrorMessageToUser(this, lostConnectionTitle, lostConnectionMessage); //TODO translate this
+                UserUtils.showErrorMessageToUser(this, lostConnectionTitle, lostConnectionMessage);
             }
-            dispose();
+            if (!Thread.currentThread().isInterrupted()) {
+                dispose();
+            }
         } else {
             buttonOK.setEnabled(true);
             buttonCancel.setEnabled(true);
@@ -448,7 +445,7 @@ public class UpdateDialog extends JFrame {
 
     private void runCleanInstallerFile() {
         log.info("Deleting file: " + PathConstants.UPDATE_PATH_FILE + StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME
-                + serverAppVersion.getVersion() + "" + ".exe");
+                + serverAppVersion.getVersion() + ".exe");
         File installer = new File(PathConstants.UPDATE_PATH_FILE + StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME
                 + serverAppVersion.getVersion() + ".exe");
         installer.deleteOnExit();

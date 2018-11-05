@@ -149,7 +149,7 @@
             </constraints>
             <properties>
               <borderPainted value="false"/>
-              <contentAreaFilled value="true"/>
+              <contentAreaFilled value="false"/>
               <defaultCapable value="true"/>
               <doubleBuffered value="false"/>
               <enabled value="false"/>
