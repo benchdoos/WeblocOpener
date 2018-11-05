@@ -138,7 +138,7 @@ public class AboutApplicationDialog extends JDialog {
         telegramLabel.setText("");
         panel3.add(telegramLabel, new GridConstraints(0, 6, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         shareLabel = new JLabel();
-        shareLabel.setIcon(new ImageIcon(getClass().getResource("/images/shareIcon.png")));
+        shareLabel.setIcon(new ImageIcon(getClass().getResource("/images/shareIcon16.png")));
         shareLabel.setText("");
         panel3.add(shareLabel, new GridConstraints(0, 7, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         donateLabel = new JLabel();
@@ -469,14 +469,14 @@ public class AboutApplicationDialog extends JDialog {
             @Override
             public void mousePressed(MouseEvent e) {
                 shareLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-                        .getImage(getClass().getResource("/images/shareIconPressed.png"))));
+                        .getImage(getClass().getResource("/images/shareIconPressed16.png"))));
 
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 shareLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-                        .getImage(getClass().getResource("/images/shareIcon.png"))));
+                        .getImage(getClass().getResource("/images/shareIcon16.png"))));
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                 StringSelection stringSelection = new StringSelection(shareLabelText);
                 clipboard.setContents(stringSelection, null);
@@ -493,18 +493,18 @@ public class AboutApplicationDialog extends JDialog {
                 setTitle(messages.getString("windowTitle"));
                 versionLabel.setText(messages.getString("appVersionLabel") + " " + CoreUtils.getApplicationVersionString());
 
-                siteLinkLabel.setText("<html><a href=\"\">" + messages.getString("visitLabel") + "</a></html>");
+                siteLinkLabel.setText(createHtmlLink(messages.getString("visitLabel")));
 
 
-                githubLinkLabel.setText("<html><a href=\"\">" + "Github" + "</a></html>");
+                githubLinkLabel.setText(createHtmlLink("Github"));
 
 
-                librariesLabel.setText("<html><a href=\"\">" + messages.getString("librariesLabel") + "</a></html>");
+                librariesLabel.setText(createHtmlLink(messages.getString("librariesLabel")));
                 librariesLabelToolTip = messages.getString("librariesLabelToolTip");
                 librariesLabel.setToolTipText(librariesLabelToolTip);
 
 
-                logLabel.setText("<html><a href=\"\">" + messages.getString("logLabel") + "</a></html>");
+                logLabel.setText(createHtmlLink(messages.getString("logLabel")));
 
 
                 logLabel.setToolTipText(messages.getString("logLabelTooltip"));
@@ -520,6 +520,10 @@ public class AboutApplicationDialog extends JDialog {
 
                 shareLabelText = messages.getString("shareLabelText");
 
+            }
+
+            private String createHtmlLink(String string) {
+                return "<html><a href=\"\">" + string + "</a></html>";
             }
         };
         translation.initTranslations();
