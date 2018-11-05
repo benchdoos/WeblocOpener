@@ -16,9 +16,9 @@
 package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.core.Translation;
-import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
 import com.github.benchdoos.weblocopener.registry.RegistryCanNotReadInfoException;
 import com.github.benchdoos.weblocopener.registry.RegistryManager;
+import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.browser.Browser;
@@ -291,7 +291,6 @@ public class SettingsDialog extends JFrame {
         return contentPane;
     }
 
-
     private int findBrowser(String browserValue) {
         int result;
         for (int i = 0; i < BrowserManager.getBrowserList().size(); i++) {
@@ -422,11 +421,7 @@ public class SettingsDialog extends JFrame {
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                 JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-        try {
-            versionLabel.setText(RegistryManager.getAppVersionValue());
-        } catch (RegistryCanNotReadInfoException e) {
-            versionLabel.setText("Unknown");
-        }
+        versionLabel.setText(CoreUtils.getApplicationVersionString());
 
         onInit = false;
 
