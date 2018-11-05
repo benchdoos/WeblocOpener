@@ -34,15 +34,15 @@ import java.io.IOException;
 import java.util.ResourceBundle;
 
 public class ShowQrDialog extends JFrame {
-    BufferedImage qrCodeImage = null;
-    String title = "QR-Code for .webloc";
+    private BufferedImage qrCodeImage;
+    private String title = "QR-Code for .webloc";
     private String url;
     private JPanel contentPane;
     private ImagePanel imagePanel;
     private JButton openButton;
 
 
-    public ShowQrDialog(String url, BufferedImage qrCodeImage) throws IOException, WriterException {
+    public ShowQrDialog(String url, BufferedImage qrCodeImage) {
         this.qrCodeImage = qrCodeImage;
         this.url = url;
         $$$setupUI$$$();
