@@ -17,18 +17,27 @@ package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.update.AppVersion;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
+import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.UserUtils;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class UpdateInfoDialog extends JDialog {
+    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
+
     private AppVersion appVersion;
     private JPanel contentPane;
     private JButton buttonOK;
@@ -100,15 +109,21 @@ public class UpdateInfoDialog extends JDialog {
 
 
         textPane.setText(generatePageForDisplay(appVersion.getUpdateTitle(), appVersion.getUpdateInfo()));
-        // textPane.setHighlighter(null); // TODO what to do? Stay? Or give user to select text???
 
         textPane.registerKeyboardAction(e -> {
             onOK();
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), JComponent.WHEN_FOCUSED);
-        textPane.addHyperlinkListener(new HyperlinkListener() {
-            public void hyperlinkUpdate(HyperlinkEvent e) {
-                if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                    UserUtils.openWebUrl(e.getURL());
+        textPane.addHyperlinkListener(e -> {
+            if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                final URL url = e.getURL();
+                if (url.toString().startsWith("mailto:")) {
+                    try {
+                        Desktop.getDesktop().mail(url.toURI());
+                    } catch (URISyntaxException | IOException ex) {
+                        log.warn("Can not open mail for: '" + url + "'", ex);
+                    }
+                } else {
+                    UserUtils.openWebUrl(url);
                 }
             }
         });
