@@ -17,7 +17,7 @@ package com.github.benchdoos.weblocopener.nongui;
 
 import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.core.Translation;
-import com.github.benchdoos.weblocopener.registry.RegistryManager;
+import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.update.AppVersion;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
@@ -65,7 +65,7 @@ public class NonGuiUpdater {
     }
 
     private void compareVersions() {
-        String str = RegistryManager.isDevMode() ? "1.0.0.0" : CoreUtils.getApplicationVersionString();
+        String str = PreferencesManager.isDevMode() ? "1.0.0.0" : CoreUtils.getApplicationVersionString();
         if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
             //create trayicon and show pop-up
             createTrayIcon();
@@ -89,11 +89,11 @@ public class NonGuiUpdater {
         PopupMenu trayMenu = new PopupMenu();
 
         final CheckboxMenuItem autoUpdateCheckBox = new CheckboxMenuItem("Auto-update");
-        log.debug(RegistryManager.KEY_AUTO_UPDATE + ": " + RegistryManager.isAutoUpdateActive());
-        autoUpdateCheckBox.setState(RegistryManager.isAutoUpdateActive());
+        log.debug(PreferencesManager.KEY_AUTO_UPDATE + ": " + PreferencesManager.isAutoUpdateActive());
+        autoUpdateCheckBox.setState(PreferencesManager.isAutoUpdateActive());
         autoUpdateCheckBox.addItemListener(e -> {
-            log.debug(RegistryManager.KEY_AUTO_UPDATE + ": " + autoUpdateCheckBox.getState());
-            RegistryManager.setAutoUpdateActive(autoUpdateCheckBox.getState());
+            log.debug(PreferencesManager.KEY_AUTO_UPDATE + ": " + autoUpdateCheckBox.getState());
+            PreferencesManager.setAutoUpdateActive(autoUpdateCheckBox.getState());
         });
         trayMenu.add(autoUpdateCheckBox);
         trayMenu.addSeparator();

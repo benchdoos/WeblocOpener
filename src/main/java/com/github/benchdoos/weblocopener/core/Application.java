@@ -19,7 +19,7 @@ import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
 import com.github.benchdoos.weblocopener.gui.*;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
-import com.github.benchdoos.weblocopener.registry.RegistryManager;
+import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.utils.*;
@@ -174,9 +174,9 @@ public class Application {
 
                     case ArgumentConstants.UPDATE_SILENT_ARGUMENT:
                         updateMode = UPDATE_MODE.SILENT;
-                        boolean isAutoUpdate = RegistryManager.isAutoUpdateActive();
+                        boolean isAutoUpdate = PreferencesManager.isAutoUpdateActive();
 
-                        log.debug(RegistryManager.KEY_AUTO_UPDATE + " : " + isAutoUpdate);
+                        log.debug(PreferencesManager.KEY_AUTO_UPDATE + " : " + isAutoUpdate);
                         if (isAutoUpdate) {
                             new NonGuiUpdater();
                         }

@@ -13,7 +13,7 @@
  * Eugene Zrazhevsky <eugene.zrazhevsky@gmail.com>
  */
 
-package com.github.benchdoos.weblocopener.registry;
+package com.github.benchdoos.weblocopener.preferences;
 
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
@@ -23,7 +23,7 @@ import java.util.prefs.Preferences;
 /**
  * Created by Eugene Zrazhevsky on 19.11.2016.
  */
-public class RegistryManager {
+public class PreferencesManager {
     public static final String KEY_AUTO_UPDATE = "auto_update_enabled";
     private static final String DEV_MODE_KEY = "dev_mode";
     private static final String KEY_BROWSER = "browser";

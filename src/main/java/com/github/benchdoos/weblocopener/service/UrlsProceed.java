@@ -18,7 +18,7 @@ package com.github.benchdoos.weblocopener.service;
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListParser;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
-import com.github.benchdoos.weblocopener.registry.RegistryManager;
+import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.UserUtils;
 import com.google.zxing.BarcodeFormat;
@@ -46,7 +46,7 @@ import java.util.Map;
  * Created by Eugene Zrazhevsky on 30.10.2016.
  */
 public class UrlsProceed {
-    public static final int QR_CODE_HEIGHT = 300, QR_CODE_WIDTH = 300;
+    private static final int QR_CODE_HEIGHT = 300, QR_CODE_WIDTH = 300;
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
     private static final String QR_CODE_CHARSET = "UTF-8";
@@ -58,13 +58,13 @@ public class UrlsProceed {
      * @param url Url to open.
      */
     public static void openUrl(String url) {
-        if (RegistryManager.getBrowserValue().equals(SettingsConstants.BROWSER_DEFAULT_VALUE)
-                || RegistryManager.getBrowserValue().isEmpty()) {
+        if (PreferencesManager.getBrowserValue().equals(SettingsConstants.BROWSER_DEFAULT_VALUE)
+                || PreferencesManager.getBrowserValue().isEmpty()) {
             log.info("Opening URL in default browser: " + url);
             openUrlInDefaultBrowser(url);
         } else {
             try {
-                log.info("Opening URL in not default browser with call:[" + RegistryManager.getBrowserValue() + "]: " + url);
+                log.info("Opening URL in not default browser with call:[" + PreferencesManager.getBrowserValue() + "]: " + url);
                 openUrlInNotDefaultBrowser(url);
             } catch (IOException e) {
                 log.warn(e);
@@ -79,7 +79,7 @@ public class UrlsProceed {
 
     private static void openUrlInNotDefaultBrowser(String url) throws IOException {
         if (!url.isEmpty()) {
-            String call = RegistryManager.getBrowserValue().replace("%site", url);
+            String call = PreferencesManager.getBrowserValue().replace("%site", url);
             Runtime runtime = Runtime.getRuntime();
             final String command = "cmd /c " + call;
             if (call.startsWith("start")) {
@@ -89,7 +89,7 @@ public class UrlsProceed {
                         InputStreamReader(process.getErrorStream()));
 
                 // read the output from the command
-                String errorMessage = null;
+                String errorMessage;
                 boolean error = false;
                 while ((errorMessage = stdError.readLine()) != null) {
                     error = true;

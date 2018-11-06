@@ -18,7 +18,7 @@ package com.github.benchdoos.weblocopener.gui;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.PathConstants;
 import com.github.benchdoos.weblocopener.core.constants.StringConstants;
-import com.github.benchdoos.weblocopener.registry.RegistryManager;
+import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.update.AppVersion;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.utils.*;
@@ -292,7 +292,7 @@ public class UpdateDialog extends JFrame {
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) > 0) {
             //App version is bigger then on server
             buttonOK.setText(translation.messages.getString("buttonOkDev"));
-            buttonOK.setEnabled(RegistryManager.isDevMode());
+            buttonOK.setEnabled(PreferencesManager.isDevMode());
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
             //No reason to update;
             buttonOK.setText(translation.messages.getString("buttonOkUp2Date"));

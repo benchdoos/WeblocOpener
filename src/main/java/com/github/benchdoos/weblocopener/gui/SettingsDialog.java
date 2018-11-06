@@ -17,7 +17,7 @@ package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.core.Translation;
-import com.github.benchdoos.weblocopener.registry.RegistryManager;
+import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
@@ -295,7 +295,7 @@ public class SettingsDialog extends JFrame {
                     }
                 } else {
                     callLabel.setVisible(true);
-                    callTextField.setText(RegistryManager.getBrowserValue());
+                    callTextField.setText(PreferencesManager.getBrowserValue());
                     callTextField.setVisible(true);
                     syntaxInfoLabel.setVisible(true);
                 }
@@ -377,13 +377,13 @@ public class SettingsDialog extends JFrame {
     }
 
     private void loadSettings() {
-        autoUpdateEnabledCheckBox.setSelected(RegistryManager.isAutoUpdateActive());
-        comboBox.setSelectedIndex(findBrowser(RegistryManager.getBrowserValue()));
+        autoUpdateEnabledCheckBox.setSelected(PreferencesManager.isAutoUpdateActive());
+        comboBox.setSelectedIndex(findBrowser(PreferencesManager.getBrowserValue()));
         final Browser browser = (Browser) comboBox.getSelectedItem();
 
         if (browser != null) {
             if (browser.getIncognitoCall() != null) {
-                incognitoCheckBox.setSelected(RegistryManager.getBrowserValue().equals(browser.getIncognitoCall()));
+                incognitoCheckBox.setSelected(PreferencesManager.getBrowserValue().equals(browser.getIncognitoCall()));
             } else {
                 incognitoCheckBox.setSelected(false);
                 incognitoCheckBox.setEnabled(false);
@@ -483,30 +483,30 @@ public class SettingsDialog extends JFrame {
     }
 
     private void updateRegistryAndDispose() {
-        if (RegistryManager.isAutoUpdateActive() != autoUpdateEnabledCheckBox.isSelected()) {
-            RegistryManager.setAutoUpdateActive(autoUpdateEnabledCheckBox.isSelected());
+        if (PreferencesManager.isAutoUpdateActive() != autoUpdateEnabledCheckBox.isSelected()) {
+            PreferencesManager.setAutoUpdateActive(autoUpdateEnabledCheckBox.isSelected());
         }
         Browser browser = (Browser) comboBox.getSelectedItem();
         if (browser != null) {
             log.info("browser call: " + browser.getCall());
             if (comboBox.getSelectedIndex() != comboBox.getItemCount() - 1) {
                 if (browser.getCall() != null) {
-                    if (!RegistryManager.getBrowserValue().equals(browser.getCall())) {
+                    if (!PreferencesManager.getBrowserValue().equals(browser.getCall())) {
                         if (!incognitoCheckBox.isSelected()) {
-                            RegistryManager.setBrowserValue(browser.getCall());
+                            PreferencesManager.setBrowserValue(browser.getCall());
                         }
                     }
                 }
                 if (browser.getIncognitoCall() != null) {
-                    if (!RegistryManager.getBrowserValue().equals(browser.getIncognitoCall())) {
+                    if (!PreferencesManager.getBrowserValue().equals(browser.getIncognitoCall())) {
                         if (incognitoCheckBox.isSelected()) {
-                            RegistryManager.setBrowserValue(browser.getIncognitoCall());
+                            PreferencesManager.setBrowserValue(browser.getIncognitoCall());
                         }
                     }
                 }
             } else {
                 if (!callTextField.getText().equals(browser.getIncognitoCall())) {
-                    RegistryManager.setBrowserValue(callTextField.getText());
+                    PreferencesManager.setBrowserValue(callTextField.getText());
                 }
             }
         }
