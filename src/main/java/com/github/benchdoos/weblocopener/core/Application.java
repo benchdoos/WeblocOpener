@@ -17,17 +17,13 @@ package com.github.benchdoos.weblocopener.core;
 
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
-import com.github.benchdoos.weblocopener.core.constants.PathConstants;
 import com.github.benchdoos.weblocopener.gui.*;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
-import com.github.benchdoos.weblocopener.registry.RegistryCanNotReadInfoException;
 import com.github.benchdoos.weblocopener.registry.RegistryManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.utils.*;
 import com.github.benchdoos.weblocopener.utils.browser.BrowserManager;
-import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,10 +34,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 
-import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOCOPENER_EXE_FILE_NAME;
 import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants.*;
 import static java.awt.Frame.MAXIMIZED_HORIZ;
 
@@ -52,7 +48,7 @@ public class Application {
     public static UPDATE_MODE updateMode = UPDATE_MODE.NORMAL;
 
 
-    public Application(String[] args) {
+    Application(String[] args) {
         log.info("{} starts in updateMode: {}", ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, Main.getCurrentMode());
         log.info("{} starts with arguments: {}", ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, Arrays.toString(args));
 
@@ -71,17 +67,7 @@ public class Application {
         updateDialog.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
-                String str;
-                try {
-                    str = RegistryManager.getAppVersionValue();
-                } catch (RegistryCanNotReadInfoException e1) {
-                    str = CoreUtils.getApplicationVersionString();
-                }
-                if (str == null) {
-                    str = CoreUtils.getApplicationVersionString();
-                } else if (str.isEmpty()) {
-                    str = CoreUtils.getApplicationVersionString();
-                }
+                String str = CoreUtils.getApplicationVersionString();
                 if (Internal.versionCompare(str, updateDialog.getAppVersion().getVersion()) == 0) {
                     NonGuiUpdater.tray.remove(NonGuiUpdater.trayIcon);
                     System.exit(0);
@@ -97,41 +83,6 @@ public class Application {
         updateDialog.checkForUpdates();
     }
 
-    private static File getFileLocation(File JAR_FILE, String property) {
-        File JAR_FILE_DEFAULT_LOCATION;
-        if (property != null) {
-            JAR_FILE_DEFAULT_LOCATION = new File(property
-                    + File.separator + ApplicationConstants.WEBLOCOPENER_EXE_FILE_NAME);
-        } else {
-            File file = JAR_FILE.getParentFile();
-            log.info("Parent file is: " + file.getAbsolutePath());
-            if (file.getName().equals(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME)) {
-                JAR_FILE_DEFAULT_LOCATION = new File(file.getAbsolutePath() + File.separator + ApplicationConstants.WEBLOCOPENER_EXE_FILE_NAME);
-            } else {
-                String programFilesPath = getProgramFilesPath();
-                JAR_FILE_DEFAULT_LOCATION = new File(
-                        programFilesPath + "WeblocOpener" + File.separator + ApplicationConstants.WEBLOCOPENER_EXE_FILE_NAME); //TODO find better solution
-            }
-        }
-        return JAR_FILE_DEFAULT_LOCATION;
-    }
-
-    /**
-     * Finds out %ProgramFiles% path
-     *
-     * @return Path to %ProgramFiles% folder
-     */
-    private static String getProgramFilesPath() {
-        String programFilesPath;
-        String realArch = SystemUtils.getRealSystemArch();
-        if (realArch.equals("64")) {
-            programFilesPath = System.getenv("ProgramFiles(X86)");
-        } else {
-            programFilesPath = System.getenv("ProgramFiles");
-        }
-        return programFilesPath;
-    }
-
     private static String helpText() {
         return OPENER_CREATE_ARGUMENT + "\t[filepath] [link] \tCreates a new .webloc file on [filepath]. " +
                 "[filepath] should end with [\\filename.webloc]\n" +
@@ -143,19 +94,20 @@ public class Application {
     /**
      * Finds out, where app is located.
      */
-    public static void initUpdateJar() {
-        final File FILE = new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-        String property = null;
+    public static void initUpdate() {
         try {
-            property = RegistryManager.getInstallLocationValue();
-        } catch (RegistryCanNotReadInfoException e) {
-            e.printStackTrace();
+            final File currentFile = CoreUtils.getCurrentFile();
+            final String command;
+            if (currentFile.isFile()) {
+                command = currentFile.getAbsolutePath() + " " + ArgumentConstants.OPENER_UPDATE_ARGUMENT;
+            } else {
+                command = "cmd /c start weblocopener " + ArgumentConstants.OPENER_UPDATE_ARGUMENT;
+            }
+            log.info("Starting update: {}", command);
+            Runtime.getRuntime().exec(command);
+        } catch (IOException | URISyntaxException e) {
+            log.warn("Could not run update", e);
         }
-        File EXE_FILE_DEFAULT_LOCATION = getFileLocation(FILE, property);
-
-        log.info("Exe: " + FILE.getAbsolutePath() + " def: " + EXE_FILE_DEFAULT_LOCATION.getAbsolutePath());
-
-        runUpdater(FILE, EXE_FILE_DEFAULT_LOCATION);
     }
 
     /**
@@ -299,25 +251,5 @@ public class Application {
         settingsDialog.setVisible(true);
     }
 
-    /**
-     * Creates a copy of jar file in other location and runs it.
-     */
-    private static void runUpdater(File JAR_FILE, File JAR_FILE_DEFAULT_LOCATION) {
-        if (JAR_FILE.getAbsolutePath().replace("%20", " ").equals(
-                JAR_FILE_DEFAULT_LOCATION.getAbsolutePath().replace("%20", " "))) {
-            try {
-                log.info("Creating itself at: " + new File(PathConstants.UPDATE_PATH_FILE + WEBLOCOPENER_EXE_FILE_NAME).getAbsolutePath());
-                FileUtils.copyFile(new File(JAR_FILE.getAbsolutePath().replace("%20", " ")),
-                        new File(PathConstants.UPDATE_PATH_FILE + WEBLOCOPENER_EXE_FILE_NAME));
-                Runtime.getRuntime().exec("java -jar " + PathConstants.UPDATE_PATH_FILE + WEBLOCOPENER_EXE_FILE_NAME);
-                System.exit(0);
-            } catch (IOException e) {
-                log.warn(e);
-            }
-        } else {
-            createUpdateDialog();
-        }
-    }
-
-    public enum UPDATE_MODE {NORMAL, SILENT, AFTER_UPDATE, ERROR}
+    public enum UPDATE_MODE {NORMAL, SILENT}
 }

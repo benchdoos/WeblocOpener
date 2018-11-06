@@ -15,9 +15,8 @@
 
 package com.github.benchdoos.weblocopener.gui;
 
+import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.core.Translation;
-import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
-import com.github.benchdoos.weblocopener.registry.RegistryCanNotReadInfoException;
 import com.github.benchdoos.weblocopener.registry.RegistryManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
@@ -37,7 +36,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -77,20 +75,7 @@ public class SettingsDialog extends JFrame {
     }
 
     private static void runUpdater() {
-        String run;
-        try {
-            run = "\"" + RegistryManager.getInstallLocationValue() + "WeblocOpener.exe\" " + ArgumentConstants.OPENER_UPDATE_ARGUMENT;
-        } catch (RegistryCanNotReadInfoException e) {
-            run = new File(SettingsDialog.class.getProtectionDomain()
-                    .getCodeSource().getLocation().getPath()).getAbsolutePath().replace("%20", " ");
-            log.warn("Can not read registry, using alternate path: [" + run + "]", e);
-        }
-        log.info("Running: " + run);
-        try {
-            Runtime.getRuntime().exec(run);
-        } catch (IOException e) {
-            log.warn("Can not execute command: " + run, e);
-        }
+        Application.initUpdate();
     }
 
     {

@@ -17,8 +17,6 @@ package com.github.benchdoos.weblocopener.registry;
 
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
-import com.github.benchdoos.weblocopener.core.constants.StringConstants;
-import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,12 +40,10 @@ public class RegistryManager {
     private static final String KEY_BROWSER = "browser";
 
 
-
     //    private static final Properties SETTINGS = new Properties();
     private static final Preferences PREFERENCES = Preferences.userRoot().node(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME.toLowerCase());
 
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
 
 
     public static String getBrowserValue() {
@@ -75,22 +71,6 @@ public class RegistryManager {
         return value;
     }
 
-    public static void setInstallLocationValue(String location) {
-        PREFERENCES.put(KEY_INSTALL_LOCATION, location);
-    }
-
-    public static String getAppVersionValue() throws RegistryCanNotReadInfoException {
-        String value = PREFERENCES.get(KEY_CURRENT_VERSION, CoreUtils.getApplicationVersionFullInformationString());
-        if (value.isEmpty()) {
-            throw new RegistryCanNotReadInfoException("Can not get app version value");
-        }
-        return value;
-    }
-
-    public static void setAppVersionValue(String version) {
-        PREFERENCES.put(KEY_CURRENT_VERSION, version);
-    }
-
     public static boolean isAutoUpdateActive() {
         return PREFERENCES.getBoolean(KEY_AUTO_UPDATE, SettingsConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE);
     }
@@ -99,41 +79,9 @@ public class RegistryManager {
         PREFERENCES.putBoolean(KEY_AUTO_UPDATE, autoUpdateActive);
     }
 
-    @SuppressWarnings("UnusedReturnValue")
-    public static String getAppNameValue() {
-        return PREFERENCES.get(KEY_APP_NAME, ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME);
-    }
-
-    public static void setAppNameValue() {
-        PREFERENCES.put(KEY_APP_NAME, ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME);
-    }
-
-    @SuppressWarnings("UnusedReturnValue")
-    public static String getURLUpdateValue() {
-        return PREFERENCES.get(KEY_URL_UPDATE_LINK, StringConstants.UPDATE_WEB_URL);
-    }
-
-    public static void setURLUpdateValue() {
-        PREFERENCES.put(KEY_URL_UPDATE_LINK, StringConstants.UPDATE_WEB_URL);
-    }
-
 
     public static boolean isDevMode() {
         return PREFERENCES.getBoolean(DEV_MODE_KEY, false);
     }
-
-
-    /**
-     * Sets default Settings if can not use registry;
-     * It will help to prevent app from crash (if install location is not corrupt);
-     */
-    public static void setDefaultSettings() {
-        log.info("[REGISTRY MANAGER] Setting default SETTINGS for app");
-        PREFERENCES.put(KEY_CURRENT_VERSION, CoreUtils.getApplicationVersionFullInformationString());
-        PREFERENCES.putBoolean(KEY_AUTO_UPDATE, SettingsConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE);
-        PREFERENCES.put(KEY_APP_NAME, ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME);
-        PREFERENCES.put(KEY_URL_UPDATE_LINK, StringConstants.UPDATE_WEB_URL);
-    }
 }
-
 

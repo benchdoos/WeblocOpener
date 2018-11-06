@@ -20,12 +20,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
+import java.io.File;
+import java.net.URISyntaxException;
 import java.util.Properties;
 
 public class CoreUtils {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
-    public static String getApplicationVersionFullInformationString() {
+    static String getApplicationVersionFullInformationString() {
         Properties properties = new Properties();
         try {
             properties.load(Main.class.getResourceAsStream("/application.properties"));
@@ -75,5 +77,9 @@ public class CoreUtils {
         } catch (Exception e) {
             log.warn("Could not enable look and feel", e);
         }
+    }
+
+    public static File getCurrentFile() throws URISyntaxException {
+        return new File(CoreUtils.class.getProtectionDomain().getCodeSource().getLocation().toURI());
     }
 }

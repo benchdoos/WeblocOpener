@@ -42,8 +42,7 @@ public class NonGuiUpdater {
     public static final SystemTray tray = SystemTray.getSystemTray();
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     public static TrayIcon trayIcon;
-    private String toolTipText = "WeblocOpener - Update";
-    private Translation translation;
+    private String toolTipText = "WeblocOpener — Update";
 
 
     private AppVersion serverAppVersion = null;
@@ -111,7 +110,7 @@ public class NonGuiUpdater {
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == 1) {
                     trayIcon.removeMouseListener(this);
-                    Application.initUpdateJar();
+                    Application.initUpdate();
                     tray.remove(trayIcon);
                 }
                 super.mouseClicked(e);
@@ -137,7 +136,7 @@ public class NonGuiUpdater {
     }
 
     private void translateDialog() {
-        translation = new Translation("translations/UpdateDialogBundle") {
+        Translation translation = new Translation("translations/UpdateDialogBundle") {
             @Override
             public void initTranslations() {
                 toolTipText = messages.getString("windowTitle");
