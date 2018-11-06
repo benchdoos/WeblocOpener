@@ -322,7 +322,7 @@ public class SettingsDialog extends JFrame {
 
 
         getRootPane().setDefaultButton(buttonOK);
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/balloonIcon64.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/balloonIcon256.png")));
 
         syntaxInfoLabel.setVisible(false);
         callTextField.setVisible(false);
@@ -417,7 +417,7 @@ public class SettingsDialog extends JFrame {
 
         FileDialog fd = new FileDialog(this, chooseAFile, FileDialog.LOAD);
         fd.setIconImage(Toolkit.getDefaultToolkit()
-                .getImage(getClass().getResource("/images/balloonIcon64.png")));
+                .getImage(getClass().getResource("/images/balloonIcon256.png")));
         fd.setDirectory(System.getProperty("user.dir"));
         fd.setFile("*.exe");
         fd.setMultipleMode(false);

@@ -327,7 +327,7 @@ public class AboutApplicationDialog extends JDialog {
     private void initGui() {
         log.debug("Creating GUI");
         setContentPane(contentPane);
-        setIconImage(Toolkit.getDefaultToolkit().getImage(AboutApplicationDialog.class.getResource("/images/balloonIcon64.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(AboutApplicationDialog.class.getResource("/images/balloonIcon256.png")));
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 

@@ -19,7 +19,6 @@ import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.service.gui.MousePickListener;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
-import com.google.zxing.WriterException;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -30,7 +29,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ResourceBundle;
 
 public class ShowQrDialog extends JFrame {
@@ -127,7 +125,7 @@ public class ShowQrDialog extends JFrame {
         translateDialog();
 
         setTitle(title);
-        setIconImage(Toolkit.getDefaultToolkit().getImage(ShowQrDialog.class.getResource("/images/balloonIcon64.png")));
+        setIconImage(Toolkit.getDefaultToolkit().getImage(ShowQrDialog.class.getResource("/images/balloonIcon256.png")));
 
 
         setContentPane(contentPane);
