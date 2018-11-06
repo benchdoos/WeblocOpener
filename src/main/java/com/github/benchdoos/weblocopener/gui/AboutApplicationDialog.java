@@ -52,7 +52,7 @@ import java.util.ResourceBundle;
 
 public class AboutApplicationDialog extends JDialog {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-    String librariesLabelToolTip = "Third-party Libraries used in WeblocOpener project.";
+    private String librariesLabelToolTip = "Third-party Libraries used in WeblocOpener project.";
     private JPanel contentPane;
     private JTextPane weblocOpenerBWillTextPane;
     private JLabel versionLabel;
@@ -331,9 +331,8 @@ public class AboutApplicationDialog extends JDialog {
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-        getRootPane().registerKeyboardAction(e -> {
-            dispose();
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+        getRootPane().registerKeyboardAction(e -> dispose(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         initLinks();
 
@@ -370,23 +369,15 @@ public class AboutApplicationDialog extends JDialog {
                 InfoDialog infoDialog = new InfoDialog();
                 infoDialog.setTitle(librariesLabelToolTip);
                 StringBuilder contentBuilder = new StringBuilder();
-                BufferedReader bufferedReader = null;
-                try {
-                    bufferedReader = new BufferedReader(new InputStreamReader(
-                            getClass().getResourceAsStream("/pages/libs.html")));
+                try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
+                        getClass().getResourceAsStream("/pages/libs.html")))) {
                     String str;
                     while ((str = bufferedReader.readLine()) != null) {
                         contentBuilder.append(str);
                     }
                     infoDialog.content = contentBuilder.toString();
                     infoDialog.setVisible(true);
-                } catch (IOException ignore) {/*NOP*/} finally {
-                    if (bufferedReader != null) {
-                        try {
-                            bufferedReader.close();
-                        } catch (IOException ignore) {/*NOP*/}
-                    }
-                }
+                } catch (IOException ignore) {/*NOP*/}
             }
 
             @Override
