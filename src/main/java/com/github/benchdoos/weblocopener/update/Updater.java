@@ -135,7 +135,6 @@ public class Updater {
             } catch (FileNotFoundException e) {
                 if (installerFile.exists() && installerFile.getName().contains("WeblocOpenerSetup")) {
                     installerFile.delete();
-                    /*fout = new FileOutputStream(installerFile);*/
                 }
                 log.warn("Could not download file: {} to {}", appVersion.getDownloadUrl(), installerFile, e);
             }
