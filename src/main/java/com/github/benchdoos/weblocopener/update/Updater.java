@@ -16,10 +16,8 @@
 package com.github.benchdoos.weblocopener.update;
 
 
-
 import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.core.Translation;
-import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
 import com.github.benchdoos.weblocopener.core.constants.PathConstants;
 import com.github.benchdoos.weblocopener.gui.UpdateDialog;
@@ -77,6 +75,93 @@ public class Updater {
         }
     }
 
+    private static File downloadNewVersionInstaller(AppVersion appVersion) throws IOException {
+        JProgressBar progressBar = null;
+        if (UpdateDialog.updateDialog != null) {
+            progressBar = UpdateDialog.updateDialog.progressBar;
+        }
+
+        ITaskbarList3 taskbar = null;
+        Pointer<?> hwnd;
+
+        try {
+            taskbar = COMRuntime.newInstance(ITaskbarList3.class);
+        } catch (ClassNotFoundException ignore) {/*WINDOWS<WINDOWS 7*/}
+
+        long hwndVal = JAWTUtils.getNativePeerHandle(UpdateDialog.updateDialog);
+        hwnd = Pointer.pointerToAddress(hwndVal, PointerIO.getSizeTInstance().getTargetSize());
+
+
+        if (progressBar != null) {
+            progressBar.setStringPainted(true);
+        }
+
+
+        try (BufferedInputStream in = new BufferedInputStream(new URL(appVersion.getDownloadUrl()).openStream());
+             FileOutputStream fout = new FileOutputStream(installerFile) ){
+            try {
+                final int bufferLength = 1024 * 1024;
+                final byte data[] = new byte[bufferLength];
+                int count;
+                int progress = 0;
+                while ((count = in.read(data, 0, bufferLength)) != -1) {
+                    if (Thread.currentThread().isInterrupted()) {
+                        installerFile.delete();
+                        if (progressBar != null) {
+                            progressBar.setValue(0);
+                            if (taskbar != null) {
+                                //noinspection unchecked
+                                taskbar.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
+                                        progressBar.getMaximum());
+                            }
+                        }
+                        break;
+                    } else {
+                        fout.write(data, 0, count);
+                        progress += count;
+                        int prg = (int) (((double) progress / appVersion.getSize()) * 100);
+
+                        if (progressBar != null) {
+                            progressBar.setValue(prg);
+                            if (taskbar != null) {
+                                //noinspection unchecked
+                                taskbar.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
+                                        progressBar.getMaximum());
+                            }
+                        }
+                    }
+                }
+
+            } catch (FileNotFoundException e) {
+                if (installerFile.exists() && installerFile.getName().contains("WeblocOpenerSetup")) {
+                    installerFile.delete();
+                    /*fout = new FileOutputStream(installerFile);*/
+                }
+                log.warn("Could not download file: {} to {}", appVersion.getDownloadUrl(), installerFile, e);
+            }
+        } finally {
+            if (taskbar != null) {
+                taskbar.Release();
+            }
+        }
+        if (Thread.currentThread().isInterrupted()) {
+            installerFile.delete();
+            installerFile.deleteOnExit();
+        }
+
+        return installerFile;
+    }
+
+    private static boolean redownloadOnCorrupt(AppVersion appVersion) throws IOException {
+        if (!installerFile.exists() || installerFile.length() != appVersion.getSize()) {
+
+            installerFile.delete();
+            installerFile = downloadNewVersionInstaller(appVersion);
+            return true;
+        }
+        return false;
+    }
+
     public static void startUpdate(AppVersion appVersion) throws IOException {
         log.info("Starting update to " + appVersion.getVersion());
         installerFile = new File(
@@ -112,133 +197,10 @@ public class Updater {
         }
     }
 
-    private static boolean redownloadOnCorrupt(AppVersion appVersion) throws IOException {
-        if (!installerFile.exists() || installerFile.length() != appVersion.getSize()) {
-
-            installerFile.delete();
-            installerFile = downloadNewVersionInstaller(appVersion);
-            return true;
-        }
-        return false;
-    }
-
     private static void update(File file) throws IOException {
         Runtime runtime = Runtime.getRuntime();
         UpdateDialog.updateDialog.buttonCancel.setEnabled(false);
         runtime.exec(file.getAbsolutePath() + ArgumentConstants.INSTALLER_SILENT_KEY);
-    }
-
-    private static File downloadNewVersionInstaller(AppVersion appVersion) throws IOException {
-        JProgressBar progressBar = null;
-        if (UpdateDialog.updateDialog != null) {
-            progressBar = UpdateDialog.updateDialog.progressBar;
-        }
-
-        ITaskbarList3 list = null;
-        Pointer<?> hwnd;
-
-        try {
-            list = COMRuntime.newInstance(ITaskbarList3.class);
-        } catch (ClassNotFoundException ignore) {/*WINDOWS<WINDOWS 7*/}
-
-        long hwndVal = JAWTUtils.getNativePeerHandle(UpdateDialog.updateDialog);
-        hwnd = Pointer.pointerToAddress(hwndVal, PointerIO.getSizeTInstance().getTargetSize());
-
-
-        if (progressBar != null) {
-            progressBar.setStringPainted(true);
-        }
-        BufferedInputStream in = null;
-        FileOutputStream fout = null;
-        try {
-
-            in = new BufferedInputStream(new URL(appVersion.getDownloadUrl()).openStream());
-            try {
-                fout = new FileOutputStream(installerFile);
-
-                final int bufferLength = 1024 * 1024;
-                final byte data[] = new byte[bufferLength];
-                int count;
-                int progress = 0;
-                while ((count = in.read(data, 0, bufferLength)) != -1) {
-                    if (Thread.currentThread().isInterrupted()) {
-                        installerFile.delete();
-                        if (progressBar != null) {
-                            progressBar.setValue(0);
-                            if (list != null) {
-                                //noinspection unchecked
-                                list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
-                                        progressBar.getMaximum());
-                            }
-                        }
-                        break;
-                    } else {
-                        fout.write(data, 0, count);
-                        progress += count;
-                        int prg = (int) (((double) progress / appVersion.getSize()) * 100);
-
-                        if (progressBar != null) {
-                            progressBar.setValue(prg);
-                            if (list != null) {
-                                //noinspection unchecked
-                                list.SetProgressValue((Pointer) hwnd, progressBar.getValue(),
-                                        progressBar.getMaximum());
-                            }
-                        }
-                    }
-                }
-
-            } catch (FileNotFoundException e) {
-                if (installerFile.exists() && installerFile.getName().contains("WeblocOpenerSetup")) { //TODO FIX
-                    // HERE
-                    installerFile.delete();
-                    fout = new FileOutputStream(installerFile);
-                }
-            }
-        } finally {
-            if (in != null) {
-                in.close();
-            }
-            if (fout != null) {
-                fout.close();
-            }
-
-            if (Thread.currentThread().isInterrupted()) {
-                installerFile.delete();
-                installerFile.deleteOnExit();
-            }
-            if (list != null) {
-                list.Release();
-            }
-        }
-
-        return installerFile;
-    }
-
-    public void getServerApplicationVersion() throws IOException {
-        log.debug("Getting current server application version");
-        String input;
-        BufferedReader bufferedReader = new BufferedReader(
-                new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING));
-
-        input = bufferedReader.readLine();
-
-        JsonParser parser = new JsonParser();
-        JsonObject root = parser.parse(input).getAsJsonObject();
-
-        appVersion = new AppVersion();
-        formAppVersionFromJson(root);
-    }
-
-    private void translateMessages() {
-        translation = new Translation("translations/UpdaterBundle") {
-            @Override
-            public void initTranslations() {
-                canNotUpdateTitle = messages.getString("canNotUpdateTitle");
-                canNotUpdateMessage = messages.getString("canNotUpdateMessage");
-            }
-        };
-        translation.initTranslations();
     }
 
     public void createConnection() {
@@ -279,6 +241,10 @@ public class Updater {
         }
     }
 
+    public AppVersion getAppVersion() {
+        return appVersion;
+    }
+
     private HttpsURLConnection getConnection() throws IOException {
         URL url = new URL(GITHUB_URL);
         log.debug("Creating connection");
@@ -288,7 +254,29 @@ public class Updater {
         return connection;
     }
 
-    public AppVersion getAppVersion() {
-        return appVersion;
+    public void getServerApplicationVersion() throws IOException {
+        log.debug("Getting current server application version");
+        String input;
+        BufferedReader bufferedReader = new BufferedReader(
+                new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING));
+
+        input = bufferedReader.readLine();
+
+        JsonParser parser = new JsonParser();
+        JsonObject root = parser.parse(input).getAsJsonObject();
+
+        appVersion = new AppVersion();
+        formAppVersionFromJson(root);
+    }
+
+    private void translateMessages() {
+        translation = new Translation("translations/UpdaterBundle") {
+            @Override
+            public void initTranslations() {
+                canNotUpdateTitle = messages.getString("canNotUpdateTitle");
+                canNotUpdateMessage = messages.getString("canNotUpdateMessage");
+            }
+        };
+        translation.initTranslations();
     }
 }
