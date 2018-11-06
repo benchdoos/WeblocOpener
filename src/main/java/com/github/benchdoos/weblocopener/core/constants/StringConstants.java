@@ -15,16 +15,16 @@
 
 package com.github.benchdoos.weblocopener.core.constants;
 
-import java.io.File;
-
-import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
-
 public interface StringConstants {
     String UPDATE_WEB_URL = "https://benchdoos.github.io/";
     String GITHUB_WEB_URL = "https://github.com/benchdoos/WeblocOpener/";
 
     String BENCH_DOOS_TELEGRAM_URL = "https://vk.cc/74nB3D"; //for stats
     String DONATE_PAYPAL_URL = "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=eugeny.zrazhevsky@icloud.com&item_name=Donation+for+WeblocOpener&cy_code=USD";
+    String FEEDBACK_MAIL_URL = "mailto:weblocopener@gmail.com?subject=WeblocOpener%20feedback" +
+            "&body=Type%20here%20your%20question%20/%20problem,%20I%20try%20to%20help%20you%20as%20soon%20as%20it%20is%20possible!" +
+            "%0AYou%20can%20attach%20log%20files%20(see%20WeblocOpener%20-%20Settings%20-%20About%20-%20Log%20folder%20-%20zip%20log%20folder%20-%20attach)." +
+            "%0ADon't%20forget%20to%20close%20the%20application%20before%20zipping%20logs;)";
 
 
     String WINDOWS_WEBLOCOPENER_SETUP_NAME = "WeblocOpenerSetupV";

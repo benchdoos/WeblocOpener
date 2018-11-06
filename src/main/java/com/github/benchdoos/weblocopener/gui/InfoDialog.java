@@ -31,7 +31,7 @@ import java.awt.event.WindowEvent;
 import static com.github.benchdoos.weblocopener.utils.system.SystemUtils.IS_WINDOWS_XP;
 
 public class InfoDialog extends JDialog {
-    String content;
+    private String content;
     private JPanel contentPane;
     private JButton buttonOK;
     private JTextPane textPane;
@@ -131,8 +131,11 @@ public class InfoDialog extends JDialog {
     }
 
     private void onOK() {
-        // add your code here
         dispose();
+    }
+
+    void setContent(String content) {
+        this.content = content;
     }
 
     @Override

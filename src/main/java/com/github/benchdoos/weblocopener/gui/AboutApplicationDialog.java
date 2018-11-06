@@ -375,7 +375,7 @@ public class AboutApplicationDialog extends JDialog {
                     while ((str = bufferedReader.readLine()) != null) {
                         contentBuilder.append(str);
                     }
-                    infoDialog.content = contentBuilder.toString();
+                    infoDialog.setContent(contentBuilder.toString());
                     infoDialog.setVisible(true);
                 } catch (IOException ignore) {/*NOP*/}
             }
@@ -401,14 +401,10 @@ public class AboutApplicationDialog extends JDialog {
         feedbackLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         feedbackLabel.addMouseListener(new MouseAdapter() {
             private void callMail() {
-                final String url = "mailto:weblocopener@gmail.com?subject=WeblocOpener%20feedback" +
-                        "&body=Type%20here%20your%20question%20/%20problem,%20I%20try%20to%20help%20you%20as%20soon%20as%20it%20is%20possible!" +
-                        "%0AYou%20can%20attach%20log%20files%20(see%20WeblocOpener%20-%20Settings%20-%20About%20-%20Log%20folder%20-%20zip%20log%20folder%20-%20attach)." +
-                        "%0ADon't%20forget%20to%20close%20the%20application%20before%20zipping%20logs;)";
                 try {
-                    Desktop.getDesktop().mail(new URI(url));
+                    Desktop.getDesktop().mail(new URI(StringConstants.FEEDBACK_MAIL_URL));
                 } catch (URISyntaxException | IOException ex) {
-                    log.warn("Can not open mail for: '" + url + "'", ex);
+                    log.warn("Can not open mail for: '" + StringConstants.FEEDBACK_MAIL_URL + "'", ex);
                 }
             }
 
