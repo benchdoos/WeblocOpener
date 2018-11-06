@@ -29,11 +29,7 @@ public class Browser {
         this.call = call;
     }
 
-    public Browser() {/*NOP*/}
-
-    public String getBrowserInfo() {
-        return "Browser: " + name + " calls:[" + call + "]";
-    }
+    Browser() {/*NOP*/}
 
     public String getCall() {
         return call;
@@ -47,7 +43,7 @@ public class Browser {
         return incognitoCall;
     }
 
-    public void setIncognitoCall(String incognitoCall) {
+    void setIncognitoCall(String incognitoCall) {
         this.incognitoCall = incognitoCall;
     }
 
@@ -61,6 +57,6 @@ public class Browser {
 
     @Override
     public String toString() {
-        return name;
+        return "Browser{" + "name='" + name + '\'' + '}';
     }
 }
