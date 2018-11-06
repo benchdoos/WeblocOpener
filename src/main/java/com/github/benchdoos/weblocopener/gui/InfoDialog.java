@@ -23,7 +23,6 @@ import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -32,12 +31,12 @@ import java.awt.event.WindowEvent;
 import static com.github.benchdoos.weblocopener.utils.system.SystemUtils.IS_WINDOWS_XP;
 
 public class InfoDialog extends JDialog {
-    public String content;
+    String content;
     private JPanel contentPane;
     private JButton buttonOK;
     private JTextPane textPane;
 
-    public InfoDialog() {
+    InfoDialog() {
         initGui();
     }
 
@@ -120,11 +119,9 @@ public class InfoDialog extends JDialog {
 
         textPane.setEditorKit(JEditorPane.createEditorKitForContentType("text/html"));
         textPane.setEditable(false);
-        textPane.addHyperlinkListener(new HyperlinkListener() {
-            public void hyperlinkUpdate(HyperlinkEvent e) {
-                if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                    UrlsProceed.openUrl(e.getURL());
-                }
+        textPane.addHyperlinkListener(e -> {
+            if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                UrlsProceed.openUrl(e.getURL());
             }
         });
 
