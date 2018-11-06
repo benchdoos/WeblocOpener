@@ -144,7 +144,7 @@ public class SettingsDialog extends JFrame {
         panel3.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         versionLabel = new JLabel();
-        versionLabel.setText("|");
+        this.$$$loadLabelText$$$(versionLabel, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("versionLabel"));
         panel3.add(versionLabel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         versionStringLabel = new JLabel();
         this.$$$loadLabelText$$$(versionStringLabel, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("versionString"));
