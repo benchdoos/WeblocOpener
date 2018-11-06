@@ -27,11 +27,9 @@ import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -103,30 +101,15 @@ public class UpdateInfoDialog extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
-        getRootPane().registerKeyboardAction(e -> {
-            onOK();
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+        getRootPane().registerKeyboardAction(e -> onOK(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
 
 
         textPane.setText(generatePageForDisplay(appVersion.getUpdateTitle(), appVersion.getUpdateInfo()));
 
-        textPane.registerKeyboardAction(e -> {
-            onOK();
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), JComponent.WHEN_FOCUSED);
-        textPane.addHyperlinkListener(e -> {
-            if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                final URL url = e.getURL();
-                if (url.toString().startsWith("mailto:")) {
-                    try {
-                        Desktop.getDesktop().mail(url.toURI());
-                    } catch (URISyntaxException | IOException ex) {
-                        log.warn("Can not open mail for: '" + url + "'", ex);
-                    }
-                } else {
-                    UserUtils.openWebUrl(url);
-                }
-            }
-        });
+        textPane.registerKeyboardAction(e -> onOK(), KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
+                JComponent.WHEN_FOCUSED);
+        textPane.addHyperlinkListener(this::onHyperlinkClick);
 
         buttonOK.addActionListener(e -> onOK());
 
@@ -136,6 +119,21 @@ public class UpdateInfoDialog extends JDialog {
         textPane.setCaretPosition(0);
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
         setVisible(true);
+    }
+
+    private void onHyperlinkClick(HyperlinkEvent e) {
+        if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+            final URL url = e.getURL();
+            if (url.toString().startsWith("mailto:")) {
+                try {
+                    Desktop.getDesktop().mail(url.toURI());
+                } catch (URISyntaxException | IOException ex) {
+                    log.warn("Can not open mail for: '" + url + "'", ex);
+                }
+            } else {
+                UserUtils.openWebUrl(url);
+            }
+        }
     }
 
     private String generatePageForDisplay(String updateTitle, String updateInfo) {
