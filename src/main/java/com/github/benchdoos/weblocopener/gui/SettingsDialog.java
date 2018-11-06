@@ -16,6 +16,7 @@
 package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.core.Translation;
+import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
 import com.github.benchdoos.weblocopener.registry.RegistryCanNotReadInfoException;
 import com.github.benchdoos.weblocopener.registry.RegistryManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
@@ -78,10 +79,10 @@ public class SettingsDialog extends JFrame {
         log.debug("Settings dialog created.");
     }
 
-    public static void runUpdater() {
+    private static void runUpdater() {
         String run;
         try {
-            run = "java -jar \"" + RegistryManager.getInstallLocationValue() + "WeblocOpener.exe\"";
+            run = "java -jar \"" + RegistryManager.getInstallLocationValue() + "WeblocOpener.exe\" " + ArgumentConstants.OPENER_UPDATE_ARGUMENT;
         } catch (RegistryCanNotReadInfoException e) {
             run = new File(SettingsDialog.class.getProtectionDomain()
                     .getCodeSource().getLocation().getPath()).getAbsolutePath().replace("%20", " ");
