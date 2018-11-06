@@ -18,8 +18,12 @@ package com.github.benchdoos.weblocopener.utils.browser;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.utils.Logging;
+import com.google.gson.*;
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -33,73 +37,29 @@ public class BrowserManager {
 
     private static String defaultBrowserName = "Default";
 
-
-    public static void loadBrowserList() {
-        initTranslation();
-        loadBrowsersFromDefault(generateDefaultBrowserArrayList());
-    }
-
-    private static void loadBrowsersFromDefault(ArrayList<Browser> list) {
-
-        browserList = list;
-        browserList.add(0, new Browser(defaultBrowserName, SettingsConstants.BROWSER_DEFAULT_VALUE));
-        log.debug("Browsers count: " + browserList.size() + " " + browserList);
-
-    }
-
     public static ArrayList<Browser> getBrowserList() {
         return browserList;
     }
 
-
-    @SuppressWarnings("SpellCheckingInspection")
-    private static ArrayList<Browser> generateDefaultBrowserArrayList() {
+    private static ArrayList<Browser> getDefaultBrowsersList() {
         ArrayList<Browser> result = new ArrayList<>();
 
-        Browser chrome = new Browser();
-        chrome.setName("Google Chrome");
-        final String call = "start chrome " + "\"" + "%site" + "\"";
-        chrome.setCall(call);
-        chrome.setIncognitoCall(call + " --incognito");
-        result.add(chrome);
-
-        Browser firefox = new Browser();
-        firefox.setName("Firefox");
-        firefox.setCall("start firefox " + "\"" + "%site" + "\"");
-        firefox.setIncognitoCall("start firefox -private-window " + "\"" + "%site" + "\"");
-        result.add(firefox);
-
-        Browser edge = new Browser();
-        edge.setName("Microsoft Edge");
-        edge.setCall("start microsoft-edge:" + "\"" + "%site" + "\"");
-        edge.setIncognitoCall("start shell:AppsFolder\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe!MicrosoftEdge -private " + "%site");
-        result.add(edge);
-
-        Browser iexplorer = new Browser();
-        iexplorer.setName("Internet Explorer");
-        iexplorer.setCall("start iexplore " + "\"" + "%site" + "\"");
-        iexplorer.setIncognitoCall("start iexplore " + "\"" + "%site" + "\"" + " -private");
-        result.add(iexplorer);
-
-        Browser opera = new Browser();
-        opera.setName("Opera");
-        opera.setCall("start opera " + "\"" + "%site" + "\"");
-        opera.setIncognitoCall("start opera --private " + "\"" + "%site" + "\"");
-        result.add(opera);
-
-        Browser yandex = new Browser();
-        yandex.setName("Yandex Browser");
-        yandex.setCall("start browser " + "\"" + "%site" + "\"");
-        yandex.setIncognitoCall("start browser -incognito " + "\"" + "%site" + "\"");
-        result.add(yandex);
-
-        Browser vivaldi = new Browser();
-        vivaldi.setName("Vivaldi");
-        vivaldi.setCall("start vivaldi " + "\"" + "%site" + "\"");
-        vivaldi.setIncognitoCall("start vivaldi -incognito " + "\"" + "%site" + "\"");
-        result.add(vivaldi);
-
-
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(Browser.class, new BrowserDeserializer());
+        Gson gson = builder.create();
+        try {
+            String content = IOUtils.toString(BrowserManager.class.getResourceAsStream("/data/browsers.json"),
+                    "UTF-8");
+            JsonElement element = new JsonParser().parse(content);
+            final JsonObject asJsonObject = element.getAsJsonObject();
+            final JsonArray browsers = asJsonObject.getAsJsonArray("browsers");
+            for (JsonElement el : browsers) {
+                final Browser browser = gson.fromJson(el, Browser.class);
+                result.add(browser);
+            }
+        } catch (IOException e) {
+            log.warn("Could not load browsers list", e);
+        }
         return result;
     }
 
@@ -111,5 +71,17 @@ public class BrowserManager {
             }
         };
         translation.initTranslations();
+    }
+
+    public static void loadBrowserList() {
+        initTranslation();
+        loadBrowsersFromDefault(getDefaultBrowsersList());
+    }
+
+    private static void loadBrowsersFromDefault(ArrayList<Browser> list) {
+        browserList = list;
+        browserList.add(0, new Browser(defaultBrowserName, SettingsConstants.BROWSER_DEFAULT_VALUE));
+        log.debug("Browsers count: " + browserList.size() + " " + browserList);
+
     }
 }

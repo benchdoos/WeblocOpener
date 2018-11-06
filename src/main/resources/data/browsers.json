@@ -1,0 +1,53 @@
+{
+  "browsers": [
+    {
+      "browser": {
+        "name": "Google Chrome",
+        "call": "start chrome \"%site\"",
+        "incognito": "start chrome \"%site\" --incognito"
+      }
+    },
+    {
+      "browser": {
+        "name": "Firefox",
+        "call": "start firefox \"%site\"",
+        "incognito": "start firefox -private-window \"%site\""
+      }
+    },
+    {
+      "browser": {
+        "name": "Microsoft Edge",
+        "call": "start microsoft-edge:\"%site\"",
+        "incognito": "start shell:AppsFolder\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe!MicrosoftEdge -private %site"
+      }
+    },
+    {
+      "browser": {
+        "name": "Internet Explorer",
+        "call": "start iexplore \"%site\"",
+        "incognito": "start iexplore \"%site\" -private"
+      }
+    },
+    {
+      "browser": {
+        "name": "Opera",
+        "call": "start opera \"%site\"",
+        "incognito": "start opera --private \"%site\""
+      }
+    },
+    {
+      "browser": {
+        "name": "Yandex Browser",
+        "call": "start browser \"%site\"",
+        "incognito": "start browser -incognito \"%site\""
+      }
+    },
+    {
+      "browser": {
+        "name": "Vivaldi",
+        "call": "start vivaldi \"%site\"",
+        "incognito": "start vivaldi -incognito \"%site\""
+      }
+    }
+  ]
+}
