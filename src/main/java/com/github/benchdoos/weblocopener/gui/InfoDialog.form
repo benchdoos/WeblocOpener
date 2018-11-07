@@ -34,7 +34,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="OK"/>
+                  <text resource-bundle="spelling" key="buttonOk"/>
                 </properties>
               </component>
             </children>
@@ -59,7 +59,7 @@
               <component id="8df7d" class="javax.swing.JTextPane" binding="textPane">
                 <constraints/>
                 <properties>
-                  <contentType value="text/html"/>
+                  <contentType resource-bundle="spelling" key="text.html"/>
                 </properties>
               </component>
             </children>

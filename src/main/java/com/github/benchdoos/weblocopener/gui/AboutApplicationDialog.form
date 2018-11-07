@@ -55,7 +55,7 @@
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="site"/>
+                      <text resource-bundle="spelling" key="site"/>
                     </properties>
                   </component>
                   <component id="3e98c" class="javax.swing.JLabel" binding="githubLinkLabel">
@@ -63,7 +63,7 @@
                       <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="github"/>
+                      <text resource-bundle="spelling" key="github"/>
                     </properties>
                   </component>
                   <component id="3c8b6" class="javax.swing.JLabel" binding="logLabel">
@@ -165,7 +165,7 @@
                             <properties>
                               <background color="-9923881"/>
                               <caretColor color="-1118482"/>
-                              <contentType resource-bundle="application" key="text.html"/>
+                              <contentType resource-bundle="spelling" key="text.html"/>
                               <dragEnabled value="false"/>
                               <editable value="false"/>
                               <enabled value="true"/>
@@ -202,7 +202,7 @@
                         <properties>
                           <font size="24" style="1"/>
                           <foreground color="-1"/>
-                          <text value="WeblocOpener"/>
+                          <text resource-bundle="spelling" key="WeblocOpener"/>
                         </properties>
                       </component>
                       <component id="94ae6" class="javax.swing.JLabel" binding="versionLabel">

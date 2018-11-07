@@ -19,7 +19,7 @@ import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
-public class BrowserDeserializer implements JsonDeserializer<Browser> {
+class BrowserDeserializer implements JsonDeserializer<Browser> {
     @Override
     public Browser deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         JsonObject object = jsonElement.getAsJsonObject();

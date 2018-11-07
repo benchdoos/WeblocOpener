@@ -24,7 +24,7 @@ import java.awt.*;
 
 public class ImagePanel extends JPanel {
 
-    private Image img;
+    private final Image img;
 
     public ImagePanel(String img) {
         this(new ImageIcon(img).getImage());

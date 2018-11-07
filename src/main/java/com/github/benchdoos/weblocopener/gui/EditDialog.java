@@ -58,7 +58,7 @@ public class EditDialog extends JFrame {
     private JTextField textField;
     private String errorTitle = "Error";
     private JLabel createWeblocFileTextPane;
-    private String pathToEditingFile;
+    private final String pathToEditingFile;
 
     @SuppressWarnings("unchecked")
     public EditDialog(String pathToEditingFile) {
@@ -234,7 +234,7 @@ public class EditDialog extends JFrame {
             UrlValidator urlValidator = new UrlValidator();
             if (urlValidator.isValid(data)) {
                 textField.setText(url.toString());
-                setTextFieldFont(textField.getFont(), TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+                setTextFieldFont(textField.getFont(), TextAttribute.UNDERLINE_ON);
                 textField.setCaretPosition(textField.getText().length());
                 textField.selectAll();
                 log.debug("Got URL from clipboard: " + url);
@@ -320,12 +320,12 @@ public class EditDialog extends JFrame {
                 UrlValidator urlValidator = new UrlValidator();
                 if (urlValidator.isValid(textField.getText())) {
                     if (textField != null) {
-                        setTextFieldFont(textField.getFont(), TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+                        setTextFieldFont(textField.getFont(), TextAttribute.UNDERLINE_ON);
                         textField.setForeground(Color.BLUE);
                     }
                 } else {
                     if (textField != null) {
-                        setTextFieldFont(textField.getFont(), TextAttribute.UNDERLINE, -1);
+                        setTextFieldFont(textField.getFont(), -1);
                         textField.setForeground(Color.BLACK);
                     }
                 }
@@ -408,9 +408,9 @@ public class EditDialog extends JFrame {
 
     }
 
-    private void setTextFieldFont(Font font, TextAttribute attribute1, int attribute2) {
+    private void setTextFieldFont(Font font, int attribute2) {
         Map attributes = font.getAttributes();
-        attributes.put(attribute1, attribute2 + "");
+        attributes.put(TextAttribute.UNDERLINE, attribute2 + "");
         textField.setFont(font.deriveFont(attributes));
     }
 

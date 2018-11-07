@@ -15,10 +15,6 @@
 
 package com.github.benchdoos.weblocopener.service.gui;
 
-/**
- * Created by Eugene Zrazhevsky on 01.11.2016.
- */
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

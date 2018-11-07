@@ -18,7 +18,7 @@ package com.github.benchdoos.weblocopener.update;
 /**
  * Created by User on 21.08.2017.
  */
-public class CanNotUpdateException extends Exception {
+class CanNotUpdateException extends Exception {
     public CanNotUpdateException() {
         super("[CanNotUpdateException]");
     }

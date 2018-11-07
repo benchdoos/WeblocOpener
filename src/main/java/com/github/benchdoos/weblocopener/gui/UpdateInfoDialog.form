@@ -59,7 +59,7 @@
               <component id="bc86b" class="javax.swing.JTextPane" binding="textPane" default-binding="true">
                 <constraints/>
                 <properties>
-                  <contentType value="text/html"/>
+                  <contentType resource-bundle="spelling" key="text.html"/>
                   <editable value="false"/>
                 </properties>
               </component>

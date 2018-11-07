@@ -32,7 +32,7 @@ import java.nio.charset.Charset;
  */
 
 
-public class WindowFocusRequester {
+class WindowFocusRequester {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
 
@@ -45,7 +45,7 @@ public class WindowFocusRequester {
 
     public static boolean runScript(String script) {
         FileOutputStream fileOutputStream = null;
-        File file = null;
+        File file;
         try {
             file = File.createTempFile("WeblocOpenerScript", ".vbs");
             file.deleteOnExit();

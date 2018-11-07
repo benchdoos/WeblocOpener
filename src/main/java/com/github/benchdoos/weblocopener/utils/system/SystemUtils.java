@@ -16,7 +16,6 @@
 package com.github.benchdoos.weblocopener.utils.system;
 
 
-import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.Internal;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import org.apache.logging.log4j.LogManager;
@@ -42,7 +41,7 @@ public class SystemUtils {
         return System.getProperty("os.version");
     }
 
-    public static String getRealSystemArch() {
+    private static String getRealSystemArch() {
         String arch = System.getenv("PROCESSOR_ARCHITECTURE");
         String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
 

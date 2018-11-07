@@ -32,10 +32,11 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ResourceBundle;
 
 import static com.github.benchdoos.weblocopener.utils.system.SystemUtils.IS_WINDOWS_XP;
 
-public class UpdateInfoDialog extends JDialog {
+class UpdateInfoDialog extends JDialog {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
     private AppVersion appVersion;
@@ -82,7 +83,7 @@ public class UpdateInfoDialog extends JDialog {
         final JScrollPane scrollPane1 = new JScrollPane();
         panel3.add(scrollPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         textPane = new JTextPane();
-        textPane.setContentType("text/html");
+        textPane.setContentType(ResourceBundle.getBundle("spelling").getString("text.html"));
         textPane.setEditable(false);
         scrollPane1.setViewportView(textPane);
     }

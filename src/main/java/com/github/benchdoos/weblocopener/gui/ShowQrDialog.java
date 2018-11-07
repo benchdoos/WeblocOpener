@@ -32,9 +32,8 @@ import java.awt.image.BufferedImage;
 import java.util.ResourceBundle;
 
 public class ShowQrDialog extends JFrame {
-    private BufferedImage qrCodeImage;
+    private final BufferedImage qrCodeImage;
     private String title = "QR-Code for .webloc";
-    private String url;
     private JPanel contentPane;
     private ImagePanel imagePanel;
     private JButton openButton;
@@ -42,7 +41,6 @@ public class ShowQrDialog extends JFrame {
 
     public ShowQrDialog(String url, BufferedImage qrCodeImage) {
         this.qrCodeImage = qrCodeImage;
-        this.url = url;
         $$$setupUI$$$();
         initGui();
         openButton.addActionListener(e -> {

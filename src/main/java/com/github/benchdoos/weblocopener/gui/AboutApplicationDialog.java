@@ -109,10 +109,10 @@ public class AboutApplicationDialog extends JDialog {
         final Spacer spacer1 = new Spacer();
         panel2.add(spacer1, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         siteLinkLabel = new JLabel();
-        siteLinkLabel.setText("site");
+        this.$$$loadLabelText$$$(siteLinkLabel, ResourceBundle.getBundle("spelling").getString("site"));
         panel2.add(siteLinkLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         githubLinkLabel = new JLabel();
-        githubLinkLabel.setText("github");
+        this.$$$loadLabelText$$$(githubLinkLabel, ResourceBundle.getBundle("spelling").getString("github"));
         panel2.add(githubLinkLabel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         logLabel = new JLabel();
         this.$$$loadLabelText$$$(logLabel, ResourceBundle.getBundle("translations/AboutApplicationDialogBundle").getString("logLabelTooltip"));
@@ -157,7 +157,7 @@ public class AboutApplicationDialog extends JDialog {
         panel4.add(scrollPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(400, 160), null, 0, false));
         descriptionTextPane.setBackground(new Color(-9923881));
         descriptionTextPane.setCaretColor(new Color(-1118482));
-        descriptionTextPane.setContentType(ResourceBundle.getBundle("application").getString("text.html"));
+        descriptionTextPane.setContentType(ResourceBundle.getBundle("spelling").getString("text.html"));
         descriptionTextPane.setDragEnabled(false);
         descriptionTextPane.setEditable(false);
         descriptionTextPane.setEnabled(true);
@@ -180,7 +180,7 @@ public class AboutApplicationDialog extends JDialog {
         Font label1Font = this.$$$getFont$$$(null, Font.BOLD, 24, label1.getFont());
         if (label1Font != null) label1.setFont(label1Font);
         label1.setForeground(new Color(-1));
-        label1.setText("WeblocOpener");
+        this.$$$loadLabelText$$$(label1, ResourceBundle.getBundle("spelling").getString("WeblocOpener"));
         panel5.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         versionLabel = new JLabel();
         Font versionLabelFont = this.$$$getFont$$$(null, -1, 11, versionLabel.getFont());

@@ -20,7 +20,7 @@ import javax.swing.text.Document;
 import java.awt.*;
 
 @SuppressWarnings("serial")
-public class PlaceholderTextField extends JTextField {
+class PlaceholderTextField extends JTextField {
 
     private String placeholder;
 

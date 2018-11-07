@@ -24,8 +24,8 @@ import java.awt.event.MouseMotionAdapter;
  * Created by Eugene Zrazhevsky on 025 25.09.2017.
  */
 public class MousePickListener {
-    final Point[] initialClick = new Point[1];
-    Window parent = null;
+    private final Point[] initialClick = new Point[1];
+    private final Window parent;
 
     public final MouseAdapter getMouseAdapter = new MouseAdapter() {
         public void mousePressed(MouseEvent e) {

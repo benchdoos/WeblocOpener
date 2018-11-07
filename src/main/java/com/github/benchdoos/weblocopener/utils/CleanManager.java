@@ -20,7 +20,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.util.Objects;
 
 import static com.github.benchdoos.weblocopener.core.constants.PathConstants.UPDATE_PATH_FILE;
 
