@@ -118,7 +118,7 @@
                 <configuration>
                     <!--TODO: change to variables-->
                     <executable>C:\Program Files (x86)\Inno Setup 5\ISCC.exe</executable>
-                    <workingDirectory>F:\Developer\JAVA\WeblocOpener\build</workingDirectory>
+                    <workingDirectory>${project.basedir}\build</workingDirectory>
                     <arguments>
                         <argument>WeblocOpener.iss</argument>
                     </arguments>
