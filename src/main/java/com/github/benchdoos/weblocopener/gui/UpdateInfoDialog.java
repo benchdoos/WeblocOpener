@@ -95,7 +95,7 @@ public class UpdateInfoDialog extends JDialog {
     }
 
     private void createGUI() {
-        setTitle("Info about update - " + appVersion.getVersion());
+        setTitle("Info about update — " + appVersion.getVersion());
         if (IS_WINDOWS_XP) {
             setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateInfoDialog.class.getResource("/images/infoIcon16_white.png")));
         } else {
