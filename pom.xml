@@ -31,6 +31,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <copyright>Copyright © 2016-2018 Eugene Zrazhevsky</copyright>
     </properties>
 
     <scm>
@@ -43,6 +44,14 @@
         </url>
     </scm>
 
+    <!--
+    Build JAR:
+    clean compile assembly:single
+    Build JAR+EXE:
+    clean compile assembly:single launch4j:launch4j -X
+    Build JAR+EXE+SETUP:
+    clean compile assembly:single launch4j:launch4j exec:exec
+    -->
     <build>
         <resources>
             <resource>
@@ -52,6 +61,25 @@
         </resources>
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.20.1</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>buildnumber-maven-plugin</artifactId>
@@ -69,21 +97,31 @@
                     <doUpdate>false</doUpdate>
                     <revisionOnScmFailure>true</revisionOnScmFailure>
                     <shortRevisionLength>10</shortRevisionLength>
-                    <format>{0} {1}</format>
+                    <format>{0}</format>
                     <items>
                         <item>buildNumber</item>
-                        <item>scmVersion</item>
                     </items>
                 </configuration>
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <!--TODO: change to variables-->
+                    <executable>C:\Program Files (x86)\Inno Setup 5\ISCC.exe</executable>
+                    <workingDirectory>F:\Developer\JAVA\WeblocOpener\build</workingDirectory>
+                    <arguments>
+                        <argument>WeblocOpener.iss</argument>
+                    </arguments>
                 </configuration>
             </plugin>
 
@@ -104,22 +142,75 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                        <phase>package</phase> <!-- bind to the packaging phase -->
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
+                        <id>assembly</id>
+                        <phase>package</phase>
+                        <goals><goal>single</goal></goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
                     </execution>
                 </executions>
+
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.20.1</version>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>1.7.24</version>
                 <configuration>
-                    <skipTests>true</skipTests>
+                    <dontWrapJar>false</dontWrapJar>
+                    <headerType>gui</headerType>
+                    <jar>target\${project.name}.jar</jar>
+                    <outfile>build\${project.name}.exe</outfile>
+                    <!--<errTitle></errTitle>-->
+                    <!--<cmdLine></cmdLine>-->
+                    <chdir>.</chdir>
+                    <priority>normal</priority>
+                    <downloadUrl>http://java.com/download</downloadUrl>
+                    <!--<supportUrl></supportUrl>-->
+                    <stayAlive>false</stayAlive>
+                    <restartOnCrash>false</restartOnCrash>
+                    <!--<manifest></manifest>-->
+                    <icon>build\installer\images\balloonIcon256.ico</icon>
+                    <classPath>
+                        <mainClass>com.github.benchdoos.weblocopener.core.Main</mainClass>
+                        <addDependencies>true</addDependencies>
+                    </classPath>
+                    <versionInfo>
+                        <fileVersion>${project.version}.${buildNumber}</fileVersion>
+                        <txtFileVersion>${project.version}.${buildNumber}</txtFileVersion>
+                        <fileDescription>WeblocOpener</fileDescription>
+                        <copyright>${copyright}</copyright>
+                        <productVersion>${project.version}.${buildNumber}</productVersion>
+                        <txtProductVersion>${project.version}.${buildNumber}</txtProductVersion>
+                        <productName>WeblocOpener</productName>
+                        <companyName>Eugene Zrazhevsky</companyName>
+                        <internalName>WeblocOpener</internalName>
+                        <originalFilename>WeblocOpener.exe</originalFilename>
+                        <trademarks>Eugene Zrazhevsky</trademarks>
+                        <language>ENGLISH_US</language>
+                    </versionInfo>
+                    <jre>
+                        <!--<path></path>-->
+                        <bundledJre64Bit>false</bundledJre64Bit>
+                        <bundledJreAsFallback>false</bundledJreAsFallback>
+                        <minVersion>1.8.0</minVersion>
+                        <!--<maxVersion></maxVersion>-->
+                        <jdkPreference>preferJre</jdkPreference>
+                        <runtimeBits>64/32</runtimeBits>
+                    </jre>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>l4j-clui</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
