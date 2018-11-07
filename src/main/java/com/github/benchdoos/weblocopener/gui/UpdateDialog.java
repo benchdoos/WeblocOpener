@@ -434,16 +434,18 @@ public class UpdateDialog extends JFrame {
 
     private void onCancel() {
         if (updateThread != null) {
-            runCleanInstallerFile();
             if (!updateThread.isInterrupted()) {
                 updateThread.interrupt();
                 log.info("Installation was interrupted: " + updateThread.isInterrupted());
                 updateThread = null;
                 buttonOK.setEnabled(true);
+                runCleanInstallerFile();
             } else {
+                runCleanInstallerFile();
                 dispose();
             }
         } else {
+            runCleanInstallerFile();
             dispose();
         }
     }
