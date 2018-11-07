@@ -54,10 +54,10 @@ public class AboutApplicationDialog extends JDialog {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private String librariesLabelToolTip = "Third-party Libraries used in WeblocOpener project.";
     private JPanel contentPane;
-    private JTextPane weblocOpenerBWillTextPane;
+    private JTextPane descriptionTextPane;
     private JLabel versionLabel;
     private ImagePanel imagePanel1;
-    private JScrollPane scrollPane1;
+    private JScrollPane scrollPane;
     private JLabel siteLinkLabel;
     private JLabel githubLinkLabel;
     private JLabel logLabel;
@@ -65,7 +65,6 @@ public class AboutApplicationDialog extends JDialog {
     private JLabel librariesLabel;
     private JLabel telegramLabel;
     private JLabel shareLabel;
-    private JLabel risingBalloonLogoLabel;
     private JLabel donateLabel;
     private String shareLabelText;
     private String shareBalloonMessage;
@@ -98,105 +97,97 @@ public class AboutApplicationDialog extends JDialog {
         imagePanel1.setOpaque(true);
         contentPane.add(imagePanel1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         panel1.setBackground(new Color(-9923881));
         panel1.setOpaque(false);
         imagePanel1.add(panel1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JPanel panel2 = new JPanel();
-        panel2.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel2.setLayout(new GridLayoutManager(1, 9, new Insets(0, 10, 10, 10), -1, -1));
+        panel2.setBackground(new Color(-9923881));
         panel2.setOpaque(false);
-        panel1.add(panel2, new GridConstraints(0, 1, 2, 1, GridConstraints.ANCHOR_NORTHEAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        risingBalloonLogoLabel = new JLabel();
-        risingBalloonLogoLabel.setIcon(new ImageIcon(getClass().getResource("/images/balloon_animated.gif")));
-        risingBalloonLogoLabel.setText("");
-        panel2.add(risingBalloonLogoLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_NORTHEAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayoutManager(1, 9, new Insets(0, 10, 10, 10), -1, -1));
-        panel3.setBackground(new Color(-9923881));
-        panel3.setOpaque(false);
-        panel1.add(panel3, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel1.add(panel2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
-        panel3.add(spacer1, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        panel2.add(spacer1, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         siteLinkLabel = new JLabel();
         siteLinkLabel.setText("site");
-        panel3.add(siteLinkLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(siteLinkLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         githubLinkLabel = new JLabel();
         githubLinkLabel.setText("github");
-        panel3.add(githubLinkLabel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(githubLinkLabel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         logLabel = new JLabel();
         this.$$$loadLabelText$$$(logLabel, ResourceBundle.getBundle("translations/AboutApplicationDialogBundle").getString("logLabelTooltip"));
-        panel3.add(logLabel, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(logLabel, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         feedbackLabel = new JLabel();
         feedbackLabel.setIcon(new ImageIcon(getClass().getResource("/images/feedbackIcon.png")));
         feedbackLabel.setText("");
-        panel3.add(feedbackLabel, new GridConstraints(0, 5, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(feedbackLabel, new GridConstraints(0, 5, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         librariesLabel = new JLabel();
         this.$$$loadLabelText$$$(librariesLabel, ResourceBundle.getBundle("translations/AboutApplicationDialogBundle").getString("librariesLabel"));
-        panel3.add(librariesLabel, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(librariesLabel, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         telegramLabel = new JLabel();
         telegramLabel.setIcon(new ImageIcon(getClass().getResource("/images/telegramIcon16.png")));
         telegramLabel.setText("");
-        panel3.add(telegramLabel, new GridConstraints(0, 6, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(telegramLabel, new GridConstraints(0, 6, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         shareLabel = new JLabel();
         shareLabel.setIcon(new ImageIcon(getClass().getResource("/images/shareIcon16.png")));
         shareLabel.setText("");
-        panel3.add(shareLabel, new GridConstraints(0, 7, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(shareLabel, new GridConstraints(0, 7, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         donateLabel = new JLabel();
         donateLabel.setIcon(new ImageIcon(getClass().getResource("/images/donate16.png")));
         donateLabel.setText("");
-        panel3.add(donateLabel, new GridConstraints(0, 8, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(donateLabel, new GridConstraints(0, 8, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JPanel panel3 = new JPanel();
+        panel3.setLayout(new GridLayoutManager(2, 1, new Insets(10, 10, 0, 10), -1, -1));
+        panel3.setOpaque(false);
+        panel1.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JPanel panel4 = new JPanel();
-        panel4.setLayout(new GridLayoutManager(2, 1, new Insets(10, 10, 0, 0), -1, -1));
+        panel4.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel4.setAlignmentX(0.0f);
+        panel4.setAlignmentY(0.0f);
+        panel4.setBackground(new Color(-9923881));
         panel4.setOpaque(false);
-        panel1.add(panel4, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel4.setRequestFocusEnabled(true);
+        panel4.setVisible(true);
+        panel3.add(panel4, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        scrollPane.setBackground(new Color(-9923881));
+        scrollPane.setFocusable(false);
+        scrollPane.setOpaque(false);
+        scrollPane.setVisible(true);
+        scrollPane.setWheelScrollingEnabled(true);
+        panel4.add(scrollPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(400, 160), null, 0, false));
+        descriptionTextPane.setBackground(new Color(-9923881));
+        descriptionTextPane.setCaretColor(new Color(-1118482));
+        descriptionTextPane.setContentType(ResourceBundle.getBundle("application").getString("text.html"));
+        descriptionTextPane.setDragEnabled(false);
+        descriptionTextPane.setEditable(false);
+        descriptionTextPane.setEnabled(true);
+        descriptionTextPane.setFocusCycleRoot(false);
+        descriptionTextPane.setFocusable(false);
+        descriptionTextPane.setOpaque(false);
+        descriptionTextPane.setRequestFocusEnabled(false);
+        descriptionTextPane.setText(ResourceBundle.getBundle("translations/AboutApplicationDialogBundle").getString("aboutAppInfo"));
+        descriptionTextPane.setVerifyInputWhenFocusTarget(false);
+        descriptionTextPane.setVisible(true);
+        scrollPane.setViewportView(descriptionTextPane);
         final JPanel panel5 = new JPanel();
-        panel5.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel5.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         panel5.setAlignmentX(0.0f);
         panel5.setAlignmentY(0.0f);
         panel5.setBackground(new Color(-9923881));
         panel5.setOpaque(false);
-        panel5.setRequestFocusEnabled(true);
-        panel5.setVisible(true);
-        panel4.add(panel5, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_NORTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        scrollPane1.setBackground(new Color(-9923881));
-        scrollPane1.setFocusable(false);
-        scrollPane1.setOpaque(false);
-        scrollPane1.setVisible(true);
-        scrollPane1.setWheelScrollingEnabled(true);
-        panel5.add(scrollPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(400, 160), null, 0, false));
-        weblocOpenerBWillTextPane.setBackground(new Color(-9923881));
-        weblocOpenerBWillTextPane.setCaretColor(new Color(-1118482));
-        weblocOpenerBWillTextPane.setContentType("text/html");
-        weblocOpenerBWillTextPane.setDragEnabled(false);
-        weblocOpenerBWillTextPane.setEditable(false);
-        weblocOpenerBWillTextPane.setEnabled(true);
-        weblocOpenerBWillTextPane.setFocusCycleRoot(false);
-        weblocOpenerBWillTextPane.setFocusable(false);
-        weblocOpenerBWillTextPane.setOpaque(false);
-        weblocOpenerBWillTextPane.setRequestFocusEnabled(false);
-        weblocOpenerBWillTextPane.setText(ResourceBundle.getBundle("translations/AboutApplicationDialogBundle").getString("aboutAppInfo"));
-        weblocOpenerBWillTextPane.setVerifyInputWhenFocusTarget(false);
-        weblocOpenerBWillTextPane.setVisible(true);
-        scrollPane1.setViewportView(weblocOpenerBWillTextPane);
-        final JPanel panel6 = new JPanel();
-        panel6.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
-        panel6.setAlignmentX(0.0f);
-        panel6.setAlignmentY(0.0f);
-        panel6.setBackground(new Color(-9923881));
-        panel6.setOpaque(false);
-        panel4.add(panel6, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(panel5, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label1 = new JLabel();
         Font label1Font = this.$$$getFont$$$(null, Font.BOLD, 24, label1.getFont());
         if (label1Font != null) label1.setFont(label1Font);
         label1.setForeground(new Color(-1));
         label1.setText("WeblocOpener");
-        panel6.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel5.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         versionLabel = new JLabel();
-        Font versionLabelFont = this.$$$getFont$$$(null, -1, 10, versionLabel.getFont());
+        Font versionLabelFont = this.$$$getFont$$$(null, -1, 11, versionLabel.getFont());
         if (versionLabelFont != null) versionLabel.setFont(versionLabelFont);
         versionLabel.setForeground(new Color(-3153931));
         this.$$$loadLabelText$$$(versionLabel, ResourceBundle.getBundle("translations/AboutApplicationDialogBundle").getString("appVersionLabel"));
-        panel6.add(versionLabel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel5.add(versionLabel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
@@ -253,74 +244,29 @@ public class AboutApplicationDialog extends JDialog {
     }
 
 
-    private void addEasterListener() {
-        risingBalloonLogoLabel.addMouseListener(new MouseAdapter() {
-            int clickCount = 0;
-            int leftClickCount = 0;
-            boolean easterShown = false;
-            Timer timer = new Timer(500, e -> {
-                if (clickCount < 3) {
-                    clickCount = 0;
-                } else {
-                    showEaster();
-                }
-
-                if (leftClickCount < 2) {
-                    leftClickCount = 0;
-                }
-            });
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON3) {
-                    if (!timer.isRunning()) {
-                        timer.setRepeats(true);
-                        timer.start();
-                    }
-                    clickCount++;
-                }
-
-                if (e.getButton() == MouseEvent.BUTTON1 && easterShown) {
-                    leftClickCount++;
-                    if (leftClickCount >= 2) {
-                        leftClickCount = 0;
-                        UrlsProceed.openUrl("https://vk.cc/79FQIY"); //hardcoded not to give to find it in source code :<
-                        dispose();
-                    }
-                }
-            }
-
-            private void showEaster() {
-                risingBalloonLogoLabel.setIcon(new ImageIcon(Toolkit.getDefaultToolkit()
-                        .getImage(ShowQrDialog.class.getResource("/images/easter.png"))));
-                easterShown = true;
-            }
-        });
-    }
-
     private void addWindowMoveListeners() {
         MousePickListener mousePickListener = new MousePickListener(this);
 
         imagePanel1.addMouseListener(mousePickListener.getMouseAdapter);
         imagePanel1.addMouseMotionListener(mousePickListener.getMouseMotionAdapter);
 
-        risingBalloonLogoLabel.addMouseListener(mousePickListener.getMouseAdapter);
-        risingBalloonLogoLabel.addMouseMotionListener(mousePickListener.getMouseMotionAdapter);
+//        risingBalloonLogoLabel.addMouseListener(mousePickListener.getMouseAdapter);
+//        risingBalloonLogoLabel.addMouseMotionListener(mousePickListener.getMouseMotionAdapter);
 
-        weblocOpenerBWillTextPane.addMouseListener(mousePickListener.getMouseAdapter);
+        descriptionTextPane.addMouseListener(mousePickListener.getMouseAdapter);
 
-        weblocOpenerBWillTextPane.addMouseMotionListener(mousePickListener.getMouseMotionAdapter);
+        descriptionTextPane.addMouseMotionListener(mousePickListener.getMouseMotionAdapter);
     }
 
     private void createUIComponents() {
         ImageIcon image = new ImageIcon(getClass().getResource("/images/background.png"));
         imagePanel1 = new ImagePanel(image);
-        weblocOpenerBWillTextPane = new JTextPane();
+        descriptionTextPane = new JTextPane();
 
-        scrollPane1 = new JScrollPane();
-        scrollPane1.setOpaque(false);
-        scrollPane1.getViewport().setOpaque(false);
-        scrollPane1.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane = new JScrollPane();
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
     }
 
@@ -340,7 +286,6 @@ public class AboutApplicationDialog extends JDialog {
         setSize(550, 300);
         setResizable(false);
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
-        addEasterListener();
         log.debug("GUI created");
     }
 
