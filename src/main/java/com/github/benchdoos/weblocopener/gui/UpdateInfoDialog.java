@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import static com.github.benchdoos.weblocopener.utils.system.SystemUtils.IS_WINDOWS_XP;
+
 public class UpdateInfoDialog extends JDialog {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
@@ -94,7 +96,11 @@ public class UpdateInfoDialog extends JDialog {
 
     private void createGUI() {
         setTitle("Info about update - " + appVersion.getVersion());
-        setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateInfoDialog.class.getResource("/images/infoIcon16.png")));
+        if (IS_WINDOWS_XP) {
+            setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateInfoDialog.class.getResource("/images/infoIcon16_white.png")));
+        } else {
+            setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateInfoDialog.class.getResource("/images/infoIcon16.png")));
+        }
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setContentPane(contentPane);
