@@ -22,7 +22,10 @@ import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
-import com.github.benchdoos.weblocopener.utils.*;
+import com.github.benchdoos.weblocopener.utils.CleanManager;
+import com.github.benchdoos.weblocopener.utils.CoreUtils;
+import com.github.benchdoos.weblocopener.utils.Logging;
+import com.github.benchdoos.weblocopener.utils.UserUtils;
 import com.github.benchdoos.weblocopener.utils.browser.BrowserManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,8 +33,6 @@ import org.apache.logging.log4j.Logger;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -61,24 +62,7 @@ public class Application {
     }
 
     private static void createUpdateDialog() {
-        final UpdateDialog updateDialog = new UpdateDialog();
-
-
-        updateDialog.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                String str = CoreUtils.getApplicationVersionString();
-                if (Internal.versionCompare(str, updateDialog.getAppVersion().getVersion()) == 0) {
-                    NonGuiUpdater.tray.remove(NonGuiUpdater.trayIcon);
-                    System.exit(0);
-                }
-                super.windowClosed(e);
-
-            }
-
-        });
-        UpdateDialog.updateDialog = updateDialog;
-
+        final UpdateDialog updateDialog = UpdateDialog.getInstance();
         updateDialog.setVisible(true);
         updateDialog.checkForUpdates();
     }

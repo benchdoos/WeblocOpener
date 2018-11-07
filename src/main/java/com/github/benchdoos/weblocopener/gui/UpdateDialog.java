@@ -18,6 +18,7 @@ package com.github.benchdoos.weblocopener.gui;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.PathConstants;
 import com.github.benchdoos.weblocopener.core.constants.StringConstants;
+import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.update.AppVersion;
 import com.github.benchdoos.weblocopener.update.Updater;
@@ -44,10 +45,10 @@ import static com.github.benchdoos.weblocopener.utils.system.SystemUtils.IS_WIND
 public class UpdateDialog extends JFrame {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
-    public static UpdateDialog updateDialog = null;
-    public JProgressBar progressBar;
-    public JButton buttonOK;
-    public JButton buttonCancel;
+    private static volatile UpdateDialog instance = null;
+    private JProgressBar progressBar;
+    private JButton buttonOK;
+    private JButton buttonCancel;
     Timer messageTimer;
     String retryButton = "Retry";
     Updater updater = null;
@@ -77,10 +78,23 @@ public class UpdateDialog extends JFrame {
     public UpdateDialog() {
         serverAppVersion = new AppVersion();
 
-        createGUI();
+        iniGui();
         loadProperties();
         translateDialog();
 
+    }
+
+    public static UpdateDialog getInstance() {
+        UpdateDialog localInstance = instance;
+        if (localInstance == null) {
+            synchronized (UpdateDialog.class) {
+                localInstance = instance;
+                if (localInstance == null) {
+                    instance = localInstance = new UpdateDialog();
+                }
+            }
+        }
+        return localInstance;
     }
 
     {
@@ -318,7 +332,15 @@ public class UpdateDialog extends JFrame {
         buttonCancel.addActionListener(e -> onCancel());
     }
 
-    private void createGUI() {
+    public JButton getButtonCancel() {
+        return buttonCancel;
+    }
+
+    public JProgressBar getProgressBar() {
+        return progressBar;
+    }
+
+    private void iniGui() {
         setContentPane(contentPane);
         getRootPane().setDefaultButton(buttonOK);
         if (IS_WINDOWS_XP) {
@@ -380,6 +402,19 @@ public class UpdateDialog extends JFrame {
                         "Opening " + StringConstants.UPDATE_WEB_URL);
                 UserUtils.openWebUrl(StringConstants.UPDATE_WEB_URL);
             }
+        });
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                String str = CoreUtils.getApplicationVersionString();
+                if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
+                    NonGuiUpdater.tray.remove(NonGuiUpdater.trayIcon);
+                    System.exit(0);
+                }
+                super.windowClosed(e);
+            }
+
         });
 
         pack();
