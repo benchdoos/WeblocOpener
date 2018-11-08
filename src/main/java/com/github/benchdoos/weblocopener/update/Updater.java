@@ -79,15 +79,15 @@ public class Updater {
             progressBar = UpdateDialog.getInstance().getProgressBar();
         }
 
-        ITaskbarList3 taskbar = null;
-        Pointer<?> hwnd;
+        ITaskbarList3 taskBar = null;
+        Pointer<?> pointer;
 
         try {
-            taskbar = COMRuntime.newInstance(ITaskbarList3.class);
+            taskBar = COMRuntime.newInstance(ITaskbarList3.class);
         } catch (ClassNotFoundException ignore) {/*WINDOWS<WINDOWS 7*/}
 
         long nativePeerHandle = JAWTUtils.getNativePeerHandle(UpdateDialog.getInstance());
-        hwnd = Pointer.pointerToAddress(nativePeerHandle, PointerIO.getSizeTInstance().getTargetSize(), null);
+        pointer = Pointer.pointerToAddress(nativePeerHandle, PointerIO.getSizeTInstance().getTargetSize(), null);
 
 
         if (progressBar != null) {
@@ -98,10 +98,10 @@ public class Updater {
 
         try (BufferedInputStream bis = new BufferedInputStream(new URL(appVersion.getDownloadUrl()).openStream());
              FileOutputStream fos = new FileOutputStream(installerFile)) {
-            downloadFile(appVersion, progressBar, taskbar, hwnd, bis, fos);
+            downloadFile(appVersion, progressBar, taskBar, pointer, bis, fos);
         } finally {
-            if (taskbar != null) {
-                taskbar.Release();
+            if (taskBar != null) {
+                taskBar.Release();
             }
         }
         if (Thread.currentThread().isInterrupted()) {
@@ -113,7 +113,7 @@ public class Updater {
     }
 
     private static void downloadFile(AppVersion appVersion, JProgressBar progressBar,
-                                     ITaskbarList3 taskbar, Pointer<?> hwnd,
+                                     ITaskbarList3 taskBar, Pointer<?> pointer,
                                      BufferedInputStream bis, FileOutputStream fos) throws IOException {
         try {
             final int bufferLength = 1024 * 1024;
@@ -130,7 +130,7 @@ public class Updater {
                     progress = 0;
                 }
 
-                updateProgressInfo(progressBar, taskbar, hwnd, progress);
+                updateProgressInfo(progressBar, taskBar, pointer, progress);
 
                 if (Thread.currentThread().isInterrupted()) {
                     break;
