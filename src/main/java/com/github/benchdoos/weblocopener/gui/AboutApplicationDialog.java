@@ -452,6 +452,8 @@ public class AboutApplicationDialog extends JDialog {
 
                 shareLabelText = messages.getString("shareLabelText");
 
+                donateLabel.setToolTipText(messages.getString("donateLabelTooltip"));
+
             }
 
             private String createHtmlLink(String string) {
