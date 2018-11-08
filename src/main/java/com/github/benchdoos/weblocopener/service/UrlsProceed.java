@@ -67,7 +67,7 @@ public class UrlsProceed {
                 log.info("Opening URL in not default browser with call:[" + PreferencesManager.getBrowserValue() + "]: " + url);
                 openUrlInNotDefaultBrowser(url);
             } catch (IOException e) {
-                log.warn(e);
+                log.warn("Could not open url in not default browser", e);
             }
         }
 

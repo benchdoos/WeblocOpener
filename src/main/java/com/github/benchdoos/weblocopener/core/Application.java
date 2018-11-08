@@ -33,6 +33,7 @@ import org.apache.logging.log4j.Logger;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -116,7 +117,7 @@ public class Application {
                             String url = runAnalyzer(args[1]);
 
                             try {
-                                ShowQrDialog qrDialog = new ShowQrDialog(url, UrlsProceed.generateQrCode(url));
+                                ShowQrDialog qrDialog = new ShowQrDialog(new File(args[1]));
                                 qrDialog.setVisible(true);
                             } catch (Exception e) {
                                 log.warn("Can not create a qr-code from url: [" + url + "]", e);
