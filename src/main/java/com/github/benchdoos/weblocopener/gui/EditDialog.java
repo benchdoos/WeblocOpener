@@ -43,6 +43,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -409,9 +410,9 @@ public class EditDialog extends JFrame {
     }
 
     private void setTextFieldFont(Font font, int attribute2) {
-        Map attributes = font.getAttributes();
-        attributes.put(TextAttribute.UNDERLINE, attribute2 + "");
-        textField.setFont(font.deriveFont(attributes));
+        Map<TextAttribute, Integer> fontAttributes = new HashMap<>();
+        fontAttributes.put(TextAttribute.UNDERLINE, attribute2);
+        textField.setFont(font.deriveFont(fontAttributes));
     }
 
     @Override
