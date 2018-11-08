@@ -10,6 +10,7 @@
 #define MyAppAdditionalPath "F:\Developer\JAVA\WeblocOpener\build\installer"
 #define ImagesPath "F:\Developer\JAVA\WeblocOpener\build\installer\images"
 #define ApplicationVersion GetFileVersion('F:\Developer\JAVA\WeblocOpener\build\WeblocOpener.exe')
+#define ApplicationCopyright GetFileCopyright('F:\Developer\JAVA\WeblocOpener\build\WeblocOpener.exe')
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -19,7 +20,7 @@ AppId={{F1300E10-BBB2-4695-AC2F-3D58DC0BC0A6}
 AppName={#MyAppName}
 AppVersion={#ApplicationVersion}
 VersionInfoVersion=1.0
-AppCopyright=Copyright (C) 2016-2018 Eugene Zrazhevsky.
+AppCopyright={#ApplicationCopyright}
 
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
