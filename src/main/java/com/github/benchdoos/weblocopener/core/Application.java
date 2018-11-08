@@ -114,13 +114,11 @@ public class Application {
                     }
                     case OPENER_QR_ARGUMENT:
                         if (args.length > 1) {
-                            String url = runAnalyzer(args[1]);
-
                             try {
                                 ShowQrDialog qrDialog = new ShowQrDialog(new File(args[1]));
                                 qrDialog.setVisible(true);
                             } catch (Exception e) {
-                                log.warn("Can not create a qr-code from url: [" + url + "]", e);
+                                log.warn("Can not create a qr-code from url: [" + args[1] + "]", e);
                             }
                         }
                         break;
