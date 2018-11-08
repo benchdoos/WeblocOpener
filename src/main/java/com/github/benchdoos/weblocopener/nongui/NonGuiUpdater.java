@@ -110,7 +110,7 @@ public class NonGuiUpdater {
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == 1) {
                     trayIcon.removeMouseListener(this);
-                    Application.initUpdate();
+                    Application.createUpdateDialog();
                     tray.remove(trayIcon);
                 }
                 super.mouseClicked(e);

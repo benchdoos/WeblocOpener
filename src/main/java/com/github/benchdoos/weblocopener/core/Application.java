@@ -33,9 +33,6 @@ import org.apache.logging.log4j.Logger;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -61,10 +58,10 @@ public class Application {
 
     }
 
-    private static void createUpdateDialog() {
+    public static void createUpdateDialog() {
         final UpdateDialog updateDialog = UpdateDialog.getInstance();
         updateDialog.setVisible(true);
-        updateDialog.checkForUpdates();
+        new Thread(updateDialog::checkForUpdates).start();
     }
 
     private static String helpText() {
@@ -73,25 +70,6 @@ public class Application {
                 OPENER_EDIT_ARGUMENT + "\t[filepath] \t\t\tCalls Edit window to edit given .webloc file.\n" +
                 OPENER_SETTINGS_ARGUMENT + "\t\t\t\t\tCalls Settings window of WeblocOpener.\n" +
                 OPENER_UPDATE_ARGUMENT + "\t\t\t\t\t\tCalls update-tool for WeblocOpener.";
-    }
-
-    /**
-     * Finds out, where app is located.
-     */
-    public static void initUpdate() {
-        try {
-            final File currentFile = CoreUtils.getCurrentFile();
-            final String command;
-            if (currentFile.isFile()) {
-                command = currentFile.getAbsolutePath() + " " + ArgumentConstants.OPENER_UPDATE_ARGUMENT;
-            } else {
-                command = "cmd /c start weblocopener " + ArgumentConstants.OPENER_UPDATE_ARGUMENT;
-            }
-            log.info("Starting update: {}", command);
-            Runtime.getRuntime().exec(command);
-        } catch (IOException | URISyntaxException e) {
-            log.warn("Could not run update", e);
-        }
     }
 
     /**

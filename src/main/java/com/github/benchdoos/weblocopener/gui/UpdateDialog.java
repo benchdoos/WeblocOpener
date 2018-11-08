@@ -75,7 +75,7 @@ public class UpdateDialog extends JFrame {
     private String lostConnectionMessage = "Can not download update \nLost connection, retry.";
     private JButton manualDownloadButton;
 
-    public UpdateDialog() {
+    private UpdateDialog() {
         serverAppVersion = new AppVersion();
 
         iniGui();

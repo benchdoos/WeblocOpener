@@ -73,45 +73,6 @@ public class Updater {
         }
     }
 
-    private static File downloadNewVersionInstaller(AppVersion appVersion) throws IOException {
-        JProgressBar progressBar = null;
-        if (UpdateDialog.getInstance() != null) {
-            progressBar = UpdateDialog.getInstance().getProgressBar();
-        }
-
-        ITaskbarList3 taskBar = null;
-        Pointer<?> pointer;
-
-        try {
-            taskBar = COMRuntime.newInstance(ITaskbarList3.class);
-        } catch (ClassNotFoundException ignore) {/*WINDOWS<WINDOWS 7*/}
-
-        long nativePeerHandle = JAWTUtils.getNativePeerHandle(UpdateDialog.getInstance());
-        pointer = Pointer.pointerToAddress(nativePeerHandle, PointerIO.getSizeTInstance().getTargetSize(), null);
-
-
-        if (progressBar != null) {
-            progressBar.setStringPainted(true);
-            progressBar.setMaximum((int)appVersion.getSize());
-        }
-
-
-        try (BufferedInputStream bis = new BufferedInputStream(new URL(appVersion.getDownloadUrl()).openStream());
-             FileOutputStream fos = new FileOutputStream(installerFile)) {
-            downloadFile(appVersion, progressBar, taskBar, pointer, bis, fos);
-        } finally {
-            if (taskBar != null) {
-                taskBar.Release();
-            }
-        }
-        if (Thread.currentThread().isInterrupted()) {
-            log.debug("File {} deleted: {}", installerFile, installerFile.delete());
-            installerFile.deleteOnExit();
-        }
-
-        return installerFile;
-    }
-
     private static void downloadFile(AppVersion appVersion, JProgressBar progressBar,
                                      ITaskbarList3 taskBar, Pointer<?> pointer,
                                      BufferedInputStream bis, FileOutputStream fos) throws IOException {
@@ -145,15 +106,43 @@ public class Updater {
         }
     }
 
-    private static void updateProgressInfo(JProgressBar progressBar, ITaskbarList3 taskbar, Pointer hwnd, int progress) {
+    private static File downloadNewVersionInstaller(AppVersion appVersion) throws IOException {
+        JProgressBar progressBar = null;
+        if (UpdateDialog.getInstance() != null) {
+            progressBar = UpdateDialog.getInstance().getProgressBar();
+        }
+
+        ITaskbarList3 taskBar = null;
+        Pointer<?> pointer;
+
+        try {
+            taskBar = COMRuntime.newInstance(ITaskbarList3.class);
+        } catch (ClassNotFoundException ignore) {/*WINDOWS<WINDOWS 7*/}
+
+        long nativePeerHandle = JAWTUtils.getNativePeerHandle(UpdateDialog.getInstance());
+        pointer = Pointer.pointerToAddress(nativePeerHandle, PointerIO.getSizeTInstance().getTargetSize(), null);
+
+
         if (progressBar != null) {
-            progressBar.setValue(progress);
-            if (taskbar != null) {
-                //noinspection unchecked
-                taskbar.SetProgressValue(hwnd, progressBar.getValue(),
-                        progressBar.getMaximum());
+            progressBar.setStringPainted(true);
+            progressBar.setMaximum((int) appVersion.getSize());
+        }
+
+
+        try (BufferedInputStream bis = new BufferedInputStream(new URL(appVersion.getDownloadUrl()).openStream());
+             FileOutputStream fos = new FileOutputStream(installerFile)) {
+            downloadFile(appVersion, progressBar, taskBar, pointer, bis, fos);
+        } finally {
+            if (taskBar != null) {
+                taskBar.Release();
             }
         }
+        if (Thread.currentThread().isInterrupted()) {
+            log.debug("File {} deleted: {}", installerFile, installerFile.delete());
+            installerFile.deleteOnExit();
+        }
+
+        return installerFile;
     }
 
     private static void reDownloadOnCorrupt(AppVersion appVersion) throws IOException {
@@ -205,6 +194,17 @@ public class Updater {
         Runtime runtime = Runtime.getRuntime();
         UpdateDialog.getInstance().getButtonCancel().setEnabled(false);
         runtime.exec(file.getAbsolutePath() + ArgumentConstants.INSTALLER_SILENT_KEY);
+    }
+
+    private static void updateProgressInfo(JProgressBar progressBar, ITaskbarList3 taskbar, Pointer hwnd, int progress) {
+        if (progressBar != null) {
+            progressBar.setValue(progress);
+            if (taskbar != null) {
+                //noinspection unchecked
+                taskbar.SetProgressValue(hwnd, progressBar.getValue(),
+                        progressBar.getMaximum());
+            }
+        }
     }
 
     private void createConnection() {
@@ -270,6 +270,7 @@ public class Updater {
 
         appVersion = new AppVersion();
         formAppVersionFromJson(root);
+        log.info("Server application version: {} {} {}", appVersion.getUpdateTitle(), appVersion.getVersion(), appVersion.getDownloadUrl());
     }
 
     private void translateMessages() {
