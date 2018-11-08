@@ -49,9 +49,9 @@ public class UpdateDialog extends JFrame {
     private JProgressBar progressBar;
     private JButton buttonOK;
     private JButton buttonCancel;
-    Timer messageTimer;
-    String retryButton = "Retry";
-    Updater updater = null;
+    private Timer messageTimer;
+    private String retryButton = "Retry";
+    private Updater updater = null;
     private Translation translation;
     private AppVersion serverAppVersion;
     private JPanel contentPane;
@@ -314,13 +314,11 @@ public class UpdateDialog extends JFrame {
     }
 
     private void createDefaultActionListeners() {
-        for (ActionListener actionListener :
-                buttonOK.getActionListeners()) {
+        for (ActionListener actionListener : buttonOK.getActionListeners()) {
             buttonOK.removeActionListener(actionListener);
         }
 
-        for (ActionListener actionListener :
-                buttonCancel.getActionListeners()) {
+        for (ActionListener actionListener : buttonCancel.getActionListeners()) {
             buttonCancel.removeActionListener(actionListener);
         }
 
@@ -352,7 +350,6 @@ public class UpdateDialog extends JFrame {
 
         createDefaultActionListeners();
 
-        // call onCancel() when cross is clicked
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -360,7 +357,6 @@ public class UpdateDialog extends JFrame {
             }
         });
 
-        // call onCancel() on ESCAPE
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                 JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
