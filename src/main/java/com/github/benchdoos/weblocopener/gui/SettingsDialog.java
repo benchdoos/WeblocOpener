@@ -56,6 +56,7 @@ public class SettingsDialog extends JFrame {
     private JLabel callLabel;
     private JLabel syntaxInfoLabel;
     private JCheckBox incognitoCheckBox;
+    private JCheckBox openFolderForQRCheckBox;
     private String toolTipText = "" +
             "<html>" +
             "  <body style=\"font-size:10px;\">Syntax: <b><u>file path</u></b> <b style=\"color:red;\">%site</b>, don't forget to add <b>%site</b>" +
@@ -133,7 +134,7 @@ public class SettingsDialog extends JFrame {
         final Spacer spacer2 = new Spacer();
         panel3.add(spacer2, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JPanel panel4 = new JPanel();
-        panel4.setLayout(new GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel4.setLayout(new GridLayoutManager(3, 3, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel4, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         autoUpdateEnabledCheckBox = new JCheckBox();
         autoUpdateEnabledCheckBox.setContentAreaFilled(true);
@@ -142,13 +143,17 @@ public class SettingsDialog extends JFrame {
         autoUpdateEnabledCheckBox.setVerifyInputWhenFocusTarget(false);
         autoUpdateEnabledCheckBox.setVerticalAlignment(0);
         panel4.add(autoUpdateEnabledCheckBox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JSeparator separator1 = new JSeparator();
+        panel4.add(separator1, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         checkUpdatesButton = new JButton();
         this.$$$loadButtonText$$$(checkUpdatesButton, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("checkUpdatesButton"));
-        panel4.add(checkUpdatesButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel4.add(checkUpdatesButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer3 = new Spacer();
-        panel4.add(spacer3, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
-        final JSeparator separator1 = new JSeparator();
-        panel4.add(separator1, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel4.add(spacer3, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        openFolderForQRCheckBox = new JCheckBox();
+        openFolderForQRCheckBox.setSelected(true);
+        this.$$$loadButtonText$$$(openFolderForQRCheckBox, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("openFolderForQRCheckBox"));
+        panel4.add(openFolderForQRCheckBox, new GridConstraints(1, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel5 = new JPanel();
         panel5.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
         contentPane.add(panel5, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
@@ -338,7 +343,7 @@ public class SettingsDialog extends JFrame {
 
         loadSettings();
 
-        buttonOK.addActionListener(e -> onOK());
+        buttonOK.addActionListener(e -> onSave());
 
         buttonCancel.addActionListener(e -> onCancel());
 
@@ -382,9 +387,7 @@ public class SettingsDialog extends JFrame {
         setResizable(false);
     }
 
-    private void loadSettings() {
-        autoUpdateEnabledCheckBox.setSelected(PreferencesManager.isAutoUpdateActive());
-        comboBox.setSelectedIndex(findBrowser(PreferencesManager.getBrowserValue()));
+    private void loadBrowserSettings() {
         final Browser browser = (Browser) comboBox.getSelectedItem();
 
         if (browser != null) {
@@ -400,6 +403,13 @@ public class SettingsDialog extends JFrame {
         }
     }
 
+    private void loadSettings() {
+        autoUpdateEnabledCheckBox.setSelected(PreferencesManager.isAutoUpdateActive());
+        comboBox.setSelectedIndex(findBrowser(PreferencesManager.getBrowserValue()));
+        openFolderForQRCheckBox.setSelected(PreferencesManager.openFolderForQrCode());
+        loadBrowserSettings();
+    }
+
     private void onAbout() {
         AboutApplicationDialog dialog = new AboutApplicationDialog();
         dialog.setVisible(true);
@@ -409,8 +419,9 @@ public class SettingsDialog extends JFrame {
         dispose();
     }
 
-    private void onOK() {
+    private void onSave() {
         updateRegistryAndDispose();
+        dispose();
     }
 
     private void onUpdateNow() {
@@ -435,6 +446,33 @@ public class SettingsDialog extends JFrame {
         } else {
             log.debug("Choice canceled");
             return null;
+        }
+    }
+
+    private void saveBrowser() {
+        Browser browser = (Browser) comboBox.getSelectedItem();
+        if (browser != null) {
+            log.info("Browser call: " + browser.getCall());
+            if (comboBox.getSelectedIndex() != comboBox.getItemCount() - 1) {
+                if (browser.getCall() != null) {
+                    if (!PreferencesManager.getBrowserValue().equals(browser.getCall())) {
+                        if (!incognitoCheckBox.isSelected()) {
+                            PreferencesManager.setBrowserValue(browser.getCall());
+                        }
+                    }
+                }
+                if (browser.getIncognitoCall() != null) {
+                    if (!PreferencesManager.getBrowserValue().equals(browser.getIncognitoCall())) {
+                        if (incognitoCheckBox.isSelected()) {
+                            PreferencesManager.setBrowserValue(browser.getIncognitoCall());
+                        }
+                    }
+                }
+            } else {
+                if (!callTextField.getText().equals(browser.getIncognitoCall())) {
+                    PreferencesManager.setBrowserValue(callTextField.getText());
+                }
+            }
         }
     }
 
@@ -465,7 +503,6 @@ public class SettingsDialog extends JFrame {
         });
     }
 
-
     private void translateDialog() {
         Translation translation = new Translation("translations/SettingsDialogBundle") {
             @Override
@@ -489,35 +526,10 @@ public class SettingsDialog extends JFrame {
     }
 
     private void updateRegistryAndDispose() {
-        final boolean autoUpdateActive = autoUpdateEnabledCheckBox.isSelected();
-        if (PreferencesManager.isAutoUpdateActive() != autoUpdateActive) {
-            log.info("Auto-update enabled: " + autoUpdateActive);
-            PreferencesManager.setAutoUpdateActive(autoUpdateActive);
-        }
-        Browser browser = (Browser) comboBox.getSelectedItem();
-        if (browser != null) {
-            log.info("Browser call: " + browser.getCall());
-            if (comboBox.getSelectedIndex() != comboBox.getItemCount() - 1) {
-                if (browser.getCall() != null) {
-                    if (!PreferencesManager.getBrowserValue().equals(browser.getCall())) {
-                        if (!incognitoCheckBox.isSelected()) {
-                            PreferencesManager.setBrowserValue(browser.getCall());
-                        }
-                    }
-                }
-                if (browser.getIncognitoCall() != null) {
-                    if (!PreferencesManager.getBrowserValue().equals(browser.getIncognitoCall())) {
-                        if (incognitoCheckBox.isSelected()) {
-                            PreferencesManager.setBrowserValue(browser.getIncognitoCall());
-                        }
-                    }
-                }
-            } else {
-                if (!callTextField.getText().equals(browser.getIncognitoCall())) {
-                    PreferencesManager.setBrowserValue(callTextField.getText());
-                }
-            }
-        }
-        dispose();
+        log.info("Saving settings: Auto-update enabled: {}; Open folder for QR-Code: {}; Selected browser: {}",
+                autoUpdateEnabledCheckBox.isSelected(), openFolderForQRCheckBox.isSelected(), comboBox.getSelectedItem());
+        PreferencesManager.setAutoUpdateActive(autoUpdateEnabledCheckBox.isSelected());
+        PreferencesManager.setOpenFolderForQrCode(openFolderForQRCheckBox.isSelected());
+        saveBrowser();
     }
 }

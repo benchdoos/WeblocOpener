@@ -16,6 +16,7 @@
 package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.core.Translation;
+import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.service.gui.MousePickListener;
@@ -197,17 +198,21 @@ public class ShowQrDialog extends JFrame {
     }
 
     private void openFileInExplorer(File qrFile) {
-        log.info("Opening image file: {}", qrFile);
-        try {
-            Runtime.getRuntime().exec("explorer.exe /select,\"" + qrFile + "\"");
-        } catch (IOException ex) {
-            log.warn("Could not open file {} in explorer", qrFile, ex);
+        if (PreferencesManager.openFolderForQrCode()) {
+            log.info("Opening image file: {}", qrFile);
             try {
-                log.debug("Opening parent: {}", qrFile.getParentFile());
-                Desktop.getDesktop().open(qrFile.getParentFile());
-            } catch (Exception ex1) {
-                log.warn("Could not open parent for file: {}, skipping.", qrFile, ex1);
+                Runtime.getRuntime().exec("explorer.exe /select,\"" + qrFile + "\"");
+            } catch (IOException ex) {
+                log.warn("Could not open file {} in explorer", qrFile, ex);
+                try {
+                    log.debug("Opening parent: {}", qrFile.getParentFile());
+                    Desktop.getDesktop().open(qrFile.getParentFile());
+                } catch (Exception ex1) {
+                    log.warn("Could not open parent for file: {}, skipping.", qrFile, ex1);
+                }
             }
+        } else {
+            log.debug("Opening folder for qr-code is blocked by settings");
         }
     }
 

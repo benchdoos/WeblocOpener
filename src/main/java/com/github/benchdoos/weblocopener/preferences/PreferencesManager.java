@@ -25,8 +25,9 @@ import java.util.prefs.Preferences;
  */
 public class PreferencesManager {
     public static final String KEY_AUTO_UPDATE = "auto_update_enabled";
-    private static final String DEV_MODE_KEY = "dev_mode";
+    private static final String KEY_OPEN_FOR_QR = "open_folder_for_qr";
     private static final String KEY_BROWSER = "browser";
+    private static final String DEV_MODE_KEY = "dev_mode";
 
     private static final Preferences PREFERENCES = Preferences.userRoot().node(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME.toLowerCase());
 
@@ -42,6 +43,14 @@ public class PreferencesManager {
         if (!callPath.isEmpty()) {
             PREFERENCES.put(KEY_BROWSER, callPath);
         }
+    }
+
+    public static boolean openFolderForQrCode() {
+        return PREFERENCES.getBoolean(KEY_OPEN_FOR_QR, SettingsConstants.OPEN_FOLDER_FOR_QR_CODE);
+    }
+
+    public static void setOpenFolderForQrCode(boolean openFolderForQrCode) {
+        PREFERENCES.putBoolean(KEY_OPEN_FOR_QR, openFolderForQrCode);
     }
 
     public static boolean isAutoUpdateActive() {
