@@ -18,6 +18,9 @@
 AppId={{F1300E10-BBB2-4695-AC2F-3D58DC0BC0A6}
 AppName={#MyAppName}
 AppVersion={#ApplicationVersion}
+VersionInfoVersion=1.0
+AppCopyright=Copyright (C) 2016-2018 Eugene Zrazhevsky.
+
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
