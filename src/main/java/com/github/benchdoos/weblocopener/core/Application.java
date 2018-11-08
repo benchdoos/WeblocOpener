@@ -47,7 +47,7 @@ public class Application {
 
 
     Application(String[] args) {
-        log.info("{} starts in updateMode: {}", ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, Main.getCurrentMode());
+        log.info("{} starts in mode: {}", ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, Main.getCurrentMode());
         log.info("{} starts with arguments: {}", ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, Arrays.toString(args));
 
         BrowserManager.loadBrowserList();
