@@ -45,16 +45,6 @@ public class UserUtils {
         showMessage(parentComponent, title, message, JOptionPane.WARNING_MESSAGE);
     }
 
-    public static void showInfoMessageToUser(Component parentComponent, String title, String message) {
-        Toolkit.getDefaultToolkit().beep();
-        showMessage(parentComponent, title, message, JOptionPane.PLAIN_MESSAGE);
-    }
-
-    public static void showSuccessMessageToUser(Component parentComponent, String title, String message) {
-        Toolkit.getDefaultToolkit().beep();
-        showMessage(parentComponent, title, message, JOptionPane.INFORMATION_MESSAGE);
-    }
-
     private static void showMessage(Component parentComponent, String title, String message, int messageLevel) {
         translateMessage();
         if (message.length() > MAXIMUM_MESSAGE_SIZE) {

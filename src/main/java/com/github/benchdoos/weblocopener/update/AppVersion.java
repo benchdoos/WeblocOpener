@@ -29,7 +29,7 @@ public class AppVersion {
         return downloadUrl;
     }
 
-    public void setDownloadUrl(String downloadUrl) {
+    void setDownloadUrl(String downloadUrl) {
         this.downloadUrl = downloadUrl;
     }
 
@@ -37,7 +37,7 @@ public class AppVersion {
         return updateTitle;
     }
 
-    public void setUpdateTitle(String updateTitle) {
+    void setUpdateTitle(String updateTitle) {
         this.updateTitle = updateTitle;
     }
 
@@ -72,7 +72,7 @@ public class AppVersion {
         return updateInfo;
     }
 
-    public void setUpdateInfo(String updateInfo) {
+    void setUpdateInfo(String updateInfo) {
         this.updateInfo = updateInfo;
     }
 }
