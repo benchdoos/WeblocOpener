@@ -20,6 +20,7 @@ import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.service.gui.MousePickListener;
+import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.google.zxing.WriterException;
@@ -176,8 +177,9 @@ public class ShowQrDialog extends JFrame {
 
         saveImageButton.addActionListener(e -> {
             try {
+                final String s = CoreUtils.getFileName(weblocFile);
                 File qrFile = new File(weblocFile.getParentFile()
-                        + File.separator + weblocFile.getName().split(".webloc")[0] + "-qr.jpg");
+                        + File.separator + s + "-qr.jpg");
                 createImageForFile(qrFile);
 
                 openFileInExplorer(qrFile);

@@ -20,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
+import java.io.File;
 import java.util.Properties;
 
 public class CoreUtils {
@@ -74,6 +75,27 @@ public class CoreUtils {
             log.debug("Look and Feel enabled");
         } catch (Exception e) {
             log.warn("Could not enable look and feel", e);
+        }
+    }
+
+    /**
+     * @param file to get it's name
+     * @return filename for file without extension
+     * */
+    public static String getFileName(File file) {
+        if (file == null) {
+            throw new IllegalArgumentException("File can not be null");
+        }
+        final int index = file.getName().lastIndexOf(".");
+
+        if (index > 0) {
+            char chars[] = new char[index];
+
+            file.getName().getChars(0, index, chars, 0);
+
+            return new String(chars);
+        } else {
+            return file.getName();
         }
     }
 }
