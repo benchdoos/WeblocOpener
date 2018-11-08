@@ -17,6 +17,7 @@ package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.core.Translation;
+import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
@@ -241,7 +242,7 @@ public class SettingsDialog extends JFrame {
         int result;
         for (int i = 0; i < BrowserManager.getBrowserList().size(); i++) {
             Browser browser = BrowserManager.getBrowserList().get(i);
-            log.debug("Selected value in comboBox: " + browser);
+            log.debug("Checking if incoming browser {} is in list, now: {}", browserValue, browser);
 
             if (browser.getCall() != null) {
                 if (browser.getCall().equals(browserValue)) {
@@ -256,7 +257,7 @@ public class SettingsDialog extends JFrame {
             }
         }
 
-        if (browserValue.equals("default") || browserValue.isEmpty()) {
+        if (browserValue.equalsIgnoreCase(SettingsConstants.BROWSER_DEFAULT_VALUE) || browserValue.isEmpty()) {
             return 0;
         } else return BrowserManager.getBrowserList().size() - 1;
     }
@@ -303,6 +304,8 @@ public class SettingsDialog extends JFrame {
                         callTextField.setVisible(true);
                         callTextField.setText(path);
                         incognitoCheckBox.setEnabled(false);
+                    } else {
+                        comboBox.setSelectedIndex(findBrowser(PreferencesManager.getBrowserValue()));
                     }
                 } else {
                     callLabel.setVisible(true);
