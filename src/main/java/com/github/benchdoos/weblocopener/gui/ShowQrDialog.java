@@ -51,7 +51,7 @@ public class ShowQrDialog extends JFrame {
     private ImagePanel imagePanel;
     private JButton openButton;
     private JButton saveImageButton;
-    private File weblocFile;
+    private final File weblocFile;
 
 
     public ShowQrDialog(File weblocFile) throws IOException, WriterException {
