@@ -27,7 +27,7 @@
             <Policies>
                 <SizeBasedTriggeringPolicy size="5 MB"/>
             </Policies>
-            <DefaultRolloverStrategy max="3"/>
+            <DefaultRolloverStrategy max="1"/>
         </RollingFile>
 
         <RollingFile name="Debug" fileName="${sys:com.github.benchdoos.weblocopener.log.folder}debug.log"
@@ -38,7 +38,7 @@
             <Policies>
                 <SizeBasedTriggeringPolicy size="5 MB"/>
             </Policies>
-            <DefaultRolloverStrategy max="2"/>
+            <DefaultRolloverStrategy max="1"/>
         </RollingFile>
 
         <RollingFile name="Important" fileName="${sys:com.github.benchdoos.weblocopener.log.folder}application.log"
@@ -47,9 +47,9 @@
                 <pattern>%d %p %C{1.}:%L [%t] - %msg%n</pattern>
             </PatternLayout>
             <Policies>
-                <SizeBasedTriggeringPolicy size="2 MB"/>
+                <SizeBasedTriggeringPolicy size="5 MB"/>
             </Policies>
-            <DefaultRolloverStrategy max="2"/>
+            <DefaultRolloverStrategy max="1"/>
         </RollingFile>
     </Appenders>
 
