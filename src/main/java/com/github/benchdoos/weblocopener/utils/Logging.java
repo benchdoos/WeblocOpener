@@ -54,6 +54,7 @@ public class Logging {
      */
     private void startLogging() {
         final String path = PathConstants.APP_LOG_FOLDER_PATH + File.separator + collingApp + File.separator;
+        System.setProperty("log4j.configurationFile", "log4j2.xml");
         System.out.println("Logging starts at: " + path);
         System.setProperty(PathConstants.APP_LOG_PROPERTY, path);
         final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
