@@ -67,7 +67,7 @@ public class NonGuiUpdater {
     private void compareVersions() {
         String str = PreferencesManager.isDevMode() ? "1.0.0.0" : CoreUtils.getApplicationVersionString();
         if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
-            //create trayicon and show pop-up
+            //create tray icon and show pop-up
             createTrayIcon();
 
 
