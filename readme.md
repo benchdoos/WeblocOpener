@@ -11,14 +11,6 @@ Download [Latest version](https://vk.cc/7Flxoe)
 ## Introduction:
 WeblocOpener is a simple way to open, edit, create MacOS Safari `.webloc` files on Windows.
 
-## Features
-
-- Get full access to `.webloc` files on Windows: open, edit and create.
-- Created files does not differ from MacOS original files.
-- Easy to install and easy to use.
-- Easy to update with auto-update app. 
-Updater will help you to find out when new version is available, download and install the update.
-
 ## What is `.webloc` file?
 `.webloc` extension is usually means that in front of you is a MacOS Safari web-url. 
 Actually it is a text document, formated to property list - PLIST 1.0 
@@ -51,8 +43,11 @@ You can use any custom browser by your own with custom call, using syntax: `<fil
 - **Auto-paste URL from clipboard when you created a new file. When you've just created an empty file, WeblocOpener helps you to paste copied URL into ULR-field. It automatically finds an URL in your clipboard.** 
 [<img src="https://benchdoos.github.io/img/faq/faq_auto_paste.png"  width="888" />](#what-can-weblocopener-do)
 
-- **Generate QR-Code from `.webloc` context menu. Just make a right-click on a .webloc file and select "Generate QR-Code". You can simply use it to open the link directly on your phone!** 
+- **Generate QR-Code from `.webloc` context menu. Just make a right-click on a .webloc file and select "Generate QR-Code".** 
 [<img src="https://benchdoos.github.io/img/faq/faq_qr.png"  width="888" />](#what-can-weblocopener-do)
+
+- **You can simply use it to open the link directly on your phone!**
+[<img src="https://benchdoos.github.io/img/faq/faq_qr_save.png"  width="888" />](#what-can-weblocopener-do)
 
 - **Auto-update tool will help you receive new updates just from the server. You should not check, if there is an update, WeblocOpener updater will notify you if there is a new version of the app.** 
 [<img src="https://benchdoos.github.io/img/faq/faq_update.png"  width="888" />](#what-can-weblocopener-do)
@@ -63,16 +58,16 @@ You can use any custom browser by your own with custom call, using syntax: `<fil
 
 ## Supported features
 
-| Feature        | Windows       | UNIX           |  MacOS  |
-| -------------  |:-------------:|:-------------: |:-------:|
-| Open           | Yes           | In development | Safari only |
-| Edit           | Yes           | In development |   No    |
-| Create new     | Yes           | In development | Default |
-| Generate QR-Code | Yes           | In development |   No    |
-| URL auto-paste | Yes           | In development | WO feature |
-| Instant URL copy | Yes           | In development | No |
-| Auto-update    | Yes           | In development | WO feature |
-| Open in not default browser    | Yes           | Not yet | Not |
+| Feature                        | Windows       | UNIX           |  MacOS      |
+| -------------------------------|:-------------:|:-------------: |:-----------:|
+| Open                           | Yes           | Frozen         | Safari only |
+| Edit                           | Yes           | Frozen         | No          |
+| Create new                     | Yes           | Frozen         | Default     |
+| Generate QR-Code               | Yes           | Frozen         | No          |
+| URL auto-paste                 | Yes           | Frozen         | WO feature  |
+| Instant URL copy               | Yes           | Frozen         | No          |
+| Auto-update                    | Yes           | Frozen         | WO feature  |
+| Open in not default browser    | Yes           | Frozen         | Not         |
 
 
 ## Have questions? 
