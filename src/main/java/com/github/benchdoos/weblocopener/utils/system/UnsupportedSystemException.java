@@ -19,15 +19,7 @@ package com.github.benchdoos.weblocopener.utils.system;
  * Created by Eugene Zrazhevsky on 03.12.2016.
  */
 public class UnsupportedSystemException extends Exception {
-    public UnsupportedSystemException() {
+    UnsupportedSystemException() {
         super("OS is not supported.");
-    }
-
-    public UnsupportedSystemException(String message) {
-        super("OS is not supported. " + message);
-    }
-
-    public UnsupportedSystemException(String message, Throwable cause) {
-        super("OS is not supported. " + message, cause);
     }
 }

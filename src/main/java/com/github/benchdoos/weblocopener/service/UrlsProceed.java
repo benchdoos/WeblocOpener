@@ -17,6 +17,7 @@ package com.github.benchdoos.weblocopener.service;
 
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListParser;
+import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.Logging;
@@ -48,8 +49,6 @@ import java.util.Map;
 public class UrlsProceed {
     private static final int QR_CODE_HEIGHT = 300, QR_CODE_WIDTH = 300;
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
-    private static final String QR_CODE_CHARSET = "UTF-8";
 
 
     /**
@@ -187,7 +186,8 @@ public class UrlsProceed {
                                               Map<EncodeHintType, Comparable> hintMap)
             throws WriterException, IOException {
         BitMatrix matrix = new MultiFormatWriter().encode(
-                new String(url.getBytes(UrlsProceed.QR_CODE_CHARSET), UrlsProceed.QR_CODE_CHARSET),
+                new String(url.getBytes(ApplicationConstants.DEFAULT_APPLICATION_CHARSET),
+                        ApplicationConstants.DEFAULT_APPLICATION_CHARSET),
                 BarcodeFormat.QR_CODE, UrlsProceed.QR_CODE_WIDTH, UrlsProceed.QR_CODE_HEIGHT, hintMap);
         return MatrixToImageWriter.toBufferedImage(matrix);
     }

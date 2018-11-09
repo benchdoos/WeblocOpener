@@ -20,4 +20,6 @@ public interface ApplicationConstants {
     String UPDATER_APPLICATION_NAME = "Updater";
 
     String WEBLOC_FILE_EXTENSION = "webloc";
+
+    String DEFAULT_APPLICATION_CHARSET = "UTF-8";
 }
