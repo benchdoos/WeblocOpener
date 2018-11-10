@@ -18,14 +18,14 @@ package com.github.benchdoos.weblocopener.service;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.gui.EditDialog;
 import com.github.benchdoos.weblocopener.gui.FileChooser;
+import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
-import com.github.benchdoos.weblocopener.utils.UserUtils;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOC_FILE_EXTENSION;
@@ -36,66 +36,43 @@ public class Analyzer {
 
 
     private String url = "";
+    private File selectedFile = null;
 
-    public Analyzer(String filePath) {
+    public Analyzer(String filePath) throws Exception {
         log.debug("Starting analyze");
         log.debug("Got argument: " + filePath);
 
         if (filePath == null) {
-            throw new IllegalArgumentException("Argument can not be null.");
+            throw new IllegalArgumentException("Filepath can not be null.");
         }
 
         analyzeFile(filePath);
-
-
     }
 
-    private void analyzeFile(String filePath) {
-        ArrayList<File> files = null;
-        File chosenFile = null;
-        try {
-            files = getWeblocFile(filePath);
-            String url;
-            if (files != null) {
-                if (files.size() == 1) {
-                    chosenFile = files.get(0);
-                    url = UrlsProceed.takeUrl(chosenFile);
-                    if (url.isEmpty()) {
-                        throw new NullPointerException("Url is empty, just editing");
-                    } else {
-                        this.url = url;
-                    }
-                } else {
-                    FileChooser fileChooser = new FileChooser(files);
-                    fileChooser.setVisible(true);
-                    chosenFile = fileChooser.getChosenFile();
-                    log.debug("Chosen file is: {}", chosenFile);
-                    if (chosenFile != null) {
-                        url = UrlsProceed.takeUrl(chosenFile);
-                        if (url.isEmpty()) {
-                            new EditDialog(chosenFile.getAbsolutePath()).setVisible(true);
-                        } else {
-                            this.url = url;
-                        }
-                    }
+    private void analyzeFile(String filePath) throws Exception {
+        File file = new File(filePath);
+        if (file.exists()) {
+            if (getFileExtension(file).equalsIgnoreCase(ApplicationConstants.WEBLOC_FILE_EXTENSION)) {
+                selectedFile = file;
+            }
+        } else {
+            final ArrayList<File> weblocFiles = getWeblocFiles(filePath);
+            FileChooser fileChooser = new FileChooser(getWeblocFiles(filePath));
+            fileChooser.setLocation(FrameUtils.getFrameOnCenterLocationPoint(fileChooser));
+            fileChooser.setVisible(true);
+            final File chosen = fileChooser.getChosenFile();
+
+            if (chosen != null) {
+                if (chosen.exists()) {
+                    selectedFile = chosen;
                 }
             }
+        }
 
-        } catch (NullPointerException e) {
-            log.warn("URL in files [" + files + "] has empty link.", e);
-            editFile(files);
-        } catch (IOException e) {
-            String message = "Can not read files [" + files + "]";
-            log.warn(message, e);
-            UserUtils.showErrorMessageToUser(null, "Error", message);
-        } catch (Exception e) {
-            final String message = "URL in files [" + files + "] is corrupt.";
-            log.warn(message, e);
-            UserUtils.showErrorMessageToUser(null, "Error", message);
-
-            if (chosenFile != null) {
-                new EditDialog(chosenFile.getAbsolutePath()).setVisible(true);
-            }
+        if (selectedFile != null) {
+            url = UrlsProceed.takeUrl(selectedFile);
+        } else {
+            throw new FileNotFoundException("Can not analyze file: " + filePath);
         }
     }
 
@@ -120,8 +97,8 @@ public class Analyzer {
         }
     }
 
-    private ArrayList<File> findOpeningFile(File currentFile) {
-        File parent = currentFile.getParentFile();
+    private ArrayList<File> findOpeningFile(File file) {
+        File parent = file.getParentFile();
         if (parent.exists() && parent.isDirectory()) {
             ArrayList<ComparedFile> values = new ArrayList<>();
 
@@ -129,7 +106,7 @@ public class Analyzer {
             if (files != null) {
                 for (File current : files) {
                     if (getFileExtension(current).equalsIgnoreCase(ApplicationConstants.WEBLOC_FILE_EXTENSION)) {
-                        int compared = compareFileNames(currentFile, current);
+                        int compared = compareFileNames(file, current);
                         values.add(new ComparedFile(compared, current));
                     }
                 }
@@ -153,6 +130,10 @@ public class Analyzer {
             }
         }
         return result;
+    }
+
+    public File getFile() {
+        return selectedFile;
     }
 
     /**
@@ -199,7 +180,7 @@ public class Analyzer {
      * @param arg File path.
      * @return <code>.webloc</code> file.
      */
-    private ArrayList<File> getWeblocFile(String arg) {
+    private ArrayList<File> getWeblocFiles(String arg) {
 
         File currentFile = new File(arg);
         log.info("File [" + arg + "] exists: " + currentFile.exists() + " file?: " + currentFile.isFile());
@@ -227,12 +208,12 @@ public class Analyzer {
         private int equalSymbols;
         private File file;
 
-        public ComparedFile(int equalSymbols, File file) {
+        ComparedFile(int equalSymbols, File file) {
             this.equalSymbols = equalSymbols;
             this.file = file;
         }
 
-        public int getEqualSymbols() {
+        int getEqualSymbols() {
             return equalSymbols;
         }
 

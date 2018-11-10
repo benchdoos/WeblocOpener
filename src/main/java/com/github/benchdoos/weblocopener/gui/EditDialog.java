@@ -51,7 +51,7 @@ import java.util.ResourceBundle;
 public class EditDialog extends JFrame {
     private final static int DEFAULT_APPLICATION_WIDTH = 450;
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
+    private final String pathToEditingFile;
     private String path = "";
     private JPanel contentPane;
     private JButton buttonOK;
@@ -59,7 +59,6 @@ public class EditDialog extends JFrame {
     private JTextField textField;
     private String errorTitle = "Error";
     private JLabel createWeblocFileTextPane;
-    private final String pathToEditingFile;
 
     @SuppressWarnings("unchecked")
     public EditDialog(String pathToEditingFile) {
@@ -67,7 +66,7 @@ public class EditDialog extends JFrame {
         $$$setupUI$$$();
         translateDialog();
 
-        initGui(pathToEditingFile);
+        initGui();
 
         log.debug("Got path: [" + pathToEditingFile + "]");
     }
@@ -207,12 +206,6 @@ public class EditDialog extends JFrame {
         ((PlaceholderTextField) textField).setPlaceholder("URL");
     }
 
-    @Override
-    public void dispose() {
-        super.dispose();
-        UrlsProceed.shutdownLogout();
-    }
-
     private void fillTextField(String pathToEditingFile) {
         try {
             log.debug("Filling textfield by file content: " + pathToEditingFile);
@@ -225,6 +218,33 @@ public class EditDialog extends JFrame {
             log.warn("Can not read url from: [" + pathToEditingFile + "]: ", e);
             fillTextFieldWithClipboard();
         }
+
+        /*
+           try {
+            log.debug("Filling textfield by file content: " + pathToEditingFile);
+            final File file = new File(pathToEditingFile);
+            if (file.exists()) {
+               fillTextFieldByUrl(file);
+            } else {
+                FileChooser fileChooser = new FileChooser(new Analyzer(pathToEditingFile).findOpeningFile(file));
+                fileChooser.setVisible(true);
+                final File chosenFile = fileChooser.getChosenFile();
+                if (chosenFile != null) {
+                    fillTextFieldByUrl(chosenFile);
+                }
+            }
+        } catch (Exception e) {
+            log.warn("Can not read url from: [" + pathToEditingFile + "]: ", e);
+            fillTextFieldWithClipboard();
+        }*/
+    }
+
+    private void fillTextFieldByUrl(File chosenFile) throws Exception {
+        URL url = new URL(UrlsProceed.takeUrl(chosenFile));
+        textField.setText(url.toString());
+        textField.setCaretPosition(textField.getText().length());
+        textField.selectAll();
+        log.debug("Got URL [{}] from [{}]", url, chosenFile);
     }
 
     private void fillTextFieldWithClipboard() {
@@ -246,10 +266,9 @@ public class EditDialog extends JFrame {
         }
     }
 
-    private void initGui(String pathToEditingFile) {
+    private void initGui() {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/webloc256.png")));
 
-        this.path = pathToEditingFile;
         setContentPane(contentPane);
 
 
@@ -379,7 +398,7 @@ public class EditDialog extends JFrame {
             URL url = new URL(textField.getText());
             UrlValidator urlValidator = new UrlValidator();
             if (urlValidator.isValid(textField.getText())) {
-                UrlsProceed.createWebloc(path, url);
+                UrlsProceed.createWebloc(pathToEditingFile, url);
                 dispose();
             } else {
                 throw new MalformedURLException();

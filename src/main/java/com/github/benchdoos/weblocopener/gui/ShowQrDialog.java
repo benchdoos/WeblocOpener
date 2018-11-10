@@ -23,7 +23,6 @@ import com.github.benchdoos.weblocopener.service.gui.MousePickListener;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
-import com.google.zxing.WriterException;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -54,7 +53,7 @@ public class ShowQrDialog extends JFrame {
     private final File weblocFile;
 
 
-    public ShowQrDialog(File weblocFile) throws IOException, WriterException {
+    public ShowQrDialog(File weblocFile) throws Exception {
         this.weblocFile = weblocFile;
 
         url = new Analyzer(weblocFile.getAbsolutePath()).getUrl();

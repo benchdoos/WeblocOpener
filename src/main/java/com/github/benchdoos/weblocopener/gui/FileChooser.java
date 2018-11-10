@@ -16,7 +16,6 @@
 package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.core.Translation;
-import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -54,11 +53,9 @@ public class FileChooser extends JDialog {
 
         translateDialog();
 
-        pack();
-
         setResizable(false);
 
-        setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
+        pack();
     }
 
     {
@@ -213,13 +210,12 @@ public class FileChooser extends JDialog {
     }
 
     private void onCancel() {
-        // add your code here if necessary
+        chosenFile = null;
         dispose();
     }
 
     private void onOK() {
         chosenFile = (File) comboBox.getSelectedItem();
-        // add your code here
         dispose();
     }
 }

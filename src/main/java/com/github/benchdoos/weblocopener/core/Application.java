@@ -115,7 +115,8 @@ public class Application {
                     case OPENER_QR_ARGUMENT:
                         if (args.length > 1) {
                             try {
-                                ShowQrDialog qrDialog = new ShowQrDialog(new File(args[1]));
+                                final String filePath = args[1];
+                                ShowQrDialog qrDialog = new ShowQrDialog(new Analyzer(filePath).getFile());
                                 qrDialog.setVisible(true);
                             } catch (Exception e) {
                                 log.warn("Can not create a qr-code from url: [" + args[1] + "]", e);
@@ -125,11 +126,17 @@ public class Application {
                     case OPENER_COPY_ARGUMENT:
                         if (args.length > 1) {
                             final String path = args[1];
-                            String url = runAnalyzer(path);
-                            StringSelection stringSelection = new StringSelection(url);
-                            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                            clipboard.setContents(stringSelection, null);
-                            log.info("Successfully copied url to clipboard from: " + path);
+                            String url;
+                            try {
+                                url = new Analyzer(path).getUrl();
+                                StringSelection stringSelection = new StringSelection(url);
+                                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                                clipboard.setContents(stringSelection, null);
+                                log.info("Successfully copied url to clipboard from: " + path);
+                            } catch (Exception e) {
+                                log.warn("Could not copy url from file: {}", e);
+                            }
+
                         }
                         break;
 
@@ -143,9 +150,17 @@ public class Application {
                         }
                         break;
                     default:
-                        String url = runAnalyzer(args[0]);
-                        UrlsProceed.openUrl(url);
-                        UrlsProceed.shutdownLogout();
+                        final String filePath = args[0];
+                        try {
+                            String url = new Analyzer(filePath).getUrl();
+                            if (!url.isEmpty()) {
+                                UrlsProceed.openUrl(url);
+                            } else {
+                                runEditDialog(filePath);
+                            }
+                        } catch (Exception e) {
+                            log.warn("Could not open file: {}", filePath, e);
+                        }
                         break;
                 }
             } else {
@@ -179,7 +194,29 @@ public class Application {
      */
     private static void manageEditArgument(String[] args) {
         if (args.length > 1) {
-            runEditDialog(args[1]);
+            final String path = args[1];
+            final File file;
+            try {
+                file = new Analyzer(path).getFile();
+                if (file != null) {
+                    runEditDialog(file.getAbsolutePath());
+                }
+            } catch (Exception e) {
+                log.warn("Could not edit file: {}", path, e);
+            }
+
+            /*if (files != null) {
+                if (files.size() == 1) {
+                    runEditDialog(path);
+                } else {
+                    FileChooser fileChooser = new FileChooser(files);
+                    fileChooser.setVisible(true);
+                    final File chosenFile = fileChooser.getChosenFile();
+                    if (chosenFile != null) {
+                        runEditDialog(chosenFile.getAbsolutePath());
+                    }
+                }
+            }*/
         } else {
             UserUtils.showErrorMessageToUser(null, "Error",
                     "Argument '-edit' should have location path parameter.");
@@ -187,21 +224,12 @@ public class Application {
     }
 
     /**
-     * Manages default incorrect argument (or url)
-     *
-     * @param arg main args
-     */
-    private static String runAnalyzer(String arg) {
-        return new Analyzer(arg).getUrl();
-    }
-
-    /**
      * Runs EditDialog
      *
-     * @param arg file path
+     * @param filepath file path
      */
-    private static void runEditDialog(String arg) {
-        EditDialog dialog = new EditDialog(arg);
+    private static void runEditDialog(String filepath) {
+        EditDialog dialog = new EditDialog(filepath);
         dialog.setVisible(true);
         dialog.setMaximumSize(new Dimension(MAXIMIZED_HORIZ, dialog.getHeight()));
         dialog.setLocationRelativeTo(null);

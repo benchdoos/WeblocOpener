@@ -123,15 +123,6 @@ public class UrlsProceed {
         }
     }
 
-
-    /**
-     * Log before program shutdown.
-     */
-    public static void shutdownLogout() {
-        log.debug("Goodbye!");
-    }
-
-
     /**
      * Creates <code>.webloc</code> file on given path.
      *
