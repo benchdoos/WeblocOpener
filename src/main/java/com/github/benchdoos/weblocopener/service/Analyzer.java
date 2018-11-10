@@ -56,10 +56,20 @@ public class Analyzer {
             }
         } else {
             final ArrayList<File> weblocFiles = getWeblocFiles(filePath);
-            FileChooser fileChooser = new FileChooser(weblocFiles);
-            fileChooser.setLocation(FrameUtils.getFrameOnCenterLocationPoint(fileChooser));
-            fileChooser.setVisible(true);
-            final File chosen = fileChooser.getChosenFile();
+
+            File chosen = null;
+            if (weblocFiles != null) {
+                if (weblocFiles.size() > 1) {
+                    FileChooser fileChooser = new FileChooser(weblocFiles);
+                    fileChooser.setLocation(FrameUtils.getFrameOnCenterLocationPoint(fileChooser));
+                    fileChooser.setVisible(true);
+                    chosen = fileChooser.getChosenFile();
+                } else if (weblocFiles.size() == 1) {
+                    chosen = weblocFiles.get(0);
+                } else {
+                    log.warn("Could not find files that math... or something went wrong: {}", weblocFiles);
+                }
+            }
 
             if (chosen != null) {
                 if (chosen.exists()) {
