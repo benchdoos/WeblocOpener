@@ -22,9 +22,7 @@ import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -56,6 +54,8 @@ public class FileChooser extends JDialog {
         initListeners();
 
         initKeyBindings();
+
+        initKeyListeners();
 
         translateDialog();
 
@@ -197,12 +197,54 @@ public class FileChooser extends JDialog {
                 JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
+    private void initKeyListeners() {
+        KeyAdapter arrowsKeyAdapter = new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                final int extendedKeyCode = e.getExtendedKeyCode();
+                final int selectedIndex = comboBox.getSelectedIndex();
+                if (extendedKeyCode == KeyEvent.VK_UP) {
+                    if (selectedIndex - 1 >= 0) {
+                        comboBox.setSelectedIndex(selectedIndex - 1);
+                    }
+                } else if (extendedKeyCode == KeyEvent.VK_DOWN) {
+                    if (selectedIndex + 1 < comboBox.getItemCount()) {
+                        comboBox.setSelectedIndex(selectedIndex + 1);
+                    }
+                }
+            }
+        };
+        contentPane.addKeyListener(arrowsKeyAdapter);
+
+        final MouseAdapter wheelMouseAdapter = new MouseAdapter() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                final int selectedIndex = comboBox.getSelectedIndex();
+                if (e.getWheelRotation() < 0) {
+                    if (selectedIndex - 1 >= 0) {
+                        comboBox.setSelectedIndex(selectedIndex - 1);
+                    }
+                } else {
+                    if (selectedIndex + 1 < comboBox.getItemCount()) {
+                        comboBox.setSelectedIndex(selectedIndex + 1);
+                    }
+                }
+            }
+        };
+        contentPane.addMouseWheelListener(wheelMouseAdapter);
+    }
+
     private void initListeners() {
         buttonOK.addActionListener(e -> onOK());
 
         buttonCancel.addActionListener(e -> onCancel());
 
         helpButton.addActionListener(e -> onHelp());
+    }
+
+    private void onCancel() {
+        chosenFile = null;
+        dispose();
     }
 
     private void onHelp() {
@@ -215,11 +257,6 @@ public class FileChooser extends JDialog {
         };
         translation.initTranslations();
         JOptionPane.showMessageDialog(this, message, title, JOptionPane.PLAIN_MESSAGE);
-    }
-
-    private void onCancel() {
-        chosenFile = null;
-        dispose();
     }
 
     private void onOK() {
