@@ -38,6 +38,12 @@ public class FileChooser extends JDialog {
     private File chosenFile = null;
     private ArrayList<File> fileArrayList;
 
+    private String message = "This window can appear when WeblocOpener can not operate selected file because of its name.\n" +
+            "Choose a file you wanted to operate from list.\n" +
+            "If you don't want to see this window every time you're operating with this file-\n" +
+            "rename it in latin characters and WeblocOpener will get this automatically!";
+    private String title = "Help";
+
     public FileChooser(ArrayList<File> fileArrayList) {
         this.fileArrayList = fileArrayList;
 
@@ -195,6 +201,20 @@ public class FileChooser extends JDialog {
         buttonOK.addActionListener(e -> onOK());
 
         buttonCancel.addActionListener(e -> onCancel());
+
+        helpButton.addActionListener(e -> onHelp());
+    }
+
+    private void onHelp() {
+        Translation translation = new Translation("translations/FileChooserBundle") {
+            @Override
+            public void initTranslations() {
+                message = messages.getString("helpMessage");
+                title = messages.getString("helpTitle");
+            }
+        };
+        translation.initTranslations();
+        JOptionPane.showMessageDialog(this, message, title, JOptionPane.PLAIN_MESSAGE);
     }
 
     private void onCancel() {
