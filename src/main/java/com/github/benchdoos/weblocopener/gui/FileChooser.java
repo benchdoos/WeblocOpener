@@ -145,19 +145,6 @@ public class FileChooser extends JDialog {
         return contentPane;
     }
 
-    private void translateDialog() {
-        Translation translation = new Translation("translations/FileChooserBundle") {
-            @Override
-            public void initTranslations() {
-                setTitle(messages.getString("windowTitle"));
-
-                buttonOK.setText(messages.getString("buttonOk"));
-                buttonCancel.setText(messages.getString("buttonCancel"));
-            }
-        };
-        translation.initTranslations();
-    }
-
     private void fillComboBox() {
         DefaultComboBoxModel<File> model = new DefaultComboBoxModel<>();
         for (File file : fileArrayList) {
@@ -189,6 +176,7 @@ public class FileChooser extends JDialog {
         getRootPane().setDefaultButton(buttonOK);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/balloonIcon256.png")));
         setTitle("WeblocOpener — choose file");
+        helpButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
     private void initKeyBindings() {
@@ -217,5 +205,18 @@ public class FileChooser extends JDialog {
     private void onOK() {
         chosenFile = (File) comboBox.getSelectedItem();
         dispose();
+    }
+
+    private void translateDialog() {
+        Translation translation = new Translation("translations/FileChooserBundle") {
+            @Override
+            public void initTranslations() {
+                setTitle(messages.getString("windowTitle"));
+
+                buttonOK.setText(messages.getString("buttonOk"));
+                buttonCancel.setText(messages.getString("buttonCancel"));
+            }
+        };
+        translation.initTranslations();
     }
 }
