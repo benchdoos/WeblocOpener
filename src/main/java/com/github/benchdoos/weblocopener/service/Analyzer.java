@@ -65,6 +65,8 @@ public class Analyzer {
                 if (chosen.exists()) {
                     selectedFile = chosen;
                 }
+            } else {
+                log.debug("User canceled selection from file list");
             }
         }
 
