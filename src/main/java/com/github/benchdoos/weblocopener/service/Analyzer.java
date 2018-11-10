@@ -16,7 +16,6 @@
 package com.github.benchdoos.weblocopener.service;
 
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
-import com.github.benchdoos.weblocopener.gui.EditDialog;
 import com.github.benchdoos.weblocopener.gui.FileChooser;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
@@ -57,7 +56,7 @@ public class Analyzer {
             }
         } else {
             final ArrayList<File> weblocFiles = getWeblocFiles(filePath);
-            FileChooser fileChooser = new FileChooser(getWeblocFiles(filePath));
+            FileChooser fileChooser = new FileChooser(weblocFiles);
             fileChooser.setLocation(FrameUtils.getFrameOnCenterLocationPoint(fileChooser));
             fileChooser.setVisible(true);
             final File chosen = fileChooser.getChosenFile();
@@ -80,21 +79,6 @@ public class Analyzer {
         final String originalFileName = fileOriginal.getName();
         final String comparingFileName = fileComparing.getName();
         return FuzzySearch.ratio(originalFileName, comparingFileName);
-    }
-
-    private void editFile(ArrayList<File> files) {
-        if (files != null) {
-            if (files.size() == 1) {
-                new EditDialog(files.get(0).getAbsolutePath()).setVisible(true);
-            } else {
-                FileChooser fileChooser = new FileChooser(files);
-                fileChooser.setVisible(true);
-                final File chosenFile = fileChooser.getChosenFile();
-                if (chosenFile != null) {
-                    new EditDialog(chosenFile.getAbsolutePath()).setVisible(true);
-                }
-            }
-        }
     }
 
     private ArrayList<File> findOpeningFile(File file) {
@@ -217,18 +201,8 @@ public class Analyzer {
             return equalSymbols;
         }
 
-        public ComparedFile setEqualSymbols(int equalSymbols) {
-            this.equalSymbols = equalSymbols;
-            return this;
-        }
-
         public File getFile() {
             return file;
-        }
-
-        public ComparedFile setFile(File file) {
-            this.file = file;
-            return this;
         }
 
         @Override
