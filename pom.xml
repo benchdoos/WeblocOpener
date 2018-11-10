@@ -289,6 +289,14 @@
             <version>2.8.2</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/me.xdrop/fuzzywuzzy -->
+        <dependency>
+            <groupId>me.xdrop</groupId>
+            <artifactId>fuzzywuzzy</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
+
     </dependencies>
 
 
