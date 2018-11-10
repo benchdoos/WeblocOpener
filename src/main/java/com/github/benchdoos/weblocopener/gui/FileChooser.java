@@ -90,10 +90,11 @@ public class FileChooser extends JDialog {
         panel2.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1, true, false));
         panel1.add(panel2, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         buttonOK = new JButton();
-        buttonOK.setText("OK");
+        this.$$$loadButtonText$$$(buttonOK, ResourceBundle.getBundle("translations/FileChooserBundle").getString("buttonOk"));
         panel2.add(buttonOK, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         buttonCancel = new JButton();
         buttonCancel.setText("Cancel");
+        buttonCancel.setToolTipText(ResourceBundle.getBundle("translations/FileChooserBundle").getString("buttonCancel"));
         panel2.add(buttonCancel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         helpButton = new JButton();
         helpButton.setBorderPainted(false);
@@ -101,6 +102,7 @@ public class FileChooser extends JDialog {
         helpButton.setIcon(new ImageIcon(getClass().getResource("/images/questionIcon16.png")));
         helpButton.setMargin(new Insets(2, 2, 2, 2));
         helpButton.setText("");
+        helpButton.setToolTipText(ResourceBundle.getBundle("translations/FileChooserBundle").getString("helpTitle"));
         panel1.add(helpButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(4, 1, new Insets(0, 0, 0, 0), -1, -1));
@@ -140,6 +142,33 @@ public class FileChooser extends JDialog {
         component.setText(result.toString());
         if (haveMnemonic) {
             component.setDisplayedMnemonic(mnemonic);
+            component.setDisplayedMnemonicIndex(mnemonicIndex);
+        }
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private void $$$loadButtonText$$$(AbstractButton component, String text) {
+        StringBuffer result = new StringBuffer();
+        boolean haveMnemonic = false;
+        char mnemonic = '\0';
+        int mnemonicIndex = -1;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '&') {
+                i++;
+                if (i == text.length()) break;
+                if (!haveMnemonic && text.charAt(i) != '&') {
+                    haveMnemonic = true;
+                    mnemonic = text.charAt(i);
+                    mnemonicIndex = result.length();
+                }
+            }
+            result.append(text.charAt(i));
+        }
+        component.setText(result.toString());
+        if (haveMnemonic) {
+            component.setMnemonic(mnemonic);
             component.setDisplayedMnemonicIndex(mnemonicIndex);
         }
     }
