@@ -27,7 +27,10 @@ class BrowserDeserializer implements JsonDeserializer<Browser> {
         Browser browser = new Browser();
         browser.setName(browserObject.get("name").getAsString());
         browser.setCall(browserObject.get("call").getAsString());
-        browser.setIncognitoCall(browserObject.get("incognito").getAsString());
+        final JsonElement incognito = browserObject.get("incognito");
+        if (incognito != null) {
+            browser.setIncognitoCall(incognito.getAsString());
+        }
         return browser;
     }
 }
