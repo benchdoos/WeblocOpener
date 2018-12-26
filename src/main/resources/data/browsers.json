@@ -17,8 +17,7 @@
     {
       "browser": {
         "name": "Microsoft Edge",
-        "call": "start microsoft-edge:\"%site\"",
-        "incognito": "start shell:AppsFolder\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe!MicrosoftEdge -private %site"
+        "call": "start microsoft-edge:\"%site\""
       }
     },
     {
