@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -41,11 +41,13 @@ import java.awt.event.*;
 import java.awt.font.TextAttribute;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
 
 public class EditDialog extends JFrame {
@@ -59,6 +61,7 @@ public class EditDialog extends JFrame {
     private JTextField textField;
     private String errorTitle = "Error";
     private JLabel createWeblocFileTextPane;
+    private JLabel urlPageTitle;
 
     @SuppressWarnings("unchecked")
     public EditDialog(String pathToEditingFile) {
@@ -83,13 +86,13 @@ public class EditDialog extends JFrame {
         contentPane = new JPanel();
         contentPane.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 10, 0), -1, -1));
         final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(1, 2, new Insets(0, 10, 0, 10), -1, -1));
+        panel1.setLayout(new GridLayoutManager(1, 3, new Insets(0, 10, 0, 10), -1, -1));
         contentPane.add(panel1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
-        panel1.add(spacer1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        panel1.add(spacer1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1, true, false));
-        panel1.add(panel2, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel1.add(panel2, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         buttonOK = new JButton();
         this.$$$loadButtonText$$$(buttonOK, ResourceBundle.getBundle("translations/EditDialogBundle").getString("buttonOk"));
         buttonOK.putClientProperty("hideActionText", Boolean.FALSE);
@@ -97,6 +100,11 @@ public class EditDialog extends JFrame {
         buttonCancel = new JButton();
         this.$$$loadButtonText$$$(buttonCancel, ResourceBundle.getBundle("translations/EditDialogBundle").getString("buttonCancel"));
         panel2.add(buttonCancel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        urlPageTitle = new JLabel();
+        urlPageTitle.setForeground(new Color(-5592406));
+        urlPageTitle.setHorizontalTextPosition(2);
+        urlPageTitle.setText("");
+        panel1.add(urlPageTitle, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, 1, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(2, 1, new Insets(5, 10, 0, 10), -1, -1));
         contentPane.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -329,11 +337,35 @@ public class EditDialog extends JFrame {
             @Override
             public void insertUpdate(DocumentEvent e) {
                 updateTextFont();
+                updatePageTitle();
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
                 updateTextFont();
+                updatePageTitle();
+            }
+
+            private void updatePageTitle() {
+                String url = textField.getText();
+                try (InputStream response = new URL(url).openStream()) {
+
+
+                    Scanner scanner = new Scanner(response);
+                    String responseBody = scanner.useDelimiter("\\A").next();
+
+                    String fullTitle = responseBody.substring(responseBody.indexOf("<title>") + 7, responseBody.indexOf("</title>"));
+                    String title = fullTitle;
+                    if (title.length() > 50) {
+                        title = title.substring(0, 50) + "...";
+                    }
+                    urlPageTitle.setText(title);
+                    urlPageTitle.setToolTipText(fullTitle);
+
+                } catch (IOException ex) {
+                    log.warn("Could not get page title: {}", ex.getMessage());
+                    urlPageTitle.setText(null);
+                }
             }
 
             private void updateTextFont() {
