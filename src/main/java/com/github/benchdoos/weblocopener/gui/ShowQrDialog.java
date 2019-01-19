@@ -109,13 +109,6 @@ public class ShowQrDialog extends JFrame {
     /**
      * @noinspection ALL
      */
-    public JComponent $$$getRootComponent$$$() {
-        return contentPane;
-    }
-
-    /**
-     * @noinspection ALL
-     */
     private void $$$loadButtonText$$$(AbstractButton component, String text) {
         StringBuffer result = new StringBuffer();
         boolean haveMnemonic = false;
@@ -138,6 +131,13 @@ public class ShowQrDialog extends JFrame {
             component.setMnemonic(mnemonic);
             component.setDisplayedMnemonicIndex(mnemonicIndex);
         }
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    public JComponent $$$getRootComponent$$$() {
+        return contentPane;
     }
 
     private void createImageForFile(File qrFile) {

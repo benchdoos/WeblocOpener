@@ -52,11 +52,13 @@
           </grid>
           <component id="8076d" class="javax.swing.JLabel" binding="urlPageTitle">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                <minimum-size width="16" height="16"/>
+              </grid>
             </constraints>
             <properties>
               <foreground color="-6316129"/>
-              <horizontalTextPosition value="2"/>
+              <horizontalTextPosition value="11"/>
               <text value=""/>
             </properties>
           </component>
