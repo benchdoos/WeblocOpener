@@ -401,7 +401,7 @@ public class EditDialog extends JFrame {
                     }
                 } else {
                     if (textField != null) {
-                        setTextFieldFont(textField.getFont(), -1);
+                        setTextFieldFont(textField.getFont(), TextAttribute.SUPERSCRIPT_SUB);
                         textField.setForeground(Color.BLACK);
                     }
                 }
