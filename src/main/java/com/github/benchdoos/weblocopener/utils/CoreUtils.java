@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -20,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Properties;
 
@@ -97,5 +98,10 @@ public class CoreUtils {
         } else {
             return file.getName();
         }
+    }
+
+    public static void copyImageToClipBoard(BufferedImage image) {
+        CopyImageToClipBoard ci = new CopyImageToClipBoard();
+        ci.copyImage(image);
     }
 }
