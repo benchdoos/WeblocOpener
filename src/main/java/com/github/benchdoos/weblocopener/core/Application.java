@@ -143,7 +143,11 @@ public class Application {
                                 };
                                 translation.initTranslations();
 
-                                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, linkCopiedMessage[0], TrayIcon.MessageType.INFO);
+                                try {
+                                    UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, linkCopiedMessage[0], TrayIcon.MessageType.INFO);
+                                } catch (Exception e) {
+                                    log.warn("Could not show message for user", e);
+                                }
                             } catch (Exception e) {
                                 log.warn("Could not copy url from file: {}", e);
                             }
