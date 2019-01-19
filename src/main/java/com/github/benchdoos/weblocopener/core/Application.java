@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -133,6 +133,17 @@ public class Application {
                                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                                 clipboard.setContents(stringSelection, null);
                                 log.info("Successfully copied url to clipboard from: " + path);
+
+                                final String[] linkCopiedMessage = {"Link successfully copied"};
+                                Translation translation = new Translation("translations/CommonsBundle") {
+                                    @Override
+                                    public void initTranslations() {
+                                        linkCopiedMessage[0] = messages.getString("linkCopied");
+                                    }
+                                };
+                                translation.initTranslations();
+
+                                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, linkCopiedMessage[0], TrayIcon.MessageType.INFO);
                             } catch (Exception e) {
                                 log.warn("Could not copy url from file: {}", e);
                             }
