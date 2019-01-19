@@ -16,6 +16,7 @@
 package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.core.Translation;
+import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
@@ -23,6 +24,7 @@ import com.github.benchdoos.weblocopener.service.gui.MousePickListener;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
+import com.github.benchdoos.weblocopener.utils.UserUtils;
 import com.google.zxing.WriterException;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -53,6 +55,8 @@ public class ShowQrDialog extends JFrame {
     private JButton openButton;
     private JButton saveImageButton;
     private JButton copyImageButton;
+    private String successImageCopyMessage = "QR-Code image successfully copied to clipboard!";
+    private String errorImageCopyMessage = "Could not copy QR-Code image to clipboard!";
 
 
     public ShowQrDialog(File weblocFile) throws Exception {
@@ -132,6 +136,7 @@ public class ShowQrDialog extends JFrame {
         copyImageButton = new JButton();
         copyImageButton.setIcon(new ImageIcon(getClass().getResource("/images/copyIcon16.png")));
         copyImageButton.setText("");
+        copyImageButton.setToolTipText(ResourceBundle.getBundle("translations/ShowQrDialogBundle").getString("copyButton"));
         panel1.add(copyImageButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
@@ -161,8 +166,12 @@ public class ShowQrDialog extends JFrame {
             try {
                 final BufferedImage image = UrlsProceed.generateQrCode(url);
                 CoreUtils.copyImageToClipBoard(image);
+
+                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, successImageCopyMessage, TrayIcon.MessageType.INFO);
             } catch (IOException | WriterException ex) {
                 log.warn("Could not create qr-code image for url: {}", url, ex);
+                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, errorImageCopyMessage, TrayIcon.MessageType.ERROR);
+
             }
         });
 
@@ -241,7 +250,8 @@ public class ShowQrDialog extends JFrame {
             @Override
             public void initTranslations() {
                 title = weblocFile.getName() + " — " + messages.getString("windowTitle");
-
+                successImageCopyMessage = messages.getString("successCopyImage");
+                errorImageCopyMessage = messages.getString("errorCopyImage");
             }
         };
         translation.initTranslations();
