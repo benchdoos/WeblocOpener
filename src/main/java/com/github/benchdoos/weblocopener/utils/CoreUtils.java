@@ -20,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Properties;
@@ -103,5 +104,16 @@ public class CoreUtils {
     public static void copyImageToClipBoard(BufferedImage image) {
         CopyImageToClipBoard ci = new CopyImageToClipBoard();
         ci.copyImage(image);
+    }
+
+    public static BufferedImage resize(BufferedImage img, int widht, int height) {
+        Image tmp = img.getScaledInstance(widht, height, Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(widht, height, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = dimg.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+
+        return dimg;
     }
 }
