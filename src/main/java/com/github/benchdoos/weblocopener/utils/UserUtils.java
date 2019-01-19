@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,6 +18,8 @@ package com.github.benchdoos.weblocopener.utils;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.StringConstants;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
@@ -31,6 +33,7 @@ import java.net.URL;
  * Created by Eugene Zrazhevsky on 03.12.2016.
  */
 public class UserUtils {
+    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static final int MAXIMUM_MESSAGE_SIZE = 150;
     private static String pleaseVisitMessage = "Please visit";
 
@@ -103,6 +106,26 @@ public class UserUtils {
         JOptionPane.showMessageDialog(parentComponent,
                 jEditorPane,
                 "[" + ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME + "] " + title, messageType);
+    }
+
+    public static void showTrayMessage(String title, String message, TrayIcon.MessageType messageType) {
+        final int delay = 7000;
+        final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(
+                UserUtils.class.getResource("/images/balloonIcon256.png")));
+
+        trayIcon.setImageAutoSize(true);
+        final SystemTray tray = SystemTray.getSystemTray();
+        try {
+            tray.add(trayIcon);
+            trayIcon.displayMessage(title, message, messageType);
+            Timer timer = new Timer(delay, e -> {
+                tray.remove(trayIcon);
+            });
+            timer.setRepeats(false);
+            timer.start();
+        } catch (AWTException e) {
+            log.warn("Could not add icon to tray");
+        }
     }
 
     public static void openWebUrl(String url) {
