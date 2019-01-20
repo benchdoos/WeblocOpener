@@ -374,7 +374,8 @@ public class EditDialog extends JFrame {
                         log.debug("Creating connection");
 
                         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-                        connection.setConnectTimeout(3000);
+                        final int TIMEOUT = 7000;
+                        connection.setConnectTimeout(TIMEOUT);
 
                         log.debug("Connection created successfully");
 
@@ -393,12 +394,14 @@ public class EditDialog extends JFrame {
                             urlPageTitle.setIcon(new ImageIcon(CoreUtils.resize(read, 16, 16)));
                         }
                     } catch (Exception e) {
-                        log.warn("Could not load favicon for page: {}", pageUrl, e);
                         urlPageTitle.setIcon(null);
+                        log.warn("Could not load favicon for page: {}", pageUrl, e);
                     }
                 } else {
                     urlPageTitle.setIcon(null);
+                    log.warn("Could not load favicon for empty page: {}", pageUrl);
                 }
+                updatePageTitle();
             }
 
             private void updatePageTitle() {
@@ -411,8 +414,13 @@ public class EditDialog extends JFrame {
                         String fullTitle = responseBody.substring(responseBody.indexOf("<title>") + 7, responseBody.indexOf("</title>"));
                         urlPageTitle.setToolTipText(fullTitle);
 
-                        if (fullTitle.length() > 40) {
-                            urlPageTitle.setText(fullTitle.substring(0, 40) + "...");
+                        final int MAX_LENGTH_WITH_ICON = 45;
+                        final int MAX_LENGTH_WITHOUT_ICON = 50;
+
+                        int maxLength = urlPageTitle.getIcon() == null ? MAX_LENGTH_WITHOUT_ICON : MAX_LENGTH_WITH_ICON;
+
+                        if (fullTitle.length() > maxLength) {
+                            urlPageTitle.setText(fullTitle.substring(0, maxLength) + "...");
                         } else {
                             urlPageTitle.setText(fullTitle);
                         }
