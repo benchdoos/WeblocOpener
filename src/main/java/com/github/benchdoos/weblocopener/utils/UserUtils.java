@@ -124,7 +124,7 @@ public class UserUtils {
             timer.setRepeats(false);
             timer.start();
         } catch (AWTException e) {
-            log.warn("Could not add icon to tray");
+            log.warn("Could not add icon to tray", e);
         }
     }
 
