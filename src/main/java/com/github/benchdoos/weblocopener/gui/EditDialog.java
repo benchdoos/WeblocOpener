@@ -438,15 +438,19 @@ public class EditDialog extends JFrame {
                 }
             }
 
+            private File getCreatingFileName(String pathToEditingFile) {
+                final String fileName = CoreUtils.fixFileName(urlPageTitle.getToolTipText()) + "." + WEBLOC_FILE_EXTENSION;
+                File folder = new File(pathToEditingFile).getParentFile();
+                return new File(folder + File.separator + fileName);
+            }
+
             private void updateRenameFileCheckBoxState() {
                 if (urlPageTitle.getText() != null) {
                     if (urlPageTitle.getText().isEmpty()) {
                         autoRenameFileCheckBox.setSelected(false);
                         autoRenameFileCheckBox.setEnabled(false);
                     } else {
-                        final String fileName = CoreUtils.fixFileName(urlPageTitle.getToolTipText()) + "." + WEBLOC_FILE_EXTENSION;
-                        File folder = new File(pathToEditingFile).getParentFile();
-                        File file = new File(folder + File.separator + fileName);
+                        File file = getCreatingFileName(pathToEditingFile);
                         log.debug("Checking for existing of file: [{}] and it exists: {}", file, file.exists());
                         if (!file.exists()) {
                             autoRenameFileCheckBox.setEnabled(true);
@@ -467,7 +471,13 @@ public class EditDialog extends JFrame {
                     public void initTranslations() {
                         if (urlPageTitle.getText() != null) {
                             if (!urlPageTitle.getText().isEmpty()) {
-                                autoRenameFileCheckBox.setToolTipText("<html>" + messages.getString("autoRenameToolTip") + "<br>" + urlPageTitle.getToolTipText() + "</html>");
+                                File file = getCreatingFileName(pathToEditingFile);
+                                if (!file.exists()) {
+                                    autoRenameFileCheckBox.setToolTipText("<html>" + messages.getString("autoRenameToolTip") + "<br>" + urlPageTitle.getToolTipText() + "</html>");
+                                } else {
+                                    autoRenameFileCheckBox.setToolTipText(messages.getString("canNotRenameExistsToolTip"));
+
+                                }
                             } else {
                                 autoRenameFileCheckBox.setToolTipText(messages.getString("canNotRenameToolTip"));
                             }
