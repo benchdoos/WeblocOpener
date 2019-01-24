@@ -33,6 +33,7 @@ import org.apache.logging.log4j.Logger;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
@@ -123,7 +124,7 @@ public class Application {
                             }
                         }
                         break;
-                    case OPENER_COPY_ARGUMENT:
+                    case OPENER_COPY_LINK_ARGUMENT:
                         if (args.length > 1) {
                             final String path = args[1];
                             String url;
@@ -149,9 +150,36 @@ public class Application {
                                     log.warn("Could not show message for user", e);
                                 }
                             } catch (Exception e) {
-                                log.warn("Could not copy url from file: {}", e);
+                                log.warn("Could not copy url from file: {}", args[1], e);
                             }
 
+                        }
+                        break;
+
+                    case OPENER_COPY_QR_ARGUMENT:
+                        String[] userMessages = {"QR-Code image successfully copied to clipboard!", "Could not copy QR-Code image to clipboard!"};
+                        try {
+                            if (args.length > 1) {
+                                final String path = args[1];
+                                String url;
+                                url = new Analyzer(path).getUrl();
+                                final BufferedImage image = UrlsProceed.generateQrCode(url);
+                                CoreUtils.copyImageToClipBoard(image);
+
+                                Translation translation = new Translation("translations/ShowQrDialogBundle") {
+                                    @Override
+                                    public void initTranslations() {
+                                        userMessages[0] = messages.getString("successCopyImage");
+                                        userMessages[1] = messages.getString("errorCopyImage");
+                                    }
+                                };
+                                translation.initTranslations();
+
+                                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, userMessages[0], TrayIcon.MessageType.INFO);
+                            }
+                        } catch (Exception e) {
+                            log.warn("Could not copy qr code for {}", args[1], e);
+                            UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, userMessages[1], TrayIcon.MessageType.ERROR);
                         }
                         break;
 

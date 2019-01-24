@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -23,7 +23,8 @@ public interface ArgumentConstants {
     String OPENER_ABOUT_ARGUMENT = "-about";
     String OPENER_HELP_ARGUMENT_HYPHEN = "-help";
     String OPENER_QR_ARGUMENT = "-qr";
-    String OPENER_COPY_ARGUMENT = "-copy";
+    String OPENER_COPY_LINK_ARGUMENT = "-copy";
+    String OPENER_COPY_QR_ARGUMENT = "-copy-qr";
 
     String UPDATE_SILENT_ARGUMENT = "-update-silent";
 
