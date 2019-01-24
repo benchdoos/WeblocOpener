@@ -634,7 +634,7 @@ public class EditDialog extends JFrame {
                 translation.initTranslations();
 
                 UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
-                        successMessage[0] + " " + fileName, TrayIcon.MessageType.INFO);
+                        successMessage[0] + " " + CoreUtils.fixFileName(fileName), TrayIcon.MessageType.INFO);
             } else {
                 throw new FileNotFoundException("File can not be found: " + file);
             }
