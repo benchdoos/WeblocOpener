@@ -16,6 +16,7 @@
 package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.core.Translation;
+import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.service.gui.ClickListener;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
@@ -29,6 +30,7 @@ import com.google.gson.JsonParser;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import org.apache.commons.io.FileExistsException;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -56,6 +58,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
+import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOC_FILE_EXTENSION;
 import static com.github.benchdoos.weblocopener.core.constants.StringConstants.FAVICON_GETTER_URL;
 
 
@@ -88,13 +91,6 @@ public class EditDialog extends JFrame {
     /**
      * @noinspection ALL
      */
-    public JComponent $$$getRootComponent$$$() {
-        return contentPane;
-    }
-
-    /**
-     * @noinspection ALL
-     */
     private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
         if (currentFont == null) return null;
         String resultName;
@@ -109,6 +105,13 @@ public class EditDialog extends JFrame {
             }
         }
         return new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    public JComponent $$$getRootComponent$$$() {
+        return contentPane;
     }
 
     /**
@@ -194,7 +197,7 @@ public class EditDialog extends JFrame {
         autoRenameFileCheckBox = new JCheckBox();
         autoRenameFileCheckBox.setEnabled(false);
         this.$$$loadButtonText$$$(autoRenameFileCheckBox, ResourceBundle.getBundle("translations/EditDialogBundle").getString("autoRenameFile"));
-        autoRenameFileCheckBox.setToolTipText(ResourceBundle.getBundle("translations/EditDialogBundle").getString("autoRenameToolTip"));
+        autoRenameFileCheckBox.setToolTipText(ResourceBundle.getBundle("translations/EditDialogBundle").getString("canNotRenameToolTip"));
         panel1.add(autoRenameFileCheckBox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(3, 1, new Insets(5, 10, 0, 10), -1, -1));
@@ -375,20 +378,6 @@ public class EditDialog extends JFrame {
                 new Thread(runnable).start();
             }
 
-            private void updateRenameFileCheckBoxState() {
-                if (urlPageTitle.getText() != null) {
-                    if (urlPageTitle.getText().isEmpty()) {
-                        autoRenameFileCheckBox.setSelected(false);
-                        autoRenameFileCheckBox.setEnabled(false);
-                    } else {
-                        autoRenameFileCheckBox.setEnabled(true);
-                    }
-                } else {
-                    autoRenameFileCheckBox.setSelected(false);
-                    autoRenameFileCheckBox.setEnabled(false);
-                }
-            }
-
             private void updatePageFaviconIcon() {
                 final String pageUrl = textField.getText();
                 log.debug("Getting favicons from url: {}");
@@ -455,6 +444,20 @@ public class EditDialog extends JFrame {
                 } else {
                     log.debug("Page is null, so title is clear");
                     urlPageTitle.setText(null);
+                }
+            }
+
+            private void updateRenameFileCheckBoxState() {
+                if (urlPageTitle.getText() != null) {
+                    if (urlPageTitle.getText().isEmpty()) {
+                        autoRenameFileCheckBox.setSelected(false);
+                        autoRenameFileCheckBox.setEnabled(false);
+                    } else {
+                        autoRenameFileCheckBox.setEnabled(true);
+                    }
+                } else {
+                    autoRenameFileCheckBox.setSelected(false);
+                    autoRenameFileCheckBox.setEnabled(false);
                 }
             }
 
@@ -529,6 +532,31 @@ public class EditDialog extends JFrame {
         fillTextField(pathToEditingFile);
     }
 
+    private void manageFileName() {
+        final String[] canNotRenameFileMessage = {
+                "Can not rename file to"};
+
+        Translation translation = new Translation("translations/EditDialogBundle") {
+            @Override
+            public void initTranslations() {
+                canNotRenameFileMessage[0] = messages.getString("canNotRenameFileMessage");
+            }
+        };
+        translation.initTranslations();
+
+        try {
+            renameFileIfAsked(pathToEditingFile);
+        } catch (Exception e) {
+            final String fileName = urlPageTitle.getToolTipText() + "." + WEBLOC_FILE_EXTENSION;
+
+            log.warn("Could not rename file {} to {}", pathToEditingFile, fileName, e);
+
+
+            UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                    canNotRenameFileMessage[0] + " " + fileName, TrayIcon.MessageType.WARNING);
+        }
+    }
+
     private void onCancel() {
         dispose();
     }
@@ -546,6 +574,9 @@ public class EditDialog extends JFrame {
             UrlValidator urlValidator = new UrlValidator();
             if (urlValidator.isValid(textField.getText())) {
                 UrlsProceed.createWebloc(pathToEditingFile, url);
+
+                manageFileName();
+
                 dispose();
             } else {
                 throw new MalformedURLException();
@@ -573,6 +604,31 @@ public class EditDialog extends JFrame {
                     message[0]);
         }
 
+    }
+
+    private void renameFileIfAsked(String pathToEditingFile) throws FileNotFoundException, FileExistsException {
+        final String toolTip = urlPageTitle.getToolTipText();
+        final String fileName = toolTip + "." + WEBLOC_FILE_EXTENSION;
+        if (autoRenameFileCheckBox.isSelected()) {
+
+            final File file = CoreUtils.renameFile(new File(pathToEditingFile), fileName);
+            if (file.exists()) {
+                final String[] successMessage = {"File successfully renamed to"};
+
+                Translation translation = new Translation("translations/EditDialogBundle") {
+                    @Override
+                    public void initTranslations() {
+                        successMessage[0] = messages.getString("fileSuccessfullyRenamedMessage");
+                    }
+                };
+                translation.initTranslations();
+
+                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                        successMessage[0] + " " + fileName, TrayIcon.MessageType.INFO);
+            } else {
+                throw new FileNotFoundException("File can not be found: " + file);
+            }
+        }
     }
 
     private void setTextFieldFont(Font font, int attribute2) {

@@ -16,6 +16,7 @@
 package com.github.benchdoos.weblocopener.utils;
 
 import com.github.benchdoos.weblocopener.core.Main;
+import org.apache.commons.io.FileExistsException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -99,6 +100,56 @@ public class CoreUtils {
         } else {
             return file.getName();
         }
+    }
+
+    private static String fixFileName(String fileName) {
+        fileName = fileName.replaceAll("#", "")
+                .replaceAll("/", "")
+                .replaceAll("\\\\", "")
+                .replaceAll("/", "")
+                .replaceAll(":", "")
+                .replaceAll("\"", "")
+                .replaceAll("<", "")
+                .replaceAll(">", "")
+                .replaceAll("\\|", "");
+        return fileName;
+    }
+
+    public static File renameFile(File oldFile, String fileName) throws FileExistsException {
+
+        if (oldFile == null) {
+            throw new IllegalArgumentException("Can not rename file [null]: it is null!");
+        }
+        if (!oldFile.exists()) {
+            throw new IllegalArgumentException("Can not rename file [" + oldFile + "]: does not exist!");
+        }
+        if (fileName == null) {
+            throw new IllegalArgumentException("Can not rename file [" + oldFile + "]: new filename can not be null");
+        }
+        if (fileName.isEmpty()) {
+            throw new IllegalArgumentException("Can not rename file [" + oldFile + "]: new filename can not be empty");
+        }
+
+
+        fileName = fixFileName(fileName);
+
+        File folder = oldFile.getParentFile();
+        File file = new File(folder.getAbsolutePath() + File.separator + fileName);
+
+        if (file.exists()) {
+            throw new FileExistsException("Can not rename file [" + oldFile + "]: file [" + file + "] already exists!");
+        }
+
+
+        log.debug("Renaming file {} to {}", oldFile, fileName);
+
+        final boolean b = oldFile.renameTo(file);
+        if (b) {
+            return file;
+        } else {
+            throw new RuntimeException("Can not rename file for some reason: " + oldFile + " to " + file);
+        }
+
     }
 
     public static void copyImageToClipBoard(BufferedImage image) {

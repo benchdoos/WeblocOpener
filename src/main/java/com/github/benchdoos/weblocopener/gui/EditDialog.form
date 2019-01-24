@@ -57,7 +57,7 @@
             <properties>
               <enabled value="false"/>
               <text resource-bundle="translations/EditDialogBundle" key="autoRenameFile"/>
-              <toolTipText resource-bundle="translations/EditDialogBundle" key="autoRenameToolTip"/>
+              <toolTipText resource-bundle="translations/EditDialogBundle" key="canNotRenameToolTip"/>
             </properties>
           </component>
         </children>
