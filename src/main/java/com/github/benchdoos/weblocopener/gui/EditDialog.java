@@ -66,7 +66,6 @@ public class EditDialog extends JFrame {
     private final static int DEFAULT_APPLICATION_WIDTH = 450;
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private final String pathToEditingFile;
-    private String path = "";
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -77,7 +76,6 @@ public class EditDialog extends JFrame {
     private JButton clearTextButton;
     private JCheckBox autoRenameFileCheckBox;
 
-    @SuppressWarnings("unchecked")
     public EditDialog(String pathToEditingFile) {
         this.pathToEditingFile = pathToEditingFile;
         $$$setupUI$$$();
@@ -250,6 +248,7 @@ public class EditDialog extends JFrame {
         }
     }
 
+
     private void createUIComponents() {
         textField = new PlaceholderTextField();
         ((PlaceholderTextField) textField).setPlaceholder("URL");
@@ -267,14 +266,6 @@ public class EditDialog extends JFrame {
             log.warn("Can not read url from: [" + pathToEditingFile + "]: ", e);
             fillTextFieldWithClipboard();
         }
-    }
-
-    private void fillTextFieldByUrl(File chosenFile) throws Exception {
-        URL url = new URL(UrlsProceed.takeUrl(chosenFile));
-        textField.setText(url.toString());
-        textField.setCaretPosition(textField.getText().length());
-        textField.selectAll();
-        log.debug("Got URL [{}] from [{}]", url, chosenFile);
     }
 
     private void fillTextFieldWithClipboard() {
