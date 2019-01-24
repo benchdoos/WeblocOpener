@@ -102,7 +102,7 @@ public class CoreUtils {
         }
     }
 
-    private static String fixFileName(String fileName) {
+    public static String fixFileName(String fileName) {
         fileName = fileName.replaceAll("#", "")
                 .replaceAll("/", "")
                 .replaceAll("\\\\", "")
