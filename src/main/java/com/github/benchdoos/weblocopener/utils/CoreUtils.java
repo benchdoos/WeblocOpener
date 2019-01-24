@@ -91,7 +91,7 @@ public class CoreUtils {
         final int index = file.getName().lastIndexOf(".");
 
         if (index > 0) {
-            char chars[] = new char[index];
+            char[] chars = new char[index];
 
             file.getName().getChars(0, index, chars, 0);
 

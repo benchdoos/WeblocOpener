@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -78,7 +78,7 @@ public class Updater {
                                      BufferedInputStream bis, FileOutputStream fos) throws IOException {
         try {
             final int bufferLength = 1024 * 1024;
-            final byte data[] = new byte[bufferLength];
+            final byte[] data = new byte[bufferLength];
             int count;
             int progress = 0;
             while ((count = bis.read(data, 0, bufferLength)) != -1) {

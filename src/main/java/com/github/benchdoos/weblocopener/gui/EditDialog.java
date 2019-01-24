@@ -50,6 +50,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -380,7 +381,7 @@ public class EditDialog extends JFrame {
                         log.debug("Connection created successfully");
 
                         BufferedReader bufferedReader = new BufferedReader(
-                                new InputStreamReader(connection.getInputStream(), "UTF-8"));
+                                new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
 
                         String input = bufferedReader.readLine();
 
