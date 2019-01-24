@@ -34,7 +34,7 @@
             </properties>
             <border type="none"/>
             <children>
-              <grid id="39c79" layout-manager="GridLayoutManager" row-count="1" column-count="9" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="39c79" layout-manager="GridLayoutManager" row-count="1" column-count="10" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="10" bottom="10" right="10"/>
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
@@ -109,12 +109,21 @@
                       <text value=""/>
                     </properties>
                   </component>
-                  <component id="1eaf2" class="javax.swing.JLabel" binding="donateLabel">
+                  <component id="1eaf2" class="javax.swing.JLabel" binding="donateByPayPalLabel">
+                    <constraints>
+                      <grid row="0" column="9" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <icon value="images/donate16.png"/>
+                      <text value=""/>
+                    </properties>
+                  </component>
+                  <component id="f084d" class="javax.swing.JLabel" binding="donateByDonationAlertsLabel">
                     <constraints>
                       <grid row="0" column="8" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <icon value="images/donate16.png"/>
+                      <icon value="images/donationAlertsIcon16.png"/>
                       <text value=""/>
                     </properties>
                   </component>

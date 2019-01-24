@@ -25,6 +25,7 @@ public interface StringConstants {
             "&body=Type%20here%20your%20question%20/%20problem,%20I%20try%20to%20help%20you%20as%20soon%20as%20it%20is%20possible!" +
             "%0AYou%20can%20attach%20log%20files%20(see%20WeblocOpener%20-%20Settings%20-%20About%20-%20Log%20folder%20-%20zip%20log%20folder%20-%20attach)." +
             "%0ADon't%20forget%20to%20close%20the%20application%20before%20zipping%20logs;)";
+    String DONATE_DONATION_ALERTS_URL = "https://www.donationalerts.com/r/benchdoos";
 
 
     String WINDOWS_WEBLOCOPENER_SETUP_NAME = "WeblocOpenerSetupV";
