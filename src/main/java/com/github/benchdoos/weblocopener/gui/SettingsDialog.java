@@ -365,7 +365,7 @@ public class SettingsDialog extends JFrame {
                     for (Object o : list) {
                         if (o instanceof File) {
                             File file = (File) o;
-                            if (FilenameUtils.removeExtension(file.getName()).equalsIgnoreCase("Rick and Morty")) {
+                            if (FilenameUtils.removeExtension(file.getName()).toLowerCase().contains("rick and morty")) {
                                 if (easterCounter == 0) {
                                     showRickAndMortyEaster();
                                     easterCounter++;
