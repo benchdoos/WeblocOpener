@@ -61,10 +61,8 @@ public class Converter {
         File file = prepareNewFile(originalWeblocFile, URL_FILE_EXTENSION);
         if (!file.exists()) {
             InternetShortcut.createInternetShortcut(file, url.toString(), null);
-        }
-
-        return null;
-
+            return file;
+        } else throw new FileExistsException("File [" + file + "] already exists");
     }
 
     private static File prepareNewFile(File originalWeblocFile, String urlFileExtension) {
