@@ -56,7 +56,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
 import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOC_FILE_EXTENSION;
 import static com.github.benchdoos.weblocopener.core.constants.StringConstants.FAVICON_GETTER_URL;
@@ -411,11 +410,8 @@ public class EditDialog extends JFrame {
             private void updatePageTitle() {
                 String url = textField.getText();
                 if (url != null && !url.isEmpty()) {
-                    try (InputStream response = new URL(url).openStream()) {
-                        Scanner scanner = new Scanner(response, ApplicationConstants.DEFAULT_APPLICATION_CHARSET);
-                        String responseBody = scanner.useDelimiter("\\A").next();
-
-                        String fullTitle = responseBody.substring(responseBody.indexOf("<title>") + 7, responseBody.indexOf("</title>"));
+                    try {
+                        String fullTitle = CoreUtils.getPageTitle(url);
                         urlPageTitle.setToolTipText(fullTitle);
 
                         urlPageTitle.setText(fullTitle);

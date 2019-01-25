@@ -16,6 +16,7 @@
 package com.github.benchdoos.weblocopener.utils;
 
 import com.github.benchdoos.weblocopener.core.Main;
+import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import org.apache.commons.io.FileExistsException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +25,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Properties;
+import java.util.Scanner;
 
 public class CoreUtils {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
@@ -115,6 +120,24 @@ public class CoreUtils {
                     .replaceAll("\\|", "");
         }
         return fileName;
+    }
+
+    public static String getPageTitle(String url) throws IOException {
+        if (url == null) {
+            throw new IllegalArgumentException("URL can not be null");
+        }
+        if (url.isEmpty()) {
+            throw new IllegalArgumentException("URL can not be empty");
+        }
+        try (InputStream response = new URL(url).openStream()) {
+
+            Scanner scanner = new Scanner(response, ApplicationConstants.DEFAULT_APPLICATION_CHARSET);
+            String responseBody = scanner.useDelimiter("\\A").next();
+
+            return responseBody.substring(responseBody.indexOf("<title>") + 7, responseBody.indexOf("</title>"));
+        } catch (IOException e) {
+            throw new IOException("Can not load page title", e);
+        }
     }
 
     public static File renameFile(File oldFile, String fileName) throws FileExistsException {
