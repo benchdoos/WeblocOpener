@@ -34,7 +34,23 @@ public abstract class Translation {
         messages = getTranslation();
     }
 
-    public abstract void initTranslations();
+    public static String getTranslatedString(String stringBundleName, String message) {
+        final String[] result;
+        result = new String[]{""};
+        try {
+            Translation translation = new Translation("translations/" + stringBundleName) {
+                @Override
+                public void initTranslations() {
+                    result[0] = messages.getString(message);
+                }
+            };
+            translation.initTranslations();
+        } catch (Exception e) {
+            log.warn("Could not get translation string by bundle: [{}] and message: [{}]", stringBundleName, message);
+            throw new RuntimeException(e);
+        }
+        return result[0];
+    }
 
     private ResourceBundle getTranslation() {
         Locale currentLocale = Locale.getDefault();
@@ -46,15 +62,5 @@ public abstract class Translation {
         return bundle;
     }
 
-    public static String getTranslatedString(String stringBundleName, String message) {
-        final String[] result = {""};
-        Translation translation = new Translation("translations/" + stringBundleName) {
-            @Override
-            public void initTranslations() {
-                result[0] = messages.getString(message);
-            }
-        };
-        translation.initTranslations();
-        return result[0];
-    }
+    public abstract void initTranslations();
 }
