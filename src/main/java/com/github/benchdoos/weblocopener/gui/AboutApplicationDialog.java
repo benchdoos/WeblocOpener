@@ -52,7 +52,6 @@ import java.util.ResourceBundle;
 
 public class AboutApplicationDialog extends JDialog {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-    private String librariesLabelToolTip = "Third-party Libraries used in WeblocOpener project.";
     private JPanel contentPane;
     private JTextPane descriptionTextPane;
     private JLabel versionLabel;
@@ -317,7 +316,7 @@ public class AboutApplicationDialog extends JDialog {
         librariesLabel.addMouseListener(new MouseAdapter() {
             private void createInfoDialog() {
                 InfoDialog infoDialog = new InfoDialog();
-                infoDialog.setTitle(librariesLabelToolTip);
+                infoDialog.setTitle(Translation.getTranslatedString("AboutApplicationDialogBundle", "librariesLabelToolTip"));
                 StringBuilder contentBuilder = new StringBuilder();
                 try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
                         getClass().getResourceAsStream("/pages/libs.html")))) {
@@ -446,9 +445,6 @@ public class AboutApplicationDialog extends JDialog {
 
 
                 librariesLabel.setText(createHtmlLink(messages.getString("librariesLabel")));
-                librariesLabelToolTip = messages.getString("librariesLabelToolTip");
-                librariesLabel.setToolTipText(librariesLabelToolTip);
-
 
                 logLabel.setText(createHtmlLink(messages.getString("logLabel")));
 
