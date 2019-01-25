@@ -87,6 +87,7 @@ Root: HKCU; Subkey: "SOFTWARE\JavaSoft\Prefs\{#MyAppName}"; ValueType: string; V
 Root: HKCU; Subkey: "SOFTWARE\JavaSoft\Prefs\{#MyAppName}"; ValueType: string; ValueName: "auto_update_enabled"; ValueData: "true"; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "SOFTWARE\JavaSoft\Prefs\{#MyAppName}"; ValueType: string; ValueName: "browser"; ValueData: "default"; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "SOFTWARE\JavaSoft\Prefs\{#MyAppName}"; ValueType: string; ValueName: "open_folder_for_qr"; ValueData: "true"; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "SOFTWARE\JavaSoft\Prefs\{#MyAppName}"; ValueType: string; ValueName: "notifications"; ValueData: "true"; Flags: uninsdeletevalue createvalueifdoesntexist
 
 Root: HKCU; Subkey: "SOFTWARE\{#MyAppName}\Capabilities"; ValueType: string; ValueName: "ApplicationDescription"; ValueData: "Open, edit and create .webloc links on Windows"; Flags: uninsdeletevalue
 Root: HKCU; Subkey: "SOFTWARE\{#MyAppName}\Capabilities\FileAssociations"; ValueType: string; ValueName: ".webloc"; ValueData: {cm:WeblocLink}; Flags: uninsdeletevalue
