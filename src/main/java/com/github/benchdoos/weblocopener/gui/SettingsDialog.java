@@ -343,6 +343,9 @@ public class SettingsDialog extends JFrame {
     }
 
     private void initDropTarget() {
+        Component component = this;
+        final ImageIcon rickAndMortyIcon = new ImageIcon(Toolkit.getDefaultToolkit()
+                .getImage(getClass().getResource("/images/easter/rickAndMorty.gif")));
         final DropTarget dropTarget = new DropTarget() {
             @Override
             public synchronized void drop(DropTargetDropEvent evt) {
@@ -356,12 +359,17 @@ public class SettingsDialog extends JFrame {
                     final Object transferData = evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
                     List<?> list = (List<?>) transferData;
                     ArrayList<File> files = new ArrayList<>(list.size());
+
+                    int easterCounter = 0;
+
                     for (Object o : list) {
                         if (o instanceof File) {
                             File file = (File) o;
                             if (FilenameUtils.removeExtension(file.getName()).equalsIgnoreCase("Rick and Morty")) {
-                                //todo show easter, link new thread
-                                System.out.println("Rick and Morty");
+                                if (easterCounter == 0) {
+                                    showRickAndMortyEaster();
+                                    easterCounter++;
+                                }
                             }
 
                             if (Analyzer.getFileExtension(file).equalsIgnoreCase(ApplicationConstants.URL_FILE_EXTENSION)) {
@@ -410,6 +418,24 @@ public class SettingsDialog extends JFrame {
                                     "SettingsDialogBundle", "couldNotConvertFiles"),
                             TrayIcon.MessageType.ERROR);
                 }
+            }
+
+            private void showRickAndMortyEaster() {
+                log.info("Look! This user has found an easter egg (Rick and Morty). Good job!");
+
+                JFrame frame = new JFrame(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME);
+                frame.setLayout(new GridLayout());
+                JLabel label = new JLabel();
+                label.setIcon(rickAndMortyIcon);
+                frame.add(label);
+                frame.setUndecorated(true);
+                frame.setSize(500, 281);
+                frame.setResizable(false);
+                frame.setLocation(FrameUtils.getFrameOnCenterLocationPoint(frame));
+                Timer timer = new Timer(5000, e -> frame.dispose());
+                timer.setRepeats(false);
+                timer.start();
+                frame.setVisible(true);
             }
 
         };
