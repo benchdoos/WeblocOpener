@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -44,5 +44,17 @@ public abstract class Translation {
                 currentLocale);
         log.debug("bundle: " + bundle.getBaseBundleName());
         return bundle;
+    }
+
+    public static String getTranslatedString(String stringBundleName, String message) {
+        final String[] result = {""};
+        Translation translation = new Translation("translations/" + stringBundleName) {
+            @Override
+            public void initTranslations() {
+                result[0] = messages.getString(message);
+            }
+        };
+        translation.initTranslations();
+        return result[0];
     }
 }
