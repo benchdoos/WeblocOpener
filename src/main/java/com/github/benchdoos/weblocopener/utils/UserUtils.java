@@ -128,6 +128,16 @@ public class UserUtils {
         try {
             tray.add(trayIcon);
             trayIcon.displayMessage(title, message, messageType);
+
+            PopupMenu menu = new PopupMenu();
+
+            MenuItem close = new MenuItem(Translation.getTranslatedString("CommonsBundle", "closeButton"));
+            close.addActionListener(e -> tray.remove(trayIcon));
+
+            menu.add(close);
+
+            trayIcon.setPopupMenu(menu);
+
             Timer timer = new Timer(delay, e -> {
                 tray.remove(trayIcon);
             });
