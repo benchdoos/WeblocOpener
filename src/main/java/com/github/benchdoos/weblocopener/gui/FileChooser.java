@@ -57,7 +57,6 @@ public class FileChooser extends JDialog {
 
         initKeyListeners();
 
-        translateDialog();
 
         setResizable(false);
 
@@ -93,7 +92,7 @@ public class FileChooser extends JDialog {
         this.$$$loadButtonText$$$(buttonOK, ResourceBundle.getBundle("translations/FileChooserBundle").getString("buttonOk"));
         panel2.add(buttonOK, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         buttonCancel = new JButton();
-        buttonCancel.setText("Cancel");
+        this.$$$loadButtonText$$$(buttonCancel, ResourceBundle.getBundle("translations/FileChooserBundle").getString("buttonCancel"));
         buttonCancel.setToolTipText(ResourceBundle.getBundle("translations/FileChooserBundle").getString("buttonCancel"));
         panel2.add(buttonCancel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         helpButton = new JButton();
@@ -207,10 +206,12 @@ public class FileChooser extends JDialog {
 
     private void initGui() {
         setContentPane(contentPane);
+
+        setTitle(Translation.getTranslatedString("FileChooserBundle", "windowTitle"));
+
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/balloonIcon256.png")));
-        setTitle("WeblocOpener — choose file");
         helpButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
@@ -288,16 +289,4 @@ public class FileChooser extends JDialog {
         dispose();
     }
 
-    private void translateDialog() {
-        Translation translation = new Translation("translations/FileChooserBundle") {
-            @Override
-            public void initTranslations() {
-                setTitle(messages.getString("windowTitle"));
-
-                buttonOK.setText(messages.getString("buttonOk"));
-                buttonCancel.setText(messages.getString("buttonCancel"));
-            }
-        };
-        translation.initTranslations();
-    }
 }
