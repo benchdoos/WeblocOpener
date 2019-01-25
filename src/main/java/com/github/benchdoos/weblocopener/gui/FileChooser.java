@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -277,15 +277,10 @@ public class FileChooser extends JDialog {
     }
 
     private void onHelp() {
-        Translation translation = new Translation("translations/FileChooserBundle") {
-            @Override
-            public void initTranslations() {
-                message = messages.getString("helpMessage");
-                title = messages.getString("helpTitle");
-            }
-        };
-        translation.initTranslations();
-        JOptionPane.showMessageDialog(this, message, title, JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(this,
+                Translation.getTranslatedString("FileChooserBundle", "helpMessage"),
+                Translation.getTranslatedString("FileChooserBundle", "helpTitle"),
+                JOptionPane.PLAIN_MESSAGE);
     }
 
     private void onOK() {
