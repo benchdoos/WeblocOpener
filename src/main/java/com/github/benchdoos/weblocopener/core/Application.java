@@ -135,17 +135,10 @@ public class Application {
                                 clipboard.setContents(stringSelection, null);
                                 log.info("Successfully copied url to clipboard from: " + path);
 
-                                final String[] linkCopiedMessage = {"Link successfully copied"};
-                                Translation translation = new Translation("translations/CommonsBundle") {
-                                    @Override
-                                    public void initTranslations() {
-                                        linkCopiedMessage[0] = messages.getString("linkCopied");
-                                    }
-                                };
-                                translation.initTranslations();
-
                                 try {
-                                    UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, linkCopiedMessage[0], TrayIcon.MessageType.INFO);
+                                    UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                                            Translation.getTranslatedString("CommonsBundle", "linkCopied"),
+                                            TrayIcon.MessageType.INFO);
                                 } catch (Exception e) {
                                     log.warn("Could not show message for user", e);
                                 }
@@ -157,7 +150,6 @@ public class Application {
                         break;
 
                     case OPENER_COPY_QR_ARGUMENT:
-                        String[] userMessages = {"QR-Code image successfully copied to clipboard!", "Could not copy QR-Code image to clipboard!"};
                         try {
                             if (args.length > 1) {
                                 final String path = args[1];
@@ -166,20 +158,15 @@ public class Application {
                                 final BufferedImage image = UrlsProceed.generateQrCode(url);
                                 CoreUtils.copyImageToClipBoard(image);
 
-                                Translation translation = new Translation("translations/ShowQrDialogBundle") {
-                                    @Override
-                                    public void initTranslations() {
-                                        userMessages[0] = messages.getString("successCopyImage");
-                                        userMessages[1] = messages.getString("errorCopyImage");
-                                    }
-                                };
-                                translation.initTranslations();
-
-                                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, userMessages[0], TrayIcon.MessageType.INFO);
+                                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                                        Translation.getTranslatedString("ShowQrDialogBundle", "successCopyImage"),
+                                        TrayIcon.MessageType.INFO);
                             }
                         } catch (Exception e) {
                             log.warn("Could not copy qr code for {}", args[1], e);
-                            UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, userMessages[1], TrayIcon.MessageType.ERROR);
+                            UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                                    Translation.getTranslatedString("ShowQrDialogBundle", "errorCopyImage")
+                                    , TrayIcon.MessageType.ERROR);
                         }
                         break;
 
