@@ -34,11 +34,17 @@ Browsers in preset: Google Chrome (Chromium project), Opera, Edge, Mozilla Firef
 You can use any custom browser by your own with custom call, using syntax: `<file_path> %site.`** 
 [<img src="https://benchdoos.github.io/img/faq/faq_select_browser.png"  width="888" />](#what-can-weblocopener-do)
 
+- **Convert `.webloc` to `.url` and backward by using drag and drop on settings window** 
+[<img src="https://benchdoos.github.io/img/faq/faq_convert_files.png"  width="888" />](#what-can-weblocopener-do)
+
 - **Create new `.webloc` files. Created files are fully supported by Safari on MacOS and WeblocOpener on Windows.** 
 [<img src="https://benchdoos.github.io/img/faq/faq_create.png"  width="888" />](#what-can-weblocopener-do)
 
 - **Edit created files. Unlike `.webloc` files on MacOS that can not be edited by default (except for text editors), WeblocOpener provides the ability to edit `.webloc` files on Windows.** 
 [<img src="https://benchdoos.github.io/img/faq/faq_edit.png"  width="888" />](#what-can-weblocopener-do)
+
+- **WeblocOpener will try to get the title of page from inserted url and will give you an option to rename it by this title. Now there is no need to name files by yourself.** 
+[<img src="https://benchdoos.github.io/img/faq/faq_auto_rename.png"  width="888" />](#what-can-weblocopener-do)
 
 - **Auto-paste URL from clipboard when you created a new file. When you've just created an empty file, WeblocOpener helps you to paste copied URL into ULR-field. It automatically finds an URL in your clipboard.** 
 [<img src="https://benchdoos.github.io/img/faq/faq_auto_paste.png"  width="888" />](#what-can-weblocopener-do)
@@ -46,7 +52,7 @@ You can use any custom browser by your own with custom call, using syntax: `<fil
 - **Generate QR-Code from `.webloc` context menu. Just make a right-click on a .webloc file and select "Generate QR-Code".** 
 [<img src="https://benchdoos.github.io/img/faq/faq_qr.png"  width="888" />](#what-can-weblocopener-do)
 
-- **You can simply use it to open the link directly on your phone!**
+- **You can simply use it to open the link directly on your phone! Or you can share yor QR-Code by copying it to clipboard.**
 [<img src="https://benchdoos.github.io/img/faq/faq_qr_save.png"  width="888" />](#what-can-weblocopener-do)
 
 - **Auto-update tool will help you receive new updates just from the server. You should not check, if there is an update, WeblocOpener updater will notify you if there is a new version of the app.** 
