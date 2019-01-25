@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,6 +17,7 @@ package com.github.benchdoos.weblocopener.service;
 
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListParser;
+import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
@@ -119,7 +120,9 @@ public class UrlsProceed {
             }
         } catch (IOException e) {
             log.warn("Can not open url: " + url, e);
-            UserUtils.showWarningMessageToUser(null, null, "URL is corrupt: " + url);
+            UserUtils.showWarningMessageToUser(null, null,
+                    Translation.getTranslatedString(
+                            "CommonsBundle", "urlIsCorruptMessage") + url);
         }
     }
 
