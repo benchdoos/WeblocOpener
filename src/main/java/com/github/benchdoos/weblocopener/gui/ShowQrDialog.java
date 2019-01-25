@@ -55,8 +55,6 @@ public class ShowQrDialog extends JFrame {
     private JButton openButton;
     private JButton saveImageButton;
     private JButton copyImageButton;
-    private String successImageCopyMessage = "QR-Code image successfully copied to clipboard!";
-    private String errorImageCopyMessage = "Could not copy QR-Code image to clipboard!";
 
 
     public ShowQrDialog(File weblocFile) throws Exception {
@@ -167,10 +165,14 @@ public class ShowQrDialog extends JFrame {
                 final BufferedImage image = UrlsProceed.generateQrCode(url);
                 CoreUtils.copyImageToClipBoard(image);
 
-                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, successImageCopyMessage, TrayIcon.MessageType.INFO);
+                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                        Translation.getTranslatedString("ShowQrDialogBundle", "successCopyImage"),
+                        TrayIcon.MessageType.INFO);
             } catch (IOException | WriterException ex) {
                 log.warn("Could not create qr-code image for url: {}", url, ex);
-                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, errorImageCopyMessage, TrayIcon.MessageType.ERROR);
+                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                        Translation.getTranslatedString("ShowQrDialogBundle", "errorCopyImage")
+                        , TrayIcon.MessageType.ERROR);
 
             }
         });
@@ -196,9 +198,8 @@ public class ShowQrDialog extends JFrame {
     }
 
     private void initGui() {
-        translateDialog();
 
-        setTitle(title);
+        setTitle(weblocFile.getName() + " — " + Translation.getTranslatedString("ShowQrDialogBundle", "windowTitle"));
         setIconImage(Toolkit.getDefaultToolkit().getImage(ShowQrDialog.class.getResource("/images/qrCode256.png")));
 
 
@@ -244,17 +245,4 @@ public class ShowQrDialog extends JFrame {
             log.debug("Opening folder for qr-code is blocked by settings");
         }
     }
-
-    private void translateDialog() {
-        Translation translation = new Translation("translations/ShowQrDialogBundle") {
-            @Override
-            public void initTranslations() {
-                title = weblocFile.getName() + " — " + messages.getString("windowTitle");
-                successImageCopyMessage = messages.getString("successCopyImage");
-                errorImageCopyMessage = messages.getString("errorCopyImage");
-            }
-        };
-        translation.initTranslations();
-    }
-
 }
