@@ -46,7 +46,7 @@ public abstract class Translation {
             };
             translation.initTranslations();
         } catch (Exception e) {
-            log.warn("Could not get translation string by bundle: [{}] and message: [{}]", stringBundleName, message);
+            log.warn("Could not get translation string by bundle: [{}] and message: [{}]", stringBundleName, message, e);
             throw new RuntimeException(e);
         }
         return result[0];
