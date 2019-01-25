@@ -423,10 +423,13 @@ public class EditDialog extends JFrame {
                     } catch (Exception e) {
                         log.warn("Could not get page title", e);
                         urlPageTitle.setText(null);
+                        urlPageTitle.setToolTipText(null);
+
                     }
                 } else {
                     log.debug("Page is null, so title is clear");
                     urlPageTitle.setText(null);
+                    urlPageTitle.setToolTipText(null);
                 }
             }
 
