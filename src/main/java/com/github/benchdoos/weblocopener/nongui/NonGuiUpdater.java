@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -42,7 +42,6 @@ public class NonGuiUpdater {
     public static final SystemTray tray = SystemTray.getSystemTray();
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     public static TrayIcon trayIcon;
-    private String toolTipText = "WeblocOpener — Update";
 
 
     private AppVersion serverAppVersion = null;
@@ -57,7 +56,6 @@ public class NonGuiUpdater {
             updater = new Updater();
 
             serverAppVersion = updater.getAppVersion();
-            translateDialog();
             compareVersions();
         } catch (IOException e) {
             Updater.canNotConnectManage(e);
@@ -70,16 +68,10 @@ public class NonGuiUpdater {
             //create tray icon and show pop-up
             createTrayIcon();
 
-
-            final String[] displayMessage = new String[1];
-            Translation translation = new Translation("translations/UpdateDialogBundle") {
-                @Override
-                public void initTranslations() {
-                    displayMessage[0] = messages.getString("newVersionAvailableTrayNotification");
-                }
-            };
-            translation.initTranslations();
-            trayIcon.displayMessage(toolTipText, displayMessage[0] + ": " + serverAppVersion.getVersion(),
+            trayIcon.displayMessage(Translation.getTranslatedString("UpdateDialogBundle", "windowTitle"),
+                    Translation.getTranslatedString("UpdateDialogBundle",
+                            "newVersionAvailableTrayNotification")
+                            + ": " + serverAppVersion.getVersion(),
                     TrayIcon.MessageType.INFO);
         }
     }
@@ -117,7 +109,7 @@ public class NonGuiUpdater {
             }
         });
 
-        trayIcon.setToolTip(toolTipText);
+        trayIcon.setToolTip(Translation.getTranslatedString("UpdateDialogBundle", "windowTitle"));
         try {
             tray.add(trayIcon);
         } catch (AWTException e) {
@@ -134,16 +126,5 @@ public class NonGuiUpdater {
                     NonGuiUpdater.class.getResource("/images/updateIconBlue256.png")));
         }
     }
-
-    private void translateDialog() {
-        Translation translation = new Translation("translations/UpdateDialogBundle") {
-            @Override
-            public void initTranslations() {
-                toolTipText = messages.getString("windowTitle");
-            }
-        };
-        translation.initTranslations();
-    }
-
 }
 
