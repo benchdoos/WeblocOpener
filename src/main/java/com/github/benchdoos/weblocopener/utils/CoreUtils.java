@@ -103,15 +103,17 @@ public class CoreUtils {
     }
 
     public static String fixFileName(String fileName) {
-        fileName = fileName.replaceAll("#", "")
-                .replaceAll("/", "")
-                .replaceAll("\\\\", "")
-                .replaceAll("/", "")
-                .replaceAll(":", "")
-                .replaceAll("\"", "")
-                .replaceAll("<", "")
-                .replaceAll(">", "")
-                .replaceAll("\\|", "");
+        if (fileName != null) {
+            fileName = fileName.replaceAll("#", "")
+                    .replaceAll("/", "")
+                    .replaceAll("\\\\", "")
+                    .replaceAll("/", "")
+                    .replaceAll(":", "")
+                    .replaceAll("\"", "")
+                    .replaceAll("<", "")
+                    .replaceAll(">", "")
+                    .replaceAll("\\|", "");
+        }
         return fileName;
     }
 
