@@ -55,10 +55,9 @@ public abstract class Translation {
     private ResourceBundle getTranslation() {
         Locale currentLocale = Locale.getDefault();
 
-        log.debug("Locale: " + currentLocale.getCountry() + " " + currentLocale.getLanguage());
         final ResourceBundle bundle = ResourceBundle.getBundle(bundlePath,
                 currentLocale);
-        log.debug("bundle: " + bundle.getBaseBundleName());
+        log.debug("[TRANSLATION] Locale: {} {} Bundle: {}", currentLocale.getCountry(), currentLocale.getLanguage(), bundle.getBaseBundleName());
         return bundle;
     }
 
