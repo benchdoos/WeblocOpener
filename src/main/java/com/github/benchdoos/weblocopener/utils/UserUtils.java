@@ -18,6 +18,7 @@ package com.github.benchdoos.weblocopener.utils;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.StringConstants;
+import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,17 +37,31 @@ public class UserUtils {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static final int MAXIMUM_MESSAGE_SIZE = 150;
 
-    public static void openWebUrl(String url) {
-        if (!Desktop.isDesktopSupported()) {
-            return;
-        }
-        Desktop desktop = Desktop.getDesktop();
+    private static void createTrayMessage(String title, String message, TrayIcon.MessageType messageType) {
+        final int delay = 7000;
+        final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(
+                UserUtils.class.getResource("/images/balloonIcon256.png")));
+        trayIcon.setImageAutoSize(true);
 
         try {
-            desktop.browse(URI.create(url));
-        } catch (IOException e) {
-            final String message = Translation.getTranslatedString("CommonsBundle", "urlIsCorruptMessage");
-            showErrorMessageToUser(null, message, message + url);
+            final SystemTray tray = SystemTray.getSystemTray();
+            tray.add(trayIcon);
+            trayIcon.displayMessage(title, message, messageType);
+
+            PopupMenu menu = new PopupMenu();
+
+            MenuItem close = new MenuItem(Translation.getTranslatedString("CommonsBundle", "closeButton"));
+            close.addActionListener(e -> tray.remove(trayIcon));
+
+            menu.add(close);
+
+            trayIcon.setPopupMenu(menu);
+
+            Timer timer = new Timer(delay, e -> tray.remove(trayIcon));
+            timer.setRepeats(false);
+            timer.start();
+        } catch (AWTException e) {
+            log.warn("Could not add icon to tray", e);
         }
     }
 
@@ -59,6 +74,20 @@ public class UserUtils {
         try {
             desktop.browse(url.toURI());
         } catch (IOException | URISyntaxException e) {
+            final String message = Translation.getTranslatedString("CommonsBundle", "urlIsCorruptMessage");
+            showErrorMessageToUser(null, message, message + url);
+        }
+    }
+
+    public static void openWebUrl(String url) {
+        if (!Desktop.isDesktopSupported()) {
+            return;
+        }
+        Desktop desktop = Desktop.getDesktop();
+
+        try {
+            desktop.browse(URI.create(url));
+        } catch (IOException e) {
             final String message = Translation.getTranslatedString("CommonsBundle", "urlIsCorruptMessage");
             showErrorMessageToUser(null, message, message + url);
         }
@@ -119,32 +148,8 @@ public class UserUtils {
     }
 
     public static void showTrayMessage(String title, String message, TrayIcon.MessageType messageType) {
-        final int delay = 7000;
-        final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(
-                UserUtils.class.getResource("/images/balloonIcon256.png")));
-
-        trayIcon.setImageAutoSize(true);
-        final SystemTray tray = SystemTray.getSystemTray();
-        try {
-            tray.add(trayIcon);
-            trayIcon.displayMessage(title, message, messageType);
-
-            PopupMenu menu = new PopupMenu();
-
-            MenuItem close = new MenuItem(Translation.getTranslatedString("CommonsBundle", "closeButton"));
-            close.addActionListener(e -> tray.remove(trayIcon));
-
-            menu.add(close);
-
-            trayIcon.setPopupMenu(menu);
-
-            Timer timer = new Timer(delay, e -> {
-                tray.remove(trayIcon);
-            });
-            timer.setRepeats(false);
-            timer.start();
-        } catch (AWTException e) {
-            log.warn("Could not add icon to tray", e);
+        if (PreferencesManager.isNotificationsShown()) {
+            createTrayMessage(title, message, messageType);
         }
     }
 
