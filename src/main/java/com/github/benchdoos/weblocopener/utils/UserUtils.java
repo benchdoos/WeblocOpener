@@ -35,44 +35,33 @@ import java.net.URL;
 public class UserUtils {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static final int MAXIMUM_MESSAGE_SIZE = 150;
-    private static String pleaseVisitMessage = "Please visit";
 
-
-    public static void showErrorMessageToUser(Component parentComponent, String title, String message) {
-        FrameUtils.shakeFrame(parentComponent);
-        showMessage(parentComponent, title, message, JOptionPane.ERROR_MESSAGE);
-    }
-
-    public static void showWarningMessageToUser(Component parentComponent, String title, String message) {
-        FrameUtils.shakeFrame(parentComponent);
-        showMessage(parentComponent, title, message, JOptionPane.WARNING_MESSAGE);
-    }
-
-    private static void showMessage(Component parentComponent, String title, String message, int messageLevel) {
-        translateMessage();
-        if (message.length() > MAXIMUM_MESSAGE_SIZE) {
-            message = message.substring(0, Math.min(message.length(), MAXIMUM_MESSAGE_SIZE)) + "...";
+    public static void openWebUrl(String url) {
+        if (!Desktop.isDesktopSupported()) {
+            return;
         }
+        Desktop desktop = Desktop.getDesktop();
 
-        String msg;
-        if (messageLevel == JOptionPane.ERROR_MESSAGE) {
-
-            msg = "<HTML><BODY><P>" + message + " <br>" + pleaseVisitMessage + " " +
-                    "<a href=\"" + StringConstants.UPDATE_WEB_URL + "\">" + StringConstants.UPDATE_WEB_URL + "</P></BODY></HTML>";
-        } else {
-            msg = message;
+        try {
+            desktop.browse(URI.create(url));
+        } catch (IOException e) {
+            final String message = Translation.getTranslatedString("CommonsBundle", "urlIsCorruptMessage");
+            showErrorMessageToUser(null, message, message + url);
         }
-        showDefaultSystemErrorMessage(parentComponent, title, msg, messageLevel);
     }
 
-    private static void translateMessage() {
-        Translation translation = new Translation("translations/CommonsBundle") {
-            @Override
-            public void initTranslations() {
-                pleaseVisitMessage = messages.getString("pleaseVisitMessage");
-            }
-        };
-        translation.initTranslations();
+    public static void openWebUrl(URL url) {
+        if (!Desktop.isDesktopSupported()) {
+            return;
+        }
+        Desktop desktop = Desktop.getDesktop();
+
+        try {
+            desktop.browse(url.toURI());
+        } catch (IOException | URISyntaxException e) {
+            final String message = Translation.getTranslatedString("CommonsBundle", "urlIsCorruptMessage");
+            showErrorMessageToUser(null, message, message + url);
+        }
     }
 
     private static void showDefaultSystemErrorMessage(Component parentComponent, String title, String message, int messageLevel) {
@@ -108,6 +97,27 @@ public class UserUtils {
                 "[" + ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME + "] " + title, messageType);
     }
 
+    public static void showErrorMessageToUser(Component parentComponent, String title, String message) {
+        FrameUtils.shakeFrame(parentComponent);
+        showMessage(parentComponent, title, message, JOptionPane.ERROR_MESSAGE);
+    }
+
+    private static void showMessage(Component parentComponent, String title, String message, int messageLevel) {
+        if (message.length() > MAXIMUM_MESSAGE_SIZE) {
+            message = message.substring(0, Math.min(message.length(), MAXIMUM_MESSAGE_SIZE)) + "...";
+        }
+
+        String msg;
+        if (messageLevel == JOptionPane.ERROR_MESSAGE) {
+
+            msg = "<HTML><BODY><P>" + message + " <br>" + Translation.getTranslatedString("CommonsBundle", "pleaseVisitMessage") + " " +
+                    "<a href=\"" + StringConstants.UPDATE_WEB_URL + "\">" + StringConstants.UPDATE_WEB_URL + "</P></BODY></HTML>";
+        } else {
+            msg = message;
+        }
+        showDefaultSystemErrorMessage(parentComponent, title, msg, messageLevel);
+    }
+
     public static void showTrayMessage(String title, String message, TrayIcon.MessageType messageType) {
         final int delay = 7000;
         final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(
@@ -128,31 +138,8 @@ public class UserUtils {
         }
     }
 
-    public static void openWebUrl(String url) {
-        if (!Desktop.isDesktopSupported()) {
-            return;
-        }
-        Desktop desktop = Desktop.getDesktop();
-
-        try {
-            desktop.browse(URI.create(url));
-        } catch (IOException e) {
-            final String message = "URL is corrupt: ";
-            showErrorMessageToUser(null, message, message + url);
-        }
-    }
-
-    public static void openWebUrl(URL url) {
-        if (!Desktop.isDesktopSupported()) {
-            return;
-        }
-        Desktop desktop = Desktop.getDesktop();
-
-        try {
-            desktop.browse(url.toURI());
-        } catch (IOException | URISyntaxException e) {
-            final String message = "URL is corrupt: ";
-            showErrorMessageToUser(null, message, message + url);
-        }
+    public static void showWarningMessageToUser(Component parentComponent, String title, String message) {
+        FrameUtils.shakeFrame(parentComponent);
+        showMessage(parentComponent, title, message, JOptionPane.WARNING_MESSAGE);
     }
 }
