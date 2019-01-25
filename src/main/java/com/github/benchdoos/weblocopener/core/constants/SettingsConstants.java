@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,5 +18,6 @@ package com.github.benchdoos.weblocopener.core.constants;
 public interface SettingsConstants {
     boolean IS_APP_AUTO_UPDATE_DEFAULT_VALUE = true;
     boolean OPEN_FOLDER_FOR_QR_CODE = true;
+    boolean SHOW_NOTIFICATIONS_TO_USER = true;
     String BROWSER_DEFAULT_VALUE = "default";
 }

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -27,6 +27,7 @@ public class PreferencesManager {
     public static final String KEY_AUTO_UPDATE = "auto_update_enabled";
     private static final String KEY_OPEN_FOR_QR = "open_folder_for_qr";
     private static final String KEY_BROWSER = "browser";
+    private static final String KEY_NOTIFICATIONS = "notifications";
     private static final String DEV_MODE_KEY = "dev_mode";
 
     private static final Preferences PREFERENCES = Preferences.userRoot().node(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME.toLowerCase());
@@ -63,6 +64,14 @@ public class PreferencesManager {
 
     public static boolean isDevMode() {
         return PREFERENCES.getBoolean(DEV_MODE_KEY, false);
+    }
+
+    public static boolean isNotificationsShown() {
+        return PREFERENCES.getBoolean(KEY_NOTIFICATIONS, SettingsConstants.SHOW_NOTIFICATIONS_TO_USER);
+    }
+
+    public static void setNotificationsShown(boolean showNotifications) {
+        PREFERENCES.putBoolean(KEY_NOTIFICATIONS, showNotifications);
     }
 }
 
