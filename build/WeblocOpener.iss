@@ -69,7 +69,7 @@ Root: HKCR; Subkey: "Webloc\shell\GenerateQRCode"; ValueType: string; ValueName:
 Root: HKCR; Subkey: "Webloc\shell\GenerateQRCode"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",5"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc\shell\GenerateQRCode\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-qr"" ""%1"" "; Flags: uninsdeletevalue
 
-; Add qr file menu
+; Add copy qr file menu
 Root: HKCR; Subkey: "Webloc\shell\CopyQRCode"; ValueType: string; ValueName: ""; ValueData: {cm:CopyQRMenu}; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc\shell\CopyQRCode"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",5"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc\shell\CopyQRCode\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-copy-qr"" ""%1"" "; Flags: uninsdeletevalue
