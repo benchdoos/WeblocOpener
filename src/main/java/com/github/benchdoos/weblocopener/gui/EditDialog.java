@@ -78,7 +78,6 @@ public class EditDialog extends JFrame {
     public EditDialog(String pathToEditingFile) {
         this.pathToEditingFile = pathToEditingFile;
         $$$setupUI$$$();
-        translateDialog();
 
         initGui();
 
@@ -285,53 +284,14 @@ public class EditDialog extends JFrame {
         }
     }
 
-    private void initGui() {
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/webloc256.png")));
-
-        setContentPane(contentPane);
-
-
-        getRootPane().setDefaultButton(buttonOK);
-
-        clearTextButton.addActionListener(e -> onClearText());
-
-        buttonOK.addActionListener(e -> onOK());
-
-        buttonCancel.addActionListener(e -> onCancel());
-
-        // call onCancel() when cross is clicked
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowActivated(WindowEvent e) {
-                if (textField.getText().isEmpty()) {
-                    fillTextFieldWithClipboard();
-                }
-                super.windowActivated(e);
-            }
-
-            @Override
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-        });
-
-        // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-
-        createWeblocFileTextPane.setBackground(new Color(232, 232, 232));
-
-
-        initTextField(pathToEditingFile);
-
-        pack();
-
-        final Dimension dimension = new Dimension(DEFAULT_APPLICATION_WIDTH, getSize().height);
-        setSize(dimension);
-        setResizable(false);
-
-        setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
+    private void createTitle() {
+        String path = "";
+        try {
+            path = new File(pathToEditingFile).getName();
+        } catch (Exception e) {
+            log.warn("Could not get file name for: " + pathToEditingFile, e);
+        }
+        setTitle(path + " — WeblocOpener");
     }
 
     private void initTextField(String pathToEditingFile) {
@@ -554,36 +514,56 @@ public class EditDialog extends JFrame {
         urlPageTitle.setText(null);
     }
 
-    private void onOK() {
-        try {
-            URL url = new URL(textField.getText());
-            UrlValidator urlValidator = new UrlValidator();
-            if (urlValidator.isValid(textField.getText())) {
-                UrlsProceed.createWebloc(pathToEditingFile, url);
+    private void initGui() {
+        createTitle();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/webloc256.png")));
 
-                manageFileName();
+        setContentPane(contentPane);
 
-                dispose();
-            } else {
-                throw new MalformedURLException();
+
+        getRootPane().setDefaultButton(buttonOK);
+
+        clearTextButton.addActionListener(e -> onClearText());
+
+        buttonOK.addActionListener(e -> onOK());
+
+        buttonCancel.addActionListener(e -> onCancel());
+
+        ((PlaceholderTextField) textField).setPlaceholder("URL");
+
+        // call onCancel() when cross is clicked
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowActivated(WindowEvent e) {
+                if (textField.getText().isEmpty()) {
+                    fillTextFieldWithClipboard();
+                }
+                super.windowActivated(e);
             }
-        } catch (MalformedURLException e) {
-            log.warn("Can not parse URL: [" + textField.getText() + "]", e);
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                onCancel();
+            }
+        });
+
+        // call onCancel() on ESCAPE
+        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        createWeblocFileTextPane.setBackground(new Color(232, 232, 232));
 
 
-            String message = Translation.getTranslatedString(
-                    "EditDialogBundle", "incorrectUrlMessage") + ": [";
+        initTextField(pathToEditingFile);
 
-            String incorrectUrl = textField.getText()
-                    .substring(0, Math.min(textField.getText().length(), 50));
-            //Fixes EditDialog long url message showing issue
-            message += textField.getText().length() > incorrectUrl.length() ? incorrectUrl + "...]" : incorrectUrl + "]";
+        pack();
 
+        final Dimension dimension = new Dimension(DEFAULT_APPLICATION_WIDTH, getSize().height);
+        setSize(dimension);
+        setResizable(false);
 
-            UserUtils.showWarningMessageToUser(this, errorTitle,
-                    message);
-        }
-
+        setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
     }
 
     private void renameFileIfAsked(String pathToEditingFile) throws FileNotFoundException, FileExistsException {
@@ -616,23 +596,36 @@ public class EditDialog extends JFrame {
         super.setVisible(b);
     }
 
-    private void translateDialog() {
-        Translation translation = new Translation("translations/EditDialogBundle") {
-            @Override
-            public void initTranslations() {
-                String path = "";
-                try {
-                    path = new File(pathToEditingFile).getName();
-                } catch (Exception e) {
-                    log.warn("Could not get file name for: " + pathToEditingFile, e);
-                }
-                setTitle(path + " — WeblocOpener");
-                ((PlaceholderTextField) textField).setPlaceholder(messages.getString("textField"));
-                buttonOK.setText(messages.getString("buttonOk"));
-                buttonCancel.setText(messages.getString("buttonCancel"));
-                errorTitle = messages.getString("errorTitle");
+    private void onOK() {
+        try {
+            URL url = new URL(textField.getText());
+            UrlValidator urlValidator = new UrlValidator();
+            if (urlValidator.isValid(textField.getText())) {
+                UrlsProceed.createWebloc(pathToEditingFile, url);
+
+                manageFileName();
+
+                dispose();
+            } else {
+                throw new MalformedURLException();
             }
-        };
-        translation.initTranslations();
+        } catch (MalformedURLException e) {
+            log.warn("Can not parse URL: [" + textField.getText() + "]", e);
+
+
+            String message = Translation.getTranslatedString(
+                    "EditDialogBundle", "incorrectUrlMessage") + ": [";
+
+            String incorrectUrl = textField.getText()
+                    .substring(0, Math.min(textField.getText().length(), 50));
+            //Fixes EditDialog long url message showing issue
+            message += textField.getText().length() > incorrectUrl.length() ? incorrectUrl + "...]" : incorrectUrl + "]";
+
+
+            UserUtils.showWarningMessageToUser(this,
+                    Translation.getTranslatedString("EditDialogBundle", "errorTitle"),
+                    message);
+        }
+
     }
 }
