@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,6 +15,7 @@
 
 package com.github.benchdoos.weblocopener.gui;
 
+import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.update.AppVersion;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
@@ -123,7 +124,7 @@ class UpdateInfoDialog extends JDialog {
     }
 
     private void createGUI() {
-        setTitle("Info about update — " + appVersion.getVersion());
+        setTitle(Translation.getTranslatedString("UpdateDialogBundle", "infoAboutUpdate") + " — " + appVersion.getVersion());
         if (IS_WINDOWS_XP) {
             setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateInfoDialog.class.getResource("/images/infoIcon16_white.png")));
         } else {
