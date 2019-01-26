@@ -74,8 +74,6 @@ public class SettingsDialog extends JFrame {
             "  </body>" +
             "</html>";
 
-    private String chooseAFile = "Choose a file:";
-
     private String customBrowserName = "Custom...";
 
     public SettingsDialog() {
@@ -300,7 +298,8 @@ public class SettingsDialog extends JFrame {
     private void initComboBox() {
         ArrayList<Browser> browsers = BrowserManager.getBrowserList();
 
-        Browser others = new Browser(customBrowserName, null);
+        Browser others = new Browser(
+                Translation.getTranslatedString("SettingsDialogBundle", "customBrowserName"), null);
         browsers.add(others);
 
         comboBox.setModel(new DefaultComboBoxModel<>(browsers.toArray()));
@@ -481,6 +480,7 @@ public class SettingsDialog extends JFrame {
 
     private void initGui() {
         setContentPane(contentPane);
+        setTitle(Translation.getTranslatedString("SettingsDialogBundle", "windowTitle"));
 
 
         getRootPane().setDefaultButton(buttonOK);
@@ -587,7 +587,9 @@ public class SettingsDialog extends JFrame {
     private String openFileBrowser() {
         log.debug("Opening File Browser");
 
-        FileDialog fd = new FileDialog(this, chooseAFile, FileDialog.LOAD);
+        FileDialog fd = new FileDialog(this,
+                Translation.getTranslatedString("SettingsDialogBundle", "chooseAFile"),
+                FileDialog.LOAD);
         fd.setIconImage(Toolkit.getDefaultToolkit()
                 .getImage(getClass().getResource("/images/balloonIcon256.png")));
         fd.setDirectory(System.getProperty("user.dir"));
@@ -662,19 +664,7 @@ public class SettingsDialog extends JFrame {
         Translation translation = new Translation("translations/SettingsDialogBundle") {
             @Override
             public void initTranslations() {
-                setTitle(messages.getString("windowTitle"));
-
-                buttonOK.setText(messages.getString("buttonOk"));
-                buttonCancel.setText(messages.getString("buttonCancel"));
-
-                versionStringLabel.setText(messages.getString("versionString"));
-                autoUpdateEnabledCheckBox.setText(messages.getString("autoUpdateEnabledCheckBox"));
-                checkUpdatesButton.setText(messages.getString("checkUpdatesButton"));
-
                 toolTipText = messages.getString("toolTipText");
-
-                customBrowserName = messages.getString("customBrowserName");
-                chooseAFile = messages.getString("chooseAFile");
             }
         };
         translation.initTranslations();
