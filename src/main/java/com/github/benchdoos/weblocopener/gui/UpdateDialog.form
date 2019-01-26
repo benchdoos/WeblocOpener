@@ -158,6 +158,7 @@
               <opaque value="false"/>
               <requestFocusEnabled value="false"/>
               <text value=""/>
+              <toolTipText resource-bundle="translations/UpdateDialogBundle" key="infoAboutUpdate"/>
             </properties>
           </component>
         </children>

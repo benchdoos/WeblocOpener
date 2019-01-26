@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -50,9 +50,7 @@ public class UpdateDialog extends JFrame {
     private JButton buttonOK;
     private JButton buttonCancel;
     private Timer messageTimer;
-    private String retryButton = "Retry";
     private Updater updater = null;
-    private Translation translation;
     private AppVersion serverAppVersion;
     private JPanel contentPane;
     private JLabel currentVersionLabel;
@@ -63,16 +61,6 @@ public class UpdateDialog extends JFrame {
     private JLabel availableVersionStringLabel;
     private JButton updateInfoButton;
     private Thread updateThread;
-    private String successUpdatedMessage = "WeblocOpener successfully updated to version: ";
-    private String successTitle = "Success";
-    private String installationCancelledTitle = "Installation cancelled";
-    private String installationCancelledMessage = "Installation cancelled by User during installation";
-    private String noPermissionsMessage = "Installation can not be run, because it has no permissions.";
-    private String installationCancelledByErrorMessage1 = "Installation cancelled by Error (unhandled error),";
-    private String installationCancelledByErrorMessage2 = "code: ";
-    private String installationCancelledByErrorMessage3 = "visit " + StringConstants.GITHUB_WEB_URL + " for more info.";
-    private String lostConnectionTitle = "Unable to update.";
-    private String lostConnectionMessage = "Can not download update \nLost connection, retry.";
     private JButton manualDownloadButton;
 
     private UpdateDialog() {
@@ -80,7 +68,6 @@ public class UpdateDialog extends JFrame {
 
         iniGui();
         loadProperties();
-        translateDialog();
 
     }
 
@@ -185,6 +172,7 @@ public class UpdateDialog extends JFrame {
         updateInfoButton.setOpaque(false);
         updateInfoButton.setRequestFocusEnabled(false);
         updateInfoButton.setText("");
+        updateInfoButton.setToolTipText(ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("infoAboutUpdate"));
         panel3.add(updateInfoButton, new GridConstraints(1, 5, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
@@ -290,7 +278,7 @@ public class UpdateDialog extends JFrame {
             Updater.canNotConnectManage(e);
             progressBar.setIndeterminate(false);
             buttonOK.setEnabled(true);
-            buttonOK.setText(retryButton);
+            buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "retryButton"));
             buttonOK.addActionListener(e1 -> {
                 progressBar.setIndeterminate(true);
                 checkForUpdates();
@@ -302,14 +290,14 @@ public class UpdateDialog extends JFrame {
         if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
             //Need to update
             buttonOK.setEnabled(true);
-            buttonOK.setText(translation.messages.getString("buttonOk"));
+            buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOk"));
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) > 0) {
             //App version is bigger then on server
-            buttonOK.setText(translation.messages.getString("buttonOkDev"));
+            buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkDev"));
             buttonOK.setEnabled(PreferencesManager.isDevMode());
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
             //No reason to update;
-            buttonOK.setText(translation.messages.getString("buttonOkUp2Date"));
+            buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkUp2Date"));
         }
     }
 
@@ -339,6 +327,7 @@ public class UpdateDialog extends JFrame {
     }
 
     private void iniGui() {
+        setTitle(Translation.getTranslatedString("UpdateDialogBundle", "windowTitle"));
         setContentPane(contentPane);
         getRootPane().setDefaultButton(buttonOK);
         if (IS_WINDOWS_XP) {
@@ -453,7 +442,9 @@ public class UpdateDialog extends JFrame {
                 Updater.startUpdate(serverAppVersion);
             } catch (IOException e) {
                 log.warn(e);
-                UserUtils.showErrorMessageToUser(this, lostConnectionTitle, lostConnectionMessage);
+                UserUtils.showErrorMessageToUser(this,
+                        Translation.getTranslatedString("UpdateDialogBundle", "lostConnectionTitle"),
+                        Translation.getTranslatedString("UpdateDialogBundle", "lostConnectionMessage"));
             }
             if (!Thread.currentThread().isInterrupted()) {
                 dispose();
@@ -482,10 +473,10 @@ public class UpdateDialog extends JFrame {
     }
 
     private void runCleanInstallerFile() {
-        log.info("Deleting file: " + PathConstants.UPDATE_PATH_FILE + StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME
-                + serverAppVersion.getVersion() + ".exe");
-        File installer = new File(PathConstants.UPDATE_PATH_FILE + StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME
-                + serverAppVersion.getVersion() + ".exe");
+        final String installerFilePath = PathConstants.UPDATE_PATH_FILE + StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME
+                + serverAppVersion.getVersion() + ".exe";
+        log.info("Deleting file: " + installerFilePath);
+        File installer = new File(installerFilePath);
         installer.deleteOnExit();
     }
 
@@ -502,35 +493,5 @@ public class UpdateDialog extends JFrame {
             newVersionSizeLabel.setText(serverAppVersion.getSize() / 1024 + "");
             unitLabel.setText("KB");
         }
-    }
-
-    private void translateDialog() {
-        translation = new Translation("translations/UpdateDialogBundle") {
-            @Override
-            public void initTranslations() {
-                setTitle(messages.getString("windowTitle"));
-                buttonOK.setText(messages.getString("buttonOk"));
-                buttonCancel.setText(messages.getString("buttonCancel"));
-
-                currentVersionStringLabel.setText(messages.getString("currentVersionStringLabel"));
-                availableVersionStringLabel.setText(messages.getString("availableVersionStringLabel"));
-                availableVersionLabel.setText(messages.getString("availableVersionLabel"));
-
-                successTitle = messages.getString("successTitle");
-                successUpdatedMessage = messages.getString("successUpdatedMessage");
-                installationCancelledTitle = messages.getString("installationCancelledTitle");
-                installationCancelledMessage = messages.getString("installationCancelledMessage");
-                noPermissionsMessage = messages.getString("noPermissionsMessage");
-                installationCancelledByErrorMessage1 = messages.getString("installationCancelledByErrorMessage1");
-                installationCancelledByErrorMessage2 = messages.getString("installationCancelledByErrorMessage2");
-                installationCancelledByErrorMessage3 = messages.getString("installationCancelledByErrorMessage3");
-
-                lostConnectionTitle = messages.getString("lostConnectionTitle");
-                lostConnectionMessage = messages.getString("lostConnectionMessage");
-
-                retryButton = messages.getString("retryButton");
-            }
-        };
-        translation.initTranslations();
     }
 }
