@@ -414,7 +414,8 @@ public class UpdateDialog extends JFrame {
 
     private void loadProperties() {
         currentVersionLabel.setText(CoreUtils.getApplicationVersionString());
-        availableVersionLabel.setText("Unknown");
+        availableVersionLabel.setText(
+                Translation.getTranslatedString("UpdateDialogBundle", "availableVersionLabelUnknown"));
     }
 
     private void onCancel() {
