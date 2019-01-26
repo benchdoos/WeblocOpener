@@ -587,21 +587,26 @@ public class SettingsDialog extends JFrame {
     private String openFileBrowser() {
         log.debug("Opening File Browser");
 
-        FileDialog fd = new FileDialog(this,
-                Translation.getTranslatedString("SettingsDialogBundle", "chooseAFile"),
-                FileDialog.LOAD);
-        fd.setIconImage(Toolkit.getDefaultToolkit()
-                .getImage(getClass().getResource("/images/balloonIcon256.png")));
-        fd.setDirectory(System.getProperty("user.dir"));
-        fd.setFile("*.exe");
-        fd.setMultipleMode(false);
-        fd.setVisible(true);
-        File[] f = fd.getFiles();
-        if (f.length > 0) {
-            log.debug("Choice: " + fd.getFiles()[0].getAbsolutePath());
-            return fd.getFiles()[0].getAbsolutePath();
-        } else {
-            log.debug("Choice canceled");
+        try {
+            FileDialog fd = new FileDialog(this,
+                    Translation.getTranslatedString("SettingsDialogBundle", "chooseAFile"),
+                    FileDialog.LOAD);
+            fd.setIconImage(Toolkit.getDefaultToolkit()
+                    .getImage(getClass().getResource("/images/balloonIcon256.png")));
+            fd.setDirectory(System.getProperty("user.dir"));
+            fd.setFile("*.exe");
+            fd.setMultipleMode(false);
+            fd.setVisible(true);
+            File[] f = fd.getFiles();
+            if (f.length > 0) {
+                log.debug("Choice: " + fd.getFiles()[0].getAbsolutePath());
+                return fd.getFiles()[0].getAbsolutePath();
+            } else {
+                log.debug("Choice canceled");
+                return null;
+            }
+        } catch (Exception e) {
+            log.warn("Could not launch File Browser", e);
             return null;
         }
     }
