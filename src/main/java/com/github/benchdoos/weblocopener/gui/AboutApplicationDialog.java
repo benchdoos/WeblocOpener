@@ -467,47 +467,6 @@ public class AboutApplicationDialog extends JDialog {
 
         donateByPayPalLabel.setToolTipText(translation.getTranslatedString("donateLabelTooltip"));
         donateByDonationAlertsLabel.setToolTipText(translation.getTranslatedString("donateByDonationAlertsLabelTooltip"));
-
-
-
-        /*Translation translation = new Translation("AboutApplicationDialogBundle") {
-            @Override
-            public void initTranslations() {
-                setTitle(messages.getString("windowTitle"));
-                versionLabel.setText(messages.getString("appVersionLabel") + " " + CoreUtils.getApplicationVersionString());
-
-                siteLinkLabel.setText(createHtmlLink(messages.getString("visitLabel")));
-
-
-                githubLinkLabel.setText(createHtmlLink("Github"));
-
-
-                librariesLabel.setText(createHtmlLink(messages.getString("librariesLabel")));
-
-                logLabel.setText(createHtmlLink(messages.getString("logLabel")));
-
-
-                logLabel.setToolTipText(messages.getString("logLabelTooltip"));
-
-                feedbackLabel.setToolTipText(messages.getString("feedbackLabel"));
-
-
-                telegramLabel.setToolTipText(messages.getString("telegramLabel"));
-
-                shareBalloonMessage = messages.getString("shareBalloonMessage");
-
-                shareLabel.setToolTipText(messages.getString("shareLabel"));
-
-                shareLabelText = messages.getString("shareLabelText");
-
-                donateByPayPalLabel.setToolTipText(messages.getString("donateLabelTooltip"));
-                donateByDonationAlertsLabel.setToolTipText(messages.getString("donateByDonationAlertsLabelTooltip"));
-
-            }
-
-
-        };
-        translation.initTranslations();*/
     }
 
 }
