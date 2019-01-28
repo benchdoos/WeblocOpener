@@ -60,12 +60,6 @@ public class Application {
 
     }
 
-    public static void createUpdateDialog() {
-        final UpdateDialog updateDialog = UpdateDialog.getInstance();
-        updateDialog.setVisible(true);
-        new Thread(updateDialog::checkForUpdates).start();
-    }
-
     private static String helpText() {
         return OPENER_CREATE_ARGUMENT + "\t[filepath] [link] \tCreates a new .webloc file on [filepath]. " +
                 "[filepath] should end with [\\filename.webloc]\n" +
@@ -107,7 +101,7 @@ public class Application {
                         break;
 
                     case OPENER_UPDATE_ARGUMENT:
-                        createUpdateDialog();
+                        runUpdateDialog();
                         break;
                     case OPENER_HELP_ARGUMENT_HYPHEN: {
                         System.out.println(helpText());
@@ -265,9 +259,15 @@ public class Application {
         dialog.setLocationRelativeTo(null);
     }
 
-    private static void runSettingsDialog() {
+    public static void runSettingsDialog() {
         SettingsDialog settingsDialog = new SettingsDialog();
         settingsDialog.setVisible(true);
+    }
+
+    public static void runUpdateDialog() {
+        final UpdateDialog updateDialog = UpdateDialog.getInstance();
+        updateDialog.setVisible(true);
+        new Thread(updateDialog::checkForUpdates).start();
     }
 
     public enum UPDATE_MODE {NORMAL, SILENT}
