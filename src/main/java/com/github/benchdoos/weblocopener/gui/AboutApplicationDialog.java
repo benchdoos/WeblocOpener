@@ -66,6 +66,7 @@ public class AboutApplicationDialog extends JDialog {
     private JLabel shareLabel;
     private JLabel donateByPayPalLabel;
     private JLabel donateByDonationAlertsLabel;
+    private JLabel twitterLabel;
     private String shareLabelText;
     private String shareBalloonMessage;
 
@@ -102,7 +103,7 @@ public class AboutApplicationDialog extends JDialog {
         panel1.setOpaque(false);
         imagePanel1.add(panel1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JPanel panel2 = new JPanel();
-        panel2.setLayout(new GridLayoutManager(1, 10, new Insets(0, 10, 10, 10), -1, -1));
+        panel2.setLayout(new GridLayoutManager(1, 11, new Insets(0, 10, 10, 10), -1, -1));
         panel2.setBackground(new Color(-9923881));
         panel2.setOpaque(false);
         panel1.add(panel2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -131,15 +132,19 @@ public class AboutApplicationDialog extends JDialog {
         shareLabel = new JLabel();
         shareLabel.setIcon(new ImageIcon(getClass().getResource("/images/shareIcon16.png")));
         shareLabel.setText("");
-        panel2.add(shareLabel, new GridConstraints(0, 7, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(shareLabel, new GridConstraints(0, 8, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         donateByPayPalLabel = new JLabel();
         donateByPayPalLabel.setIcon(new ImageIcon(getClass().getResource("/images/donate16.png")));
         donateByPayPalLabel.setText("");
-        panel2.add(donateByPayPalLabel, new GridConstraints(0, 9, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(donateByPayPalLabel, new GridConstraints(0, 10, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         donateByDonationAlertsLabel = new JLabel();
         donateByDonationAlertsLabel.setIcon(new ImageIcon(getClass().getResource("/images/donationAlertsIcon16.png")));
         donateByDonationAlertsLabel.setText("");
-        panel2.add(donateByDonationAlertsLabel, new GridConstraints(0, 8, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(donateByDonationAlertsLabel, new GridConstraints(0, 9, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        twitterLabel = new JLabel();
+        twitterLabel.setIcon(new ImageIcon(getClass().getResource("/images/twitterIcon16.png")));
+        twitterLabel.setText("");
+        panel2.add(twitterLabel, new GridConstraints(0, 7, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(2, 1, new Insets(10, 10, 0, 10), -1, -1));
         panel3.setOpaque(false);
@@ -380,6 +385,14 @@ public class AboutApplicationDialog extends JDialog {
             }
         });
 
+        twitterLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        twitterLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                UrlsProceed.openUrl(StringConstants.WEBLOCOPENER_TWITTER_URL);
+            }
+        });
+
         shareLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         shareLabel.addMouseListener(new MouseAdapter() {
             private void createBalloonTip() {
@@ -458,6 +471,8 @@ public class AboutApplicationDialog extends JDialog {
 
 
         telegramLabel.setToolTipText(translation.getTranslatedString("telegramLabel"));
+
+        twitterLabel.setToolTipText(translation.getTranslatedString("twitterLabel"));
 
         shareBalloonMessage = translation.getTranslatedString("shareBalloonMessage");
 

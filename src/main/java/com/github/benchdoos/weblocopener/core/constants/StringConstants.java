@@ -20,6 +20,7 @@ public interface StringConstants {
     String GITHUB_WEB_URL = "https://github.com/benchdoos/WeblocOpener/";
 
     String BENCH_DOOS_TELEGRAM_URL = "https://vk.cc/74nB3D"; //for stats
+    String WEBLOCOPENER_TWITTER_URL = "https://vk.cc/8YubRk"; //for stats
     String DONATE_PAYPAL_URL = "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=eugeny.zrazhevsky@icloud.com&item_name=Donation+for+WeblocOpener&cy_code=USD";
     String FEEDBACK_MAIL_URL = "mailto:weblocopener@gmail.com?subject=WeblocOpener%20feedback" +
             "&body=Type%20here%20your%20question%20/%20problem,%20I%20try%20to%20help%20you%20as%20soon%20as%20it%20is%20possible!" +
