@@ -67,18 +67,11 @@ public class SettingsDialog extends JFrame {
     private JCheckBox openFolderForQRCheckBox;
     private JCheckBox showNotificationsToUserCheckBox;
     private JScrollPane scrollpane;
-    private String toolTipText = "" +
-            "<html>" +
-            "  <body style=\"font-size:10px;\">Syntax: <b><u>file path</u></b> <b style=\"color:red;\">%site</b>, don't forget to add <b>%site</b>" +
-            "  <br>Example for Google Chrome: <b style=\"color:green;\">start chrome \"%site\"</b>" +
-            "  </body>" +
-            "</html>";
 
     private String customBrowserName = "Custom...";
 
     public SettingsDialog() {
         log.debug("Creating settings dialog.");
-        translateDialog();
         initGui();
         log.debug("Settings dialog created.");
     }
@@ -641,10 +634,11 @@ public class SettingsDialog extends JFrame {
     private void setSyntaxInfoButtonToolTip() {
 
         syntaxInfoLabel.addMouseListener(new MouseAdapter() {
+            private final String translatedBalloonTip = Translation.getTranslatedString("SettingsDialogBundle", "toolTipText");
             final int DEFAULT_TIME = 10_000;
             final int SHORT_TIME = 6_000;
 
-            BalloonTip balloonTip = generateBalloonTip(toolTipText);
+            BalloonTip balloonTip = generateBalloonTip(translatedBalloonTip);
 
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -660,19 +654,10 @@ public class SettingsDialog extends JFrame {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                balloonTip = generateBalloonTip(toolTipText);
+                balloonTip = generateBalloonTip(
+                        translatedBalloonTip);
             }
         });
-    }
-
-    private void translateDialog() {
-        Translation translation = new Translation("translations/SettingsDialogBundle") {
-            @Override
-            public void initTranslations() {
-                toolTipText = messages.getString("toolTipText");
-            }
-        };
-        translation.initTranslations();
     }
 
     private void updateRegistry() {

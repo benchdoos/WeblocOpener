@@ -431,8 +431,46 @@ public class AboutApplicationDialog extends JDialog {
 
     }
 
+    private String createHtmlLink(String string) {
+        return "<html><a href=\"\">" + string + "</a></html>";
+    }
+
     private void translateDialog() {
-        Translation translation = new Translation("translations/AboutApplicationDialogBundle") {
+
+        Translation translation = new Translation("AboutApplicationDialogBundle");
+        setTitle(translation.getTranslatedString("windowTitle"));
+        versionLabel.setText(translation.getTranslatedString("appVersionLabel") + " " + CoreUtils.getApplicationVersionString());
+
+        siteLinkLabel.setText(createHtmlLink(translation.getTranslatedString("visitLabel")));
+
+
+        githubLinkLabel.setText(createHtmlLink("Github"));
+
+
+        librariesLabel.setText(createHtmlLink(translation.getTranslatedString("librariesLabel")));
+
+        logLabel.setText(createHtmlLink(translation.getTranslatedString("logLabel")));
+
+
+        logLabel.setToolTipText(translation.getTranslatedString("logLabelTooltip"));
+
+        feedbackLabel.setToolTipText(translation.getTranslatedString("feedbackLabel"));
+
+
+        telegramLabel.setToolTipText(translation.getTranslatedString("telegramLabel"));
+
+        shareBalloonMessage = translation.getTranslatedString("shareBalloonMessage");
+
+        shareLabel.setToolTipText(translation.getTranslatedString("shareLabel"));
+
+        shareLabelText = translation.getTranslatedString("shareLabelText");
+
+        donateByPayPalLabel.setToolTipText(translation.getTranslatedString("donateLabelTooltip"));
+        donateByDonationAlertsLabel.setToolTipText(translation.getTranslatedString("donateByDonationAlertsLabelTooltip"));
+
+
+
+        /*Translation translation = new Translation("AboutApplicationDialogBundle") {
             @Override
             public void initTranslations() {
                 setTitle(messages.getString("windowTitle"));
@@ -467,11 +505,9 @@ public class AboutApplicationDialog extends JDialog {
 
             }
 
-            private String createHtmlLink(String string) {
-                return "<html><a href=\"\">" + string + "</a></html>";
-            }
+
         };
-        translation.initTranslations();
+        translation.initTranslations();*/
     }
 
 }

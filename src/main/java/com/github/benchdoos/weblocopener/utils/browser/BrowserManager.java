@@ -35,7 +35,6 @@ public class BrowserManager {
 
     private static ArrayList<Browser> browserList = new ArrayList<>();
 
-    private static String defaultBrowserName = "Default";
 
     public static ArrayList<Browser> getBrowserList() {
         return browserList;
@@ -65,24 +64,15 @@ public class BrowserManager {
         return result;
     }
 
-    private static void initTranslation() {
-        Translation translation = new Translation("translations/CommonsBundle") {
-            @Override
-            public void initTranslations() {
-                defaultBrowserName = messages.getString("defaultBrowserName");
-            }
-        };
-        translation.initTranslations();
-    }
-
     public static void loadBrowserList() {
-        initTranslation();
         loadBrowsersFromDefault(getDefaultBrowsersList());
     }
 
     private static void loadBrowsersFromDefault(ArrayList<Browser> list) {
         browserList = list;
-        browserList.add(0, new Browser(defaultBrowserName, SettingsConstants.BROWSER_DEFAULT_VALUE));
+        browserList.add(0, new Browser(
+                Translation.getTranslatedString("CommonsBundle", "defaultBrowserName"),
+                SettingsConstants.BROWSER_DEFAULT_VALUE));
         log.debug("Browsers count: " + browserList.size() + " " + browserList);
 
     }

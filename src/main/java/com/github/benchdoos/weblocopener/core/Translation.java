@@ -23,36 +23,37 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 
-public abstract class Translation {
+public class Translation {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
     protected final ResourceBundle messages;
     private final String bundlePath;
 
-    protected Translation(String bundlePath) {
-        this.bundlePath = bundlePath;
+    public Translation(String bundleName) {
+        this.bundlePath = "translations/" + bundleName;
         messages = getTranslation();
     }
 
     public static String getTranslatedString(String stringBundleName, String message) {
-        final String[] result;
-        result = new String[]{""};
         try {
-            Translation translation = new Translation("translations/" + stringBundleName) {
-                @Override
-                public void initTranslations() {
-                    Locale currentLocale = Locale.getDefault();
-                    log.debug("[TRANSLATION] Locale: {} {}; Bundle: {}:[{}]", currentLocale.getCountry(),
-                            currentLocale.getLanguage(), stringBundleName, message);
-                    result[0] = messages.getString(message);
-                }
-            };
-            translation.initTranslations();
+            final String bundlePath = "translations/" + stringBundleName;
+            Locale currentLocale = Locale.getDefault();
+
+            log.debug("[TRANSLATION] Locale: {} {}; Bundle: {}:[{}]", currentLocale.getCountry(),
+                    currentLocale.getLanguage(), stringBundleName, message);
+
+            final ResourceBundle bundle = ResourceBundle.getBundle(bundlePath, currentLocale);
+
+            return bundle.getString(message);
         } catch (Exception e) {
-            log.warn("Could not get translation string by bundle: [{}] and message: [{}]", stringBundleName, message, e);
-            throw new RuntimeException(e);
+            log.warn("Could not translate  string: {}:[{}]", stringBundleName, message, e);
+            throw new RuntimeException("Could not localize string: " + stringBundleName + ":[" + message + "]", e);
         }
-        return result[0];
+    }
+
+    public String getTranslatedString(String message) {
+        log.debug("[TRANSLATION] Translating message: {}", message);
+        return messages.getString(message);
     }
 
     private ResourceBundle getTranslation() {
@@ -60,6 +61,4 @@ public abstract class Translation {
 
         return ResourceBundle.getBundle(bundlePath, currentLocale);
     }
-
-    public abstract void initTranslations();
 }

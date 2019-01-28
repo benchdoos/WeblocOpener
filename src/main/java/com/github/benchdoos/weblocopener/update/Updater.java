@@ -52,24 +52,21 @@ public class Updater {
     private static final String WINDOWS_SETUP_DEFAULT_NAME = "WeblocOpenerSetup.exe";
     private static File installerFile = null;
     private static HttpsURLConnection connection = null;
-    private static String canNotUpdateTitle = "Can not Update";
-    private static String canNotUpdateMessage = "Can not connect to api.github.com";
     private AppVersion appVersion = null;
 
 
     public Updater() throws IOException, NullPointerException {
-        translateMessages();
         createConnection();
 
         getServerApplicationVersion();
     }
 
     public static void canNotConnectManage(Exception e) {
-
-
-        log.warn(canNotUpdateMessage, e);
+        log.warn("Could not connect", e);
         if (Application.updateMode != Application.UPDATE_MODE.SILENT) {
-            UserUtils.showErrorMessageToUser(null, canNotUpdateTitle, canNotUpdateMessage);
+            Translation translation = new Translation("UpdaterBundle");
+            UserUtils.showErrorMessageToUser(null, translation.getTranslatedString("canNotUpdateTitle"),
+                    translation.getTranslatedString("canNotUpdateMessage"));
         }
     }
 
@@ -271,16 +268,5 @@ public class Updater {
         appVersion = new AppVersion();
         formAppVersionFromJson(root);
         log.info("Server application version: {} {} {}", appVersion.getUpdateTitle(), appVersion.getVersion(), appVersion.getDownloadUrl());
-    }
-
-    private void translateMessages() {
-        Translation translation = new Translation("translations/UpdaterBundle") {
-            @Override
-            public void initTranslations() {
-                canNotUpdateTitle = messages.getString("canNotUpdateTitle");
-                canNotUpdateMessage = messages.getString("canNotUpdateMessage");
-            }
-        };
-        translation.initTranslations();
     }
 }
