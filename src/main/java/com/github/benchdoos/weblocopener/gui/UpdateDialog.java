@@ -443,9 +443,11 @@ public class UpdateDialog extends JFrame {
                 Updater.startUpdate(serverAppVersion);
             } catch (IOException e) {
                 log.warn("Could not start update", e);
+
+                Translation translation = new Translation("UpdateDialogBundle");
                 UserUtils.showErrorMessageToUser(this,
-                        Translation.getTranslatedString("UpdateDialogBundle", "lostConnectionTitle"),
-                        Translation.getTranslatedString("UpdateDialogBundle", "lostConnectionMessage"));
+                        translation.getTranslatedString("lostConnectionTitle"),
+                        translation.getTranslatedString("lostConnectionMessage"));
             }
             if (!Thread.currentThread().isInterrupted()) {
                 dispose();
