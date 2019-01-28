@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 public abstract class Translation {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
-    public final ResourceBundle messages;
+    protected final ResourceBundle messages;
     private final String bundlePath;
 
     protected Translation(String bundlePath) {
@@ -41,6 +41,9 @@ public abstract class Translation {
             Translation translation = new Translation("translations/" + stringBundleName) {
                 @Override
                 public void initTranslations() {
+                    Locale currentLocale = Locale.getDefault();
+                    log.debug("[TRANSLATION] Locale: {} {}; Bundle: {}:[{}]", currentLocale.getCountry(),
+                            currentLocale.getLanguage(), stringBundleName, message);
                     result[0] = messages.getString(message);
                 }
             };
@@ -55,10 +58,7 @@ public abstract class Translation {
     private ResourceBundle getTranslation() {
         Locale currentLocale = Locale.getDefault();
 
-        final ResourceBundle bundle = ResourceBundle.getBundle(bundlePath,
-                currentLocale);
-        log.debug("[TRANSLATION] Locale: {} {} Bundle: {}", currentLocale.getCountry(), currentLocale.getLanguage(), bundle.getBaseBundleName());
-        return bundle;
+        return ResourceBundle.getBundle(bundlePath, currentLocale);
     }
 
     public abstract void initTranslations();
