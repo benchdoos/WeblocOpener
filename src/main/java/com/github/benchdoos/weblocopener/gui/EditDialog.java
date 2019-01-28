@@ -415,22 +415,23 @@ public class EditDialog extends JFrame {
             }
 
             private void updateRenameFileCheckBoxToolTip() {
-                final String bundle = "EditDialogBundle";
+                Translation translation = new Translation("EditDialogBundle");
+
                 if (urlPageTitle.getText() != null) {
                     if (!urlPageTitle.getText().isEmpty()) {
                         File file = getCreatingFileName(pathToEditingFile);
                         if (!file.exists()) {
-                            autoRenameFileCheckBox.setToolTipText("<html>" + Translation.getTranslatedString(bundle, "autoRenameToolTip")
+                            autoRenameFileCheckBox.setToolTipText("<html>" + translation.getTranslatedString("autoRenameToolTip")
                                     + "<br>" + urlPageTitle.getToolTipText() + "</html>");
                         } else {
-                            autoRenameFileCheckBox.setToolTipText(Translation.getTranslatedString(bundle, "canNotRenameExistsToolTip"));
+                            autoRenameFileCheckBox.setToolTipText(translation.getTranslatedString("canNotRenameExistsToolTip"));
 
                         }
                     } else {
-                        autoRenameFileCheckBox.setToolTipText(Translation.getTranslatedString(bundle, "canNotRenameToolTip"));
+                        autoRenameFileCheckBox.setToolTipText(translation.getTranslatedString("canNotRenameToolTip"));
                     }
                 } else {
-                    autoRenameFileCheckBox.setToolTipText(Translation.getTranslatedString(bundle, "canNotRenameToolTip"));
+                    autoRenameFileCheckBox.setToolTipText(translation.getTranslatedString("canNotRenameToolTip"));
                 }
             }
 
