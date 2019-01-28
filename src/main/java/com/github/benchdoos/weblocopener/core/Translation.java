@@ -26,10 +26,12 @@ import java.util.ResourceBundle;
 public class Translation {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
-    protected final ResourceBundle messages;
+    private final ResourceBundle messages;
     private final String bundlePath;
+    private final String bundleName;
 
     public Translation(String bundleName) {
+        this.bundleName = bundleName;
         this.bundlePath = "translations/" + bundleName;
         messages = getTranslation();
     }
@@ -52,8 +54,14 @@ public class Translation {
     }
 
     public String getTranslatedString(String message) {
-        log.debug("[TRANSLATION] Translating message: {}", message);
-        return messages.getString(message);
+        try {
+            log.debug("[TRANSLATION] Translating message: {}", message);
+            return messages.getString(message);
+        } catch (Exception e) {
+            log.warn("Could not localize string: " + bundleName + ":[" + message + "]", e);
+            throw new RuntimeException("Could not localize string: " + bundleName + ":[" + message + "]", e);
+
+        }
     }
 
     private ResourceBundle getTranslation() {
