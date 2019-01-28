@@ -76,22 +76,51 @@ public class NonGuiUpdater {
         }
     }
 
-    private void createTrayIcon() {
+    private CheckboxMenuItem createCheckBoxItem() {
+        final CheckboxMenuItem autoUpdateCheckBox = new CheckboxMenuItem(
+                Translation.getTranslatedString("NonGuiUpdaterBundle", "autoUpdateCheckBox"));
 
-        PopupMenu trayMenu = new PopupMenu();
-
-        final CheckboxMenuItem autoUpdateCheckBox = new CheckboxMenuItem("Auto-update");
         log.debug(PreferencesManager.KEY_AUTO_UPDATE + ": " + PreferencesManager.isAutoUpdateActive());
         autoUpdateCheckBox.setState(PreferencesManager.isAutoUpdateActive());
         autoUpdateCheckBox.addItemListener(e -> {
             log.debug(PreferencesManager.KEY_AUTO_UPDATE + ": " + autoUpdateCheckBox.getState());
             PreferencesManager.setAutoUpdateActive(autoUpdateCheckBox.getState());
         });
+        return autoUpdateCheckBox;
+    }
+
+    private MenuItem createExitItem() {
+        MenuItem exit = new MenuItem(
+                Translation.getTranslatedString("NonGuiUpdaterBundle", "exitButton"));
+
+        exit.addActionListener(e -> tray.remove(trayIcon));
+        return exit;
+    }
+
+    private MenuItem createSettingsItem() {
+        MenuItem settings = new MenuItem(
+                Translation.getTranslatedString("NonGuiUpdaterBundle", "settingsButton"));
+        settings.addActionListener(e -> {
+            Application.runSettingsDialog();
+            tray.remove(trayIcon);
+        });
+        return settings;
+    }
+
+    private void createTrayIcon() {
+
+        PopupMenu trayMenu = new PopupMenu();
+
+        MenuItem settings = createSettingsItem();
+        trayMenu.add(settings);
+        trayMenu.addSeparator();
+
+
+        final CheckboxMenuItem autoUpdateCheckBox = createCheckBoxItem();
         trayMenu.add(autoUpdateCheckBox);
         trayMenu.addSeparator();
 
-        MenuItem exit = new MenuItem("Exit");
-        exit.addActionListener(e -> tray.remove(trayIcon));
+        MenuItem exit = createExitItem();
         trayMenu.add(exit);
 
         trayIcon.setImageAutoSize(true);
@@ -102,7 +131,7 @@ public class NonGuiUpdater {
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == 1) {
                     trayIcon.removeMouseListener(this);
-                    Application.createUpdateDialog();
+                    Application.runUpdateDialog();
                     tray.remove(trayIcon);
                 }
                 super.mouseClicked(e);

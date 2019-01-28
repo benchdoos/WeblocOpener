@@ -581,7 +581,7 @@ public class SettingsDialog extends JFrame {
 
     private void onUpdateNow() {
         dispose();
-        Application.createUpdateDialog();
+        Application.runUpdateDialog();
     }
 
     private String openFileBrowser() {
