@@ -4,6 +4,8 @@
 
 Visit website: [https://benchdoos.github.io/](https://vk.cc/6wK76Z)
 
+Follow on Twitter: [https://twitter.com/weblocopener](https://twitter.com/weblocopener)
+
 Subscribe on telegram [channel](https://vk.cc/6wK7k1)
 
 Download [Latest version](https://vk.cc/7Flxoe)
@@ -66,12 +68,13 @@ You can use any custom browser by your own with custom call, using syntax: `<fil
 
 | Feature                        | Windows       | UNIX           |  MacOS      |
 | -------------------------------|:-------------:|:-------------: |:-----------:|
-| Open                           | Yes           | Frozen         | Safari only |
+| Open                           | Yes           | Frozen         | Yes         |
 | Edit                           | Yes           | Frozen         | No          |
 | Create new                     | Yes           | Frozen         | Default     |
 | Generate QR-Code               | Yes           | Frozen         | No          |
 | URL auto-paste                 | Yes           | Frozen         | WO feature  |
-| Instant URL copy               | Yes           | Frozen         | No          |
+| Instant URL, QR-Code copy      | Yes           | Frozen         | No          |
+| Converter .webloc to .url and backward| Yes    | Frozen         | No          |
 | Auto-update                    | Yes           | Frozen         | WO feature  |
 | Open in not default browser    | Yes           | Frozen         | Not         |
 
