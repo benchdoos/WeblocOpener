@@ -15,9 +15,12 @@
 
 package com.github.benchdoos.weblocopener.core.constants;
 
+import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
+
 public interface SettingsConstants {
     boolean IS_APP_AUTO_UPDATE_DEFAULT_VALUE = true;
     boolean OPEN_FOLDER_FOR_QR_CODE = true;
     boolean SHOW_NOTIFICATIONS_TO_USER = true;
     String BROWSER_DEFAULT_VALUE = "default";
+    PreferencesManager.DARK_MODE DARK_MODE_DEFAULT_VALUE = PreferencesManager.DARK_MODE.DISABLED;
 }

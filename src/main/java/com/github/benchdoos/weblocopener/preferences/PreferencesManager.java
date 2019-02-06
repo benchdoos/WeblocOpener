@@ -29,7 +29,9 @@ public class PreferencesManager {
     private static final String KEY_BROWSER = "browser";
     private static final String KEY_NOTIFICATIONS = "notifications";
     private static final String DEV_MODE_KEY = "dev_mode";
-
+    private static final String KEY_DARK_MODE = "dark_mode";
+    private static final String KEY_DARK_MODE_DOWN_TIME = "dark_mode_down_time";
+    private static final String KEY_DARK_MODE_UPPER_TIME = "dark_mode_upper_time";
     private static final Preferences PREFERENCES = Preferences.userRoot().node(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME.toLowerCase());
 
     public static String getBrowserValue() {
@@ -46,12 +48,19 @@ public class PreferencesManager {
         }
     }
 
-    public static boolean openFolderForQrCode() {
-        return PREFERENCES.getBoolean(KEY_OPEN_FOR_QR, SettingsConstants.OPEN_FOLDER_FOR_QR_CODE);
+    private static String getDarkMode() {
+        final String s = PREFERENCES.get(KEY_DARK_MODE, SettingsConstants.DARK_MODE_DEFAULT_VALUE.toString());
+        if (s.equalsIgnoreCase(DARK_MODE.ALWAYS.toString())) {
+            return DARK_MODE.ALWAYS.toString();
+        } else if (s.equalsIgnoreCase(DARK_MODE.DISABLED.toString())) {
+            return DARK_MODE.DISABLED.toString();
+        } else {
+            return s;
+        }
     }
 
-    public static void setOpenFolderForQrCode(boolean openFolderForQrCode) {
-        PREFERENCES.putBoolean(KEY_OPEN_FOR_QR, openFolderForQrCode);
+    public static void setDarkMode(DARK_MODE mode) {
+        PREFERENCES.put(KEY_DARK_MODE, mode.toString().toUpperCase());
     }
 
     public static boolean isAutoUpdateActive() {
@@ -60,6 +69,19 @@ public class PreferencesManager {
 
     public static void setAutoUpdateActive(boolean autoUpdateActive) {
         PREFERENCES.putBoolean(KEY_AUTO_UPDATE, autoUpdateActive);
+    }
+
+    public static boolean isDarkModeEnabledNow() {
+        switch (getDarkMode()) {
+            case "ALWAYS":
+                return true;
+            case "DISABLED":
+                return false;
+            default: {
+                //loads api blah blah
+                return SettingsConstants.DARK_MODE_DEFAULT_VALUE == DARK_MODE.ALWAYS;
+            }
+        }
     }
 
     public static boolean isDevMode() {
@@ -73,5 +95,15 @@ public class PreferencesManager {
     public static void setNotificationsShown(boolean showNotifications) {
         PREFERENCES.putBoolean(KEY_NOTIFICATIONS, showNotifications);
     }
+
+    public static boolean openFolderForQrCode() {
+        return PREFERENCES.getBoolean(KEY_OPEN_FOR_QR, SettingsConstants.OPEN_FOLDER_FOR_QR_CODE);
+    }
+
+    public static void setOpenFolderForQrCode(boolean openFolderForQrCode) {
+        PREFERENCES.putBoolean(KEY_OPEN_FOR_QR, openFolderForQrCode);
+    }
+
+    public enum DARK_MODE {ALWAYS, DISABLED}
 }
 

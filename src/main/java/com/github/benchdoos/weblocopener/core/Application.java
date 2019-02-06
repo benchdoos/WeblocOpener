@@ -15,6 +15,8 @@
 
 package com.github.benchdoos.weblocopener.core;
 
+import com.github.benchdoos.beans.DefaultThemes;
+import com.github.benchdoos.core.JColorful;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
 import com.github.benchdoos.weblocopener.gui.*;
@@ -261,6 +263,12 @@ public class Application {
 
     public static void runSettingsDialog() {
         SettingsDialog settingsDialog = new SettingsDialog();
+
+        if (PreferencesManager.isDarkModeEnabledNow()) {
+            JColorful colorful = new JColorful(DefaultThemes.EXTREMELY_BLACK);
+            colorful.colorize(settingsDialog);
+        }
+
         settingsDialog.setVisible(true);
     }
 
