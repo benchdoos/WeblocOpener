@@ -17,6 +17,7 @@ package com.github.benchdoos.weblocopener.utils;
 
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.service.Analyzer;
+import com.github.benchdoos.weblocopener.service.InternetShortcutLink;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FilenameUtils;
@@ -37,7 +38,7 @@ public class Converter {
     public static File convertUrlToWebloc(File originalUrlFile) throws IOException {
         validateFile(originalUrlFile, ApplicationConstants.URL_FILE_EXTENSION);
 
-        final URL internetShortcut = InternetShortcut.getInternetShortcut(originalUrlFile);
+        final URL internetShortcut = new InternetShortcutLink().getLink(originalUrlFile);
 
         log.debug("Shortcut for file [{}] url is: ", originalUrlFile, internetShortcut);
 
@@ -60,7 +61,7 @@ public class Converter {
 
         File file = prepareNewFile(originalWeblocFile, URL_FILE_EXTENSION);
         if (!file.exists()) {
-            InternetShortcut.createInternetShortcut(file, url.toString(), null);
+            new InternetShortcutLink().createLink(file, url);
             return file;
         } else throw new FileExistsException("File [" + file + "] already exists");
     }

@@ -13,7 +13,7 @@
  * Eugene Zrazhevsky <eugene.zrazhevsky@gmail.com>
  */
 
-package com.github.benchdoos.weblocopener.utils;
+package com.github.benchdoos.weblocopener.service;
 
 import java.io.File;
 import java.io.FileReader;
@@ -22,27 +22,23 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
 
-public class InternetShortcut {
+public class InternetShortcutLink implements AbstractLink {
     /**
      * Create an Internet shortcut
      *
      * @param file location of the shortcut
      * @param url  URL
-     * @param icon URL (ex. http://www.server.com/favicon.ico)
      * @throws IOException if can not write a file
      */
-    public static void createInternetShortcut(File file, String url, String icon) throws IOException {
+    public void createLink(File file, URL url) throws IOException {
         FileWriter fileWriter = new FileWriter(file);
         fileWriter.write("[InternetShortcut]\n");
-        fileWriter.write("URL=" + url + "\n");
-        if (icon != null && !icon.equals("")) {
-            fileWriter.write("IconFile=" + icon + "\n");
-        }
+        fileWriter.write("URL=" + url.toString() + "\n");
         fileWriter.flush();
         fileWriter.close();
     }
 
-    public static URL getInternetShortcut(File file) throws IOException {
+    public URL getLink(File file) throws IOException {
         try (FileReader fileReader = new FileReader(file)) {
             Scanner scan = new Scanner(fileReader);
 
