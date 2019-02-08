@@ -20,6 +20,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * Link for Windows {@code .url} file
+ */
 public class InternetShortcutLink implements AbstractLink {
     /**
      * Create an Internet shortcut
