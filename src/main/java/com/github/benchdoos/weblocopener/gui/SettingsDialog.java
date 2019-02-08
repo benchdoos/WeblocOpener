@@ -457,6 +457,7 @@ public class SettingsDialog extends JFrame {
         autoUpdateEnabledCheckBox.setSelected(PreferencesManager.isAutoUpdateActive());
 
         browserSetterPanel.loadSettings();
+        browserSetterPanel.init();
 
         openFolderForQRCheckBox.setSelected(PreferencesManager.openFolderForQrCode());
         showNotificationsToUserCheckBox.setSelected(PreferencesManager.isNotificationsShown());

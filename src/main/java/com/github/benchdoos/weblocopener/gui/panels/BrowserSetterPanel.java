@@ -56,8 +56,6 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
         initGui();
         initListeners();
         initBrowserComboBox();
-        onInit = false;
-
     }
 
     {
@@ -183,6 +181,11 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
         return browserComboBox.getSelectedItem();
     }
 
+    public void init() {
+        //no other way found. call this after init from outside
+        onInit = false;
+    }
+
     private void initBrowserComboBox() {
         ArrayList<Browser> browsers = BrowserManager.getBrowserList();
 
@@ -205,10 +208,7 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
         browserComboBox.addActionListener(e -> {
             if (browserComboBox.getSelectedIndex() == browserComboBox.getItemCount() - 1) {
                 log.debug("init: " + onInit);
-                final boolean b = callTextField.getText().equalsIgnoreCase(SettingsConstants.BROWSER_DEFAULT_VALUE);
-                final boolean empty = callTextField.getText().isEmpty();
-                log.debug(":> " + callTextField.getText() + " " + b + " " + empty);
-                if (b || empty) {
+                if (!onInit) {
                     log.info("Opening file browser for custom browser search");
                     String path = openFileBrowser();
                     if (path != null) {
@@ -323,7 +323,7 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
             log.info("Browser call: " + browser.getCall());
             final int selectedIndex = browserComboBox.getSelectedIndex();
             final int itemCount = browserComboBox.getItemCount();
-            System.out.println("sel indX: " + selectedIndex + " itm cnt: " + itemCount);
+
             if (selectedIndex != itemCount - 1) {
                 if (browser.getCall() != null) {
                     if (!PreferencesManager.getBrowserValue().equals(browser.getCall())) {
@@ -341,7 +341,7 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
                 }
             } else {
                 final String text = callTextField.getText();
-                System.out.println("saving text: " + text);
+                log.debug("saving text: " + text);
                 if (!text.equals(browser.getIncognitoCall())) {
                     PreferencesManager.setBrowserValue(text);
                 }
