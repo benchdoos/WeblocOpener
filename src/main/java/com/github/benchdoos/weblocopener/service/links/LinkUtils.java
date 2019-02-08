@@ -16,27 +16,26 @@
 package com.github.benchdoos.weblocopener.service.links;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Scanner;
 
-public class InternetShortcutLink implements AbstractLink {
-    /**
-     * Create an Internet shortcut
-     *
-     * @param file location of the shortcut
-     * @param url  URL
-     * @throws IOException if can not write a file
-     */
-    public void createLink(File file, URL url) throws IOException {
-        FileWriter fileWriter = new FileWriter(file);
-        fileWriter.write("[InternetShortcut]\n");
-        fileWriter.write("URL=" + url.toString() + "\n");
-        fileWriter.flush();
-        fileWriter.close();
-    }
+class LinkUtils {
+    static URL getUrl(File file) throws IOException {
+        try (FileReader fileReader = new FileReader(file)) {
+            Scanner scan = new Scanner(fileReader);
 
-    public URL getLink(File file) throws IOException {
-        return LinkUtils.getUrl(file);
+            while (scan.hasNext()) {
+                final String next = scan.next();
+                if (next.startsWith("URL=")) {
+                    char[] buffer = new char[next.length()];
+                    next.getChars(4, next.length(), buffer, 0);
+                    final String url = new String(buffer);
+                    return new URL(url);
+                }
+            }
+        }
+        return null;
     }
 }
