@@ -18,18 +18,13 @@ package com.github.benchdoos.weblocopener.gui;
 import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
-import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
+import com.github.benchdoos.weblocopener.gui.panels.BrowserSetterPanel;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.utils.*;
-import com.github.benchdoos.weblocopener.utils.browser.Browser;
-import com.github.benchdoos.weblocopener.utils.browser.BrowserManager;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import net.java.balloontip.BalloonTip;
-import net.java.balloontip.styles.MinimalBalloonStyle;
-import net.java.balloontip.utils.TimingUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
@@ -39,7 +34,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,7 +47,6 @@ import java.util.TooManyListenersException;
 public class SettingsDialog extends JFrame {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
-    private boolean onInit = true;
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -59,9 +55,6 @@ public class SettingsDialog extends JFrame {
     private JLabel versionLabel;
     private JLabel versionStringLabel;
     private JButton aboutButton;
-    private JComboBox<Object> browserComboBox;
-    private JTextField callTextField;
-    private JLabel callLabel;
     private JLabel syntaxInfoLabel;
     private JCheckBox incognitoCheckBox;
     private JCheckBox openFolderForQRCheckBox;
@@ -74,6 +67,7 @@ public class SettingsDialog extends JFrame {
     private JLabel sunriseValueLabel;
     private JLabel foundLocationLabel;
     private JPanel locationAndTimePanel;
+    private BrowserSetterPanel browserSetterPanel;
 
     public SettingsDialog() {
         log.debug("Creating settings dialog.");
@@ -127,103 +121,75 @@ public class SettingsDialog extends JFrame {
         panel3.setLayout(new GridLayoutManager(4, 1, new Insets(0, 0, 0, 0), -1, -1));
         scrollpane.setViewportView(panel3);
         final JPanel panel4 = new JPanel();
-        panel4.setLayout(new GridLayoutManager(4, 3, new Insets(0, 0, 0, 0), -1, -1));
-        panel3.add(panel4, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        panel4.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), null));
-        browserComboBox = new JComboBox();
-        browserComboBox.setMaximumRowCount(9);
-        panel4.add(browserComboBox, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label2 = new JLabel();
-        this.$$$loadLabelText$$$(label2, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("openInBrowser"));
-        panel4.add(label2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        callLabel = new JLabel();
-        this.$$$loadLabelText$$$(callLabel, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("customCallLabel"));
-        callLabel.setVisible(true);
-        panel4.add(callLabel, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        incognitoCheckBox = new JCheckBox();
-        incognitoCheckBox.setEnabled(false);
-        incognitoCheckBox.setText("");
-        incognitoCheckBox.setToolTipText(ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("incognitoModeTooltip"));
-        panel4.add(incognitoCheckBox, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer3 = new Spacer();
-        panel4.add(spacer3, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
-        callTextField = new JTextField();
-        callTextField.setVisible(true);
-        panel4.add(callTextField, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(80, -1), null, 0, false));
-        syntaxInfoLabel = new JLabel();
-        syntaxInfoLabel.setIcon(new ImageIcon(getClass().getResource("/images/infoIcon16.png")));
-        syntaxInfoLabel.setText("");
-        panel4.add(syntaxInfoLabel, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JPanel panel5 = new JPanel();
-        panel5.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
-        panel3.add(panel5, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel4.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
+        panel3.add(panel4, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         versionLabel = new JLabel();
         this.$$$loadLabelText$$$(versionLabel, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("versionLabel"));
-        panel5.add(versionLabel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel4.add(versionLabel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         versionStringLabel = new JLabel();
         this.$$$loadLabelText$$$(versionStringLabel, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("versionString"));
-        panel5.add(versionStringLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer4 = new Spacer();
-        panel5.add(spacer4, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
-        final JPanel panel6 = new JPanel();
-        panel6.setLayout(new GridLayoutManager(5, 3, new Insets(0, 0, 0, 0), -1, -1));
-        panel3.add(panel6, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel4.add(versionStringLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer3 = new Spacer();
+        panel4.add(spacer3, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final JPanel panel5 = new JPanel();
+        panel5.setLayout(new GridLayoutManager(5, 3, new Insets(0, 0, 0, 0), -1, -1));
+        panel3.add(panel5, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         autoUpdateEnabledCheckBox = new JCheckBox();
         autoUpdateEnabledCheckBox.setContentAreaFilled(true);
         autoUpdateEnabledCheckBox.setSelected(true);
         this.$$$loadButtonText$$$(autoUpdateEnabledCheckBox, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("autoUpdateEnabledCheckBox"));
         autoUpdateEnabledCheckBox.setVerifyInputWhenFocusTarget(false);
         autoUpdateEnabledCheckBox.setVerticalAlignment(0);
-        panel6.add(autoUpdateEnabledCheckBox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel5.add(autoUpdateEnabledCheckBox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JSeparator separator1 = new JSeparator();
-        panel6.add(separator1, new GridConstraints(4, 0, 1, 3, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel5.add(separator1, new GridConstraints(4, 0, 1, 3, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         checkUpdatesButton = new JButton();
         this.$$$loadButtonText$$$(checkUpdatesButton, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("checkUpdatesButton"));
-        panel6.add(checkUpdatesButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer5 = new Spacer();
-        panel6.add(spacer5, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        panel5.add(checkUpdatesButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer4 = new Spacer();
+        panel5.add(spacer4, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         openFolderForQRCheckBox = new JCheckBox();
         openFolderForQRCheckBox.setSelected(true);
         this.$$$loadButtonText$$$(openFolderForQRCheckBox, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("openFolderForQRCheckBox"));
-        panel6.add(openFolderForQRCheckBox, new GridConstraints(1, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel5.add(openFolderForQRCheckBox, new GridConstraints(1, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         showNotificationsToUserCheckBox = new JCheckBox();
         showNotificationsToUserCheckBox.setSelected(true);
         this.$$$loadButtonText$$$(showNotificationsToUserCheckBox, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("showNotifications"));
-        panel6.add(showNotificationsToUserCheckBox, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JPanel panel7 = new JPanel();
-        panel7.setLayout(new GridLayoutManager(2, 3, new Insets(0, 0, 0, 0), -1, -1));
-        panel6.add(panel7, new GridConstraints(3, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        final JLabel label3 = new JLabel();
-        this.$$$loadLabelText$$$(label3, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("darkMode"));
-        panel7.add(label3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel5.add(showNotificationsToUserCheckBox, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JPanel panel6 = new JPanel();
+        panel6.setLayout(new GridLayoutManager(2, 3, new Insets(0, 0, 0, 0), -1, -1));
+        panel5.add(panel6, new GridConstraints(3, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        final JLabel label2 = new JLabel();
+        this.$$$loadLabelText$$$(label2, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("darkMode"));
+        panel6.add(label2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         darkModeCompoBox = new JComboBox();
         final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
         darkModeCompoBox.setModel(defaultComboBoxModel1);
-        panel7.add(darkModeCompoBox, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer6 = new Spacer();
-        panel7.add(spacer6, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        panel6.add(darkModeCompoBox, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer5 = new Spacer();
+        panel6.add(spacer5, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         locationAndTimePanel = new JPanel();
         locationAndTimePanel.setLayout(new GridLayoutManager(2, 8, new Insets(0, 0, 0, 0), -1, -1));
-        panel7.add(locationAndTimePanel, new GridConstraints(1, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel6.add(locationAndTimePanel, new GridConstraints(1, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         locationTextField = new JTextField();
         locationAndTimePanel.add(locationTextField, new GridConstraints(0, 0, 1, 7, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         locationStatusLabel = new JLabel();
         locationStatusLabel.setIcon(new ImageIcon(getClass().getResource("/images/emojiCross16.png")));
         locationAndTimePanel.add(locationStatusLabel, new GridConstraints(0, 7, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(16, 16), new Dimension(16, 16), new Dimension(16, 16), 0, false));
+        final JLabel label3 = new JLabel();
+        this.$$$loadLabelText$$$(label3, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("TimeLabel"));
+        locationAndTimePanel.add(label3, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label4 = new JLabel();
-        this.$$$loadLabelText$$$(label4, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("TimeLabel"));
-        locationAndTimePanel.add(label4, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label5 = new JLabel();
-        this.$$$loadLabelText$$$(label5, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("sunsetLabel"));
-        locationAndTimePanel.add(label5, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        this.$$$loadLabelText$$$(label4, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("sunsetLabel"));
+        locationAndTimePanel.add(label4, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         sunsetValueLabel = new JLabel();
         Font sunsetValueLabelFont = this.$$$getFont$$$(null, Font.BOLD, -1, sunsetValueLabel.getFont());
         if (sunsetValueLabelFont != null) sunsetValueLabel.setFont(sunsetValueLabelFont);
         sunsetValueLabel.setText("19:00");
         locationAndTimePanel.add(sunsetValueLabel, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label6 = new JLabel();
-        this.$$$loadLabelText$$$(label6, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("sunriseLabel"));
-        locationAndTimePanel.add(label6, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label5 = new JLabel();
+        this.$$$loadLabelText$$$(label5, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("sunriseLabel"));
+        locationAndTimePanel.add(label5, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         sunriseValueLabel = new JLabel();
         Font sunriseValueLabelFont = this.$$$getFont$$$(null, Font.BOLD, -1, sunriseValueLabel.getFont());
         if (sunriseValueLabelFont != null) sunriseValueLabel.setFont(sunriseValueLabelFont);
@@ -232,10 +198,12 @@ public class SettingsDialog extends JFrame {
         foundLocationLabel = new JLabel();
         this.$$$loadLabelText$$$(foundLocationLabel, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("unknownLocation"));
         locationAndTimePanel.add(foundLocationLabel, new GridConstraints(1, 6, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer6 = new Spacer();
+        locationAndTimePanel.add(spacer6, new GridConstraints(1, 5, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        browserSetterPanel = new BrowserSetterPanel();
+        panel3.add(browserSetterPanel.$$$getRootComponent$$$(), new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final Spacer spacer7 = new Spacer();
-        locationAndTimePanel.add(spacer7, new GridConstraints(1, 5, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
-        final Spacer spacer8 = new Spacer();
-        panel3.add(spacer8, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel3.add(spacer7, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
     }
 
     /**
@@ -318,99 +286,6 @@ public class SettingsDialog extends JFrame {
         return contentPane;
     }
 
-    private int findBrowser(String browserValue) {
-        int result;
-        for (int i = 0; i < BrowserManager.getBrowserList().size(); i++) {
-            Browser browser = BrowserManager.getBrowserList().get(i);
-            log.debug("Checking if incoming browser {} is in list, now: {}", browserValue, browser);
-
-            if (browser.getCall() != null) {
-                if (browser.getCall().equals(browserValue)) {
-                    result = i;
-                    return result;
-                } else if (browser.getIncognitoCall() != null) {
-                    if (browser.getIncognitoCall().equals(browserValue)) {
-                        result = i;
-                        return result;
-                    }
-                }
-            }
-        }
-
-        if (browserValue.equalsIgnoreCase(SettingsConstants.BROWSER_DEFAULT_VALUE) || browserValue.isEmpty()) {
-            return 0;
-        } else return BrowserManager.getBrowserList().size() - 1;
-    }
-
-    private BalloonTip generateBalloonTip(String toolTipText) {
-        BalloonTip balloonTip = new BalloonTip(syntaxInfoLabel, toolTipText);
-        balloonTip.setStyle(new MinimalBalloonStyle(Color.white, 5));
-        balloonTip.setCloseButton(null);
-        balloonTip.setVisible(false);
-        balloonTip.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                balloonTip.setVisible(false);
-            }
-        });
-        return balloonTip;
-    }
-
-    private void initBrowserComboBox() {
-        ArrayList<Browser> browsers = BrowserManager.getBrowserList();
-
-        Browser others = new Browser(
-                Translation.getTranslatedString("SettingsDialogBundle", "customBrowserName"), null);
-        browsers.add(others);
-
-        browserComboBox.setModel(new DefaultComboBoxModel<>(browsers.toArray()));
-        browserComboBox.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                if (value instanceof Browser) {
-                    return super.getListCellRendererComponent(list, ((Browser) value).getName(), index, isSelected, cellHasFocus);
-                } else {
-                    return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                }
-            }
-        });
-
-        browserComboBox.addActionListener(e -> {
-            if (browserComboBox.getSelectedIndex() == browserComboBox.getItemCount() - 1) {
-                if (!onInit) {
-                    log.info("Opening file browser for custom browser search");
-                    String path = openFileBrowser();
-                    if (path != null) {
-                        callLabel.setVisible(true);
-                        callTextField.setVisible(true);
-                        callTextField.setText(path);
-                        incognitoCheckBox.setEnabled(false);
-                    } else {
-                        browserComboBox.setSelectedIndex(findBrowser(PreferencesManager.getBrowserValue()));
-                    }
-                } else {
-                    callLabel.setVisible(true);
-                    callTextField.setText(PreferencesManager.getBrowserValue());
-                    callTextField.setVisible(true);
-                    syntaxInfoLabel.setVisible(true);
-                }
-            } else {
-                if (browserComboBox.getSelectedIndex() == 0) {
-                    incognitoCheckBox.setEnabled(false);
-                    incognitoCheckBox.setSelected(false);
-                } else {
-                    if (browsers.get(browserComboBox.getSelectedIndex()).getIncognitoCall() != null) {
-                        incognitoCheckBox.setEnabled(true);
-                    } else {
-                        incognitoCheckBox.setSelected(false);
-                        incognitoCheckBox.setEnabled(false);
-                    }
-                }
-                callLabel.setVisible(false);
-                callTextField.setVisible(false);
-            }
-        });
-    }
 
     private void initDropTarget() {
         Component component = this;
@@ -544,13 +419,6 @@ public class SettingsDialog extends JFrame {
         getRootPane().setDefaultButton(buttonOK);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/balloonIcon256.png")));
 
-        syntaxInfoLabel.setVisible(false);
-        callTextField.setVisible(false);
-        callLabel.setVisible(false);
-
-        initBrowserComboBox();
-
-
         loadSettings();
 
         buttonOK.addActionListener(e -> onSave());
@@ -561,19 +429,6 @@ public class SettingsDialog extends JFrame {
 
         aboutButton.addActionListener(e -> onAbout());
 
-        callTextField.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentHidden(ComponentEvent e) {
-                syntaxInfoLabel.setVisible(false);
-            }
-
-            @Override
-            public void componentShown(ComponentEvent e) {
-                syntaxInfoLabel.setVisible(true);
-            }
-        });
-
-        setSyntaxInfoButtonToolTip();
 
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -590,8 +445,6 @@ public class SettingsDialog extends JFrame {
         versionLabel.setText(CoreUtils.getApplicationVersionString());
         scrollpane.setBorder(null);
 
-        onInit = false;
-
         initDropTarget();
 
         pack();
@@ -600,28 +453,13 @@ public class SettingsDialog extends JFrame {
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
     }
 
-    private void loadBrowserSettings() {
-        final Browser browser = (Browser) browserComboBox.getSelectedItem();
-
-        if (browser != null) {
-            if (browser.getIncognitoCall() != null) {
-                incognitoCheckBox.setSelected(PreferencesManager.getBrowserValue().equals(browser.getIncognitoCall()));
-            } else {
-                incognitoCheckBox.setSelected(false);
-                incognitoCheckBox.setEnabled(false);
-            }
-        } else {
-            incognitoCheckBox.setSelected(false);
-            incognitoCheckBox.setEnabled(false);
-        }
-    }
-
     private void loadSettings() {
         autoUpdateEnabledCheckBox.setSelected(PreferencesManager.isAutoUpdateActive());
-        browserComboBox.setSelectedIndex(findBrowser(PreferencesManager.getBrowserValue()));
+
+        browserSetterPanel.loadSettings();
+
         openFolderForQRCheckBox.setSelected(PreferencesManager.openFolderForQrCode());
         showNotificationsToUserCheckBox.setSelected(PreferencesManager.isNotificationsShown());
-        loadBrowserSettings();
     }
 
     private void onAbout() {
@@ -643,95 +481,13 @@ public class SettingsDialog extends JFrame {
         Application.runUpdateDialog();
     }
 
-    private String openFileBrowser() {
-        log.debug("Opening File Browser");
-
-        try {
-            FileDialog fd = new FileDialog(this,
-                    Translation.getTranslatedString("SettingsDialogBundle", "chooseAFile"),
-                    FileDialog.LOAD);
-            fd.setIconImage(Toolkit.getDefaultToolkit()
-                    .getImage(getClass().getResource("/images/balloonIcon256.png")));
-            fd.setDirectory(System.getProperty("user.dir"));
-            fd.setFile("*.exe");
-            fd.setMultipleMode(false);
-            fd.setVisible(true);
-            File[] f = fd.getFiles();
-            if (f.length > 0) {
-                log.debug("Choice: " + fd.getFiles()[0].getAbsolutePath());
-                return fd.getFiles()[0].getAbsolutePath();
-            } else {
-                log.debug("Choice canceled");
-                return null;
-            }
-        } catch (Exception e) {
-            log.warn("Could not launch File Browser", e);
-            return null;
-        }
-    }
-
-    private void saveBrowser() {
-        Browser browser = (Browser) browserComboBox.getSelectedItem();
-        if (browser != null) {
-            log.info("Browser call: " + browser.getCall());
-            if (browserComboBox.getSelectedIndex() != browserComboBox.getItemCount() - 1) {
-                if (browser.getCall() != null) {
-                    if (!PreferencesManager.getBrowserValue().equals(browser.getCall())) {
-                        if (!incognitoCheckBox.isSelected()) {
-                            PreferencesManager.setBrowserValue(browser.getCall());
-                        }
-                    }
-                }
-                if (browser.getIncognitoCall() != null) {
-                    if (!PreferencesManager.getBrowserValue().equals(browser.getIncognitoCall())) {
-                        if (incognitoCheckBox.isSelected()) {
-                            PreferencesManager.setBrowserValue(browser.getIncognitoCall());
-                        }
-                    }
-                }
-            } else {
-                if (!callTextField.getText().equals(browser.getIncognitoCall())) {
-                    PreferencesManager.setBrowserValue(callTextField.getText());
-                }
-            }
-        }
-    }
-
-    private void setSyntaxInfoButtonToolTip() {
-
-        syntaxInfoLabel.addMouseListener(new MouseAdapter() {
-            final int DEFAULT_TIME = 10_000;
-            final int SHORT_TIME = 6_000;
-            private final String translatedBalloonTip = Translation.getTranslatedString("SettingsDialogBundle", "toolTipText");
-            BalloonTip balloonTip = generateBalloonTip(translatedBalloonTip);
-
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                balloonTip.setVisible(true);
-                TimingUtils.showTimedBalloon(balloonTip, DEFAULT_TIME);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                balloonTip.setVisible(true);
-                TimingUtils.showTimedBalloon(balloonTip, SHORT_TIME);
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                balloonTip = generateBalloonTip(
-                        translatedBalloonTip);
-            }
-        });
-    }
-
     private void updateRegistry() {
         log.info("Saving settings: Auto-update enabled: {}; Open folder for QR-Code: {}; Notifications active: {}; Selected browser: {}",
                 autoUpdateEnabledCheckBox.isSelected(), openFolderForQRCheckBox.isSelected(), showNotificationsToUserCheckBox.isSelected(),
-                browserComboBox.getSelectedItem());
+                browserSetterPanel.getSelectedItem());
         PreferencesManager.setAutoUpdateActive(autoUpdateEnabledCheckBox.isSelected());
         PreferencesManager.setOpenFolderForQrCode(openFolderForQRCheckBox.isSelected());
         PreferencesManager.setNotificationsShown(showNotificationsToUserCheckBox.isSelected());
-        saveBrowser();
+        browserSetterPanel.saveBrowser();
     }
 }

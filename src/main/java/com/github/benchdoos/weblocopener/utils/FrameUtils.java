@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -45,13 +45,29 @@ public class FrameUtils {
      * @param component Component where window is located.
      * @return Window that is searched.
      **/
-    private static Window findWindow(Component component) {
+    public static Window findWindow(Component component) {
         if (component == null) {
             return JOptionPane.getRootFrame();
         } else if (component instanceof Window) {
             return (Window) component;
         } else {
             return findWindow(component.getParent());
+        }
+    }
+
+    /**
+     * Finds window on component given.
+     *
+     * @param component Component where window is located.
+     * @return Window that is searched.
+     **/
+    public static Dialog findDialog(Component component) {
+        if (component == null) {
+            return null;
+        } else if (component instanceof Dialog) {
+            return (Dialog) component;
+        } else {
+            return findDialog(component.getParent());
         }
     }
 
