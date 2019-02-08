@@ -24,6 +24,7 @@ import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
+import com.github.benchdoos.weblocopener.service.WeblocLink;
 import com.github.benchdoos.weblocopener.utils.CleanManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
@@ -207,7 +208,7 @@ public class Application {
             if (args.length > 3) {
                 log.info("You can create only one link in one file. Creating.");
             }
-            UrlsProceed.createWebloc(filePath, new URL(url));
+            new WeblocLink().createLink(new File(filePath), new URL(url));
         } else {
             throw new IllegalArgumentException("Not all arguments (" + CORRECT_CREATION_SYNTAX + "):" + Arrays.toString(args));
         }

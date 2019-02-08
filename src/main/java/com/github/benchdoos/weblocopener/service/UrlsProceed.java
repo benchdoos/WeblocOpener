@@ -15,8 +15,6 @@
 
 package com.github.benchdoos.weblocopener.service;
 
-import com.dd.plist.NSDictionary;
-import com.dd.plist.PropertyListParser;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
@@ -36,7 +34,6 @@ import org.apache.logging.log4j.Logger;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
@@ -124,49 +121,6 @@ public class UrlsProceed {
                     Translation.getTranslatedString(
                             "CommonsBundle", "urlIsCorruptMessage") + url);
         }
-    }
-
-    /**
-     * Creates <code>.webloc</code> file on given path.
-     *
-     * @param url  URL to create.
-     * @param path Path of creating file.
-     */
-    public static void createWebloc(String path, URL url) {
-        log.info("Creating .webloc at [" + path + "] URL: [" + url + "]");
-        NSDictionary root = new NSDictionary();
-        root.put("URL", url.toString());
-
-
-        try {
-            File file = new File(path);
-            PropertyListParser.saveAsXML(root, file);
-        } catch (IOException e) {
-            log.warn("Can not create .webloc file", e);
-        }
-    }
-
-    /**
-     * Takes URL from <code>.webloc</code> file
-     *
-     * @param file File <code>.webloc</code>
-     * @return String - URL in file
-     * @see File
-     */
-    public static String takeUrl(File file) throws Exception {
-        if (!file.exists()) {
-            throw new IllegalArgumentException("File does not exist, path: " + file);
-        }
-        if (file.isDirectory()) {
-            throw new IllegalArgumentException("File can not be a directory, path: " + file);
-        }
-
-        log.debug("Got file: " + file);
-        NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(file);
-        String url = rootDict.objectForKey("URL").toString();
-        log.info("Got URL: [" + url + "] from file: " + file);
-
-        return url;
     }
 
     public static BufferedImage generateQrCode(String url) throws IOException, WriterException {

@@ -18,7 +18,7 @@ package com.github.benchdoos.weblocopener.utils;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.InternetShortcutLink;
-import com.github.benchdoos.weblocopener.service.UrlsProceed;
+import com.github.benchdoos.weblocopener.service.WeblocLink;
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
@@ -48,7 +48,7 @@ public class Converter {
 
         File file = prepareNewFile(originalUrlFile, WEBLOC_FILE_EXTENSION);
         if (!file.exists()) {
-            UrlsProceed.createWebloc(file.getAbsolutePath(), internetShortcut);
+            new WeblocLink().createLink(file, internetShortcut);
             return file;
         } else throw new FileExistsException("File [" + file + "] already exists");
 

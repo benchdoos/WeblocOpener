@@ -34,7 +34,7 @@ public class Analyzer {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
 
-    private String url = "";
+    private String url = "";//todo change into URL
     private File selectedFile = null;
 
     public Analyzer(String filePath) throws Exception {
@@ -81,7 +81,7 @@ public class Analyzer {
         }
 
         if (selectedFile != null) {
-            url = UrlsProceed.takeUrl(selectedFile);
+            url = new WeblocLink().getLink(selectedFile).toString();
         } else {
             throw new FileNotFoundException("Can not analyze file: " + filePath);
         }

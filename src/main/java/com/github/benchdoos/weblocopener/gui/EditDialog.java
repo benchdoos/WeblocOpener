@@ -17,7 +17,7 @@ package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
-import com.github.benchdoos.weblocopener.service.UrlsProceed;
+import com.github.benchdoos.weblocopener.service.WeblocLink;
 import com.github.benchdoos.weblocopener.service.gui.ClickListener;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
@@ -82,6 +82,86 @@ public class EditDialog extends JFrame {
         initGui();
 
         log.debug("Got path: [" + pathToEditingFile + "]");
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null) {
+            resultName = currentFont.getName();
+        } else {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+                resultName = fontName;
+            } else {
+                resultName = currentFont.getName();
+            }
+        }
+        return new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    public JComponent $$$getRootComponent$$$() {
+        return contentPane;
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private void $$$loadButtonText$$$(AbstractButton component, String text) {
+        StringBuffer result = new StringBuffer();
+        boolean haveMnemonic = false;
+        char mnemonic = '\0';
+        int mnemonicIndex = -1;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '&') {
+                i++;
+                if (i == text.length()) break;
+                if (!haveMnemonic && text.charAt(i) != '&') {
+                    haveMnemonic = true;
+                    mnemonic = text.charAt(i);
+                    mnemonicIndex = result.length();
+                }
+            }
+            result.append(text.charAt(i));
+        }
+        component.setText(result.toString());
+        if (haveMnemonic) {
+            component.setMnemonic(mnemonic);
+            component.setDisplayedMnemonicIndex(mnemonicIndex);
+        }
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private void $$$loadLabelText$$$(JLabel component, String text) {
+        StringBuffer result = new StringBuffer();
+        boolean haveMnemonic = false;
+        char mnemonic = '\0';
+        int mnemonicIndex = -1;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '&') {
+                i++;
+                if (i == text.length()) break;
+                if (!haveMnemonic && text.charAt(i) != '&') {
+                    haveMnemonic = true;
+                    mnemonic = text.charAt(i);
+                    mnemonicIndex = result.length();
+                }
+            }
+            result.append(text.charAt(i));
+        }
+        component.setText(result.toString());
+        if (haveMnemonic) {
+            component.setDisplayedMnemonic(mnemonic);
+            component.setDisplayedMnemonicIndex(mnemonicIndex);
+        }
     }
 
     /**
@@ -166,84 +246,14 @@ public class EditDialog extends JFrame {
         panel3.add(urlPageTitle, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, 1, GridConstraints.SIZEPOLICY_FIXED, new Dimension(16, 16), null, null, 0, false));
     }
 
-    /**
-     * @noinspection ALL
-     */
-    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
-        if (currentFont == null) return null;
-        String resultName;
-        if (fontName == null) {
-            resultName = currentFont.getName();
-        } else {
-            Font testFont = new Font(fontName, Font.PLAIN, 10);
-            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
-                resultName = fontName;
-            } else {
-                resultName = currentFont.getName();
-            }
+    private void createTitle() {
+        String path = "";
+        try {
+            path = new File(pathToEditingFile).getName();
+        } catch (Exception e) {
+            log.warn("Could not get file name for: " + pathToEditingFile, e);
         }
-        return new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
-    }
-
-    /**
-     * @noinspection ALL
-     */
-    public JComponent $$$getRootComponent$$$() {
-        return contentPane;
-    }
-
-    /**
-     * @noinspection ALL
-     */
-    private void $$$loadButtonText$$$(AbstractButton component, String text) {
-        StringBuffer result = new StringBuffer();
-        boolean haveMnemonic = false;
-        char mnemonic = '\0';
-        int mnemonicIndex = -1;
-        for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i) == '&') {
-                i++;
-                if (i == text.length()) break;
-                if (!haveMnemonic && text.charAt(i) != '&') {
-                    haveMnemonic = true;
-                    mnemonic = text.charAt(i);
-                    mnemonicIndex = result.length();
-                }
-            }
-            result.append(text.charAt(i));
-        }
-        component.setText(result.toString());
-        if (haveMnemonic) {
-            component.setMnemonic(mnemonic);
-            component.setDisplayedMnemonicIndex(mnemonicIndex);
-        }
-    }
-
-    /**
-     * @noinspection ALL
-     */
-    private void $$$loadLabelText$$$(JLabel component, String text) {
-        StringBuffer result = new StringBuffer();
-        boolean haveMnemonic = false;
-        char mnemonic = '\0';
-        int mnemonicIndex = -1;
-        for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i) == '&') {
-                i++;
-                if (i == text.length()) break;
-                if (!haveMnemonic && text.charAt(i) != '&') {
-                    haveMnemonic = true;
-                    mnemonic = text.charAt(i);
-                    mnemonicIndex = result.length();
-                }
-            }
-            result.append(text.charAt(i));
-        }
-        component.setText(result.toString());
-        if (haveMnemonic) {
-            component.setDisplayedMnemonic(mnemonic);
-            component.setDisplayedMnemonicIndex(mnemonicIndex);
-        }
+        setTitle(path + " — WeblocOpener");
     }
 
     private void createUIComponents() {
@@ -254,7 +264,7 @@ public class EditDialog extends JFrame {
     private void fillTextField(String pathToEditingFile) {
         try {
             log.debug("Filling textfield by file content: " + pathToEditingFile);
-            URL url = new URL(UrlsProceed.takeUrl(new File(pathToEditingFile)));
+            URL url = new WeblocLink().getLink(new File(pathToEditingFile));
             textField.setText(url.toString());
             textField.setCaretPosition(textField.getText().length());
             textField.selectAll();
@@ -284,14 +294,56 @@ public class EditDialog extends JFrame {
         }
     }
 
-    private void createTitle() {
-        String path = "";
-        try {
-            path = new File(pathToEditingFile).getName();
-        } catch (Exception e) {
-            log.warn("Could not get file name for: " + pathToEditingFile, e);
-        }
-        setTitle(path + " — WeblocOpener");
+    private void initGui() {
+        createTitle();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/webloc256.png")));
+
+        setContentPane(contentPane);
+
+
+        getRootPane().setDefaultButton(buttonOK);
+
+        clearTextButton.addActionListener(e -> onClearText());
+
+        buttonOK.addActionListener(e -> onOK());
+
+        buttonCancel.addActionListener(e -> onCancel());
+
+        ((PlaceholderTextField) textField).setPlaceholder("URL");
+
+        // call onCancel() when cross is clicked
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowActivated(WindowEvent e) {
+                if (textField.getText().isEmpty()) {
+                    fillTextFieldWithClipboard();
+                }
+                super.windowActivated(e);
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                onCancel();
+            }
+        });
+
+        // call onCancel() on ESCAPE
+        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        createWeblocFileTextPane.setBackground(new Color(232, 232, 232));
+
+
+        initTextField(pathToEditingFile);
+
+        pack();
+
+        final Dimension dimension = new Dimension(DEFAULT_APPLICATION_WIDTH, getSize().height);
+        setSize(dimension);
+        setResizable(false);
+
+        setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
     }
 
     private void initTextField(String pathToEditingFile) {
@@ -515,56 +567,46 @@ public class EditDialog extends JFrame {
         urlPageTitle.setText(null);
     }
 
-    private void initGui() {
-        createTitle();
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/webloc256.png")));
+    private void onOK() {
+        final String urlText = textField.getText();
+        try {
+            URL url = new URL(urlText);
+            UrlValidator urlValidator = new UrlValidator();
+            if (urlValidator.isValid(urlText)) {
+                new WeblocLink().createLink(new File(pathToEditingFile), url);
 
-        setContentPane(contentPane);
+                manageFileName();
 
-
-        getRootPane().setDefaultButton(buttonOK);
-
-        clearTextButton.addActionListener(e -> onClearText());
-
-        buttonOK.addActionListener(e -> onOK());
-
-        buttonCancel.addActionListener(e -> onCancel());
-
-        ((PlaceholderTextField) textField).setPlaceholder("URL");
-
-        // call onCancel() when cross is clicked
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowActivated(WindowEvent e) {
-                if (textField.getText().isEmpty()) {
-                    fillTextFieldWithClipboard();
-                }
-                super.windowActivated(e);
+                dispose();
+            } else {
+                throw new MalformedURLException();
             }
-
-            @Override
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-        });
-
-        // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-
-        createWeblocFileTextPane.setBackground(new Color(232, 232, 232));
+        } catch (MalformedURLException e) {
+            log.warn("Can not parse URL: [" + urlText + "]", e);
 
 
-        initTextField(pathToEditingFile);
+            String message = Translation.getTranslatedString(
+                    "EditDialogBundle", "incorrectUrlMessage") + ": [";
 
-        pack();
+            String incorrectUrl = urlText
+                    .substring(0, Math.min(urlText.length(), 50));
+            //Fixes EditDialog long url message showing issue
+            message += urlText.length() > incorrectUrl.length() ? incorrectUrl + "...]" : incorrectUrl + "]";
 
-        final Dimension dimension = new Dimension(DEFAULT_APPLICATION_WIDTH, getSize().height);
-        setSize(dimension);
-        setResizable(false);
 
-        setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
+            UserUtils.showWarningMessageToUser(this,
+                    Translation.getTranslatedString("EditDialogBundle", "errorTitle"),
+                    message);
+        } catch (IOException e) {
+            log.warn("Can not create file at: " + pathToEditingFile + " with url: " + urlText, e);
+
+            String message = Translation.getTranslatedString(
+                    "EditDialogBundle", "canNotSaveFile") + "<br>" + e.getMessage();
+            UserUtils.showWarningMessageToUser(this,
+                    Translation.getTranslatedString("EditDialogBundle", "errorTitle"),
+                    "<html>" + message + "</html>");
+        }
+
     }
 
     private void renameFileIfAsked(String pathToEditingFile) throws FileNotFoundException, FileExistsException {
@@ -595,38 +637,5 @@ public class EditDialog extends JFrame {
     public void setVisible(boolean b) {
         FrameUtils.showOnTop(this);
         super.setVisible(b);
-    }
-
-    private void onOK() {
-        try {
-            URL url = new URL(textField.getText());
-            UrlValidator urlValidator = new UrlValidator();
-            if (urlValidator.isValid(textField.getText())) {
-                UrlsProceed.createWebloc(pathToEditingFile, url);
-
-                manageFileName();
-
-                dispose();
-            } else {
-                throw new MalformedURLException();
-            }
-        } catch (MalformedURLException e) {
-            log.warn("Can not parse URL: [" + textField.getText() + "]", e);
-
-
-            String message = Translation.getTranslatedString(
-                    "EditDialogBundle", "incorrectUrlMessage") + ": [";
-
-            String incorrectUrl = textField.getText()
-                    .substring(0, Math.min(textField.getText().length(), 50));
-            //Fixes EditDialog long url message showing issue
-            message += textField.getText().length() > incorrectUrl.length() ? incorrectUrl + "...]" : incorrectUrl + "]";
-
-
-            UserUtils.showWarningMessageToUser(this,
-                    Translation.getTranslatedString("EditDialogBundle", "errorTitle"),
-                    message);
-        }
-
     }
 }
