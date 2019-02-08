@@ -26,6 +26,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
 
+/**
+ * Link for MacOS {@code .webloc} file
+ */
 public class WeblocLink implements AbstractLink {
     @Override
     public void createLink(File file, URL url) throws IOException {
