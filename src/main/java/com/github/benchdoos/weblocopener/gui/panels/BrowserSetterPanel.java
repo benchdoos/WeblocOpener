@@ -293,10 +293,10 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
     private String openFileBrowser() {
         log.debug("Opening File Browser");
 
+        FileDialog fd = new FileDialog(FrameUtils.findDialog(this),
+                Translation.getTranslatedString("SettingsDialogBundle", "chooseAFile"),
+                FileDialog.LOAD);
         try {
-            FileDialog fd = new FileDialog(FrameUtils.findDialog(this),
-                    Translation.getTranslatedString("SettingsDialogBundle", "chooseAFile"),
-                    FileDialog.LOAD);
             fd.setIconImage(Toolkit.getDefaultToolkit()
                     .getImage(getClass().getResource("/images/balloonIcon256.png")));
             fd.setDirectory(System.getProperty("user.dir"));
@@ -305,14 +305,18 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
             fd.setVisible(true);
             File[] f = fd.getFiles();
             if (f.length > 0) {
-                log.debug("Choice: " + fd.getFiles()[0].getAbsolutePath());
-                return fd.getFiles()[0].getAbsolutePath();
+                final String absolutePath = fd.getFiles()[0].getAbsolutePath();
+                log.debug("Choice: " + absolutePath);
+                fd.dispose();
+                return absolutePath;
             } else {
                 log.debug("Choice canceled");
+                fd.dispose();
                 return null;
             }
         } catch (Exception e) {
             log.warn("Could not launch File Browser", e);
+            fd.dispose();
             return null;
         }
     }
