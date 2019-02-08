@@ -33,6 +33,7 @@ public class DesktopEntryLink implements AbstractLink {
         writer.write("Encoding=" + ApplicationConstants.DEFAULT_APPLICATION_CHARSET + "\n");
         writer.write("Name=" + file.getName() + "\n");
         writer.write("URL=" + url.toString() + "\n");
+        writer.write("Type=Link" + "\n");
         writer.write("Icon=text-html" + "\n");
         writer.flush();
         writer.close();
