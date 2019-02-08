@@ -24,7 +24,7 @@ import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
-import com.github.benchdoos.weblocopener.service.WeblocLink;
+import com.github.benchdoos.weblocopener.service.links.WeblocLink;
 import com.github.benchdoos.weblocopener.utils.CleanManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;

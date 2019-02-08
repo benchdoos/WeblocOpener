@@ -13,7 +13,7 @@
  * Eugene Zrazhevsky <eugene.zrazhevsky@gmail.com>
  */
 
-package com.github.benchdoos.weblocopener.service;
+package com.github.benchdoos.weblocopener.service.links;
 
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListFormatException;

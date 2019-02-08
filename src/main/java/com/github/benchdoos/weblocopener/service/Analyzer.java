@@ -17,6 +17,7 @@ package com.github.benchdoos.weblocopener.service;
 
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.gui.FileChooser;
+import com.github.benchdoos.weblocopener.service.links.WeblocLink;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import me.xdrop.fuzzywuzzy.FuzzySearch;

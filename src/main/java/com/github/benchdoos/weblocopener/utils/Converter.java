@@ -17,8 +17,8 @@ package com.github.benchdoos.weblocopener.utils;
 
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.service.Analyzer;
-import com.github.benchdoos.weblocopener.service.InternetShortcutLink;
-import com.github.benchdoos.weblocopener.service.WeblocLink;
+import com.github.benchdoos.weblocopener.service.links.InternetShortcutLink;
+import com.github.benchdoos.weblocopener.service.links.WeblocLink;
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
