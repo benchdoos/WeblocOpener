@@ -22,6 +22,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * Link for Linux {@code .desktop} file
+ */
 public class DesktopEntryLink implements AbstractLink {
     @Override
     public void createLink(File file, URL url) throws IOException {
