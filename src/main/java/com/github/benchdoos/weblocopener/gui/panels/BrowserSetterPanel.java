@@ -41,7 +41,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class BrowserSetterPanel extends JPanel {
+public class BrowserSetterPanel extends JPanel implements SettingsPanel {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private boolean onInit = true;
 
@@ -317,7 +317,7 @@ public class BrowserSetterPanel extends JPanel {
         }
     }
 
-    public void saveBrowser() {
+    public void saveSettings() {
         Browser browser = (Browser) browserComboBox.getSelectedItem();
         if (browser != null) {
             log.info("Browser call: " + browser.getCall());

@@ -488,6 +488,6 @@ public class SettingsDialog extends JFrame {
         PreferencesManager.setAutoUpdateActive(autoUpdateEnabledCheckBox.isSelected());
         PreferencesManager.setOpenFolderForQrCode(openFolderForQRCheckBox.isSelected());
         PreferencesManager.setNotificationsShown(showNotificationsToUserCheckBox.isSelected());
-        browserSetterPanel.saveBrowser();
+        browserSetterPanel.saveSettings();
     }
 }
