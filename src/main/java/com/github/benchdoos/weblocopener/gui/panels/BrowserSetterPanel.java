@@ -243,7 +243,7 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
         });
     }
 
-    public void initGui() {
+    private void initGui() {
         setLayout(new GridLayout());
         add(contentPane);
 
