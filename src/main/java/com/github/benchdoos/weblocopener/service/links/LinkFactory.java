@@ -16,30 +16,30 @@
 package com.github.benchdoos.weblocopener.service.links;
 
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.net.URL;
 
-/**
- * Link for Linux {@code .desktop} file
- */
-public class DesktopEntryLink implements AbstractLink {
-    @Override
-    public void createLink(File file, URL url) throws IOException {
-        FileWriter writer = new FileWriter(file);
-        writer.write("[Desktop Entry]\n");
-        writer.write("Encoding=" + ApplicationConstants.DEFAULT_APPLICATION_CHARSET + "\n");
-        writer.write("Name=" + file.getName() + "\n");
-        writer.write("URL=" + url.toString() + "\n");
-        writer.write("Icon=text-html" + "\n");
-        writer.flush();
-        writer.close();
+public class LinkFactory {
+    public AbstractLink getLink(File file) {
+        String originalExtension = FilenameUtils.getExtension(file.getName());
+        return getAbstractLink(originalExtension);
     }
 
-    @Override
-    public URL getUrl(File file) throws IOException {
-        return LinkUtils.getUrl(file);
+    private AbstractLink getAbstractLink(String originalExtension) {
+        switch (originalExtension) {
+            case ApplicationConstants.WEBLOC_FILE_EXTENSION:
+                return new WeblocLink();
+            case ApplicationConstants.URL_FILE_EXTENSION:
+                return new InternetShortcutLink();
+            case ApplicationConstants.DESKTOP_FILE_EXTENSION:
+                return new DesktopEntryLink();
+            default:
+                return null;
+        }
+    }
+
+    public AbstractLink getLink(String extension) {
+        return getAbstractLink(extension);
     }
 }

@@ -23,5 +23,7 @@ public interface ApplicationConstants {
 
     String URL_FILE_EXTENSION = "url";
 
+    String DESKTOP_FILE_EXTENSION = "desktop";
+
     String DEFAULT_APPLICATION_CHARSET = "UTF-8";
 }

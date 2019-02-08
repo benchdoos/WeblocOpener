@@ -449,7 +449,7 @@ public class SettingsDialog extends JFrame {
 
                             if (Analyzer.getFileExtension(file).equalsIgnoreCase(ApplicationConstants.URL_FILE_EXTENSION)) {
                                 try {
-                                    files.add(Converter.convertUrlToWebloc(file));
+                                    files.add(Converter.convert(file, ApplicationConstants.WEBLOC_FILE_EXTENSION));
                                     try {
                                         FileUtils.forceDelete(file);
                                     } catch (IOException e) {
@@ -461,7 +461,7 @@ public class SettingsDialog extends JFrame {
 
                             } else if (Analyzer.getFileExtension(file).equalsIgnoreCase(ApplicationConstants.WEBLOC_FILE_EXTENSION)) {
                                 try {
-                                    files.add(Converter.convertWeblocToUrl(file));
+                                    files.add(Converter.convert(file, ApplicationConstants.URL_FILE_EXTENSION));
                                     try {
                                         FileUtils.forceDelete(file);
                                     } catch (IOException e) {

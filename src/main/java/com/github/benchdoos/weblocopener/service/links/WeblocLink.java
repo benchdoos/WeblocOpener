@@ -38,7 +38,7 @@ public class WeblocLink implements AbstractLink {
     }
 
     @Override
-    public URL getLink(File file) throws IOException {
+    public URL getUrl(File file) throws IOException {
         try {
             NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(file);
             return new URL(rootDict.objectForKey("URL").toString());

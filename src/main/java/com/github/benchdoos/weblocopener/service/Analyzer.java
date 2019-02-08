@@ -21,6 +21,7 @@ import com.github.benchdoos.weblocopener.service.links.WeblocLink;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -82,7 +83,7 @@ public class Analyzer {
         }
 
         if (selectedFile != null) {
-            url = new WeblocLink().getLink(selectedFile).toString();
+            url = new WeblocLink().getUrl(selectedFile).toString();
         } else {
             throw new FileNotFoundException("Can not analyze file: " + filePath);
         }
@@ -149,12 +150,7 @@ public class Analyzer {
         if (file == null) {
             throw new IllegalArgumentException("File can not be null");
         }
-        String name = file.getName();
-        try {
-            return name.substring(name.lastIndexOf(".") + 1);
-        } catch (Exception e) {
-            return "";
-        }
+        return FilenameUtils.getExtension(file.getName());
     }
 
     private int getMaximumValue(ArrayList<ComparedFile> values) {
@@ -182,7 +178,7 @@ public class Analyzer {
         File currentFile = new File(arg);
         log.info("File [" + arg + "] exists: " + currentFile.exists() + " file?: " + currentFile.isFile());
         if (currentFile.isFile() && currentFile.exists()) {
-            if (getFileExtension(currentFile).equals(WEBLOC_FILE_EXTENSION)) {
+            if (FilenameUtils.getExtension(currentFile.getName()).equals(WEBLOC_FILE_EXTENSION)) {
                 log.info("File added to proceed: " + currentFile.getAbsolutePath());
                 ArrayList<File> arrayList = new ArrayList<>();
                 arrayList.add(currentFile);

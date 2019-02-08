@@ -34,6 +34,6 @@ public interface AbstractLink {
      * @param file file with link
      * @return url in the file
      */
-    URL getLink(File file) throws IOException;
+    URL getUrl(File file) throws IOException;
 
 }

@@ -15,10 +15,9 @@
 
 package com.github.benchdoos.weblocopener.utils;
 
-import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.service.Analyzer;
-import com.github.benchdoos.weblocopener.service.links.InternetShortcutLink;
-import com.github.benchdoos.weblocopener.service.links.WeblocLink;
+import com.github.benchdoos.weblocopener.service.links.AbstractLink;
+import com.github.benchdoos.weblocopener.service.links.LinkFactory;
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
@@ -26,42 +25,22 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
-
-import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.URL_FILE_EXTENSION;
-import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOC_FILE_EXTENSION;
 
 public class Converter {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
-    public static File convertUrlToWebloc(File originalUrlFile) throws IOException {
-        validateFile(originalUrlFile, ApplicationConstants.URL_FILE_EXTENSION);
+    public static File convert(File originalFile, String extension) throws Exception {
+        log.debug("Converting file:{} to new extension: {}", originalFile, extension);
+        validateFile(originalFile, extension);
 
-        final URL internetShortcut = new InternetShortcutLink().getLink(originalUrlFile);
+        AbstractLink originalLink = new LinkFactory().getLink(originalFile);
+        final URL originalUrl = originalLink.getUrl(originalFile);
+        AbstractLink convertedLink = new LinkFactory().getLink(extension);
 
-        log.debug("Shortcut for file [{}] url is: ", originalUrlFile, internetShortcut);
-
-        if (internetShortcut == null) {
-            throw new NullPointerException("Url in internet shortcut [" + originalUrlFile + "] is null");
-        }
-
-        File file = prepareNewFile(originalUrlFile, WEBLOC_FILE_EXTENSION);
+        File file = prepareNewFile(originalFile, extension);
         if (!file.exists()) {
-            new WeblocLink().createLink(file, internetShortcut);
-            return file;
-        } else throw new FileExistsException("File [" + file + "] already exists");
-
-    }
-
-    public static File convertWeblocToUrl(File originalWeblocFile) throws Exception {
-        validateFile(originalWeblocFile, WEBLOC_FILE_EXTENSION);
-        Analyzer analyzer = new Analyzer(originalWeblocFile.getAbsolutePath());
-        final URL url = new URL(analyzer.getUrl());
-
-        File file = prepareNewFile(originalWeblocFile, URL_FILE_EXTENSION);
-        if (!file.exists()) {
-            new InternetShortcutLink().createLink(file, url);
+            convertedLink.createLink(file, originalUrl);
             return file;
         } else throw new FileExistsException("File [" + file + "] already exists");
     }
@@ -82,8 +61,8 @@ public class Converter {
         if (!originalUrlFile.exists()) {
             throw new FileNotFoundException("File does not exist: " + originalUrlFile);
         }
-        if (!Analyzer.getFileExtension(originalUrlFile).equalsIgnoreCase(extension)) {
-            throw new IllegalArgumentException("File extension is not *.url: " + originalUrlFile);
+        if (Analyzer.getFileExtension(originalUrlFile).equalsIgnoreCase(extension)) {
+            throw new IllegalArgumentException("File extension " + originalUrlFile + " equals to new extension " + extension);
         }
     }
 }

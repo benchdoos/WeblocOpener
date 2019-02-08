@@ -264,7 +264,7 @@ public class EditDialog extends JFrame {
     private void fillTextField(String pathToEditingFile) {
         try {
             log.debug("Filling textfield by file content: " + pathToEditingFile);
-            URL url = new WeblocLink().getLink(new File(pathToEditingFile));
+            URL url = new WeblocLink().getUrl(new File(pathToEditingFile));
             textField.setText(url.toString());
             textField.setCaretPosition(textField.getText().length());
             textField.selectAll();

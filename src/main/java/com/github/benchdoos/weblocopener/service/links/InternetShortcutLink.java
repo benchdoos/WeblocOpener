@@ -39,7 +39,7 @@ public class InternetShortcutLink implements AbstractLink {
         fileWriter.close();
     }
 
-    public URL getLink(File file) throws IOException {
+    public URL getUrl(File file) throws IOException {
         return LinkUtils.getUrl(file);
     }
 }
