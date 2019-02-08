@@ -23,12 +23,6 @@ import java.io.IOException;
 import java.net.URL;
 
 public class DesktopEntryLink implements AbstractLink {
-    //[Desktop Entry]
-    //Encoding=UTF-8
-    //Name=Link to your site
-    //URL=http://your-site-url.com
-    //Icon=text-html
-
     @Override
     public void createLink(File file, URL url) throws IOException {
         FileWriter writer = new FileWriter(file);
