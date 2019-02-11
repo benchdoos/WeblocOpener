@@ -139,7 +139,7 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
         return contentPane;
     }
 
-    public int findBrowser(String browserValue) {
+    private int findBrowser(String browserValue) {
         int result;
         for (int i = 0; i < BrowserManager.getBrowserList().size(); i++) {
             Browser browser = BrowserManager.getBrowserList().get(i);
@@ -148,10 +148,12 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
             if (browser.getCall() != null) {
                 if (browser.getCall().equals(browserValue)) {
                     result = i;
+                    log.debug("Browser is: " + browser);
                     return result;
                 } else if (browser.getIncognitoCall() != null) {
                     if (browser.getIncognitoCall().equals(browserValue)) {
                         result = i;
+                        log.debug("Browser is: " + browser);
                         return result;
                     }
                 }
@@ -159,8 +161,13 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
         }
 
         if (browserValue.equalsIgnoreCase(SettingsConstants.BROWSER_DEFAULT_VALUE) || browserValue.isEmpty()) {
+            log.debug("Browser is: default");
             return 0;
-        } else return BrowserManager.getBrowserList().size() - 1;
+        } else {
+            final int i = BrowserManager.getBrowserList().size() - 1;
+            log.debug("Browser is: custom - [{}]", browserValue);
+            return i;
+        }
     }
 
     private BalloonTip generateBalloonTip(String toolTipText) {
