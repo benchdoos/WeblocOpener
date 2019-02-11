@@ -19,6 +19,7 @@ import com.github.benchdoos.weblocopener.utils.Logging;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -78,6 +79,24 @@ public class DarkModeAnalyzer {
 
     private static boolean isDarkModeEnabledByLocation(String value) {
         Location location = getLocation(value);
+        final SunManager sunManager = new SunManager(location);
+        try {
+            final TimeRange byLocationYesterday = sunManager.getDarkModeValueByLocation("yesterday");
+            final TimeRange byLocationToday = sunManager.getDarkModeValueByLocation("today");
+            final TimeRange byLocationTomorrow = sunManager.getDarkModeValueByLocation("tomorrow");
+
+            final TimeRange realBeginningTimeRange = new TimeRange(byLocationYesterday.getEnd(), byLocationToday.getStart());
+            final TimeRange realEndingTimeRange = new TimeRange(byLocationToday.getEnd(), byLocationTomorrow.getStart());
+
+            final Calendar instance = Calendar.getInstance();
+            Date now = instance.getTime();
+
+            if (realBeginningTimeRange.isInRange(now)) {
+                return true;
+            } else return realEndingTimeRange.isInRange(now);
+        } catch (IOException e) {
+            log.warn("Could not load sunrise/sunset info from location: {}", location, e);
+        }
         //get from api
         return false;
     }
