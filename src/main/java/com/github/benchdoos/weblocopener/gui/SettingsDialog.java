@@ -51,20 +51,16 @@ import java.util.TooManyListenersException;
 public class SettingsDialog extends JFrame {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
+    private Timer settingsSavedTimer = null;
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JCheckBox autoUpdateEnabledCheckBox;
-    private JButton checkUpdatesButton;
-    private JLabel versionLabel;
     private JButton aboutButton;
-    private JCheckBox incognitoCheckBox;
-    private JCheckBox openFolderForQRCheckBox;
-    private JCheckBox showNotificationsToUserCheckBox;
     private JScrollPane scrollpane;
     private JList<SettingsPanel> settingsList;
     private JPanel scrollPaneContent;
     private JButton buttonApply;
+    private JLabel settingsSavedLabel;
     private BrowserSetterPanel browserSetterPanel;
     private MainSetterPanel mainSetterPanel;
     private AppearanceSetterPanel appearanceSetterPanel;
@@ -89,13 +85,13 @@ public class SettingsDialog extends JFrame {
         contentPane = new JPanel();
         contentPane.setLayout(new GridLayoutManager(3, 2, new Insets(10, 10, 10, 10), -1, -1));
         final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(2, 3, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.setLayout(new GridLayoutManager(2, 4, new Insets(0, 0, 0, 0), -1, -1));
         contentPane.add(panel1, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         panel1.add(spacer1, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
-        panel1.add(panel2, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel1.add(panel2, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         buttonOK = new JButton();
         this.$$$loadButtonText$$$(buttonOK, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("buttonOk"));
         panel2.add(buttonOK, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -111,7 +107,11 @@ public class SettingsDialog extends JFrame {
         final JLabel label1 = new JLabel();
         label1.setForeground(new Color(-6316129));
         this.$$$loadLabelText$$$(label1, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("dragAndDropNotice"));
-        panel1.add(label1, new GridConstraints(0, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel1.add(label1, new GridConstraints(0, 0, 1, 4, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        settingsSavedLabel = new JLabel();
+        settingsSavedLabel.setForeground(new Color(-16732650));
+        this.$$$loadLabelText$$$(settingsSavedLabel, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("settingsSaved"));
+        panel1.add(settingsSavedLabel, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
         contentPane.add(spacer2, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JSplitPane splitPane1 = new JSplitPane();
@@ -362,6 +362,8 @@ public class SettingsDialog extends JFrame {
 
         scrollpane.setBorder(null);
 
+        settingsSavedLabel.setVisible(false);
+
         initDropTarget();
 
         browserSetterPanel.init(); //don't forget it or it will crash fileBrowser
@@ -371,10 +373,6 @@ public class SettingsDialog extends JFrame {
         setMinimumSize(new Dimension(640, 300));
 //        setSize(new Dimension(400, 260));
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
-    }
-
-    private void onApply() {
-        updateRegistry();
     }
 
     private void initSettingsList() {
@@ -403,6 +401,15 @@ public class SettingsDialog extends JFrame {
         });
     }
 
+    private void loadSettings() {
+        final ListModel<SettingsPanel> model = settingsList.getModel();
+        for (int i = 0; i < model.getSize(); i++) {
+            final SettingsPanel settingsPanel = model.getElementAt(i);
+            settingsPanel.loadSettings();
+        }
+        settingsList.setSelectedIndex(0);
+    }
+
     private void loadSettingsList() {
         DefaultListModel<SettingsPanel> model = new DefaultListModel<>();
 
@@ -416,18 +423,21 @@ public class SettingsDialog extends JFrame {
         settingsList.setModel(model);
     }
 
-    private void loadSettings() {
-        final ListModel<SettingsPanel> model = settingsList.getModel();
-        for (int i = 0; i < model.getSize(); i++) {
-            final SettingsPanel settingsPanel = model.getElementAt(i);
-            settingsPanel.loadSettings();
-        }
-        settingsList.setSelectedIndex(0);
-    }
-
     private void onAbout() {
         AboutApplicationDialog dialog = new AboutApplicationDialog();
         dialog.setVisible(true);
+    }
+
+    private void onApply() {
+        updateRegistry();
+        settingsSavedLabel.setVisible(true);
+        if (settingsSavedTimer == null) {
+            settingsSavedTimer = new Timer(5000, e -> {
+                settingsSavedLabel.setVisible(false);
+            });
+            settingsSavedTimer.setRepeats(false);
+        }
+        settingsSavedTimer.restart();
     }
 
     private void onCancel() {
