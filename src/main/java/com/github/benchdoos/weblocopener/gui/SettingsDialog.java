@@ -409,6 +409,7 @@ public class SettingsDialog extends JFrame {
             final SettingsPanel settingsPanel = model.getElementAt(i);
             settingsPanel.loadSettings();
         }
+        settingsList.setSelectedIndex(0);
     }
 
     private void onAbout() {
