@@ -78,6 +78,8 @@ public class PreferencesManager {
             case "DISABLED":
                 return false;
             default: {
+                //parse value, if location - get time
+                //if time - return time
                 //loads api blah blah
                 return SettingsConstants.DARK_MODE_DEFAULT_VALUE == DARK_MODE.ALWAYS;
             }
