@@ -181,6 +181,11 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
         return browserComboBox.getSelectedItem();
     }
 
+    /**
+     * This inits the the file browser
+     * <b>WARNING!</b>
+     * Don't forget it, otherwise it will crash fileBrowser
+     */
     public void init() {
         //no other way found. call this after init from outside
         onInit = false;

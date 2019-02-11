@@ -358,6 +358,9 @@ public class SettingsDialog extends JFrame {
 
         initDropTarget();
 
+        browserSetterPanel.init(); //don't forget it or it will crash fileBrowser
+
+
         pack();
         setMinimumSize(new Dimension(640, 300));
 //        setSize(new Dimension(400, 260));
