@@ -39,7 +39,7 @@
             <children>
               <component id="73c4d" class="javax.swing.JComboBox" binding="locationComboBox">
                 <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                  <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <maximum-size width="400" height="-1"/>
                   </grid>
                 </constraints>
@@ -113,11 +113,6 @@
                   <text resource-bundle="translations/AppearanceSetterPanelBundle" key="unknownLocation"/>
                 </properties>
               </component>
-              <hspacer id="cfc59">
-                <constraints>
-                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </hspacer>
               <component id="2b94c" class="javax.swing.JLabel" binding="locationStatusLabel">
                 <constraints>
                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
@@ -130,6 +125,11 @@
                   <icon value="images/emojiCross16.png"/>
                 </properties>
               </component>
+              <hspacer id="8de55">
+                <constraints>
+                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </hspacer>
             </children>
           </grid>
           <grid id="1b16c" binding="byTimePanel" layout-manager="GridLayoutManager" row-count="2" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
