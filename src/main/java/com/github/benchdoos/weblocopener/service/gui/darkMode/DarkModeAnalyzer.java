@@ -43,7 +43,12 @@ public class DarkModeAnalyzer {
         if (split[0].contains(":")) {
             return new DarkModeValue(getStartTimeRange(split), getEndTimeRange(split));
         } else {
-            return new DarkModeValue(getLocation(split));
+            final String[] split2 = split[0].split("\\|");
+            final String address = split2[0];
+            final String locationCoordinates = split2[1];
+            final Location location = getLocation(locationCoordinates);
+            location.setAddress(address);
+            return new DarkModeValue(location);
         }
     }
 
@@ -55,6 +60,13 @@ public class DarkModeAnalyzer {
         return new TimeRange(endBegin.getTime(), endEnd.getTime());
     }
 
+    private static Location getLocation(String value) {
+        String[] split = value.split(";");
+        double longitude = Double.valueOf(split[0]);
+        double latitude = Double.valueOf(split[1]);
+        return new Location(longitude, latitude);
+    }
+
     private static TimeRange getStartTimeRange(String[] split) {
         Calendar startBegin = getCalendarForTime(split[0]);
         startBegin.add(Calendar.DATE, -1);
@@ -63,12 +75,24 @@ public class DarkModeAnalyzer {
         return new TimeRange(startBegin.getTime(), startEnd.getTime());
     }
 
+    private static boolean isDarkModeEnabledByLocation(String value) {
+        final String[] split = value.split("\\|");
+        final String address = split[0];
+        final String locationCoordinates = split[1];
+        Location location = getLocation(locationCoordinates);
+        location.setAddress(address);
+        //get from api
+        return false;
+    }
+
     public static boolean isDarkModeEnabledByNotDefaultData(String value) {
         final String[] split = value.split(";");
         if (split[0].contains(":")) {
             return isDarkModeEnabledByTimeRange(split);
-        } //todo add else and add loading latitude adn oth
-        return true;
+        } else {
+
+            return isDarkModeEnabledByLocation(value);
+        }
     }
 
     private static boolean isDarkModeEnabledByTimeRange(String[] split) {
@@ -85,11 +109,5 @@ public class DarkModeAnalyzer {
         if (startTimeRange.isInRange(nowTime)) {
             return true;
         } else return endTimeRange.isInRange(nowTime);
-    }
-
-    private static Location getLocation(String[] split) {
-        double longitude = Double.valueOf(split[0]);
-        double latitude = Double.valueOf(split[1]);
-        return new Location(longitude, latitude);
     }
 }
