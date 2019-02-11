@@ -64,6 +64,21 @@ public class PreferencesManager {
         PREFERENCES.put(KEY_DARK_MODE, mode.toString().toUpperCase());
     }
 
+    public static Object getRealDarkMode() {
+        final String s = PREFERENCES.get(KEY_DARK_MODE, SettingsConstants.DARK_MODE_DEFAULT_VALUE.toString());
+        if (s.equalsIgnoreCase(DARK_MODE.ALWAYS.toString())) {
+            return Boolean.TRUE;
+        } else if (s.equalsIgnoreCase(DARK_MODE.DISABLED.toString())) {
+            return Boolean.FALSE;
+        } else {
+            try {
+                return DarkModeAnalyzer.getDarkModeValue(s);
+            } catch (Exception e) {
+                return SettingsConstants.DARK_MODE_DEFAULT_VALUE == DARK_MODE.ALWAYS;
+            }
+        }
+    }
+
     public static boolean isAutoUpdateActive() {
         return PREFERENCES.getBoolean(KEY_AUTO_UPDATE, SettingsConstants.IS_APP_AUTO_UPDATE_DEFAULT_VALUE);
     }
@@ -82,8 +97,12 @@ public class PreferencesManager {
                 //parse value, if location - get time
                 //if time - return time
                 //loads api blah blah
-                return DarkModeAnalyzer.isDarkModeEnabledByNotDefaultData(getDarkMode());
-//                return SettingsConstants.DARK_MODE_DEFAULT_VALUE == DARK_MODE.ALWAYS;
+                try {
+                    return DarkModeAnalyzer.isDarkModeEnabledByNotDefaultData(getDarkMode());
+                } catch (Exception e) {
+                    return SettingsConstants.DARK_MODE_DEFAULT_VALUE == DARK_MODE.ALWAYS;
+                }
+
             }
         }
     }

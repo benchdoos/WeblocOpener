@@ -15,6 +15,8 @@
 
 package com.github.benchdoos.weblocopener.gui.panels;
 
+import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopener.service.gui.darkMode.DarkModeValue;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -23,7 +25,9 @@ import javax.swing.*;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.DefaultFormatterFactory;
 import java.awt.*;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
@@ -290,7 +294,31 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
 
     @Override
     public void loadSettings() {
+        final Object object = PreferencesManager.getRealDarkMode();
+        if (object instanceof Boolean) {
+            Boolean b = (Boolean) object;
+            if (b) {
+                alwaysDarkModeRadioButton.setSelected(true);
+            } else {
+                disabledDarkModeRadioButton.setSelected(true);
+            }
+        } else if (object instanceof DarkModeValue) {
+            final DarkModeValue realDarkModeValue = (DarkModeValue) object;
+            if (realDarkModeValue.getNext() != null && realDarkModeValue.getPrevious() != null) {
+                byTimeDarkModeRadioButton.setSelected(true);
+                final Date startTime = realDarkModeValue.getNext().getStart();
 
+                final Date endTime = realDarkModeValue.getPrevious().getEnd();
+
+
+                DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+                String startTimeString = dateFormat.format(startTime);
+                beginningTextField.setText(startTimeString);
+                String endTimeString = dateFormat.format(endTime);
+                endingTextField.setText(endTimeString);
+
+            }
+        }
     }
 
     @Override

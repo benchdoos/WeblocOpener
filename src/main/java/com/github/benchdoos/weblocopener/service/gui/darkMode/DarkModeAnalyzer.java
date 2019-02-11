@@ -38,6 +38,15 @@ public class DarkModeAnalyzer {
         return cal;
     }
 
+    public static Object getDarkModeValue(String s) {
+        final String[] split = s.split(";");
+        if (split[0].contains(":")) {
+            return new DarkModeValue(getStartTimeRange(split), getEndTimeRange(split));
+        } else {
+            return new DarkModeValue(getLocation(split));
+        }
+    }
+
     private static TimeRange getEndTimeRange(String[] split) {
         Calendar endBegin = getCalendarForTime(split[0]);
         Calendar endEnd = getCalendarForTime(split[1]);
@@ -58,7 +67,7 @@ public class DarkModeAnalyzer {
         final String[] split = value.split(";");
         if (split[0].contains(":")) {
             return isDarkModeEnabledByTimeRange(split);
-        }
+        } //todo add else and add loading latitude adn oth
         return true;
     }
 
@@ -76,5 +85,11 @@ public class DarkModeAnalyzer {
         if (startTimeRange.isInRange(nowTime)) {
             return true;
         } else return endTimeRange.isInRange(nowTime);
+    }
+
+    private static Location getLocation(String[] split) {
+        double longitude = Double.valueOf(split[0]);
+        double latitude = Double.valueOf(split[1]);
+        return new Location(longitude, latitude);
     }
 }
