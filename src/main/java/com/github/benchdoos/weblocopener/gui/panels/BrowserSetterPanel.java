@@ -222,7 +222,13 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
                         callTextField.setText(path);
                         incognitoCheckBox.setEnabled(false);
                     } else {
-                        browserComboBox.setSelectedIndex(findBrowser(PreferencesManager.getBrowserValue()));
+                        final int browser = findBrowser(PreferencesManager.getBrowserValue());
+                        browserComboBox.setSelectedIndex(browser);
+                        if (browser == browserComboBox.getItemCount() - 1) {
+                            callTextField.setVisible(true);
+                            callTextField.setText(PreferencesManager.getBrowserValue());
+                            incognitoCheckBox.setEnabled(false);
+                        }
                     }
                 } else {
                     callLabel.setVisible(true);
