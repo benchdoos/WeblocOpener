@@ -29,11 +29,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class SunManager {
+class SunManager {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private Location location;
 
-    public SunManager(Location location) {
+    SunManager(Location location) {
 
         this.location = location;
     }
