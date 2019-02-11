@@ -92,11 +92,7 @@
               <component id="6cf68" class="javax.swing.JList" binding="settingsList">
                 <constraints/>
                 <properties>
-                  <model>
-                    <item value="mainSettings"/>
-                    <item value="appearenceSettings"/>
-                    <item value="launchSettings"/>
-                  </model>
+                  <selectionMode value="0"/>
                 </properties>
               </component>
             </children>
@@ -108,32 +104,26 @@
             <properties/>
             <border type="none"/>
             <children>
-              <grid id="44471" layout-manager="GridLayoutManager" row-count="4" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="3a03d" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints/>
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <nested-form id="3eda0" form-file="com/github/benchdoos/weblocopener/gui/panels/BrowserSetterPanel.form" binding="browserSetterPanel">
+                  <grid id="79713" binding="scrollPaneContent" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
                     <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
-                  </nested-form>
-                  <vspacer id="d87f9">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <vspacer id="d726">
                     <constraints>
-                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                     </constraints>
                   </vspacer>
-                  <nested-form id="81102" form-file="com/github/benchdoos/weblocopener/gui/panels/MainSetterPanel.form" binding="mainSetterPanel">
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                  </nested-form>
-                  <nested-form id="43cc7" form-file="com/github/benchdoos/weblocopener/gui/panels/DarkModeSetterPanel.form" binding="darkModeSetterPanel">
-                    <constraints>
-                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                  </nested-form>
                 </children>
               </grid>
             </children>

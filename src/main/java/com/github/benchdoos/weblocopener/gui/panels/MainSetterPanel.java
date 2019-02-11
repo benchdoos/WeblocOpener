@@ -19,15 +19,20 @@ import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
+import com.github.benchdoos.weblocopener.utils.Logging;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ResourceBundle;
 
 public class MainSetterPanel extends JPanel implements SettingsPanel {
+    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
+
     private JPanel contentPane;
     private JCheckBox autoUpdateEnabledCheckBox;
     private JButton checkUpdatesButton;
@@ -178,8 +183,13 @@ public class MainSetterPanel extends JPanel implements SettingsPanel {
 
     @Override
     public void saveSettings() {
-        PreferencesManager.setAutoUpdateActive(autoUpdateEnabledCheckBox.isSelected());
-        PreferencesManager.setOpenFolderForQrCode(openFolderForQRCheckBox.isSelected());
-        PreferencesManager.setNotificationsShown(showNotificationsToUserCheckBox.isSelected());
+        final boolean update = autoUpdateEnabledCheckBox.isSelected();
+        final boolean folder = openFolderForQRCheckBox.isSelected();
+        final boolean notification = showNotificationsToUserCheckBox.isSelected();
+        log.info("Saving settings: auto-update: {}, open folder for qr-code: {}, notifications available: {}", update, folder, notification);
+
+        PreferencesManager.setAutoUpdateActive(update);
+        PreferencesManager.setOpenFolderForQrCode(folder);
+        PreferencesManager.setNotificationsShown(notification);
     }
 }

@@ -324,33 +324,38 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
     public void saveSettings() {
         Browser browser = (Browser) browserComboBox.getSelectedItem();
         if (browser != null) {
-            log.info("Browser call: " + browser.getCall());
+            final String call = browser.getCall();
             final int selectedIndex = browserComboBox.getSelectedIndex();
             final int itemCount = browserComboBox.getItemCount();
 
+            final String incognitoCall = browser.getIncognitoCall();
             if (selectedIndex != itemCount - 1) {
-                if (browser.getCall() != null) {
-                    if (!PreferencesManager.getBrowserValue().equals(browser.getCall())) {
+                if (call != null) {
+                    if (!PreferencesManager.getBrowserValue().equals(call)) {
                         if (!incognitoCheckBox.isSelected()) {
-                            PreferencesManager.setBrowserValue(browser.getCall());
+                            log.debug("Browser call: {}", call);
+                            PreferencesManager.setBrowserValue(call);
                         }
                     }
                 }
-                if (browser.getIncognitoCall() != null) {
-                    if (!PreferencesManager.getBrowserValue().equals(browser.getIncognitoCall())) {
+                if (incognitoCall != null) {
+                    if (!PreferencesManager.getBrowserValue().equals(incognitoCall)) {
                         if (incognitoCheckBox.isSelected()) {
-                            PreferencesManager.setBrowserValue(browser.getIncognitoCall());
+                            log.debug("Browser call: {}", incognitoCall);
+                            PreferencesManager.setBrowserValue(incognitoCall);
                         }
                     }
                 }
             } else {
                 final String text = callTextField.getText();
-                log.debug("saving text: " + text);
-                if (!text.equals(browser.getIncognitoCall())) {
+                if (!text.equals(incognitoCall)) {
+                    log.debug("Browser call: {}", text);
                     PreferencesManager.setBrowserValue(text);
                 }
             }
         }
+
+        log.info("Saving settings: browser: {}", browser);
     }
 
     private void setSyntaxInfoButtonToolTip() {

@@ -23,7 +23,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ResourceBundle;
 
-public class DarkModeSetterPanel extends JPanel implements SettingsPanel {
+public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
     private JPanel contentPane;
     private JComboBox darkModeCompoBox;
     private JPanel locationAndTimePanel;
@@ -33,7 +33,7 @@ public class DarkModeSetterPanel extends JPanel implements SettingsPanel {
     private JLabel sunriseValueLabel;
     private JLabel foundLocationLabel;
 
-    public DarkModeSetterPanel() {
+    public AppearanceSetterPanel() {
         initGui();
     }
 
