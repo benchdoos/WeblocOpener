@@ -35,7 +35,6 @@ import java.awt.*;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -292,8 +291,6 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         });
 
         locationTextField.getDocument().addDocumentListener(new DocumentListener() {
-            boolean mute = false;
-
             String locationName = null;
             Timer timer = new Timer(1000, e -> {
                 if (locationName != null && !locationName.isEmpty()) {
@@ -305,48 +302,39 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
                         log.warn("Could not get locations for name: {}", locationName);
                         locations = new Location[0];
                     }
-                    final String s = Arrays.toString(locations);
-                    System.out.println("locations are: " + s + " " + locations.length);
 
+                    updateLocationVerificationStatus(locations.length > 0);
                     DefaultComboBoxModel<Location> model = new DefaultComboBoxModel<>(locations);
                     locationComboBox.setModel(model);
-
-                    mute = true;
-                    Timer timer = new Timer(1000, ev -> mute = false);
-                    timer.setRepeats(false);
-                    timer.restart();
+                } else {
+                    updateLocationVerificationStatus(false);
                 }
             });
 
+
             @Override
             public void changedUpdate(DocumentEvent e) {
-                if (!mute) {
-                    System.out.println("changedUpdate");
-                }
+                /*NOP*/
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                if (!mute) {
-                    updateData();
-                    System.out.println("insertUpdate");
-                }
+                updateData();
 
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if (!mute) {
-                    updateData();
-                    System.out.println("removeUpdate");
-                }
-
+                updateData();
             }
 
             private void updateData() {
+                updateLocationVerificationStatus(false);
+
                 locationName = locationTextField.getText();
                 timer.setRepeats(false);
                 timer.restart();
+
             }
         });
     }
@@ -473,7 +461,6 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
             }
         } else {
             if (byLocationSettingsValid()) {
-                //save here
                 final Location location = ((Location) locationComboBox.getSelectedItem());
                 if (location != null) {
                     String value = location.getAddress() + "|" + location.getLongitude() + ";" + location.getLatitude();
@@ -481,6 +468,14 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
                     log.info("Saving settings: dark mode: {}", value);
                 }
             }
+        }
+    }
+
+    private void updateLocationVerificationStatus(boolean b) {
+        if (b) {
+            locationStatusLabel.setIcon(new ImageIcon(getClass().getResource("/images/emojiSuccess16.png")));
+        } else {
+            locationStatusLabel.setIcon(new ImageIcon(getClass().getResource("/images/emojiCross16.png")));
         }
     }
 }
