@@ -31,8 +31,6 @@ public class PreferencesManager {
     private static final String KEY_NOTIFICATIONS = "notifications";
     private static final String DEV_MODE_KEY = "dev_mode";
     private static final String KEY_DARK_MODE = "dark_mode";
-    private static final String KEY_DARK_MODE_DOWN_TIME = "dark_mode_down_time";
-    private static final String KEY_DARK_MODE_UPPER_TIME = "dark_mode_upper_time";
     private static final Preferences PREFERENCES = Preferences.userRoot().node(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME.toLowerCase());
 
     public static String getBrowserValue() {
