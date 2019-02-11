@@ -430,5 +430,6 @@ public class SettingsDialog extends JFrame {
     private void updateRegistry() {
         mainSetterPanel.saveSettings();
         browserSetterPanel.saveSettings();
+        appearanceSetterPanel.saveSettings();
     }
 }
