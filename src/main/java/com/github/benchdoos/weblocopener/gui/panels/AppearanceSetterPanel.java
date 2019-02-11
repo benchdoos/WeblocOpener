@@ -39,7 +39,7 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
 
     private JPanel contentPane;
     private JPanel byLocationPanel;
-    private JComboBox locationTextField;
+    private JComboBox locationComboBox;
     private JLabel locationStatusLabel;
     private JRadioButton disabledDarkModeRadioButton;
     private JRadioButton alwaysDarkModeRadioButton;
@@ -84,10 +84,10 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         byLocationPanel = new JPanel();
         byLocationPanel.setLayout(new GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(byLocationPanel, new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        locationTextField = new JComboBox();
-        locationTextField.setEditable(true);
-        locationTextField.setMaximumRowCount(10);
-        byLocationPanel.add(locationTextField, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        locationComboBox = new JComboBox();
+        locationComboBox.setEditable(true);
+        locationComboBox.setMaximumRowCount(10);
+        byLocationPanel.add(locationComboBox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         locationStatusLabel = new JLabel();
         locationStatusLabel.setIcon(new ImageIcon(getClass().getResource("/images/emojiCross16.png")));
         byLocationPanel.add(locationStatusLabel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(16, 16), new Dimension(16, 16), new Dimension(16, 16), 0, false));
@@ -324,6 +324,11 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         endingTextField.setText("7:00");
     }
 
+    private void loadByLocationSettings(DarkModeValue realDarkModeValue) {
+        byLocationDarkModeRadioButton.setSelected(true);
+        locationComboBox.setSelectedItem(realDarkModeValue.getLocation());
+    }
+
     private void loadByTimeSettings(DarkModeValue realDarkModeValue) {
         byTimeDarkModeRadioButton.setSelected(true);
 
@@ -355,8 +360,17 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
             } else if (realDarkModeValue.getLocation() != null) {
                 //find name by https://wiki.openstreetmap.org/wiki/Nominatim
                 //update all data
+                loadByLocationSettings(realDarkModeValue);
             }
         }
+    }
+
+    private void saveByTimeSettings() {
+        final String begins = beginningTextField.getText();
+        final String ends = endingTextField.getText();
+        final String value = begins + ";" + ends;
+        PreferencesManager.setDarkMode(value);
+        log.info("Saving settings: dark mode: {}", value);
     }
 
     @Override
@@ -380,15 +394,8 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         } else {
             if (byLocationSettingsValid()) {
                 //save here
+                PreferencesManager.setDarkMode("Майкоп, городской округ Майкоп, Республика Адыгея, Южный федеральный округ, РФ|44.6062079;40.104053");
             }
         }
-    }
-
-    private void saveByTimeSettings() {
-        final String begins = beginningTextField.getText();
-        final String ends = endingTextField.getText();
-        final String value = begins + ";" + ends;
-        PreferencesManager.setDarkMode(value);
-        log.info("Saving settings: dark mode: {}", value);
     }
 }

@@ -72,7 +72,9 @@ public class PreferencesManager {
             return Boolean.FALSE;
         } else {
             try {
-                return DarkModeAnalyzer.getDarkModeValue(s);
+                final Object darkModeValue = DarkModeAnalyzer.getDarkModeValue(s);
+                System.out.println("O>> " + darkModeValue);
+                return darkModeValue;
             } catch (Exception e) {
                 return SettingsConstants.DARK_MODE_DEFAULT_VALUE == DARK_MODE.ALWAYS;
             }
@@ -98,6 +100,7 @@ public class PreferencesManager {
                 //if time - return time
                 //loads api blah blah
                 try {
+                    System.out.println("value: " + getDarkMode());
                     return DarkModeAnalyzer.isDarkModeEnabledByNotDefaultData(getDarkMode());
                 } catch (Exception e) {
                     return SettingsConstants.DARK_MODE_DEFAULT_VALUE == DARK_MODE.ALWAYS;

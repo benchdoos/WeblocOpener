@@ -40,15 +40,11 @@ public class DarkModeAnalyzer {
 
     public static Object getDarkModeValue(String s) {
         final String[] split = s.split(";");
-        if (split[0].contains(":")) {
-            return new DarkModeValue(getStartTimeRange(split), getEndTimeRange(split));
-        } else {
-            final String[] split2 = split[0].split("\\|");
-            final String address = split2[0];
-            final String locationCoordinates = split2[1];
-            final Location location = getLocation(locationCoordinates);
-            location.setAddress(address);
+        if (split[0].contains("|")) {
+            final Location location = getLocation(s);
             return new DarkModeValue(location);
+        } else {
+            return new DarkModeValue(getStartTimeRange(split), getEndTimeRange(split));
         }
     }
 
@@ -61,10 +57,15 @@ public class DarkModeAnalyzer {
     }
 
     private static Location getLocation(String value) {
-        String[] split = value.split(";");
-        double longitude = Double.valueOf(split[0]);
-        double latitude = Double.valueOf(split[1]);
-        return new Location(longitude, latitude);
+        final String[] split = value.split("\\|");
+        final String address = split[0];
+        final String locationCoordinates = split[1];
+
+        String[] locationSplit = locationCoordinates.split(";");
+        double longitude = Double.valueOf(locationSplit[0]);
+        double latitude = Double.valueOf(locationSplit[1]);
+
+        return new Location(longitude, latitude, address);
     }
 
     private static TimeRange getStartTimeRange(String[] split) {
@@ -76,22 +77,17 @@ public class DarkModeAnalyzer {
     }
 
     private static boolean isDarkModeEnabledByLocation(String value) {
-        final String[] split = value.split("\\|");
-        final String address = split[0];
-        final String locationCoordinates = split[1];
-        Location location = getLocation(locationCoordinates);
-        location.setAddress(address);
+        Location location = getLocation(value);
         //get from api
         return false;
     }
 
     public static boolean isDarkModeEnabledByNotDefaultData(String value) {
         final String[] split = value.split(";");
-        if (split[0].contains(":")) {
-            return isDarkModeEnabledByTimeRange(split);
-        } else {
-
+        if (split[0].contains("|")) {
             return isDarkModeEnabledByLocation(value);
+        } else {
+            return isDarkModeEnabledByTimeRange(split);
         }
     }
 
