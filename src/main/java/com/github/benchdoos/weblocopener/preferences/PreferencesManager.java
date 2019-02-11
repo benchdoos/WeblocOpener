@@ -60,8 +60,8 @@ public class PreferencesManager {
         }
     }
 
-    public static void setDarkMode(DARK_MODE mode) {
-        PREFERENCES.put(KEY_DARK_MODE, mode.toString().toUpperCase());
+    public static void setDarkMode(String value) {
+        PREFERENCES.put(KEY_DARK_MODE, value);
     }
 
     public static Object getRealDarkMode() {

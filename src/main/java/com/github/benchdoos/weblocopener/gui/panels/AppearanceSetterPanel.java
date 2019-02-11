@@ -17,9 +17,12 @@ package com.github.benchdoos.weblocopener.gui.panels;
 
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.DarkModeValue;
+import com.github.benchdoos.weblocopener.utils.Logging;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import javax.swing.text.DateFormatter;
@@ -27,10 +30,13 @@ import javax.swing.text.DefaultFormatterFactory;
 import java.awt.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
 
 public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
+    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
+
     private JPanel contentPane;
     private JPanel byLocationPanel;
     private JComboBox locationTextField;
@@ -240,6 +246,32 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         return contentPane;
     }
 
+    private boolean byLocationSettingsValid() {
+        return true;
+    }
+
+    private boolean byTimeSettingsValid() {
+        final String begins = beginningTextField.getText();
+        final String ends = endingTextField.getText();
+
+        final Date beginTime = getTimeFromString(begins);
+        final Date endTime = getTimeFromString(ends);
+
+        return beginTime.after(endTime);
+    }
+
+    private Date getTimeFromString(String begins) {
+        final String[] splitBegins = begins.split(":");
+
+        final Calendar up = Calendar.getInstance();
+
+
+        up.set(Calendar.HOUR, Integer.parseInt(splitBegins[0]));
+        up.set(Calendar.MINUTE, Integer.parseInt(splitBegins[1]));
+
+        return up.getTime();
+    }
+
     private void initDarkModeButtonGroup() {
         disabledDarkModeRadioButton.addChangeListener(e -> {
             if (disabledDarkModeRadioButton.isSelected()) {
@@ -326,6 +358,26 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
 
     @Override
     public void saveSettings() {
-
+        if (disabledDarkModeRadioButton.isSelected()) {
+            final String value = PreferencesManager.DARK_MODE.DISABLED.toString();
+            PreferencesManager.setDarkMode(value);
+            log.info("Saving settings: dark mode: {}", value);
+        } else if (alwaysDarkModeRadioButton.isSelected()) {
+            final String value = PreferencesManager.DARK_MODE.ALWAYS.toString();
+            PreferencesManager.setDarkMode(value);
+            log.info("Saving settings: dark mode: {}", value);
+        } else if (byTimeDarkModeRadioButton.isSelected()) {
+            if (byTimeSettingsValid()) {
+                final String begins = beginningTextField.getText();
+                final String ends = endingTextField.getText();
+                final String value = begins + ";" + ends;
+                PreferencesManager.setDarkMode(value);
+                log.info("Saving settings: dark mode: {}", value);
+            }
+        } else {
+            if (byLocationSettingsValid()) {
+                //save here
+            }
+        }
     }
 }
