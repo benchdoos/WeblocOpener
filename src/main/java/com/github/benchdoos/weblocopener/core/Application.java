@@ -112,69 +112,21 @@ public class Application {
                     }
                     case OPENER_QR_ARGUMENT:
                         if (args.length > 1) {
-                            try {
-                                final String filePath = args[1];
-                                ShowQrDialog qrDialog = new ShowQrDialog(new Analyzer(filePath).getFile());
-                                qrDialog.setVisible(true);
-                            } catch (Exception e) {
-                                log.warn("Can not create a qr-code from url: [" + args[1] + "]", e);
-                            }
+                            runQrDialog(args[1]);
                         }
                         break;
                     case OPENER_COPY_LINK_ARGUMENT:
                         if (args.length > 1) {
-                            final String path = args[1];
-                            String url;
-                            try {
-                                url = new Analyzer(path).getUrl();
-                                StringSelection stringSelection = new StringSelection(url);
-                                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                                clipboard.setContents(stringSelection, null);
-                                log.info("Successfully copied url to clipboard from: " + path);
-
-                                try {
-                                    UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
-                                            Translation.getTranslatedString("CommonsBundle", "linkCopied"),
-                                            TrayIcon.MessageType.INFO);
-                                } catch (Exception e) {
-                                    log.warn("Could not show message for user", e);
-                                }
-                            } catch (Exception e) {
-                                log.warn("Could not copy url from file: {}", args[1], e);
-                            }
-
+                            runCopyLink(args[1]);
                         }
                         break;
 
                     case OPENER_COPY_QR_ARGUMENT:
-                        try {
-                            if (args.length > 1) {
-                                final String path = args[1];
-                                String url;
-                                url = new Analyzer(path).getUrl();
-                                final BufferedImage image = UrlsProceed.generateQrCode(url);
-                                CoreUtils.copyImageToClipBoard(image);
-
-                                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
-                                        Translation.getTranslatedString("ShowQrDialogBundle", "successCopyImage"),
-                                        TrayIcon.MessageType.INFO);
-                            }
-                        } catch (Exception e) {
-                            log.warn("Could not copy qr code for {}", args[1], e);
-                            UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
-                                    Translation.getTranslatedString("ShowQrDialogBundle", "errorCopyImage")
-                                    , TrayIcon.MessageType.ERROR);
-                        }
+                        runCopyQrCode(args);
                         break;
 
                     case ArgumentConstants.UPDATE_SILENT_ARGUMENT:
-                        updateMode = UPDATE_MODE.SILENT;
-                        boolean isAutoUpdate = PreferencesManager.isAutoUpdateActive();
-
-                        log.debug(PreferencesManager.KEY_AUTO_UPDATE + " : " + isAutoUpdate);
-                        if (isAutoUpdate) {
-                            new NonGuiUpdater();
-                        }
+                        runUpdateSilent();
                         break;
                     default:
                         final String filePath = args[0];
@@ -231,22 +183,52 @@ public class Application {
             } catch (Exception e) {
                 log.warn("Could not edit file: {}", path, e);
             }
-
-            /*if (files != null) {
-                if (files.size() == 1) {
-                    runEditDialog(path);
-                } else {
-                    FileChooser fileChooser = new FileChooser(files);
-                    fileChooser.setVisible(true);
-                    final File chosenFile = fileChooser.getChosenFile();
-                    if (chosenFile != null) {
-                        runEditDialog(chosenFile.getAbsolutePath());
-                    }
-                }
-            }*/
         } else {
             UserUtils.showErrorMessageToUser(null, "Error",
                     "Argument '-edit' should have location path parameter.");
+        }
+    }
+
+    private static void runCopyLink(String arg) {
+        final String path = arg;
+        String url;
+        try {
+            url = new Analyzer(path).getUrl();
+            StringSelection stringSelection = new StringSelection(url);
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
+            log.info("Successfully copied url to clipboard from: " + path);
+
+            try {
+                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                        Translation.getTranslatedString("CommonsBundle", "linkCopied"),
+                        TrayIcon.MessageType.INFO);
+            } catch (Exception e) {
+                log.warn("Could not show message for user", e);
+            }
+        } catch (Exception e) {
+            log.warn("Could not copy url from file: {}", arg, e);
+        }
+    }
+
+    private static void runCopyQrCode(String[] args) {
+        try {
+            if (args.length > 1) {
+                final String path = args[1];
+                String url;
+                url = new Analyzer(path).getUrl();
+                final BufferedImage image = UrlsProceed.generateQrCode(url);
+                CoreUtils.copyImageToClipBoard(image);
+
+                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                        Translation.getTranslatedString("ShowQrDialogBundle", "successCopyImage"),
+                        TrayIcon.MessageType.INFO);
+            }
+        } catch (Exception e) {
+            log.warn("Could not copy qr code for {}", args[1], e);
+            UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                    Translation.getTranslatedString("ShowQrDialogBundle", "errorCopyImage")
+                    , TrayIcon.MessageType.ERROR);
         }
     }
 
@@ -257,9 +239,27 @@ public class Application {
      */
     private static void runEditDialog(String filepath) {
         EditDialog dialog = new EditDialog(filepath);
+        if (PreferencesManager.isDarkModeEnabledNow()) {
+            JColorful colorful = new JColorful(DefaultThemes.EXTREMELY_BLACK);
+            colorful.colorize(dialog);
+        }
+
         dialog.setVisible(true);
         dialog.setMaximumSize(new Dimension(MAXIMIZED_HORIZ, dialog.getHeight()));
         dialog.setLocationRelativeTo(null);
+    }
+
+    private static void runQrDialog(String arg) {
+        try {
+            ShowQrDialog qrDialog = new ShowQrDialog(new Analyzer(arg).getFile());
+            if (PreferencesManager.isDarkModeEnabledNow()) {
+                JColorful colorful = new JColorful(DefaultThemes.EXTREMELY_BLACK);
+                colorful.colorize(qrDialog);
+            }
+            qrDialog.setVisible(true);
+        } catch (Exception e) {
+            log.warn("Can not create a qr-code from url: [" + arg + "]", e);
+        }
     }
 
     public static void runSettingsDialog() {
@@ -275,8 +275,24 @@ public class Application {
 
     public static void runUpdateDialog() {
         final UpdateDialog updateDialog = UpdateDialog.getInstance();
+
+        if (PreferencesManager.isDarkModeEnabledNow()) {
+            JColorful colorful = new JColorful(DefaultThemes.EXTREMELY_BLACK);
+            colorful.colorize(updateDialog);
+        }
+
         updateDialog.setVisible(true);
         new Thread(updateDialog::checkForUpdates).start();
+    }
+
+    private static void runUpdateSilent() {
+        updateMode = UPDATE_MODE.SILENT;
+        boolean isAutoUpdate = PreferencesManager.isAutoUpdateActive();
+
+        log.debug(PreferencesManager.KEY_AUTO_UPDATE + " : " + isAutoUpdate);
+        if (isAutoUpdate) {
+            new NonGuiUpdater();
+        }
     }
 
     public enum UPDATE_MODE {NORMAL, SILENT}
