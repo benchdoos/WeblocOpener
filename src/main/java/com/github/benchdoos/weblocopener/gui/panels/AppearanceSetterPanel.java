@@ -306,17 +306,20 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
             final DarkModeValue realDarkModeValue = (DarkModeValue) object;
             if (realDarkModeValue.getNext() != null && realDarkModeValue.getPrevious() != null) {
                 byTimeDarkModeRadioButton.setSelected(true);
-                final Date startTime = realDarkModeValue.getNext().getStart();
 
+                final Date startTime = realDarkModeValue.getNext().getStart();
                 final Date endTime = realDarkModeValue.getPrevious().getEnd();
 
-
                 DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+
                 String startTimeString = dateFormat.format(startTime);
                 beginningTextField.setText(startTimeString);
                 String endTimeString = dateFormat.format(endTime);
                 endingTextField.setText(endTimeString);
 
+            } else if (realDarkModeValue.getLocation() != null) {
+                //find name by https://wiki.openstreetmap.org/wiki/Nominatim
+                //update all data
             }
         }
     }
