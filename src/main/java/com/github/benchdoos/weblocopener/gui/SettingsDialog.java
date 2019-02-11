@@ -15,12 +15,15 @@
 
 package com.github.benchdoos.weblocopener.gui;
 
+import com.github.benchdoos.beans.DefaultThemes;
+import com.github.benchdoos.core.JColorful;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.gui.panels.AppearanceSetterPanel;
 import com.github.benchdoos.weblocopener.gui.panels.BrowserSetterPanel;
 import com.github.benchdoos.weblocopener.gui.panels.MainSetterPanel;
 import com.github.benchdoos.weblocopener.gui.panels.SettingsPanel;
+import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.utils.Converter;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
@@ -421,6 +424,13 @@ public class SettingsDialog extends JFrame {
         model.addElement(browserSetterPanel);
         model.addElement(appearanceSetterPanel);
         settingsList.setModel(model);
+
+        if (PreferencesManager.isDarkModeEnabledNow()) {
+            final JColorful colorful = new JColorful(DefaultThemes.EXTREMELY_BLACK);
+            colorful.colorize(mainSetterPanel);
+            colorful.colorize(browserSetterPanel);
+            colorful.colorize(appearanceSetterPanel);
+        }
     }
 
     private void onAbout() {
