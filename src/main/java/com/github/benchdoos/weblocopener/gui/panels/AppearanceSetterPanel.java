@@ -26,8 +26,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
@@ -288,6 +291,38 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         });
 
         locationComboBox.setEditor(new LocationComboBoxEditor());
+
+        final JTextComponent tc = (JTextComponent) locationComboBox.getEditor().getEditorComponent();
+        tc.getDocument().addDocumentListener(new DocumentListener() {
+            String text = null;
+            Timer timer = new Timer(1000, e -> {
+                if (text != null && !text.isEmpty()) {
+                    //go to api
+                    System.out.println("text is: " + text);
+                }
+            });
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateData(e);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateData(e);
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateData(e);
+            }
+
+            private void updateData(DocumentEvent e) {
+                text = tc.getText();
+                timer.setRepeats(false);
+                timer.restart();
+            }
+        });
     }
 
     private void initDarkModeButtonGroup() {
@@ -317,6 +352,14 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         });
     }
 
+    private void initDefaultsForPanels() {
+        byTimePanel.setVisible(false);
+        byLocationPanel.setVisible(false);
+
+        beginningTextField.setText("19:00");
+        endingTextField.setText("7:00");
+    }
+
     private void initFormattedTextFields() {
         final DateFormatter formatter = new DateFormatter(new SimpleDateFormat("HH:mm"));
         beginningTextField.setFormatterFactory(new DefaultFormatterFactory(formatter));
@@ -329,19 +372,11 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
 
         initFormattedTextFields();
 
-        initPanels();
+        initDefaultsForPanels();
 
         initComboBoxes();
 
         initDarkModeButtonGroup();
-    }
-
-    private void initPanels() {
-        byTimePanel.setVisible(false);
-        byLocationPanel.setVisible(false);
-
-        beginningTextField.setText("19:00");
-        endingTextField.setText("7:00");
     }
 
     private void loadByLocationSettings(DarkModeValue realDarkModeValue) {
@@ -378,8 +413,6 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
             if (realDarkModeValue.getNext() != null && realDarkModeValue.getPrevious() != null) {
                 loadByTimeSettings(realDarkModeValue);
             } else if (realDarkModeValue.getLocation() != null) {
-                //find name by https://wiki.openstreetmap.org/wiki/Nominatim
-                //update all data
                 loadByLocationSettings(realDarkModeValue);
             }
         }
@@ -427,8 +460,18 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         }
 
         @Override
+        public void addActionListener(ActionListener l) {
+            textField.addActionListener(l);
+        }
+
+        @Override
         public Component getEditorComponent() {
             return textField;
+        }
+
+        @Override
+        public Object getItem() {
+            return textField.getText();
         }
 
         @Override
@@ -441,23 +484,13 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         }
 
         @Override
-        public Object getItem() {
-            return textField.getText();
+        public void removeActionListener(ActionListener l) {
+            textField.removeActionListener(l);
         }
 
         @Override
         public void selectAll() {
             textField.selectAll();
-        }
-
-        @Override
-        public void addActionListener(ActionListener l) {
-            textField.addActionListener(l);
-        }
-
-        @Override
-        public void removeActionListener(ActionListener l) {
-            textField.removeActionListener(l);
         }
     }
 }
