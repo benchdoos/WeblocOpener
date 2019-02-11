@@ -20,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class DarkModeAnalyzer {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
@@ -55,16 +56,25 @@ public class DarkModeAnalyzer {
 
     public static boolean isDarkModeEnabledByNotDefaultData(String value) {
         final String[] split = value.split(";");
-        DarkModeValue darkModeValue;
         if (split[0].contains(":")) {
-            final TimeRange startTimeRange = getStartTimeRange(split);
-            final TimeRange endTimeRange = getEndTimeRange(split);
-
-            System.out.println("ranges: \n" +
-                    "begins: " + startTimeRange
-                    + "\nends: " + endTimeRange);
-            System.out.println("Today: " + Calendar.getInstance().getTime());
+            return isDarkModeEnabledByTimeRange(split);
         }
         return true;
+    }
+
+    private static boolean isDarkModeEnabledByTimeRange(String[] split) {
+        final TimeRange startTimeRange = getStartTimeRange(split);
+        final TimeRange endTimeRange = getEndTimeRange(split);
+
+        log.debug("Dark mode ranges:"
+                + " begins: " + startTimeRange
+
+                + " ends: " + endTimeRange);
+        final Date nowTime = Calendar.getInstance().getTime();
+        log.debug("Today: " + nowTime);
+
+        if (startTimeRange.isInRange(nowTime)) {
+            return true;
+        } else return endTimeRange.isInRange(nowTime);
     }
 }

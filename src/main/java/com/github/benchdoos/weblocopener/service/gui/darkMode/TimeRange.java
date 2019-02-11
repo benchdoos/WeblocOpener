@@ -21,7 +21,7 @@ public class TimeRange {
     private Date start;
     private Date end;
 
-    public TimeRange(Date start, Date end) {
+    TimeRange(Date start, Date end) {
         this.start = start;
         this.end = end;
     }
@@ -40,6 +40,10 @@ public class TimeRange {
 
     public void setStart(Date start) {
         this.start = start;
+    }
+
+    boolean isInRange(Date date) {
+        return start.before(date) && end.after(date);
     }
 
     @Override
