@@ -17,6 +17,7 @@ package com.github.benchdoos.weblocopener.preferences;
 
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
+import com.github.benchdoos.weblocopener.service.gui.darkMode.DarkModeAnalyzer;
 
 import java.util.prefs.Preferences;
 
@@ -81,7 +82,8 @@ public class PreferencesManager {
                 //parse value, if location - get time
                 //if time - return time
                 //loads api blah blah
-                return SettingsConstants.DARK_MODE_DEFAULT_VALUE == DARK_MODE.ALWAYS;
+                return DarkModeAnalyzer.isDarkModeEnabledByNotDefaultData(getDarkMode());
+//                return SettingsConstants.DARK_MODE_DEFAULT_VALUE == DARK_MODE.ALWAYS;
             }
         }
     }
