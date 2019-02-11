@@ -72,9 +72,7 @@ public class PreferencesManager {
             return Boolean.FALSE;
         } else {
             try {
-                final Object darkModeValue = DarkModeAnalyzer.getDarkModeValue(s);
-                System.out.println("O>> " + darkModeValue);
-                return darkModeValue;
+                return DarkModeAnalyzer.getDarkModeValue(s);
             } catch (Exception e) {
                 return SettingsConstants.DARK_MODE_DEFAULT_VALUE == DARK_MODE.ALWAYS;
             }
