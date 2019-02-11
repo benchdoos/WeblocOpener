@@ -466,6 +466,8 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
                     String value = location.getAddress() + "|" + location.getLongitude() + ";" + location.getLatitude();
                     PreferencesManager.setDarkMode(value);
                     log.info("Saving settings: dark mode: {}", value);
+                } else {
+                    log.warn("Saving settings: dark mode: could not get location: null");
                 }
             }
         }
