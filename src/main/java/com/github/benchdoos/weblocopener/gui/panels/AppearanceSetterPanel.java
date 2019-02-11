@@ -17,6 +17,7 @@ package com.github.benchdoos.weblocopener.gui.panels;
 
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.DarkModeValue;
+import com.github.benchdoos.weblocopener.service.gui.darkMode.Location;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -28,6 +29,7 @@ import javax.swing.*;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.DefaultFormatterFactory;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -39,7 +41,7 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
 
     private JPanel contentPane;
     private JPanel byLocationPanel;
-    private JComboBox locationComboBox;
+    private JComboBox<Location> locationComboBox;
     private JLabel locationStatusLabel;
     private JRadioButton disabledDarkModeRadioButton;
     private JRadioButton alwaysDarkModeRadioButton;
@@ -82,18 +84,15 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         final Spacer spacer1 = new Spacer();
         panel1.add(spacer1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         byLocationPanel = new JPanel();
-        byLocationPanel.setLayout(new GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
+        byLocationPanel.setLayout(new GridLayoutManager(3, 3, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(byLocationPanel, new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         locationComboBox = new JComboBox();
         locationComboBox.setEditable(true);
         locationComboBox.setMaximumRowCount(10);
-        byLocationPanel.add(locationComboBox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        locationStatusLabel = new JLabel();
-        locationStatusLabel.setIcon(new ImageIcon(getClass().getResource("/images/emojiCross16.png")));
-        byLocationPanel.add(locationStatusLabel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(16, 16), new Dimension(16, 16), new Dimension(16, 16), 0, false));
+        byLocationPanel.add(locationComboBox, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, new Dimension(400, -1), 0, false));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayoutManager(1, 6, new Insets(0, 0, 0, 0), -1, -1));
-        byLocationPanel.add(panel2, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        byLocationPanel.add(panel2, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label2 = new JLabel();
         this.$$$loadLabelText$$$(label2, ResourceBundle.getBundle("translations/AppearanceSetterPanelBundle").getString("TimeLabel"));
         panel2.add(label2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -117,7 +116,14 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         panel2.add(spacer2, new GridConstraints(0, 5, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         foundLocationLabel = new JLabel();
         this.$$$loadLabelText$$$(foundLocationLabel, ResourceBundle.getBundle("translations/AppearanceSetterPanelBundle").getString("unknownLocation"));
-        byLocationPanel.add(foundLocationLabel, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        byLocationPanel.add(foundLocationLabel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer3 = new Spacer();
+        byLocationPanel.add(spacer3, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer4 = new Spacer();
+        byLocationPanel.add(spacer4, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        locationStatusLabel = new JLabel();
+        locationStatusLabel.setIcon(new ImageIcon(getClass().getResource("/images/emojiCross16.png")));
+        byLocationPanel.add(locationStatusLabel, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(16, 16), new Dimension(16, 16), new Dimension(16, 16), 0, false));
         byTimePanel = new JPanel();
         byTimePanel.setLayout(new GridLayoutManager(2, 4, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(byTimePanel, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -137,8 +143,8 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         label7.setIcon(new ImageIcon(getClass().getResource("/images/emojiCross16.png")));
         label7.setText("");
         byTimePanel.add(label7, new GridConstraints(0, 2, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(16, 16), new Dimension(16, 16), new Dimension(16, 16), 0, false));
-        final Spacer spacer3 = new Spacer();
-        byTimePanel.add(spacer3, new GridConstraints(0, 3, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer5 = new Spacer();
+        byTimePanel.add(spacer5, new GridConstraints(0, 3, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(2, 3, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel3, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -155,8 +161,8 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         byLocationDarkModeRadioButton = new JRadioButton();
         this.$$$loadButtonText$$$(byLocationDarkModeRadioButton, ResourceBundle.getBundle("translations/AppearanceSetterPanelBundle").getString("byLocationName"));
         panel3.add(byLocationDarkModeRadioButton, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer4 = new Spacer();
-        panel3.add(spacer4, new GridConstraints(0, 2, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer6 = new Spacer();
+        panel3.add(spacer6, new GridConstraints(0, 2, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         ButtonGroup buttonGroup;
         buttonGroup = new ButtonGroup();
         buttonGroup.add(disabledDarkModeRadioButton);
@@ -272,6 +278,20 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         return up.getTime();
     }
 
+    private void initComboBoxes() {
+        locationComboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Location) {
+                    return super.getListCellRendererComponent(list, ((Location) value).getAddress(), index, isSelected, cellHasFocus);
+                }
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
+
+        locationComboBox.setEditor(new LocationComboBoxEditor());
+    }
+
     private void initDarkModeButtonGroup() {
         disabledDarkModeRadioButton.addChangeListener(e -> {
             if (disabledDarkModeRadioButton.isSelected()) {
@@ -312,6 +332,8 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         initFormattedTextFields();
 
         initPanels();
+
+        initComboBoxes();
 
         initDarkModeButtonGroup();
     }
@@ -396,6 +418,48 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
                 //save here
                 PreferencesManager.setDarkMode("Майкоп, городской округ Майкоп, Республика Адыгея, Южный федеральный округ, РФ|44.6062079;40.104053");
             }
+        }
+    }
+
+    private class LocationComboBoxEditor implements ComboBoxEditor {
+        JTextField textField;
+
+        LocationComboBoxEditor() {
+            this.textField = new JTextField();
+        }
+
+        @Override
+        public Component getEditorComponent() {
+            return textField;
+        }
+
+        @Override
+        public void setItem(Object object) {
+            if (object instanceof Location) {
+                textField.setText(((Location) object).getAddress());
+            } else {
+                textField.setText(object == null ? null : object.toString());
+            }
+        }
+
+        @Override
+        public Object getItem() {
+            return textField.getText();
+        }
+
+        @Override
+        public void selectAll() {
+            textField.selectAll();
+        }
+
+        @Override
+        public void addActionListener(ActionListener l) {
+            textField.addActionListener(l);
+        }
+
+        @Override
+        public void removeActionListener(ActionListener l) {
+            textField.removeActionListener(l);
         }
     }
 }
