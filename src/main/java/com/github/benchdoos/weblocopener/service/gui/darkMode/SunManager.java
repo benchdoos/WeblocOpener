@@ -15,17 +15,14 @@
 
 package com.github.benchdoos.weblocopener.service.gui.darkMode;
 
-import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
+import com.github.benchdoos.weblocopener.utils.ConnectionUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.net.ssl.HttpsURLConnection;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -44,13 +41,8 @@ public class SunManager {
     private HttpsURLConnection createConnection(String day) {
         try {
             final HttpsURLConnection connection = getConnection(day);
-            if (!connection.getDoOutput()) {
-                connection.setDoOutput(true);
-            }
-            if (!connection.getDoInput()) {
-                connection.setDoInput(true);
-            }
-            return connection;
+
+            return ConnectionUtils.getNeededHttpsURLConnection(connection);
         } catch (IOException e) {
             log.warn("Could not establish connection", e);
             return null;
@@ -74,26 +66,20 @@ public class SunManager {
     TimeRange getDarkModeValueByLocation(String day) throws IOException {
         final HttpsURLConnection connection = createConnection(day);
         if (connection != null) {
-            return getDarkModeValueFromConnection(connection);
+            return getTimeRangeFromApi(connection);
         } else return null;
 
     }
 
-    private TimeRange getDarkModeValueFromConnection(HttpsURLConnection connection) throws IOException {
-        log.debug("Getting current server application version");
-        String input;
-        BufferedReader bufferedReader = new BufferedReader(
-                new InputStreamReader(connection.getInputStream(), ApplicationConstants.DEFAULT_APPLICATION_CHARSET));
-
-        input = bufferedReader.readLine();
-
-        JsonParser parser = new JsonParser();
-        JsonObject root = parser.parse(input).getAsJsonObject();
+    private TimeRange getTimeRangeFromApi(HttpsURLConnection connection) throws IOException {
+        log.debug("Getting time range from sunrise-sunset.org");
+        JsonObject root = ConnectionUtils.getJsonRootElementFromConnection(connection).getAsJsonObject();
 
         TimeRange value = getDarkModeValueFromJson(root);
         log.info("Got DarkModeValue from JSON: {}", value);
         return value;
     }
+
 
     private TimeRange getDarkModeValueFromJson(JsonObject root) {
         final JsonObject resultObject = root.getAsJsonObject().get("results").getAsJsonObject();

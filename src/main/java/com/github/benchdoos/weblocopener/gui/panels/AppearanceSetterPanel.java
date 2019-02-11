@@ -18,6 +18,7 @@ package com.github.benchdoos.weblocopener.gui.panels;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.DarkModeValue;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.Location;
+import com.github.benchdoos.weblocopener.service.gui.darkMode.LocationManager;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -30,11 +31,11 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
-import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -45,7 +46,6 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
     private JPanel contentPane;
     private JPanel byLocationPanel;
     private JComboBox<Location> locationComboBox;
-    private JLabel locationStatusLabel;
     private JRadioButton disabledDarkModeRadioButton;
     private JRadioButton alwaysDarkModeRadioButton;
     private JRadioButton byTimeDarkModeRadioButton;
@@ -56,6 +56,8 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
     private JLabel sunsetValueLabel;
     private JLabel sunriseValueLabel;
     private JLabel foundLocationLabel;
+    private JTextField locationTextField;
+    private JLabel locationStatusLabel;
 
     public AppearanceSetterPanel() {
         initGui();
@@ -87,15 +89,14 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         final Spacer spacer1 = new Spacer();
         panel1.add(spacer1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         byLocationPanel = new JPanel();
-        byLocationPanel.setLayout(new GridLayoutManager(3, 3, new Insets(0, 0, 0, 0), -1, -1));
+        byLocationPanel.setLayout(new GridLayoutManager(4, 2, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(byLocationPanel, new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         locationComboBox = new JComboBox();
-        locationComboBox.setEditable(true);
         locationComboBox.setMaximumRowCount(10);
-        byLocationPanel.add(locationComboBox, new GridConstraints(0, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, new Dimension(400, -1), 0, false));
+        byLocationPanel.add(locationComboBox, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(400, -1), new Dimension(400, -1), new Dimension(400, -1), 0, false));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayoutManager(1, 6, new Insets(0, 0, 0, 0), -1, -1));
-        byLocationPanel.add(panel2, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        byLocationPanel.add(panel2, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label2 = new JLabel();
         this.$$$loadLabelText$$$(label2, ResourceBundle.getBundle("translations/AppearanceSetterPanelBundle").getString("TimeLabel"));
         panel2.add(label2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -119,12 +120,12 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         panel2.add(spacer2, new GridConstraints(0, 5, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         foundLocationLabel = new JLabel();
         this.$$$loadLabelText$$$(foundLocationLabel, ResourceBundle.getBundle("translations/AppearanceSetterPanelBundle").getString("unknownLocation"));
-        byLocationPanel.add(foundLocationLabel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        byLocationPanel.add(foundLocationLabel, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        locationTextField = new JTextField();
+        byLocationPanel.add(locationTextField, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         locationStatusLabel = new JLabel();
         locationStatusLabel.setIcon(new ImageIcon(getClass().getResource("/images/emojiCross16.png")));
-        byLocationPanel.add(locationStatusLabel, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(16, 16), new Dimension(16, 16), new Dimension(16, 16), 0, false));
-        final Spacer spacer3 = new Spacer();
-        byLocationPanel.add(spacer3, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        byLocationPanel.add(locationStatusLabel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(16, 16), new Dimension(16, 16), new Dimension(16, 16), 0, false));
         byTimePanel = new JPanel();
         byTimePanel.setLayout(new GridLayoutManager(2, 4, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(byTimePanel, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -144,8 +145,8 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         label7.setIcon(new ImageIcon(getClass().getResource("/images/emojiCross16.png")));
         label7.setText("");
         byTimePanel.add(label7, new GridConstraints(0, 2, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(16, 16), new Dimension(16, 16), new Dimension(16, 16), 0, false));
-        final Spacer spacer4 = new Spacer();
-        byTimePanel.add(spacer4, new GridConstraints(0, 3, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer3 = new Spacer();
+        byTimePanel.add(spacer3, new GridConstraints(0, 3, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(2, 3, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel3, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -162,8 +163,8 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         byLocationDarkModeRadioButton = new JRadioButton();
         this.$$$loadButtonText$$$(byLocationDarkModeRadioButton, ResourceBundle.getBundle("translations/AppearanceSetterPanelBundle").getString("byLocationName"));
         panel3.add(byLocationDarkModeRadioButton, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer5 = new Spacer();
-        panel3.add(spacer5, new GridConstraints(0, 2, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer4 = new Spacer();
+        panel3.add(spacer4, new GridConstraints(0, 2, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         ButtonGroup buttonGroup;
         buttonGroup = new ButtonGroup();
         buttonGroup.add(disabledDarkModeRadioButton);
@@ -290,35 +291,60 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
             }
         });
 
-        locationComboBox.setEditor(new LocationComboBoxEditor());
+        locationTextField.getDocument().addDocumentListener(new DocumentListener() {
+            boolean mute = false;
 
-        final JTextComponent tc = (JTextComponent) locationComboBox.getEditor().getEditorComponent();
-        tc.getDocument().addDocumentListener(new DocumentListener() {
-            String text = null;
+            String locationName = null;
             Timer timer = new Timer(1000, e -> {
-                if (text != null && !text.isEmpty()) {
-                    //go to api
-                    System.out.println("text is: " + text);
+                if (locationName != null && !locationName.isEmpty()) {
+                    LocationManager locationManager = new LocationManager(locationName);
+                    Location[] locations;
+                    try {
+                        locations = locationManager.getLocations();
+                    } catch (IOException e1) {
+                        log.warn("Could not get locations for name: {}", locationName);
+                        locations = new Location[0];
+                    }
+                    final String s = Arrays.toString(locations);
+                    System.out.println("locations are: " + s + " " + locations.length);
+
+                    DefaultComboBoxModel<Location> model = new DefaultComboBoxModel<>(locations);
+                    locationComboBox.setModel(model);
+
+                    mute = true;
+                    Timer timer = new Timer(1000, ev -> mute = false);
+                    timer.setRepeats(false);
+                    timer.restart();
                 }
             });
 
             @Override
             public void changedUpdate(DocumentEvent e) {
-                updateData(e);
+                if (!mute) {
+                    System.out.println("changedUpdate");
+                }
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                updateData(e);
+                if (!mute) {
+                    updateData();
+                    System.out.println("insertUpdate");
+                }
+
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                updateData(e);
+                if (!mute) {
+                    updateData();
+                    System.out.println("removeUpdate");
+                }
+
             }
 
-            private void updateData(DocumentEvent e) {
-                text = tc.getText();
+            private void updateData() {
+                locationName = locationTextField.getText();
                 timer.setRepeats(false);
                 timer.restart();
             }
@@ -381,6 +407,7 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
 
     private void loadByLocationSettings(DarkModeValue realDarkModeValue) {
         byLocationDarkModeRadioButton.setSelected(true);
+        locationTextField.setText(realDarkModeValue.getLocation().getAddress());
         locationComboBox.setSelectedItem(realDarkModeValue.getLocation());
     }
 
@@ -447,50 +474,13 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         } else {
             if (byLocationSettingsValid()) {
                 //save here
-                PreferencesManager.setDarkMode("Майкоп, городской округ Майкоп, Республика Адыгея, Южный федеральный округ, РФ|44.6062079;40.104053");
+                final Location location = ((Location) locationComboBox.getSelectedItem());
+                if (location != null) {
+                    String value = location.getAddress() + "|" + location.getLongitude() + ";" + location.getLatitude();
+                    PreferencesManager.setDarkMode(value);
+                    log.info("Saving settings: dark mode: {}", value);
+                }
             }
-        }
-    }
-
-    private class LocationComboBoxEditor implements ComboBoxEditor {
-        JTextField textField;
-
-        LocationComboBoxEditor() {
-            this.textField = new JTextField();
-        }
-
-        @Override
-        public void addActionListener(ActionListener l) {
-            textField.addActionListener(l);
-        }
-
-        @Override
-        public Component getEditorComponent() {
-            return textField;
-        }
-
-        @Override
-        public Object getItem() {
-            return textField.getText();
-        }
-
-        @Override
-        public void setItem(Object object) {
-            if (object instanceof Location) {
-                textField.setText(((Location) object).getAddress());
-            } else {
-                textField.setText(object == null ? null : object.toString());
-            }
-        }
-
-        @Override
-        public void removeActionListener(ActionListener l) {
-            textField.removeActionListener(l);
-        }
-
-        @Override
-        public void selectAll() {
-            textField.selectAll();
         }
     }
 }
