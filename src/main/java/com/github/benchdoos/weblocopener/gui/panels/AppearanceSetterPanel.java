@@ -54,6 +54,7 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
     private JPanel byTimePanel;
     private JTextField locationTextField;
     private JLabel locationStatusLabel;
+    private JLabel timeStatusLabel;
 
     public AppearanceSetterPanel() {
         initGui();
@@ -110,10 +111,10 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         endingTextField = new JFormattedTextField();
         endingTextField.setText("07:00");
         byTimePanel.add(endingTextField, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
-        final JLabel label4 = new JLabel();
-        label4.setIcon(new ImageIcon(getClass().getResource("/images/emojiCross16.png")));
-        label4.setText("");
-        byTimePanel.add(label4, new GridConstraints(0, 2, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(16, 16), new Dimension(16, 16), new Dimension(16, 16), 0, false));
+        timeStatusLabel = new JLabel();
+        timeStatusLabel.setIcon(new ImageIcon(getClass().getResource("/images/emojiCross16.png")));
+        timeStatusLabel.setText("");
+        byTimePanel.add(timeStatusLabel, new GridConstraints(0, 2, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(16, 16), new Dimension(16, 16), new Dimension(16, 16), 0, false));
         final Spacer spacer2 = new Spacer();
         byTimePanel.add(spacer2, new GridConstraints(0, 3, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JPanel panel2 = new JPanel();
@@ -322,13 +323,65 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         byLocationPanel.setVisible(false);
 
         beginningTextField.setText("19:00");
-        endingTextField.setText("7:00");
+        endingTextField.setText("07:00");
     }
 
     private void initFormattedTextFields() {
         final DateFormatter formatter = new DateFormatter(new SimpleDateFormat("HH:mm"));
         beginningTextField.setFormatterFactory(new DefaultFormatterFactory(formatter));
         endingTextField.setFormatterFactory(new DefaultFormatterFactory(formatter));
+
+        DocumentListener l = new DocumentListener() {
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updateIcon();
+            }
+
+            private Date getDate(String field) {
+                final Calendar calendar = Calendar.getInstance();
+                final String[] split = field.split(":");
+                if (split.length == 2) {
+                    if (split[0].length() > 2 || split[1].length() > 2) {
+                        throw new IllegalArgumentException("Split length should be less then 2 digits: " + split[0] + " " + split[1]);
+                    } else {
+                        final int hours = Integer.parseInt(split[0]);
+                        final int minutes = Integer.parseInt(split[1]);
+                        if (hours > 24 || minutes > 60) {
+                            throw new IllegalArgumentException("Hours or minutes are not valid: " + hours + " " + minutes);
+
+                        } else {
+                            calendar.set(Calendar.HOUR, hours);
+                            calendar.set(Calendar.MINUTE, minutes);
+                            calendar.set(Calendar.SECOND, 0);
+                            calendar.set(Calendar.MILLISECOND, 0);
+                            return calendar.getTime();
+                        }
+                    }
+                } else throw new IllegalArgumentException("String is not valid: " + field);
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateIcon();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updateIcon();
+            }
+
+            private void updateIcon() {
+                try {
+                    Date beginTime = getDate(beginningTextField.getText());
+                    Date endTime = getDate(endingTextField.getText());
+                    updateTimeVerificationStatus(beginTime.after(endTime));
+                } catch (Exception e) {
+                    updateTimeVerificationStatus(false);
+                }
+            }
+        };
+        beginningTextField.getDocument().addDocumentListener(l);
+        endingTextField.getDocument().addDocumentListener(l);
     }
 
     private void initGui() {
@@ -429,6 +482,14 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
             locationStatusLabel.setIcon(new ImageIcon(getClass().getResource("/images/emojiSuccess16.png")));
         } else {
             locationStatusLabel.setIcon(new ImageIcon(getClass().getResource("/images/emojiCross16.png")));
+        }
+    }
+
+    private void updateTimeVerificationStatus(boolean b) {
+        if (b) {
+            timeStatusLabel.setIcon(new ImageIcon(getClass().getResource("/images/emojiSuccess16.png")));
+        } else {
+            timeStatusLabel.setIcon(new ImageIcon(getClass().getResource("/images/emojiCross16.png")));
         }
     }
 }
