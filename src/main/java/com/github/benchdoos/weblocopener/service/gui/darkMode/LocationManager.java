@@ -49,7 +49,7 @@ public class LocationManager {
 
 
     private HttpsURLConnection getConnection() throws IOException {
-
+        //for more info - visit https://wiki.openstreetmap.org/wiki/Nominatim
         URL url = new URL("https://nominatim.openstreetmap.org/search/" +
                 locationName.replaceAll(" ", "%20") +
                 "?format=json&limit=5");
@@ -60,15 +60,25 @@ public class LocationManager {
         return connection;
     }
 
-    public Location[] getLocations() throws IOException {
-        final HttpsURLConnection connection = createConnection();
-        return getLocationData(connection);
-    }
-
     private Location[] getLocationData(HttpsURLConnection connection) throws IOException {
         log.debug("Getting current server application version");
         final JsonArray asJsonArray = ConnectionUtils.getJsonRootElementFromConnection(connection).getAsJsonArray();
         return parseJsonObjectForLocations(asJsonArray);
+    }
+
+    private Location getLocationFromElement(JsonObject element) {
+        final JsonElement displayName = element.get("display_name");
+        final JsonElement longitude = element.get("lon");
+        final JsonElement latitude = element.get("lat");
+
+        final Location location = new Location(longitude.getAsDouble(), latitude.getAsDouble());
+        location.setAddress(displayName.getAsString());
+        return location;
+    }
+
+    public Location[] getLocations() throws IOException {
+        final HttpsURLConnection connection = createConnection();
+        return getLocationData(connection);
     }
 
     private Location[] parseJsonObjectForLocations(JsonArray array) {
@@ -83,15 +93,5 @@ public class LocationManager {
 
 
         return locations.toArray(new Location[0]);
-    }
-
-    private Location getLocationFromElement(JsonObject element) {
-        final JsonElement displayName = element.get("display_name");
-        final JsonElement longitude = element.get("lon");
-        final JsonElement latitude = element.get("lat");
-
-        final Location location = new Location(longitude.getAsDouble(), latitude.getAsDouble());
-        location.setAddress(displayName.getAsString());
-        return location;
     }
 }
