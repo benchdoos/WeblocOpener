@@ -15,6 +15,7 @@
 
 package com.github.benchdoos.weblocopener.gui.panels;
 
+import com.github.benchdoos.weblocopener.gui.panels.simpleTimePickerListeners.ValueChangeListener;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.DarkModeValue;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.Location;
@@ -119,8 +120,10 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         byTimePanel.add(timeStatusLabel, new GridConstraints(0, 3, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(16, 16), new Dimension(16, 16), new Dimension(16, 16), 0, false));
         final Spacer spacer2 = new Spacer();
         byTimePanel.add(spacer2, new GridConstraints(0, 4, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
-        final SimpleTimePicker nestedForm1 = new SimpleTimePicker();
-        byTimePanel.add(nestedForm1.$$$getRootComponent$$$(), new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        beginningTimePicker = new SimpleTimePicker();
+        byTimePanel.add(beginningTimePicker.$$$getRootComponent$$$(), new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        endingTimePicker = new SimpleTimePicker();
+        byTimePanel.add(endingTimePicker.$$$getRootComponent$$$(), new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayoutManager(2, 3, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel2, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -330,6 +333,7 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         endingTextField.setText("07:00");
     }
 
+    @Deprecated
     private void initFormattedTextFields() {
         final DateFormatter formatter = new DateFormatter(new SimpleDateFormat("HH:mm"));
         beginningTextField.setFormatterFactory(new DefaultFormatterFactory(formatter));
@@ -394,11 +398,21 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
 
         initFormattedTextFields();
 
+        initTimePickers();
+
         initDefaultsForPanels();
 
         initComboBoxes();
 
         initDarkModeButtonGroup();
+    }
+
+    private void initTimePickers() {
+        final ValueChangeListener validate = e -> {
+            System.out.println("Here we validate: " + e.getSelectedTime());
+        };
+        beginningTimePicker.addValueChangeListener(validate);
+        endingTimePicker.addValueChangeListener(validate);
     }
 
     private void loadByLocationSettings(DarkModeValue realDarkModeValue) {

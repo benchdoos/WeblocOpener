@@ -15,9 +15,8 @@
 
 package com.github.benchdoos.weblocopener.gui.panels.simpleTimePickerListeners;
 
-public class DefaultValueChangeListener implements ValueChangeListener {
-    @Override
-    public void valueChanged() {
-        System.out.println("Hello!");
-    }
+import com.github.benchdoos.weblocopener.service.gui.darkMode.SimpleTime;
+
+public interface ValueChangeEvent {
+    SimpleTime getSelectedTime();
 }

@@ -16,5 +16,5 @@
 package com.github.benchdoos.weblocopener.gui.panels.simpleTimePickerListeners;
 
 public interface ValueChangeListener {
-    void valueChanged();
+    void valueChanged(ValueChangeEvent e);
 }
