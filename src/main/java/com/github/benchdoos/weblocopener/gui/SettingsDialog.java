@@ -440,6 +440,7 @@ public class SettingsDialog extends JFrame {
 
     private void onApply() {
         updateRegistry();
+        updateUIDarkMode();
         settingsSavedLabel.setVisible(true);
         if (settingsSavedTimer == null) {
             settingsSavedTimer = new Timer(5000, e -> {
@@ -459,10 +460,23 @@ public class SettingsDialog extends JFrame {
         dispose();
     }
 
-
     private void updateRegistry() {
         mainSetterPanel.saveSettings();
         browserSetterPanel.saveSettings();
         appearanceSetterPanel.saveSettings();
+    }
+
+    private void updateUIDarkMode() {
+        if (PreferencesManager.isDarkModeEnabledNow()) {
+            try {
+                final JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
+                colorful.colorize(this);
+                colorful.colorize(mainSetterPanel);
+                colorful.colorize(browserSetterPanel);
+                colorful.colorize(appearanceSetterPanel);
+            } catch (Exception e) {
+                log.warn("Could not colorize component", e);
+            }
+        }
     }
 }

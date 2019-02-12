@@ -15,7 +15,6 @@
 
 package com.github.benchdoos.weblocopener.core;
 
-import com.github.benchdoos.beans.DefaultThemes;
 import com.github.benchdoos.core.JColorful;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
@@ -240,7 +239,7 @@ public class Application {
     private static void runEditDialog(String filepath) {
         EditDialog dialog = new EditDialog(filepath);
         if (PreferencesManager.isDarkModeEnabledNow()) {
-            JColorful colorful = new JColorful(DefaultThemes.EXTREMELY_BLACK);
+            JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
             colorful.colorize(dialog);
         }
 
@@ -253,7 +252,7 @@ public class Application {
         try {
             ShowQrDialog qrDialog = new ShowQrDialog(new Analyzer(arg).getFile());
             if (PreferencesManager.isDarkModeEnabledNow()) {
-                JColorful colorful = new JColorful(DefaultThemes.EXTREMELY_BLACK);
+                JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
                 colorful.colorize(qrDialog);
             }
             qrDialog.setVisible(true);
@@ -266,7 +265,7 @@ public class Application {
         SettingsDialog settingsDialog = new SettingsDialog();
 
         if (PreferencesManager.isDarkModeEnabledNow()) {
-            JColorful colorful = new JColorful(DefaultThemes.EXTREMELY_BLACK);
+            JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
             colorful.colorize(settingsDialog);
         }
 
@@ -277,7 +276,7 @@ public class Application {
         final UpdateDialog updateDialog = UpdateDialog.getInstance();
 
         if (PreferencesManager.isDarkModeEnabledNow()) {
-            JColorful colorful = new JColorful(DefaultThemes.EXTREMELY_BLACK);
+            JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
             colorful.colorize(updateDialog);
         }
 
