@@ -35,7 +35,6 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.io.IOException;
 import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
 
@@ -49,8 +48,6 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
     private JRadioButton alwaysDarkModeRadioButton;
     private JRadioButton byTimeDarkModeRadioButton;
     private JRadioButton byLocationDarkModeRadioButton;
-    private JFormattedTextField beginningTextField;
-    private JFormattedTextField endingTextField;
     private JPanel byTimePanel;
     private JTextField locationTextField;
     private JLabel locationStatusLabel;
@@ -99,30 +96,24 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         locationStatusLabel.setIcon(new ImageIcon(getClass().getResource("/images/emojiCross16.png")));
         byLocationPanel.add(locationStatusLabel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(16, 16), new Dimension(16, 16), new Dimension(16, 16), 0, false));
         byTimePanel = new JPanel();
-        byTimePanel.setLayout(new GridLayoutManager(2, 5, new Insets(0, 0, 0, 0), -1, -1));
+        byTimePanel.setLayout(new GridLayoutManager(2, 4, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(byTimePanel, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        beginningTextField = new JFormattedTextField();
-        beginningTextField.setText("19:00");
-        byTimePanel.add(beginningTextField, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
         final JLabel label2 = new JLabel();
         this.$$$loadLabelText$$$(label2, ResourceBundle.getBundle("translations/AppearanceSetterPanelBundle").getString("beginning"));
         byTimePanel.add(label2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label3 = new JLabel();
         this.$$$loadLabelText$$$(label3, ResourceBundle.getBundle("translations/AppearanceSetterPanelBundle").getString("ending"));
         byTimePanel.add(label3, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        endingTextField = new JFormattedTextField();
-        endingTextField.setText("07:00");
-        byTimePanel.add(endingTextField, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, -1), null, 0, false));
         timeStatusLabel = new JLabel();
         timeStatusLabel.setIcon(new ImageIcon(getClass().getResource("/images/emojiCross16.png")));
         timeStatusLabel.setText("");
-        byTimePanel.add(timeStatusLabel, new GridConstraints(0, 3, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(16, 16), new Dimension(16, 16), new Dimension(16, 16), 0, false));
+        byTimePanel.add(timeStatusLabel, new GridConstraints(0, 2, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(16, 16), new Dimension(16, 16), new Dimension(16, 16), 0, false));
         final Spacer spacer2 = new Spacer();
-        byTimePanel.add(spacer2, new GridConstraints(0, 4, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
-        beginningTimePicker = new SimpleTimePicker();
-        byTimePanel.add(beginningTimePicker.$$$getRootComponent$$$(), new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        byTimePanel.add(spacer2, new GridConstraints(0, 3, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         endingTimePicker = new SimpleTimePicker();
-        byTimePanel.add(endingTimePicker.$$$getRootComponent$$$(), new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        byTimePanel.add(endingTimePicker.$$$getRootComponent$$$(), new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        beginningTimePicker = new SimpleTimePicker();
+        byTimePanel.add(beginningTimePicker.$$$getRootComponent$$$(), new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayoutManager(2, 3, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel2, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -216,25 +207,10 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
     }
 
     private boolean byTimeSettingsValid() {
-        final String begins = beginningTextField.getText();
-        final String ends = endingTextField.getText();
-
-        final Date beginTime = getTimeFromString(begins);
-        final Date endTime = getTimeFromString(ends);
+        final Date beginTime = beginningTimePicker.getSelectedSimpleTime().toDate();
+        final Date endTime = endingTimePicker.getSelectedSimpleTime().toDate();
 
         return beginTime.after(endTime);
-    }
-
-    private Date getTimeFromString(String begins) {
-        final String[] splitBegins = begins.split(":");
-
-        final Calendar up = Calendar.getInstance();
-
-
-        up.set(Calendar.HOUR, Integer.parseInt(splitBegins[0]));
-        up.set(Calendar.MINUTE, Integer.parseInt(splitBegins[1]));
-
-        return up.getTime();
     }
 
     private void initComboBoxes() {
@@ -327,75 +303,11 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
     private void initDefaultsForPanels() {
         byTimePanel.setVisible(false);
         byLocationPanel.setVisible(false);
-
-        beginningTextField.setText("19:00");
-        endingTextField.setText("07:00");
-    }
-
-    @Deprecated
-    private void initFormattedTextFields() {
-       /* final DateFormatter formatter = new DateFormatter(new SimpleDateFormat("HH:mm"));
-        beginningTextField.setFormatterFactory(new DefaultFormatterFactory(formatter));
-        endingTextField.setFormatterFactory(new DefaultFormatterFactory(formatter));*/
-
-        DocumentListener l = new DocumentListener() {
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                updateIcon();
-            }
-
-            private Date getDate(String field) {
-                final Calendar calendar = Calendar.getInstance();
-                final String[] split = field.split(":");
-                if (split.length == 2) {
-                    if (split[0].length() > 2 || split[1].length() > 2) {
-                        throw new IllegalArgumentException("Split length should be less then 2 digits: " + split[0] + " " + split[1]);
-                    } else {
-                        final int hours = Integer.parseInt(split[0]);
-                        final int minutes = Integer.parseInt(split[1]);
-                        if (hours > 24 || minutes > 60) {
-                            throw new IllegalArgumentException("Hours or minutes are not valid: " + hours + " " + minutes);
-
-                        } else {
-                            calendar.set(Calendar.HOUR, hours);
-                            calendar.set(Calendar.MINUTE, minutes);
-                            calendar.set(Calendar.SECOND, 0);
-                            calendar.set(Calendar.MILLISECOND, 0);
-                            return calendar.getTime();
-                        }
-                    }
-                } else throw new IllegalArgumentException("String is not valid: " + field);
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                updateIcon();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                updateIcon();
-            }
-
-            private void updateIcon() {
-                try {
-                    Date beginTime = getDate(beginningTextField.getText());
-                    Date endTime = getDate(endingTextField.getText());
-                    updateTimeVerificationStatus(beginTime.after(endTime));
-                } catch (Exception e) {
-                    updateTimeVerificationStatus(false);
-                }
-            }
-        };
-        /*beginningTextField.getDocument().addDocumentListener(l);
-        endingTextField.getDocument().addDocumentListener(l);*/
     }
 
     private void initGui() {
         setLayout(new GridLayout());
         add(contentPane);
-
-        initFormattedTextFields();
 
         initTimePickers();
 
@@ -486,8 +398,8 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
             if (byTimeSettingsValid()) {
                 saveByTimeSettings();
             } else {
-                final String begins = beginningTextField.getText();
-                final String ends = endingTextField.getText();
+                final SimpleTime begins = beginningTimePicker.getSelectedSimpleTime();
+                final SimpleTime ends = endingTimePicker.getSelectedSimpleTime();
                 log.warn("Saving settings: dark mode: declined, settings set are not valid - begin time: {} is not after ending time: {}", begins, ends);
             }
         } else {

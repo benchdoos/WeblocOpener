@@ -15,6 +15,8 @@
 
 package com.github.benchdoos.weblocopener.service.gui.darkMode;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 
 public class SimpleTime {
@@ -58,6 +60,13 @@ public class SimpleTime {
     @Override
     public int hashCode() {
         return Objects.hash(hour, minute);
+    }
+
+    public Date toDate() {
+        final Calendar up = Calendar.getInstance();
+        up.set(Calendar.HOUR, hour);
+        up.set(Calendar.MINUTE, minute);
+        return up.getTime();
     }
 
     @Override

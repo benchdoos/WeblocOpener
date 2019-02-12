@@ -17,8 +17,6 @@ package com.github.benchdoos.weblocopener.gui.panels;
 
 import com.github.benchdoos.weblocopener.gui.panels.simpleTimePickerListeners.ValueChangeListener;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.SimpleTime;
-import com.intellij.uiDesigner.core.GridConstraints;
-import com.intellij.uiDesigner.core.GridLayoutManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,14 +57,26 @@ public class SimpleTimePicker extends JPanel {
      */
     private void $$$setupUI$$$() {
         contentPane = new JPanel();
-        contentPane.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
+        contentPane.setLayout(new GridBagLayout());
         hourComboBox = new JComboBox();
-        contentPane.add(hourComboBox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(50, -1), new Dimension(50, -1), new Dimension(50, -1), 0, false));
+        GridBagConstraints gbc;
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        contentPane.add(hourComboBox, gbc);
         minuteComboBox = new JComboBox();
-        contentPane.add(minuteComboBox, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(50, -1), new Dimension(50, -1), new Dimension(50, -1), 0, false));
-        final JLabel label1 = new JLabel();
-        label1.setText(":");
-        contentPane.add(label1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        contentPane.add(minuteComboBox, gbc);
     }
 
     /**
