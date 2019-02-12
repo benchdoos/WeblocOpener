@@ -15,6 +15,8 @@
 
 package com.github.benchdoos.weblocopener.service.gui.darkMode;
 
+import java.util.Objects;
+
 public class SimpleTime {
     private int hour;
     private int minute;
@@ -42,6 +44,20 @@ public class SimpleTime {
 
     public void setMinute(int minute) {
         this.minute = minute;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SimpleTime that = (SimpleTime) o;
+        return hour == that.hour &&
+                minute == that.minute;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(hour, minute);
     }
 
     @Override

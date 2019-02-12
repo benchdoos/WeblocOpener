@@ -15,11 +15,13 @@
 
 package com.github.benchdoos.weblocopener.gui.panels;
 
+import com.github.benchdoos.weblocopener.gui.panels.simpleTimePickerListeners.ValueChangeEvent;
 import com.github.benchdoos.weblocopener.gui.panels.simpleTimePickerListeners.ValueChangeListener;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.DarkModeValue;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.Location;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.LocationManager;
+import com.github.benchdoos.weblocopener.service.gui.darkMode.SimpleTime;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -30,12 +32,9 @@ import org.apache.logging.log4j.Logger;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.text.DateFormatter;
-import javax.swing.text.DefaultFormatterFactory;
 import java.awt.*;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -335,9 +334,9 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
 
     @Deprecated
     private void initFormattedTextFields() {
-        final DateFormatter formatter = new DateFormatter(new SimpleDateFormat("HH:mm"));
+       /* final DateFormatter formatter = new DateFormatter(new SimpleDateFormat("HH:mm"));
         beginningTextField.setFormatterFactory(new DefaultFormatterFactory(formatter));
-        endingTextField.setFormatterFactory(new DefaultFormatterFactory(formatter));
+        endingTextField.setFormatterFactory(new DefaultFormatterFactory(formatter));*/
 
         DocumentListener l = new DocumentListener() {
             @Override
@@ -388,8 +387,8 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
                 }
             }
         };
-        beginningTextField.getDocument().addDocumentListener(l);
-        endingTextField.getDocument().addDocumentListener(l);
+        /*beginningTextField.getDocument().addDocumentListener(l);
+        endingTextField.getDocument().addDocumentListener(l);*/
     }
 
     private void initGui() {
@@ -408,8 +407,16 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
     }
 
     private void initTimePickers() {
-        final ValueChangeListener validate = e -> {
-            System.out.println("Here we validate: " + e.getSelectedTime());
+        beginningTimePicker.setTime(new SimpleTime(19, 0));
+        endingTimePicker.setTime(new SimpleTime(7, 0));
+
+        final ValueChangeListener validate = new ValueChangeListener() {
+            @Override
+            public void valueChanged(ValueChangeEvent e) {
+                final SimpleTime begin = beginningTimePicker.getSelectedSimpleTime();
+                final SimpleTime end = endingTimePicker.getSelectedSimpleTime();
+                AppearanceSetterPanel.this.updateTimeVerificationStatus(!begin.equals(end));
+            }
         };
         beginningTimePicker.addValueChangeListener(validate);
         endingTimePicker.addValueChangeListener(validate);
@@ -427,12 +434,14 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         final Date startTime = realDarkModeValue.getNext().getStart();
         final Date endTime = realDarkModeValue.getPrevious().getEnd();
 
-        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        final int startHour = startTime.toInstant().atZone(ZoneId.systemDefault()).getHour();
+        final int startMinute = startTime.toInstant().atZone(ZoneId.systemDefault()).getMinute();
+        final int endHour = endTime.toInstant().atZone(ZoneId.systemDefault()).getHour();
+        final int endMinute = endTime.toInstant().atZone(ZoneId.systemDefault()).getMinute();
 
-        String startTimeString = dateFormat.format(startTime);
-        beginningTextField.setText(startTimeString);
-        String endTimeString = dateFormat.format(endTime);
-        endingTextField.setText(endTimeString);
+
+        beginningTimePicker.setTime(new SimpleTime(startHour, startMinute));
+        endingTimePicker.setTime(new SimpleTime(endHour, endMinute));
     }
 
     @Override
@@ -456,8 +465,8 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
     }
 
     private void saveByTimeSettings() {
-        final String begins = beginningTextField.getText();
-        final String ends = endingTextField.getText();
+        final String begins = beginningTimePicker.getSelectedSimpleTime().getHour() + ":" + beginningTimePicker.getSelectedSimpleTime().getMinute();
+        final String ends = endingTimePicker.getSelectedSimpleTime().getHour() + ":" + endingTimePicker.getSelectedSimpleTime().getMinute();
         final String value = begins + ";" + ends;
         PreferencesManager.setDarkMode(value);
         log.info("Saving settings: dark mode: {}", value);

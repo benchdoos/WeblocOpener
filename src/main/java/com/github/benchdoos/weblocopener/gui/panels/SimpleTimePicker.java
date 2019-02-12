@@ -40,8 +40,7 @@ public class SimpleTimePicker extends JPanel {
     public SimpleTimePicker(SimpleTime initTime) {
         initGui();
         initComboBoxes();
-        hourComboBox.setSelectedItem(intToTime(initTime.getHour()));
-        minuteComboBox.setSelectedItem(intToTime(initTime.getMinute()));
+        setTime(initTime);
     }
 
     {
@@ -136,5 +135,10 @@ public class SimpleTimePicker extends JPanel {
                 listeners.remove(l);
             }
         }
+    }
+
+    public void setTime(SimpleTime simpleTime) {
+        hourComboBox.setSelectedItem(intToTime(simpleTime.getHour()));
+        minuteComboBox.setSelectedItem(intToTime(simpleTime.getMinute()));
     }
 }
