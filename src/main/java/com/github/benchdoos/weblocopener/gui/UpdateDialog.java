@@ -15,7 +15,9 @@
 
 package com.github.benchdoos.weblocopener.gui;
 
+import com.github.benchdoos.core.JColorful;
 import com.github.benchdoos.weblocopener.core.Translation;
+import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.PathConstants;
 import com.github.benchdoos.weblocopener.core.constants.StringConstants;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
@@ -462,7 +464,16 @@ public class UpdateDialog extends JFrame {
     private void onUpdateInfoButton() {
         if (serverAppVersion != null) {
             if (!serverAppVersion.getUpdateInfo().isEmpty()) {
-                UpdateInfoDialog dialog = new UpdateInfoDialog(serverAppVersion);
+                UpdateInfoDialog dialog;
+                if (PreferencesManager.isDarkModeEnabledNow()) {
+                    JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
+                    colorful.colorizeGlobal();
+                    dialog = new UpdateInfoDialog(serverAppVersion);
+                    colorful.colorize(dialog);
+                } else {
+                    dialog = new UpdateInfoDialog(serverAppVersion);
+                }
+                dialog.setVisible(true);
             }
         }
     }

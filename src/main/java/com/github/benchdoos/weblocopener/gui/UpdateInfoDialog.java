@@ -16,6 +16,7 @@
 package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.core.Translation;
+import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.update.AppVersion;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
@@ -153,7 +154,6 @@ class UpdateInfoDialog extends JDialog {
 
         textPane.setCaretPosition(0);
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
-        setVisible(true);
     }
 
     private void onHyperlinkClick(HyperlinkEvent e) {
@@ -188,7 +188,8 @@ class UpdateInfoDialog extends JDialog {
         String title = "<center style=\"font-size:14px; color:#4f7ece; padding-bottom:10px;\">" + updateTitle + "</center>";
         String defaultFooter = "</body></html>";
         updateInfo = updateInfo.replaceAll("\n", "<br>");
-        updateInfo = "<p style=\"font-family:'Open Sans'; font-size:12px; padding:0; margin:0;\">" + updateInfo + "</p>";
+        final String customTextColor = PreferencesManager.isDarkModeEnabledNow() ? "color: white;" : "";
+        updateInfo = "<p style=\"font-family:'Open Sans'; font-size:12px; padding:0; margin:0; " + customTextColor + " \">" + updateInfo + "</p>";
 
         return defaultHead + title + updateInfo + defaultFooter;
     }
