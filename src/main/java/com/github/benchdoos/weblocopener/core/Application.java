@@ -188,8 +188,7 @@ public class Application {
         }
     }
 
-    private static void runCopyLink(String arg) {
-        final String path = arg;
+    private static void runCopyLink(String path) {
         String url;
         try {
             url = new Analyzer(path).getUrl();
@@ -206,7 +205,7 @@ public class Application {
                 log.warn("Could not show message for user", e);
             }
         } catch (Exception e) {
-            log.warn("Could not copy url from file: {}", arg, e);
+            log.warn("Could not copy url from file: {}", path, e);
         }
     }
 
