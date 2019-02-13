@@ -67,6 +67,7 @@ public class SettingsDialog extends JFrame {
     private JButton buttonApply;
     private JLabel settingsSavedLabel;
     private JButton donatePaypalButton;
+    private JLabel dragAndDropNotice;
     private BrowserSetterPanel browserSetterPanel;
     private MainSetterPanel mainSetterPanel;
     private AppearanceSetterPanel appearanceSetterPanel;
@@ -110,10 +111,10 @@ public class SettingsDialog extends JFrame {
         aboutButton = new JButton();
         this.$$$loadButtonText$$$(aboutButton, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("buttonAbout"));
         panel1.add(aboutButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label1 = new JLabel();
-        label1.setForeground(new Color(-6316129));
-        this.$$$loadLabelText$$$(label1, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("dragAndDropNotice"));
-        panel1.add(label1, new GridConstraints(0, 0, 1, 5, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        dragAndDropNotice = new JLabel();
+        dragAndDropNotice.setForeground(new Color(-6316129));
+        this.$$$loadLabelText$$$(dragAndDropNotice, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("dragAndDropNotice"));
+        panel1.add(dragAndDropNotice, new GridConstraints(0, 0, 1, 5, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         settingsSavedLabel = new JLabel();
         settingsSavedLabel.setForeground(new Color(-16732650));
         this.$$$loadLabelText$$$(settingsSavedLabel, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("settingsSaved"));
@@ -352,6 +353,8 @@ public class SettingsDialog extends JFrame {
 
         loadSettings();
 
+        updateDragAndDropNotice();
+
         buttonApply.addActionListener(e -> onApply());
 
         donatePaypalButton.addActionListener(e -> UrlsProceed.openUrl(StringConstants.DONATE_PAYPAL_URL));
@@ -457,6 +460,8 @@ public class SettingsDialog extends JFrame {
     private void onApply() {
         updateRegistry();
         updateUIDarkMode();
+        updateDragAndDropNotice();
+
         settingsSavedLabel.setVisible(true);
         if (settingsSavedTimer == null) {
             settingsSavedTimer = new Timer(5000, e -> {
@@ -465,6 +470,11 @@ public class SettingsDialog extends JFrame {
             settingsSavedTimer.setRepeats(false);
         }
         settingsSavedTimer.restart();
+    }
+
+    private void updateDragAndDropNotice() {
+        final String translatedString = Translation.getTranslatedString("SettingsDialogBundle", "dragAndDropNotice");
+        dragAndDropNotice.setText(translatedString.replace("{}", PreferencesManager.getConverterExportExtension()));
     }
 
     private void onCancel() {
