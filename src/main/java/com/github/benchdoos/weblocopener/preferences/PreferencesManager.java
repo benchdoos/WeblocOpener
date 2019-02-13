@@ -18,7 +18,10 @@ package com.github.benchdoos.weblocopener.preferences;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.DarkModeAnalyzer;
+import com.github.benchdoos.weblocopener.service.gui.darkMode.SimpleTime;
 
+import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.prefs.Preferences;
 
 /**
@@ -33,6 +36,9 @@ public class PreferencesManager {
     private static final String KEY_DARK_MODE = "dark_mode";
     private static final String KEY_CONVERTER_EXPORT_EXTENSION = "converter_export_extension";
     private static final Preferences PREFERENCES = Preferences.userRoot().node(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME.toLowerCase());
+
+    private static SimpleTime lastDarkModeUpdateTime = null;
+    private static boolean lastDarkModeEnabled = false;
 
     public static String getBrowserValue() {
         final String value = PREFERENCES.get(KEY_BROWSER, SettingsConstants.BROWSER_DEFAULT_VALUE);
@@ -94,7 +100,28 @@ public class PreferencesManager {
                 return false;
             default: {
                 try {
-                    return DarkModeAnalyzer.isDarkModeEnabledByNotDefaultData(getDarkMode());
+                    final Calendar instance = Calendar.getInstance();
+                    final int startHour = instance.toInstant().atZone(ZoneId.systemDefault()).getHour();
+                    final int startMinute = instance.toInstant().atZone(ZoneId.systemDefault()).getMinute();
+                    SimpleTime time = new SimpleTime(startHour, startMinute);
+
+                    if (lastDarkModeUpdateTime != null) {
+                        if (lastDarkModeUpdateTime.equals(time)) {
+                            return lastDarkModeEnabled;
+                        } else {
+                            lastDarkModeUpdateTime = time;
+                            final boolean darkModeEnabledByNotDefaultData = DarkModeAnalyzer.isDarkModeEnabledByNotDefaultData(getDarkMode());
+                            lastDarkModeEnabled = darkModeEnabledByNotDefaultData;
+                            return darkModeEnabledByNotDefaultData;
+                        }
+                    } else {
+                        lastDarkModeUpdateTime = time;
+                        final boolean darkModeEnabledByNotDefaultData = DarkModeAnalyzer.isDarkModeEnabledByNotDefaultData(getDarkMode());
+                        lastDarkModeEnabled = darkModeEnabledByNotDefaultData;
+                        return darkModeEnabledByNotDefaultData;
+
+                    }
+
                 } catch (Exception e) {
                     return SettingsConstants.DARK_MODE_DEFAULT_VALUE == DARK_MODE.ALWAYS;
                 }
