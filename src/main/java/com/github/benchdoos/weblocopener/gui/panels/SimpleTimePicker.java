@@ -21,6 +21,8 @@ import com.github.benchdoos.weblocopener.service.gui.darkMode.SimpleTime;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 
 public class SimpleTimePicker extends JPanel {
@@ -32,12 +34,10 @@ public class SimpleTimePicker extends JPanel {
 
     public SimpleTimePicker() {
         initGui();
-        initComboBoxes();
     }
 
     public SimpleTimePicker(SimpleTime initTime) {
         initGui();
-        initComboBoxes();
         setTime(initTime);
     }
 
@@ -129,6 +129,27 @@ public class SimpleTimePicker extends JPanel {
     public void initGui() {
         setLayout(new GridLayout());
         add(contentPane);
+
+        initComboBoxes();
+
+        initComboBoxListeners();
+    }
+
+    private void initComboBoxListeners() {
+        hourComboBox.addMouseMotionListener(createMouseMotionAdapter(minuteComboBox, hourComboBox));
+        minuteComboBox.addMouseMotionListener(createMouseMotionAdapter(hourComboBox, minuteComboBox));
+
+    }
+
+    private MouseMotionAdapter createMouseMotionAdapter(JComboBox other, JComboBox current) {
+        return new MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                if (other.isPopupVisible()) {
+                    current.setPopupVisible(true);
+                }
+            }
+        };
     }
 
     private String intToTime(int i) {
