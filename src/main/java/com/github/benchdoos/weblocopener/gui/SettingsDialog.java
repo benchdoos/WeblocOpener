@@ -464,14 +464,7 @@ public class SettingsDialog extends JFrame {
         updateUIDarkMode();
         updateDragAndDropNotice();
 
-        settingsSavedLabel.setVisible(true);
-        if (settingsSavedTimer == null) {
-            settingsSavedTimer = new Timer(5000, e -> {
-                settingsSavedLabel.setVisible(false);
-            });
-            settingsSavedTimer.setRepeats(false);
-        }
-        settingsSavedTimer.restart();
+        showOnApplyMessage();
     }
 
     private void onCancel() {
@@ -481,6 +474,17 @@ public class SettingsDialog extends JFrame {
     private void onSave() {
         updateRegistry();
         dispose();
+    }
+
+    private void showOnApplyMessage() {
+        settingsSavedLabel.setVisible(true);
+        if (settingsSavedTimer == null) {
+            settingsSavedTimer = new Timer(5000, e -> {
+                settingsSavedLabel.setVisible(false);
+            });
+            settingsSavedTimer.setRepeats(false);
+        }
+        settingsSavedTimer.restart();
     }
 
     private void updateDragAndDropNotice() {
