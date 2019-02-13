@@ -82,8 +82,6 @@ public class LocationManager {
     }
 
     private Location[] parseJsonObjectForLocations(JsonArray array) {
-        System.out.println("size is: " + array.size());
-
         ArrayList<Location> locations = new ArrayList<>();
 
         for (int i = 0; i < array.size(); i++) {
