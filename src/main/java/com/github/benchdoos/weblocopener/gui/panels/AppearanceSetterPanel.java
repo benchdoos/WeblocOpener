@@ -15,6 +15,7 @@
 
 package com.github.benchdoos.weblocopener.gui.panels;
 
+import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.gui.panels.simpleTimePickerListeners.ValueChangeListener;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
@@ -35,6 +36,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -276,12 +278,14 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
             String locationName = null;
             Timer timer = new Timer(1000, e -> {
                 if (locationName != null && !locationName.isEmpty()) {
-                    LocationManager locationManager = new LocationManager(locationName);
+                    final String encodedLocationName = new String(this.locationName.getBytes(
+                            Charset.forName(ApplicationConstants.DEFAULT_APPLICATION_CHARSET)));
+                    LocationManager locationManager = new LocationManager(encodedLocationName);
                     Location[] locations;
                     try {
                         locations = locationManager.getLocations();
                     } catch (IOException e1) {
-                        log.warn("Could not get locations for name: {}", locationName, e1);
+                        log.warn("Could not get locations for name: {}", this.locationName, e1);
                         locations = new Location[0];
                     }
 
