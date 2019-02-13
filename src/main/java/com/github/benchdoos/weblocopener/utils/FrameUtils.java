@@ -19,6 +19,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 /**
  * Created by Eugene Zrazhevsky on 30.10.2016.
@@ -140,5 +142,18 @@ public class FrameUtils {
             window.repaint();
             window.setAlwaysOnTop(false);
         });
+    }
+
+    public static KeyAdapter getSmartKeyAdapter(Component component) {
+        return new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    if (component != null) {
+                        component.dispatchEvent(e);
+                    }
+                }
+            }
+        };
     }
 }
