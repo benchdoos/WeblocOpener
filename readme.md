@@ -3,6 +3,7 @@
 # WeblocOpener
 
 [![GitHub releases](https://img.shields.io/github/downloads/benchdoos/WeblocOpener/total.svg)](https://github.com/benchdoos/WeblocOpener/releases)
+
 Visit website: [https://benchdoos.github.io/](https://vk.cc/6wK76Z)
 
 Follow on Twitter: [https://twitter.com/weblocopener](https://twitter.com/weblocopener)
