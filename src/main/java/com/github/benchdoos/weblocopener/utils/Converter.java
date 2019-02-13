@@ -31,7 +31,7 @@ public class Converter {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
     public static File convert(File originalFile, String extension) throws Exception {
-        log.debug("Converting file:{} to new extension: {}", originalFile, extension);
+        log.debug("Converting file: {} to new extension: {}", originalFile, extension);
         validateFile(originalFile, extension);
 
         AbstractLink originalLink = new LinkFactory().getLink(originalFile);
