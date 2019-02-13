@@ -236,11 +236,15 @@ public class Application {
      * @param filepath file path
      */
     private static void runEditDialog(String filepath) {
-        EditDialog dialog = new EditDialog(filepath);
+        EditDialog dialog;
         if (PreferencesManager.isDarkModeEnabledNow()) {
             JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
+            colorful.colorizeGlobal();
+            dialog = new EditDialog(filepath);
             colorful.colorize(dialog);
             dialog.updateTextFont();
+        } else {
+            dialog = new EditDialog(filepath);
         }
 
         dialog.setVisible(true);
@@ -250,10 +254,15 @@ public class Application {
 
     private static void runQrDialog(String arg) {
         try {
-            ShowQrDialog qrDialog = new ShowQrDialog(new Analyzer(arg).getFile());
+            final File file = new Analyzer(arg).getFile();
+            ShowQrDialog qrDialog;
             if (PreferencesManager.isDarkModeEnabledNow()) {
                 JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
+                colorful.colorizeGlobal();
+                qrDialog = new ShowQrDialog(file);
                 colorful.colorize(qrDialog);
+            } else {
+                qrDialog = new ShowQrDialog(file);
             }
             qrDialog.setVisible(true);
         } catch (Exception e) {
@@ -262,22 +271,30 @@ public class Application {
     }
 
     public static void runSettingsDialog() {
-        SettingsDialog settingsDialog = new SettingsDialog();
-
+        SettingsDialog settingsDialog;
         if (PreferencesManager.isDarkModeEnabledNow()) {
             JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
-            colorful.colorize(settingsDialog);
-        }
+            colorful.colorizeGlobal();
 
+            settingsDialog = new SettingsDialog();
+
+            colorful.colorize(settingsDialog);
+        } else {
+            settingsDialog = new SettingsDialog();
+        }
         settingsDialog.setVisible(true);
     }
 
     public static void runUpdateDialog() {
-        final UpdateDialog updateDialog = UpdateDialog.getInstance();
+        final UpdateDialog updateDialog;
 
         if (PreferencesManager.isDarkModeEnabledNow()) {
             JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
+            colorful.colorizeGlobal();
+            updateDialog = UpdateDialog.getInstance();
             colorful.colorize(updateDialog);
+        } else {
+            updateDialog = UpdateDialog.getInstance();
         }
 
         updateDialog.setVisible(true);
