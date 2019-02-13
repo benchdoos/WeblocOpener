@@ -281,7 +281,7 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
                     try {
                         locations = locationManager.getLocations();
                     } catch (IOException e1) {
-                        log.warn("Could not get locations for name: {}", locationName);
+                        log.warn("Could not get locations for name: {}", locationName, e1);
                         locations = new Location[0];
                     }
 
