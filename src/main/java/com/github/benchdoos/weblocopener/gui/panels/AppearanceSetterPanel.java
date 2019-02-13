@@ -15,7 +15,7 @@
 
 package com.github.benchdoos.weblocopener.gui.panels;
 
-import com.github.benchdoos.weblocopener.gui.panels.simpleTimePickerListeners.ValueChangeEvent;
+import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.gui.panels.simpleTimePickerListeners.ValueChangeListener;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.DarkModeValue;
@@ -213,7 +213,54 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         return beginTime.after(endTime);
     }
 
-    private void initComboBoxes() {
+    private void initDarkModeButtonGroup() {
+        disabledDarkModeRadioButton.addChangeListener(e -> {
+            if (disabledDarkModeRadioButton.isSelected()) {
+                byTimePanel.setVisible(false);
+                byLocationPanel.setVisible(false);
+            }
+        });
+        alwaysDarkModeRadioButton.addChangeListener(e -> {
+            if (alwaysDarkModeRadioButton.isSelected()) {
+                byTimePanel.setVisible(false);
+                byLocationPanel.setVisible(false);
+            }
+        });
+        byTimeDarkModeRadioButton.addChangeListener(e -> {
+            if (byTimeDarkModeRadioButton.isSelected()) {
+                byTimePanel.setVisible(true);
+                byLocationPanel.setVisible(false);
+            }
+        });
+        byLocationDarkModeRadioButton.addChangeListener(e -> {
+            if (byLocationDarkModeRadioButton.isSelected()) {
+                byTimePanel.setVisible(false);
+                byLocationPanel.setVisible(true);
+            }
+        });
+    }
+
+    private void initDefaultsForPanels() {
+        byTimePanel.setVisible(false);
+        byLocationPanel.setVisible(false);
+    }
+
+    private void initGui() {
+        setLayout(new GridLayout());
+        add(contentPane);
+
+        initTimePickers();
+
+        initDefaultsForPanels();
+
+        initLocationUI();
+
+        initDarkModeButtonGroup();
+
+        validateSimpleTimePanels();
+    }
+
+    private void initLocationUI() {
         locationComboBox.setRenderer(new DefaultListCellRenderer() {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -263,7 +310,9 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
             }
 
             private void updateData() {
-                updateLocationVerificationStatus(false);
+//                updateLocationVerificationStatus(false);
+                locationComboBox.setModel(new DefaultComboBoxModel<>());
+                setLocationStatusLabelLoading();
 
                 locationName = locationTextField.getText();
                 timer.setRepeats(false);
@@ -273,62 +322,12 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         });
     }
 
-    private void initDarkModeButtonGroup() {
-        disabledDarkModeRadioButton.addChangeListener(e -> {
-            if (disabledDarkModeRadioButton.isSelected()) {
-                byTimePanel.setVisible(false);
-                byLocationPanel.setVisible(false);
-            }
-        });
-        alwaysDarkModeRadioButton.addChangeListener(e -> {
-            if (alwaysDarkModeRadioButton.isSelected()) {
-                byTimePanel.setVisible(false);
-                byLocationPanel.setVisible(false);
-            }
-        });
-        byTimeDarkModeRadioButton.addChangeListener(e -> {
-            if (byTimeDarkModeRadioButton.isSelected()) {
-                byTimePanel.setVisible(true);
-                byLocationPanel.setVisible(false);
-            }
-        });
-        byLocationDarkModeRadioButton.addChangeListener(e -> {
-            if (byLocationDarkModeRadioButton.isSelected()) {
-                byTimePanel.setVisible(false);
-                byLocationPanel.setVisible(true);
-            }
-        });
-    }
-
-    private void initDefaultsForPanels() {
-        byTimePanel.setVisible(false);
-        byLocationPanel.setVisible(false);
-    }
-
-    private void initGui() {
-        setLayout(new GridLayout());
-        add(contentPane);
-
-        initTimePickers();
-
-        initDefaultsForPanels();
-
-        initComboBoxes();
-
-        initDarkModeButtonGroup();
-    }
-
     private void initTimePickers() {
-        beginningTimePicker.setTime(new SimpleTime(19, 0));
-        endingTimePicker.setTime(new SimpleTime(7, 0));
+        beginningTimePicker.setTime(SettingsConstants.DARK_MODE_BEGINNING_DEFAULT_TIME);
+        endingTimePicker.setTime(SettingsConstants.DARK_MODE_ENDING_DEFAULT_TIME);
 
-        final ValueChangeListener validate = new ValueChangeListener() {
-            @Override
-            public void valueChanged(ValueChangeEvent e) {
-                final SimpleTime begin = beginningTimePicker.getSelectedSimpleTime();
-                final SimpleTime end = endingTimePicker.getSelectedSimpleTime();
-                AppearanceSetterPanel.this.updateTimeVerificationStatus(!begin.equals(end));
-            }
+        final ValueChangeListener validate = e -> {
+            validateSimpleTimePanels();
         };
         beginningTimePicker.addValueChangeListener(validate);
         endingTimePicker.addValueChangeListener(validate);
@@ -416,6 +415,19 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         }
     }
 
+    private void setLocationStatusLabelLoading() {
+        try {
+            ImageIcon imageIcon =
+                    new ImageIcon(AppearanceSetterPanel.class.getResource("/images/loading.gif"));
+            System.out.println(">>" + imageIcon);
+
+            System.out.println(">>>" + locationStatusLabel);
+            locationStatusLabel.setIcon(imageIcon);
+        } catch (Exception e) {
+            log.warn("hmm.... {}", e.getMessage(), e);
+        }
+    }
+
     private void updateLocationVerificationStatus(boolean b) {
         if (b) {
             locationStatusLabel.setIcon(new ImageIcon(getClass().getResource("/images/emojiSuccess16.png")));
@@ -430,5 +442,11 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         } else {
             timeStatusLabel.setIcon(new ImageIcon(getClass().getResource("/images/emojiCross16.png")));
         }
+    }
+
+    private void validateSimpleTimePanels() {
+        final SimpleTime begin = beginningTimePicker.getSelectedSimpleTime();
+        final SimpleTime end = endingTimePicker.getSelectedSimpleTime();
+        AppearanceSetterPanel.this.updateTimeVerificationStatus(!begin.equals(end));
     }
 }
