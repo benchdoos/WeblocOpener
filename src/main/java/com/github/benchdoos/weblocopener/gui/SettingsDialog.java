@@ -250,7 +250,9 @@ public class SettingsDialog extends JFrame {
                                 log.warn("Rick and Morty easter egg is broken", e);
                             }
 
-                            if (Analyzer.getFileExtension(file).equalsIgnoreCase(ApplicationConstants.URL_FILE_EXTENSION)) {
+                            final String fileExtension = Analyzer.getFileExtension(file);
+                            if (fileExtension.equalsIgnoreCase(ApplicationConstants.URL_FILE_EXTENSION)
+                                    || fileExtension.equalsIgnoreCase(ApplicationConstants.DESKTOP_FILE_EXTENSION)) {
                                 try {
                                     files.add(Converter.convert(file, ApplicationConstants.WEBLOC_FILE_EXTENSION));
                                     try {
@@ -259,19 +261,19 @@ public class SettingsDialog extends JFrame {
                                         log.warn("Could not delete file: {}", file, e);
                                     }
                                 } catch (IOException e) {
-                                    log.warn("Could not convert *.url to *.webloc file: {}", file, e);
+                                    log.warn("Could not convert *.{} to *.webloc file: {}", fileExtension, file, e);
                                 }
 
-                            } else if (Analyzer.getFileExtension(file).equalsIgnoreCase(ApplicationConstants.WEBLOC_FILE_EXTENSION)) {
+                            } else if (fileExtension.equalsIgnoreCase(ApplicationConstants.WEBLOC_FILE_EXTENSION)) {
                                 try {
-                                    files.add(Converter.convert(file, ApplicationConstants.URL_FILE_EXTENSION));
+                                    files.add(Converter.convert(file, PreferencesManager.getConverterExportExtension()));
                                     try {
                                         FileUtils.forceDelete(file);
                                     } catch (IOException e) {
                                         log.warn("Could not delete file: {}", file, e);
                                     }
                                 } catch (IOException e) {
-                                    log.warn("Could not convert *.url to *.webloc file: {}", file, e);
+                                    log.warn("Could not convert *.webloc to *.{} file: {}", PreferencesManager.getConverterExportExtension(), file, e);
                                 }
                             }
                         }
@@ -472,11 +474,6 @@ public class SettingsDialog extends JFrame {
         settingsSavedTimer.restart();
     }
 
-    private void updateDragAndDropNotice() {
-        final String translatedString = Translation.getTranslatedString("SettingsDialogBundle", "dragAndDropNotice");
-        dragAndDropNotice.setText(translatedString.replace("{}", PreferencesManager.getConverterExportExtension()));
-    }
-
     private void onCancel() {
         dispose();
     }
@@ -484,6 +481,11 @@ public class SettingsDialog extends JFrame {
     private void onSave() {
         updateRegistry();
         dispose();
+    }
+
+    private void updateDragAndDropNotice() {
+        final String translatedString = Translation.getTranslatedString("SettingsDialogBundle", "dragAndDropNotice");
+        dragAndDropNotice.setText(translatedString.replace("{}", PreferencesManager.getConverterExportExtension()));
     }
 
     private void updateRegistry() {
