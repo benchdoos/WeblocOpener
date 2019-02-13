@@ -31,6 +31,7 @@ public class PreferencesManager {
     private static final String KEY_NOTIFICATIONS = "notifications";
     private static final String DEV_MODE_KEY = "dev_mode";
     private static final String KEY_DARK_MODE = "dark_mode";
+    private static final String KEY_CONVERTER_EXPORT_EXTENSION = "converter_export_extension";
     private static final Preferences PREFERENCES = Preferences.userRoot().node(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME.toLowerCase());
 
     public static String getBrowserValue() {
@@ -120,6 +121,18 @@ public class PreferencesManager {
 
     public static void setOpenFolderForQrCode(boolean openFolderForQrCode) {
         PREFERENCES.putBoolean(KEY_OPEN_FOR_QR, openFolderForQrCode);
+    }
+
+    public static String getConverterExportExtension() {
+        final String s = PREFERENCES.get(KEY_CONVERTER_EXPORT_EXTENSION, SettingsConstants.CONVERTER_DEFAULT_EXTENSION);
+        if (s.equalsIgnoreCase(ApplicationConstants.WEBLOC_FILE_EXTENSION)) {
+            return SettingsConstants.CONVERTER_DEFAULT_EXTENSION;
+        }
+        return s;
+    }
+
+    public static void setConverterExportExtension(String value) {
+        PREFERENCES.put(KEY_CONVERTER_EXPORT_EXTENSION, value);
     }
 
     public enum DARK_MODE {ALWAYS, DISABLED}

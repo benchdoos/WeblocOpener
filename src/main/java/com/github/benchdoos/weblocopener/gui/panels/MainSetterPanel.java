@@ -176,6 +176,13 @@ public class MainSetterPanel extends JPanel implements SettingsPanel {
         return contentPane;
     }
 
+    private void fillConvertComboBox() {
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        model.addElement("*." + ApplicationConstants.URL_FILE_EXTENSION);
+        model.addElement("*." + ApplicationConstants.DESKTOP_FILE_EXTENSION);
+        converterComboBox.setModel(model);
+    }
+
     private void initGui() {
         setLayout(new GridLayout());
         add(contentPane);
@@ -186,11 +193,25 @@ public class MainSetterPanel extends JPanel implements SettingsPanel {
         fillConvertComboBox();
     }
 
-    private void fillConvertComboBox() {
-        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
-        model.addElement("*." + ApplicationConstants.URL_FILE_EXTENSION);
-        model.addElement("*." + ApplicationConstants.DESKTOP_FILE_EXTENSION);
-        converterComboBox.setModel(model);
+    private void loadConverterValue() {
+        DefaultComboBoxModel<String> model = ((DefaultComboBoxModel<String>) converterComboBox.getModel());
+        if (model != null) {
+            for (int i = 0; i < model.getSize(); i++) {
+                final String current = model.getElementAt(i);
+                final String converterExportExtension = PreferencesManager.getConverterExportExtension();
+                if (current.contains(converterExportExtension)) {
+                    converterComboBox.setSelectedItem(current);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void loadSettings() {
+        loadConverterValue();
+        autoUpdateEnabledCheckBox.setSelected(PreferencesManager.isAutoUpdateActive());
+        openFolderForQRCheckBox.setSelected(PreferencesManager.openFolderForQrCode());
+        showNotificationsToUserCheckBox.setSelected(PreferencesManager.isNotificationsShown());
     }
 
     private void onUpdateNow() {
@@ -198,11 +219,15 @@ public class MainSetterPanel extends JPanel implements SettingsPanel {
         Application.runUpdateDialog();
     }
 
-    @Override
-    public void loadSettings() {
-        autoUpdateEnabledCheckBox.setSelected(PreferencesManager.isAutoUpdateActive());
-        openFolderForQRCheckBox.setSelected(PreferencesManager.openFolderForQrCode());
-        showNotificationsToUserCheckBox.setSelected(PreferencesManager.isNotificationsShown());
+    private void saveConverterValue() {
+        final Object selectedItem = converterComboBox.getSelectedItem();
+        if (selectedItem != null) {
+            if (selectedItem.toString().toLowerCase().contains(ApplicationConstants.URL_FILE_EXTENSION)) {
+                PreferencesManager.setConverterExportExtension(ApplicationConstants.URL_FILE_EXTENSION);
+            } else if (selectedItem.toString().toLowerCase().contains(ApplicationConstants.DESKTOP_FILE_EXTENSION)) {
+                PreferencesManager.setConverterExportExtension(ApplicationConstants.DESKTOP_FILE_EXTENSION);
+            }
+        }
     }
 
     @Override
@@ -210,8 +235,10 @@ public class MainSetterPanel extends JPanel implements SettingsPanel {
         final boolean update = autoUpdateEnabledCheckBox.isSelected();
         final boolean folder = openFolderForQRCheckBox.isSelected();
         final boolean notification = showNotificationsToUserCheckBox.isSelected();
-        log.info("Saving settings: auto-update: {}, open folder for qr-code: {}, notifications available: {}", update, folder, notification);
+        final Object converterMode = converterComboBox.getSelectedItem();
 
+        saveConverterValue();
+        log.info("Saving settings: auto-update: {}, open folder for qr-code: {}, notifications available: {}, converter will save: {}", update, folder, notification, converterMode);
         PreferencesManager.setAutoUpdateActive(update);
         PreferencesManager.setOpenFolderForQrCode(folder);
         PreferencesManager.setNotificationsShown(notification);
