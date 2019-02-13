@@ -17,6 +17,7 @@ package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
+import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.gui.ClickListener;
 import com.github.benchdoos.weblocopener.service.links.WeblocLink;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
@@ -487,21 +488,6 @@ public class EditDialog extends JFrame {
                 }
             }
 
-            private void updateTextFont() {
-                UrlValidator urlValidator = new UrlValidator();
-                if (urlValidator.isValid(textField.getText())) {
-                    if (textField != null) {
-                        setTextFieldFont(textField.getFont(), TextAttribute.UNDERLINE_ON);
-                        textField.setForeground(Color.BLUE);
-                    }
-                } else {
-                    if (textField != null) {
-                        setTextFieldFont(textField.getFont(), TextAttribute.SUPERSCRIPT_SUB);
-                        textField.setForeground(Color.BLACK);
-                    }
-                }
-            }
-
         });
 
         UndoManager undoManager = new UndoManager();
@@ -539,6 +525,30 @@ public class EditDialog extends JFrame {
 
         fillTextField(pathToEditingFile);
     }
+
+    public void updateTextFont() {
+        UrlValidator urlValidator = new UrlValidator();
+        if (urlValidator.isValid(textField.getText())) {
+            if (textField != null) {
+                setTextFieldFont(textField.getFont(), TextAttribute.UNDERLINE_ON);
+                if (!PreferencesManager.isDarkModeEnabledNow()) {
+                    textField.setForeground(Color.BLUE);
+                } else {
+                    textField.setForeground(Color.decode("#1BA7FF"));
+                }
+            }
+        } else {
+            if (textField != null) {
+                setTextFieldFont(textField.getFont(), TextAttribute.SUPERSCRIPT_SUB);
+                if (!PreferencesManager.isDarkModeEnabledNow()) {
+                    textField.setForeground(Color.BLACK);
+                } else {
+                    textField.setForeground(ApplicationConstants.DARK_MODE_THEME.getTextComponentElement().getForegroundColor());
+                }
+            }
+        }
+    }
+
 
     private void manageFileName() {
         try {

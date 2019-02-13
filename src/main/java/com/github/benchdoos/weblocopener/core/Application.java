@@ -241,6 +241,7 @@ public class Application {
         if (PreferencesManager.isDarkModeEnabledNow()) {
             JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
             colorful.colorize(dialog);
+            dialog.updateTextFont();
         }
 
         dialog.setVisible(true);
