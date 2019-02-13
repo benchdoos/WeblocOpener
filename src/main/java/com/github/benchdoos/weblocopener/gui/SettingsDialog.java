@@ -457,7 +457,9 @@ public class SettingsDialog extends JFrame {
         AboutApplicationDialog dialog;
         if (PreferencesManager.isDarkModeEnabledNow()) {
             JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
+            colorful.colorizeGlobal();
             dialog = new AboutApplicationDialog();
+            colorful.colorize(dialog);
         } else {
             dialog = new AboutApplicationDialog();
         }

@@ -17,6 +17,7 @@ package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.StringConstants;
+import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.service.gui.MousePickListener;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
@@ -259,16 +260,18 @@ public class AboutApplicationDialog extends JDialog {
         imagePanel1.addMouseListener(mousePickListener.getMouseAdapter);
         imagePanel1.addMouseMotionListener(mousePickListener.getMouseMotionAdapter);
 
-//        risingBalloonLogoLabel.addMouseListener(mousePickListener.getMouseAdapter);
-//        risingBalloonLogoLabel.addMouseMotionListener(mousePickListener.getMouseMotionAdapter);
-
         descriptionTextPane.addMouseListener(mousePickListener.getMouseAdapter);
 
         descriptionTextPane.addMouseMotionListener(mousePickListener.getMouseMotionAdapter);
     }
 
     private void createUIComponents() {
-        ImageIcon image = new ImageIcon(getClass().getResource("/images/background.png"));
+        ImageIcon image = null;
+        if (!PreferencesManager.isDarkModeEnabledNow()) {
+            image = new ImageIcon(getClass().getResource("/images/background.png"));
+        } else {
+            image = new ImageIcon(getClass().getResource("/images/backgroundBlack.png"));
+        }
         imagePanel1 = new ImagePanel(image);
         descriptionTextPane = new JTextPane();
 
@@ -288,6 +291,12 @@ public class AboutApplicationDialog extends JDialog {
 
         getRootPane().registerKeyboardAction(e -> dispose(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                 JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+        if (PreferencesManager.isDarkModeEnabledNow()) {
+            descriptionTextPane.setText(
+                    Translation.getTranslatedString("AboutApplicationDialogBundle", "aboutAppInfo")
+                            .replace("{}", "color:white;"));
+        }
 
         initLinks();
 
@@ -445,7 +454,11 @@ public class AboutApplicationDialog extends JDialog {
     }
 
     private String createHtmlLink(String string) {
-        return "<html><a href=\"\">" + string + "</a></html>";
+        if (!PreferencesManager.isDarkModeEnabledNow()) {
+            return "<html><a href=\"\">" + string + "</a></html>";
+        } else {
+            return "<html><a style=\"color:#BAE5FF;\" href=\"\">" + string + "</a></html>";
+        }
     }
 
     private void translateDialog() {
