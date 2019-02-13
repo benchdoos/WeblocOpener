@@ -125,7 +125,7 @@ public class SettingsDialog extends JFrame {
         donatePaypalButton.setIcon(new ImageIcon(getClass().getResource("/images/donate16.png")));
         donatePaypalButton.setIconTextGap(0);
         donatePaypalButton.setMargin(new Insets(0, 0, 0, 0));
-        donatePaypalButton.setOpaque(true);
+        donatePaypalButton.setOpaque(false);
         donatePaypalButton.setText("");
         panel1.add(donatePaypalButton, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
