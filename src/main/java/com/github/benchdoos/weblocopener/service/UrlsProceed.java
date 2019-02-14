@@ -25,6 +25,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageConfig;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
@@ -137,6 +138,11 @@ public class UrlsProceed {
                 new String(url.getBytes(ApplicationConstants.DEFAULT_APPLICATION_CHARSET),
                         ApplicationConstants.DEFAULT_APPLICATION_CHARSET),
                 BarcodeFormat.QR_CODE, UrlsProceed.QR_CODE_WIDTH, UrlsProceed.QR_CODE_HEIGHT, hintMap);
-        return MatrixToImageWriter.toBufferedImage(matrix);
+        if (PreferencesManager.isDarkModeEnabledNow()) {
+            MatrixToImageConfig conf = new MatrixToImageConfig(Color.WHITE.getRGB(), Color.BLACK.getRGB());
+            return MatrixToImageWriter.toBufferedImage(matrix, conf);
+        } else {
+            return MatrixToImageWriter.toBufferedImage(matrix);
+        }
     }
 }
