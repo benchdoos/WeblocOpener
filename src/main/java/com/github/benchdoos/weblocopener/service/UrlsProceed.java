@@ -16,19 +16,13 @@
 package com.github.benchdoos.weblocopener.service;
 
 import com.github.benchdoos.weblocopener.core.Translation;
-import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.Logging;
+import com.github.benchdoos.weblocopener.utils.QrCodeUtils;
 import com.github.benchdoos.weblocopener.utils.UserUtils;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -39,16 +33,26 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Eugene Zrazhevsky on 30.10.2016.
  */
 public class UrlsProceed {
-    private static final int QR_CODE_HEIGHT = 300, QR_CODE_WIDTH = 300;
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
+    public static BufferedImage generateQrCode(String url) throws IOException, WriterException {
+        MatrixToImageConfig conf = null;
+        if (PreferencesManager.isDarkModeEnabledNow()) {
+            conf = new MatrixToImageConfig(Color.WHITE.getRGB(), Color.BLACK.getRGB());
+        } else {
+            conf = new MatrixToImageConfig(Color.BLACK.getRGB(), Color.WHITE.getRGB());
+        }
+        return QrCodeUtils.generateQrCode(url, conf);
+    }
+
+    public static void openUrl(URL url) {
+        openUrl(url.toString());
+    }
 
     /**
      * Opens url on default browser.
@@ -71,8 +75,24 @@ public class UrlsProceed {
 
     }
 
-    public static void openUrl(URL url) {
-        openUrl(url.toString());
+    private static void openUrlInDefaultBrowser(String url) {
+        if (!Desktop.isDesktopSupported()) {
+            log.warn("Desktop is not supported");
+            return;
+        }
+
+        Desktop desktop = Desktop.getDesktop();
+
+        try {
+            if (!url.isEmpty()) {
+                desktop.browse(URI.create(url));
+            }
+        } catch (IOException e) {
+            log.warn("Can not open url: " + url, e);
+            UserUtils.showWarningMessageToUser(null, null,
+                    Translation.getTranslatedString(
+                            "CommonsBundle", "urlIsCorruptMessage") + url);
+        }
     }
 
     private static void openUrlInNotDefaultBrowser(String url) throws IOException {
@@ -104,45 +124,5 @@ public class UrlsProceed {
         }
     }
 
-    private static void openUrlInDefaultBrowser(String url) {
-        if (!Desktop.isDesktopSupported()) {
-            log.warn("Desktop is not supported");
-            return;
-        }
 
-        Desktop desktop = Desktop.getDesktop();
-
-        try {
-            if (!url.isEmpty()) {
-                desktop.browse(URI.create(url));
-            }
-        } catch (IOException e) {
-            log.warn("Can not open url: " + url, e);
-            UserUtils.showWarningMessageToUser(null, null,
-                    Translation.getTranslatedString(
-                            "CommonsBundle", "urlIsCorruptMessage") + url);
-        }
-    }
-
-    public static BufferedImage generateQrCode(String url) throws IOException, WriterException {
-        Map<EncodeHintType, Comparable> hintMap = new HashMap<>();
-        hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-        hintMap.put(EncodeHintType.MARGIN, 1);
-        return createQRCode(url, hintMap);
-    }
-
-    private static BufferedImage createQRCode(String url,
-                                              Map<EncodeHintType, Comparable> hintMap)
-            throws WriterException, IOException {
-        BitMatrix matrix = new MultiFormatWriter().encode(
-                new String(url.getBytes(ApplicationConstants.DEFAULT_APPLICATION_CHARSET),
-                        ApplicationConstants.DEFAULT_APPLICATION_CHARSET),
-                BarcodeFormat.QR_CODE, UrlsProceed.QR_CODE_WIDTH, UrlsProceed.QR_CODE_HEIGHT, hintMap);
-        if (PreferencesManager.isDarkModeEnabledNow()) {
-            MatrixToImageConfig conf = new MatrixToImageConfig(Color.WHITE.getRGB(), Color.BLACK.getRGB());
-            return MatrixToImageWriter.toBufferedImage(matrix, conf);
-        } else {
-            return MatrixToImageWriter.toBufferedImage(matrix);
-        }
-    }
 }
