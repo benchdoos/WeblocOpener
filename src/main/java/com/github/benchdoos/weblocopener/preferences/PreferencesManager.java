@@ -37,8 +37,8 @@ public class PreferencesManager {
     private static final String KEY_CONVERTER_EXPORT_EXTENSION = "converter_export_extension";
     private static final Preferences PREFERENCES = Preferences.userRoot().node(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME.toLowerCase());
 
-    private static SimpleTime lastDarkModeUpdateTime = null;
-    private static boolean lastDarkModeEnabled = false;
+    private static volatile SimpleTime lastDarkModeUpdateTime = null;
+    private static volatile boolean lastDarkModeEnabled = false;
 
     public static String getBrowserValue() {
         final String value = PREFERENCES.get(KEY_BROWSER, SettingsConstants.BROWSER_DEFAULT_VALUE);
