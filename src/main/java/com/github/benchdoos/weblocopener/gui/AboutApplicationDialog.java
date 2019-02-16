@@ -15,7 +15,9 @@
 
 package com.github.benchdoos.weblocopener.gui;
 
+import com.github.benchdoos.core.JColorful;
 import com.github.benchdoos.weblocopener.core.Translation;
+import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.StringConstants;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
@@ -330,6 +332,11 @@ public class AboutApplicationDialog extends JDialog {
         librariesLabel.addMouseListener(new MouseAdapter() {
             private void createInfoDialog() {
                 InfoDialog infoDialog = new InfoDialog();
+                if (PreferencesManager.isDarkModeEnabledNow()) {
+                    final JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
+                    colorful.colorize(infoDialog);
+                }
+
                 infoDialog.setTitle(Translation.getTranslatedString("AboutApplicationDialogBundle", "librariesLabelToolTip"));
                 StringBuilder contentBuilder = new StringBuilder();
                 try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
@@ -338,7 +345,7 @@ public class AboutApplicationDialog extends JDialog {
                     while ((str = bufferedReader.readLine()) != null) {
                         contentBuilder.append(str);
                     }
-                    infoDialog.setContent(contentBuilder.toString());
+                    infoDialog.setContent(getDarkStyle(contentBuilder.toString()));
                     infoDialog.setVisible(true);
                 } catch (IOException ignore) {/*NOP*/}
             }
@@ -451,6 +458,14 @@ public class AboutApplicationDialog extends JDialog {
         });
 
 
+    }
+
+    private String getDarkStyle(String content) {
+        if (PreferencesManager.isDarkModeEnabledNow()) {
+            return content.replace("{}", "color:#ffffff;");
+        } else {
+            return content.replace("{}", "");
+        }
     }
 
     private String createHtmlLink(String string) {
