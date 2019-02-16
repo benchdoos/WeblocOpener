@@ -15,8 +15,8 @@
 
 package com.github.benchdoos.weblocopener.core.constants;
 
-import com.github.benchdoos.beans.Theme;
-import com.github.benchdoos.core.JColorful;
+import com.github.benchdoos.jcolorful.beans.Theme;
+import com.github.benchdoos.jcolorful.core.JColorful;
 
 public interface ApplicationConstants {
     String WEBLOCOPENER_APPLICATION_NAME = "WeblocOpener";

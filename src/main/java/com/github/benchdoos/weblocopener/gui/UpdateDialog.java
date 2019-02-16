@@ -15,7 +15,7 @@
 
 package com.github.benchdoos.weblocopener.gui;
 
-import com.github.benchdoos.core.JColorful;
+import com.github.benchdoos.jcolorful.core.JColorful;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.PathConstants;
