@@ -16,7 +16,9 @@
 package com.github.benchdoos.weblocopener.gui.panels;
 
 import com.github.benchdoos.weblocopener.core.Application;
+import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
+import com.github.benchdoos.weblocopener.gui.Translatable;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
@@ -31,7 +33,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ResourceBundle;
 
-public class MainSetterPanel extends JPanel implements SettingsPanel {
+public class MainSetterPanel extends JPanel implements SettingsPanel, Translatable {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
     private JPanel contentPane;
@@ -42,6 +44,7 @@ public class MainSetterPanel extends JPanel implements SettingsPanel {
     private JLabel versionLabel;
     private JLabel versionStringLabel;
     private JComboBox<String> converterComboBox;
+    private JLabel convertToLabel;
 
     public MainSetterPanel() {
         initGui();
@@ -70,31 +73,31 @@ public class MainSetterPanel extends JPanel implements SettingsPanel {
         autoUpdateEnabledCheckBox = new JCheckBox();
         autoUpdateEnabledCheckBox.setContentAreaFilled(true);
         autoUpdateEnabledCheckBox.setSelected(true);
-        this.$$$loadButtonText$$$(autoUpdateEnabledCheckBox, ResourceBundle.getBundle("translations/MainSetterPanelBundle_en_EN").getString("autoUpdateEnabledCheckBox"));
+        this.$$$loadButtonText$$$(autoUpdateEnabledCheckBox, ResourceBundle.getBundle("translations/MainSetterPanelBundle").getString("autoUpdateEnabledCheckBox"));
         autoUpdateEnabledCheckBox.setVerifyInputWhenFocusTarget(false);
         autoUpdateEnabledCheckBox.setVerticalAlignment(0);
         panel1.add(autoUpdateEnabledCheckBox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         checkUpdatesButton = new JButton();
-        this.$$$loadButtonText$$$(checkUpdatesButton, ResourceBundle.getBundle("translations/MainSetterPanelBundle_en_EN").getString("checkUpdatesButton"));
+        this.$$$loadButtonText$$$(checkUpdatesButton, ResourceBundle.getBundle("translations/MainSetterPanelBundle").getString("checkUpdatesButton"));
         panel1.add(checkUpdatesButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         panel1.add(spacer1, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         openFolderForQRCheckBox = new JCheckBox();
         openFolderForQRCheckBox.setSelected(true);
-        this.$$$loadButtonText$$$(openFolderForQRCheckBox, ResourceBundle.getBundle("translations/MainSetterPanelBundle_en_EN").getString("openFolderForQRCheckBox"));
+        this.$$$loadButtonText$$$(openFolderForQRCheckBox, ResourceBundle.getBundle("translations/MainSetterPanelBundle").getString("openFolderForQRCheckBox"));
         panel1.add(openFolderForQRCheckBox, new GridConstraints(1, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         showNotificationsToUserCheckBox = new JCheckBox();
         showNotificationsToUserCheckBox.setSelected(true);
-        this.$$$loadButtonText$$$(showNotificationsToUserCheckBox, ResourceBundle.getBundle("translations/MainSetterPanelBundle_en_EN").getString("showNotificationsCheckBox"));
+        this.$$$loadButtonText$$$(showNotificationsToUserCheckBox, ResourceBundle.getBundle("translations/MainSetterPanelBundle").getString("showNotificationsCheckBox"));
         panel1.add(showNotificationsToUserCheckBox, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JSeparator separator1 = new JSeparator();
         panel1.add(separator1, new GridConstraints(3, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel2, new GridConstraints(4, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        final JLabel label1 = new JLabel();
-        this.$$$loadLabelText$$$(label1, ResourceBundle.getBundle("translations/MainSetterPanelBundle_en_EN").getString("convertTo"));
-        panel2.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        convertToLabel = new JLabel();
+        this.$$$loadLabelText$$$(convertToLabel, ResourceBundle.getBundle("translations/MainSetterPanelBundle").getString("convertTo"));
+        panel2.add(convertToLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         converterComboBox = new JComboBox();
         panel2.add(converterComboBox, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
@@ -103,16 +106,16 @@ public class MainSetterPanel extends JPanel implements SettingsPanel {
         panel3.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
         contentPane.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         versionLabel = new JLabel();
-        this.$$$loadLabelText$$$(versionLabel, ResourceBundle.getBundle("translations/MainSetterPanelBundle_en_EN").getString("versionLabel"));
+        this.$$$loadLabelText$$$(versionLabel, ResourceBundle.getBundle("translations/MainSetterPanelBundle").getString("versionLabel"));
         panel3.add(versionLabel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         versionStringLabel = new JLabel();
-        this.$$$loadLabelText$$$(versionStringLabel, ResourceBundle.getBundle("translations/MainSetterPanelBundle_en_EN").getString("versionString"));
+        this.$$$loadLabelText$$$(versionStringLabel, ResourceBundle.getBundle("translations/MainSetterPanelBundle").getString("versionString"));
         panel3.add(versionStringLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer3 = new Spacer();
         panel3.add(spacer3, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JSeparator separator2 = new JSeparator();
         contentPane.add(separator2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        label1.setLabelFor(converterComboBox);
+        convertToLabel.setLabelFor(converterComboBox);
     }
 
     /**
@@ -191,6 +194,7 @@ public class MainSetterPanel extends JPanel implements SettingsPanel {
         versionLabel.setText(CoreUtils.getApplicationVersionString());
 
         fillConvertComboBox();
+        translate();
     }
 
     private void loadConverterValue() {
@@ -242,5 +246,17 @@ public class MainSetterPanel extends JPanel implements SettingsPanel {
         PreferencesManager.setAutoUpdateActive(update);
         PreferencesManager.setOpenFolderForQrCode(folder);
         PreferencesManager.setNotificationsShown(notification);
+    }
+
+    @Override
+    public void translate() {
+        Translation translation = new Translation("MainSetterPanelBundle");
+        versionStringLabel.setText(translation.getTranslatedString("versionString"));
+        versionLabel.setText(translation.getTranslatedString("versionLabel"));
+        autoUpdateEnabledCheckBox.setText(translation.getTranslatedString("autoUpdateEnabledCheckBox"));
+        checkUpdatesButton.setText(translation.getTranslatedString("checkUpdatesButton"));
+        openFolderForQRCheckBox.setText(translation.getTranslatedString("openFolderForQRCheckBox"));
+        showNotificationsToUserCheckBox.setText(translation.getTranslatedString("showNotificationsCheckBox"));
+        convertToLabel.setText(translation.getTranslatedString("convertTo"));
     }
 }

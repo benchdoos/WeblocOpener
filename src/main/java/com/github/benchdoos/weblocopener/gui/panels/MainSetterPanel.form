@@ -23,7 +23,7 @@
             <properties>
               <contentAreaFilled value="true"/>
               <selected value="true"/>
-              <text resource-bundle="translations/MainSetterPanelBundle_en_EN" key="autoUpdateEnabledCheckBox"/>
+              <text resource-bundle="translations/MainSetterPanelBundle" key="autoUpdateEnabledCheckBox"/>
               <verifyInputWhenFocusTarget value="false"/>
               <verticalAlignment value="0"/>
             </properties>
@@ -33,7 +33,7 @@
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text resource-bundle="translations/MainSetterPanelBundle_en_EN" key="checkUpdatesButton"/>
+              <text resource-bundle="translations/MainSetterPanelBundle" key="checkUpdatesButton"/>
             </properties>
           </component>
           <hspacer id="3af66">
@@ -47,7 +47,7 @@
             </constraints>
             <properties>
               <selected value="true"/>
-              <text resource-bundle="translations/MainSetterPanelBundle_en_EN" key="openFolderForQRCheckBox"/>
+              <text resource-bundle="translations/MainSetterPanelBundle" key="openFolderForQRCheckBox"/>
             </properties>
           </component>
           <component id="3febf" class="javax.swing.JCheckBox" binding="showNotificationsToUserCheckBox" default-binding="true">
@@ -56,7 +56,7 @@
             </constraints>
             <properties>
               <selected value="true"/>
-              <text resource-bundle="translations/MainSetterPanelBundle_en_EN" key="showNotificationsCheckBox"/>
+              <text resource-bundle="translations/MainSetterPanelBundle" key="showNotificationsCheckBox"/>
             </properties>
           </component>
           <component id="64e3c" class="javax.swing.JSeparator">
@@ -73,13 +73,13 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="ca22f" class="javax.swing.JLabel">
+              <component id="ca22f" class="javax.swing.JLabel" binding="convertToLabel">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <labelFor value="2c189"/>
-                  <text resource-bundle="translations/MainSetterPanelBundle_en_EN" key="convertTo"/>
+                  <text resource-bundle="translations/MainSetterPanelBundle" key="convertTo"/>
                 </properties>
               </component>
               <component id="2c189" class="javax.swing.JComboBox" binding="converterComboBox">
@@ -110,7 +110,7 @@
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text resource-bundle="translations/MainSetterPanelBundle_en_EN" key="versionLabel"/>
+              <text resource-bundle="translations/MainSetterPanelBundle" key="versionLabel"/>
             </properties>
           </component>
           <component id="5a907" class="javax.swing.JLabel" binding="versionStringLabel">
@@ -118,7 +118,7 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text resource-bundle="translations/MainSetterPanelBundle_en_EN" key="versionString"/>
+              <text resource-bundle="translations/MainSetterPanelBundle" key="versionString"/>
             </properties>
           </component>
           <hspacer id="bad39">
