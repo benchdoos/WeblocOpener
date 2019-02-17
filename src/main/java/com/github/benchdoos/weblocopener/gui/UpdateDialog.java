@@ -44,7 +44,7 @@ import java.util.ResourceBundle;
 import static com.github.benchdoos.weblocopener.utils.system.SystemUtils.IS_WINDOWS_XP;
 
 @SuppressWarnings({"ALL", "ResultOfMethodCallIgnored"})
-public class UpdateDialog extends JFrame {
+public class UpdateDialog extends JFrame implements Translatable {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
     private static volatile UpdateDialog instance = null;
@@ -114,11 +114,11 @@ public class UpdateDialog extends JFrame {
         buttonOK.setEnabled(false);
         Font buttonOKFont = this.$$$getFont$$$(null, Font.BOLD, -1, buttonOK.getFont());
         if (buttonOKFont != null) buttonOK.setFont(buttonOKFont);
-        this.$$$loadButtonText$$$(buttonOK, ResourceBundle.getBundle("translations/UpdateDialogBundle_en_EN").getString("buttonOk"));
+        this.$$$loadButtonText$$$(buttonOK, ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("buttonOk"));
         panel2.add(buttonOK, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         buttonCancel = new JButton();
         buttonCancel.setActionCommand(ResourceBundle.getBundle("translations/UpdateDialogBundle_en_EN").getString("buttonCancel"));
-        this.$$$loadButtonText$$$(buttonCancel, ResourceBundle.getBundle("translations/UpdateDialogBundle_en_EN").getString("buttonCancel"));
+        this.$$$loadButtonText$$$(buttonCancel, ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("buttonCancel"));
         panel2.add(buttonCancel, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         manualDownloadButton = new JButton();
         manualDownloadButton.setIcon(new ImageIcon(getClass().getResource("/images/downloadsIcon16.png")));
@@ -126,7 +126,7 @@ public class UpdateDialog extends JFrame {
         manualDownloadButton.setMargin(new Insets(2, 2, 2, 8));
         manualDownloadButton.setOpaque(true);
         manualDownloadButton.setRequestFocusEnabled(false);
-        this.$$$loadButtonText$$$(manualDownloadButton, ResourceBundle.getBundle("translations/UpdateDialogBundle_en_EN").getString("manualDownloadButtonText"));
+        this.$$$loadButtonText$$$(manualDownloadButton, ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("manualDownloadButtonText"));
         manualDownloadButton.setToolTipText(ResourceBundle.getBundle("translations/UpdateDialogBundle_en_EN").getString("manualDownloadButtonToolTip"));
         panel2.add(manualDownloadButton, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
@@ -140,7 +140,7 @@ public class UpdateDialog extends JFrame {
         progressBar.setStringPainted(false);
         panel3.add(progressBar, new GridConstraints(2, 0, 1, 6, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         currentVersionStringLabel = new JLabel();
-        this.$$$loadLabelText$$$(currentVersionStringLabel, ResourceBundle.getBundle("translations/UpdateDialogBundle_en_EN").getString("currentVersionStringLabel"));
+        this.$$$loadLabelText$$$(currentVersionStringLabel, ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("currentVersionStringLabel"));
         panel3.add(currentVersionStringLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         currentVersionLabel = new JLabel();
         Font currentVersionLabelFont = this.$$$getFont$$$(null, Font.BOLD, -1, currentVersionLabel.getFont());
@@ -148,7 +148,7 @@ public class UpdateDialog extends JFrame {
         currentVersionLabel.setText("");
         panel3.add(currentVersionLabel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         availableVersionStringLabel = new JLabel();
-        this.$$$loadLabelText$$$(availableVersionStringLabel, ResourceBundle.getBundle("translations/UpdateDialogBundle_en_EN").getString("availableVersionStringLabel"));
+        this.$$$loadLabelText$$$(availableVersionStringLabel, ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("availableVersionStringLabel"));
         panel3.add(availableVersionStringLabel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         availableVersionLabel = new JLabel();
         Font availableVersionLabelFont = this.$$$getFont$$$(null, Font.BOLD, -1, availableVersionLabel.getFont());
@@ -174,7 +174,7 @@ public class UpdateDialog extends JFrame {
         updateInfoButton.setOpaque(false);
         updateInfoButton.setRequestFocusEnabled(false);
         updateInfoButton.setText("");
-        updateInfoButton.setToolTipText(ResourceBundle.getBundle("translations/UpdateDialogBundle_en_EN").getString("infoAboutUpdate"));
+        updateInfoButton.setToolTipText(ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("infoAboutUpdate"));
         panel3.add(updateInfoButton, new GridConstraints(1, 5, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
@@ -408,6 +408,8 @@ public class UpdateDialog extends JFrame {
 
         });
 
+        translate();
+
         pack();
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
         setSize(new Dimension(400, 170));
@@ -507,5 +509,16 @@ public class UpdateDialog extends JFrame {
             newVersionSizeLabel.setText(serverAppVersion.getSize() / 1024 + "");
             unitLabel.setText("KB");
         }
+    }
+
+    @Override
+    public void translate() {
+        Translation translation = new Translation("UpdateDialogBundle");
+        currentVersionStringLabel.setText(translation.getTranslatedString("currentVersionStringLabel"));
+        availableVersionStringLabel.setText(translation.getTranslatedString("availableVersionStringLabel"));
+        updateInfoButton.setToolTipText(translation.getTranslatedString("infoAboutUpdate"));
+        buttonOK.setText(translation.getTranslatedString("buttonOk"));
+        manualDownloadButton.setText(translation.getTranslatedString("manualDownloadButtonText"));
+        buttonCancel.setText(translation.getTranslatedString("buttonCancel"));
     }
 }
