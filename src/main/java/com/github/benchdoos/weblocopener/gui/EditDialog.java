@@ -62,7 +62,7 @@ import static com.github.benchdoos.weblocopener.core.constants.ApplicationConsta
 import static com.github.benchdoos.weblocopener.core.constants.StringConstants.FAVICON_GETTER_URL;
 
 
-public class EditDialog extends JFrame {
+public class EditDialog extends JFrame implements Translatable {
     private final static int DEFAULT_APPLICATION_WIDTH = 450;
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private final String pathToEditingFile;
@@ -71,7 +71,7 @@ public class EditDialog extends JFrame {
     private JButton buttonCancel;
     private JTextField textField;
     private String errorTitle = "Error";
-    private JLabel createWeblocFileTextPane;
+    private JLabel editLinkLabel;
     private JLabel urlPageTitle;
     private JButton clearTextButton;
     private JCheckBox autoRenameFileCheckBox;
@@ -105,16 +105,16 @@ public class EditDialog extends JFrame {
         panel2.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1, true, false));
         panel1.add(panel2, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         buttonOK = new JButton();
-        this.$$$loadButtonText$$$(buttonOK, ResourceBundle.getBundle("translations/EditDialogBundle_en_EN").getString("buttonOk"));
+        this.$$$loadButtonText$$$(buttonOK, ResourceBundle.getBundle("translations/EditDialogBundle").getString("buttonOk"));
         buttonOK.putClientProperty("hideActionText", Boolean.FALSE);
         panel2.add(buttonOK, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         buttonCancel = new JButton();
-        this.$$$loadButtonText$$$(buttonCancel, ResourceBundle.getBundle("translations/EditDialogBundle_en_EN").getString("buttonCancel"));
+        this.$$$loadButtonText$$$(buttonCancel, ResourceBundle.getBundle("translations/EditDialogBundle").getString("buttonCancel"));
         panel2.add(buttonCancel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         autoRenameFileCheckBox = new JCheckBox();
         autoRenameFileCheckBox.setEnabled(false);
-        this.$$$loadButtonText$$$(autoRenameFileCheckBox, ResourceBundle.getBundle("translations/EditDialogBundle_en_EN").getString("autoRenameFile"));
-        autoRenameFileCheckBox.setToolTipText(ResourceBundle.getBundle("translations/EditDialogBundle_en_EN").getString("canNotRenameToolTip"));
+        this.$$$loadButtonText$$$(autoRenameFileCheckBox, ResourceBundle.getBundle("translations/EditDialogBundle").getString("autoRenameFile"));
+        autoRenameFileCheckBox.setToolTipText(ResourceBundle.getBundle("translations/EditDialogBundle").getString("canNotRenameToolTip"));
         panel1.add(autoRenameFileCheckBox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(3, 1, new Insets(5, 10, 0, 10), -1, -1));
@@ -142,24 +142,24 @@ public class EditDialog extends JFrame {
         clearTextButton.setPressedIcon(new ImageIcon(getClass().getResource("/images/closeButtons/circleRedDarker12.png")));
         clearTextButton.setRolloverIcon(new ImageIcon(getClass().getResource("/images/closeButtons/circleRed12.png")));
         clearTextButton.setText("");
-        clearTextButton.setToolTipText(ResourceBundle.getBundle("translations/EditDialogBundle_en_EN").getString("clearTextToolTip"));
+        clearTextButton.setToolTipText(ResourceBundle.getBundle("translations/EditDialogBundle").getString("clearTextToolTip"));
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel4.add(clearTextButton, gbc);
-        createWeblocFileTextPane = new JLabel();
-        createWeblocFileTextPane.setAutoscrolls(true);
-        createWeblocFileTextPane.setEnabled(true);
-        createWeblocFileTextPane.setFocusable(false);
-        Font createWeblocFileTextPaneFont = this.$$$getFont$$$(null, -1, 14, createWeblocFileTextPane.getFont());
-        if (createWeblocFileTextPaneFont != null) createWeblocFileTextPane.setFont(createWeblocFileTextPaneFont);
-        createWeblocFileTextPane.setOpaque(false);
-        createWeblocFileTextPane.setRequestFocusEnabled(true);
-        this.$$$loadLabelText$$$(createWeblocFileTextPane, ResourceBundle.getBundle("translations/EditDialogBundle_en_EN").getString("EditWeblocLink"));
-        createWeblocFileTextPane.setVerifyInputWhenFocusTarget(false);
-        createWeblocFileTextPane.setVisible(true);
-        panel3.add(createWeblocFileTextPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_VERTICAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        editLinkLabel = new JLabel();
+        editLinkLabel.setAutoscrolls(true);
+        editLinkLabel.setEnabled(true);
+        editLinkLabel.setFocusable(false);
+        Font editLinkLabelFont = this.$$$getFont$$$(null, -1, 14, editLinkLabel.getFont());
+        if (editLinkLabelFont != null) editLinkLabel.setFont(editLinkLabelFont);
+        editLinkLabel.setOpaque(false);
+        editLinkLabel.setRequestFocusEnabled(true);
+        this.$$$loadLabelText$$$(editLinkLabel, ResourceBundle.getBundle("translations/EditDialogBundle").getString("EditWeblocLink"));
+        editLinkLabel.setVerifyInputWhenFocusTarget(false);
+        editLinkLabel.setVisible(true);
+        panel3.add(editLinkLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_VERTICAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         urlPageTitle = new JLabel();
         urlPageTitle.setForeground(new Color(-6316129));
         urlPageTitle.setHorizontalTextPosition(11);
@@ -333,7 +333,7 @@ public class EditDialog extends JFrame {
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                 JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-        createWeblocFileTextPane.setBackground(new Color(232, 232, 232));
+        editLinkLabel.setBackground(new Color(232, 232, 232));
 
 
         initTextField(pathToEditingFile);
@@ -345,6 +345,7 @@ public class EditDialog extends JFrame {
         setResizable(false);
 
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
+        translate();
     }
 
     private void initTextField(String pathToEditingFile) {
@@ -524,6 +525,18 @@ public class EditDialog extends JFrame {
         textField.getInputMap().put(KeyStroke.getKeyStroke("control shift Z"), "Redo");
 
         fillTextField(pathToEditingFile);
+    }
+
+    @Override
+    public void translate() {
+        Translation translation = new Translation("EditDialogBundle");
+        editLinkLabel.setText(translation.getTranslatedString("EditWeblocLink"));
+        clearTextButton.setToolTipText(translation.getTranslatedString("clearTextToolTip"));
+        autoRenameFileCheckBox.setText(translation.getTranslatedString("autoRenameFile"));
+        autoRenameFileCheckBox.setToolTipText(translation.getTranslatedString("canNotRenameToolTip"));
+        buttonOK.setText(translation.getTranslatedString("buttonOk"));
+        buttonCancel.setText(translation.getTranslatedString("buttonCancel"));
+
     }
 
     public void updateTextFont() {
