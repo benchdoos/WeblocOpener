@@ -173,5 +173,13 @@ public class LocaleSetterPanel extends JPanel implements SettingsPanel, Translat
     public void translate() {
         Translation translation = new Translation("LocaleSetterPanelBundle");
         languageLabel.setText(translation.getTranslatedString("language"));
+        translateComboBox(translation);
+
+    }
+
+    private void translateComboBox(Translation translation) {
+        final DefaultComboBoxModel<Object> model = (DefaultComboBoxModel<Object>) localeComboBox.getModel();
+        model.removeElementAt(0);
+        model.insertElementAt(translation.getTranslatedString("languageDefault"), 0);
     }
 }
