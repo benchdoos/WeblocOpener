@@ -2,7 +2,11 @@
 
 # WeblocOpener
 
-[![GitHub releases](https://img.shields.io/github/downloads/benchdoos/WeblocOpener/total.svg)](https://github.com/benchdoos/WeblocOpener/releases)
+[![DOWNLOADS_TOTAL](https://img.shields.io/github/downloads/benchdoos/WeblocOpener/total.svg?style=flat-square)](https://github.com/benchdoos/WeblocOpener/releases)
+[![DOWNLOADS_LATEST](https://img.shields.io/github/release/benchdoos/WeblocOpener.svg?style=flat-square)](https://github.com/benchdoos/WeblocOpener/releases/latest)
+[![DOWNLOADS_LATEST](https://img.shields.io/github/downloads/benchdoos/WeblocOpener/latest/total.svg?style=flat-square)](https://github.com/benchdoos/WeblocOpener/releases/latest)
+[![COMMITS_PER_YEAR](https://img.shields.io/github/commit-activity/y/benchdoos/WeblocOpener.svg?style=flat-square)](https://github.com/benchdoos/JColorful/commits/master)
+[![LICENSE](https://img.shields.io/github/license/benchdoos/WeblocOpener.svg?style=flat-square)](https://github.com/benchdoos/JColorful/blob/master/LICENSE)
 
 Visit website: [https://benchdoos.github.io/](https://vk.cc/6wK76Z)
 
