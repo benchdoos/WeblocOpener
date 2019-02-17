@@ -57,6 +57,12 @@ You can use any custom browser by your own with custom call, using syntax: `<fil
 - **Auto-paste URL from clipboard when you created a new file. When you've just created an empty file, WeblocOpener helps you to paste copied URL into ULR-field. It automatically finds an URL in your clipboard.** 
 [<img src="https://benchdoos.github.io/img/faq/faq_auto_paste.png"  width="888" />](#what-can-weblocopener-do)
 
+- **Dark mode will protect your eyes at night. It turns on automatically scheduled or by your location. Check out in settings how to customize it for yourself.** 
+[<img src="https://benchdoos.github.io/img/faq/faq_dark_mode.png"  width="888" />](#what-can-weblocopener-do)
+
+- **New settings window can give you abilities to change: dark mode, language of the application, converter mode.** 
+[<img src="https://benchdoos.github.io/img/faq/faq_new_settings.png"  width="888" />](#what-can-weblocopener-do)
+
 - **Generate QR-Code from `.webloc` context menu. Just make a right-click on a .webloc file and select "Generate QR-Code".** 
 [<img src="https://benchdoos.github.io/img/faq/faq_qr.png"  width="888" />](#what-can-weblocopener-do)
 
@@ -80,7 +86,7 @@ You can use any custom browser by your own with custom call, using syntax: `<fil
 | Generate QR-Code               | Yes           | Frozen         | No          |
 | URL auto-paste                 | Yes           | Frozen         | WO feature  |
 | Instant URL, QR-Code copy      | Yes           | Frozen         | No          |
-| Converter .webloc to .url and backward| Yes    | Frozen         | No          |
+| Converter .webloc to .url to .desktop and backward| Yes    | Frozen         | No          |
 | Auto-update                    | Yes           | Frozen         | WO feature  |
 | Open in not default browser    | Yes           | Frozen         | Not         |
 
