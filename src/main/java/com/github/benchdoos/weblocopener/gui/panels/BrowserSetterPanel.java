@@ -424,5 +424,19 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel, Transla
         Translation translation = new Translation("BrowserSetterPanelBundle");
         openInLabel.setText(translation.getTranslatedString("openInBrowser"));
         callLabel.setText(translation.getTranslatedString("customCallLabel"));
+
+        translateComboBox();
+    }
+
+    private void translateComboBox() {
+        DefaultComboBoxModel<Browser> model = ((DefaultComboBoxModel<Browser>) browserComboBox.getModel());
+        final Browser defaultBrowser = model.getElementAt(0);
+        if (defaultBrowser != null) {
+            defaultBrowser.setName(Translation.getTranslatedString("CommonsBundle", "defaultBrowserName"));
+        }
+        final Browser customBrowser = model.getElementAt(model.getSize() - 1);
+        if (customBrowser != null) {
+            customBrowser.setName(Translation.getTranslatedString("SettingsDialogBundle", "customBrowserName"));
+        }
     }
 }
