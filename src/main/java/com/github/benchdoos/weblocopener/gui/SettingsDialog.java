@@ -19,10 +19,7 @@ import com.github.benchdoos.jcolorful.core.JColorful;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.StringConstants;
-import com.github.benchdoos.weblocopener.gui.panels.AppearanceSetterPanel;
-import com.github.benchdoos.weblocopener.gui.panels.BrowserSetterPanel;
-import com.github.benchdoos.weblocopener.gui.panels.MainSetterPanel;
-import com.github.benchdoos.weblocopener.gui.panels.SettingsPanel;
+import com.github.benchdoos.weblocopener.gui.panels.*;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
@@ -70,6 +67,7 @@ public class SettingsDialog extends JFrame {
     private BrowserSetterPanel browserSetterPanel;
     private MainSetterPanel mainSetterPanel;
     private AppearanceSetterPanel appearanceSetterPanel;
+    private LocaleSetterPanel localeSetterPanel;
 
 
     public SettingsDialog() {
@@ -409,6 +407,8 @@ public class SettingsDialog extends JFrame {
                         name = Translation.getTranslatedString("SettingsDialogBundle", "settingsBrowserPanelName");
                     } else if (value instanceof AppearanceSetterPanel) {
                         name = Translation.getTranslatedString("SettingsDialogBundle", "settingsAppearancePanelName");
+                    } else if (value instanceof LocaleSetterPanel) {
+                        name = Translation.getTranslatedString("SettingsDialogBundle", "settingsLocalePanelName");
                     }
                     return super.getListCellRendererComponent(list, name, index, isSelected, cellHasFocus);
                 }
@@ -438,10 +438,12 @@ public class SettingsDialog extends JFrame {
         mainSetterPanel = new MainSetterPanel();
         browserSetterPanel = new BrowserSetterPanel();
         appearanceSetterPanel = new AppearanceSetterPanel();
+        localeSetterPanel = new LocaleSetterPanel();
 
         model.addElement(mainSetterPanel);
         model.addElement(browserSetterPanel);
         model.addElement(appearanceSetterPanel);
+        model.addElement(localeSetterPanel);
         settingsList.setModel(model);
 
         if (PreferencesManager.isDarkModeEnabledNow()) {
@@ -449,6 +451,7 @@ public class SettingsDialog extends JFrame {
             colorful.colorize(mainSetterPanel);
             colorful.colorize(browserSetterPanel);
             colorful.colorize(appearanceSetterPanel);
+            colorful.colorize(localeSetterPanel);
         }
     }
 
