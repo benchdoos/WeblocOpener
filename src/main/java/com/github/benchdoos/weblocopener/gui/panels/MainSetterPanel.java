@@ -252,7 +252,7 @@ public class MainSetterPanel extends JPanel implements SettingsPanel, Translatab
     public void translate() {
         Translation translation = new Translation("MainSetterPanelBundle");
         versionStringLabel.setText(translation.getTranslatedString("versionString"));
-        versionLabel.setText(translation.getTranslatedString("versionLabel"));
+        versionLabel.setText(CoreUtils.getApplicationVersionString());
         autoUpdateEnabledCheckBox.setText(translation.getTranslatedString("autoUpdateEnabledCheckBox"));
         checkUpdatesButton.setText(translation.getTranslatedString("checkUpdatesButton"));
         openFolderForQRCheckBox.setText(translation.getTranslatedString("openFolderForQRCheckBox"));
