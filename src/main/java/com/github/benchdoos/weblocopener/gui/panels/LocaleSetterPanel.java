@@ -166,6 +166,7 @@ public class LocaleSetterPanel extends JPanel implements SettingsPanel, Translat
         } else {
             log.warn("Not settings: locale: value is null");
         }
+        loadSettings();
     }
 
     @Override
