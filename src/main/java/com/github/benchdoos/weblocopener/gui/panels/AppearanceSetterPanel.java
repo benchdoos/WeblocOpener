@@ -60,6 +60,7 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel, T
     private JLabel timeStatusLabel;
     private SimpleTimePicker beginningTimePicker;
     private SimpleTimePicker endingTimePicker;
+    private JLabel darkModeLabel;
 
     public AppearanceSetterPanel() {
         $$$setupUI$$$();
@@ -80,9 +81,9 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel, T
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new GridLayoutManager(4, 2, new Insets(0, 0, 0, 0), -1, -1));
         contentPane.add(panel1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        final JLabel label1 = new JLabel();
-        this.$$$loadLabelText$$$(label1, ResourceBundle.getBundle("translations/AppearanceSetterPanelBundle").getString("darkMode"));
-        panel1.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        darkModeLabel = new JLabel();
+        this.$$$loadLabelText$$$(darkModeLabel, ResourceBundle.getBundle("translations/AppearanceSetterPanelBundle").getString("darkMode"));
+        panel1.add(darkModeLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         panel1.add(spacer1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         byLocationPanel = new JPanel();
@@ -98,12 +99,12 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel, T
         byTimePanel = new JPanel();
         byTimePanel.setLayout(new GridLayoutManager(2, 4, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(byTimePanel, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        final JLabel label1 = new JLabel();
+        this.$$$loadLabelText$$$(label1, ResourceBundle.getBundle("translations/AppearanceSetterPanelBundle").getString("beginning"));
+        byTimePanel.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label2 = new JLabel();
-        this.$$$loadLabelText$$$(label2, ResourceBundle.getBundle("translations/AppearanceSetterPanelBundle").getString("beginning"));
-        byTimePanel.add(label2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label3 = new JLabel();
-        this.$$$loadLabelText$$$(label3, ResourceBundle.getBundle("translations/AppearanceSetterPanelBundle").getString("ending"));
-        byTimePanel.add(label3, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        this.$$$loadLabelText$$$(label2, ResourceBundle.getBundle("translations/AppearanceSetterPanelBundle").getString("ending"));
+        byTimePanel.add(label2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         timeStatusLabel = new JLabel();
         timeStatusLabel.setIcon(new ImageIcon(getClass().getResource("/images/emojiCross16.png")));
         timeStatusLabel.setText("");
@@ -444,6 +445,7 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel, T
     @Override
     public void translate() {
         Translation translation = new Translation("AppearanceSetterPanelBundle");
+        darkModeLabel.setText(translation.getTranslatedString("darkMode"));
         disabledDarkModeRadioButton.setText(translation.getTranslatedString("disabledName"));
         alwaysDarkModeRadioButton.setText(translation.getTranslatedString("alwaysName"));
         byTimeDarkModeRadioButton.setText(translation.getTranslatedString("byTimeName"));
