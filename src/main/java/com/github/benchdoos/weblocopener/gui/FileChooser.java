@@ -27,12 +27,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class FileChooser extends JDialog {
+public class FileChooser extends JDialog implements Translatable {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JComboBox<File> comboBox;
     private JButton helpButton;
+    private JLabel greetingLabel;
+    private JLabel askingLabel;
     private File chosenFile = null;
     private ArrayList<File> fileArrayList;
 
@@ -47,20 +49,7 @@ public class FileChooser extends JDialog {
 
         initGui();
 
-        initComboBox();
 
-        fillComboBox();
-
-        initListeners();
-
-        initKeyBindings();
-
-        initKeyListeners();
-
-
-        setResizable(false);
-
-        pack();
     }
 
     {
@@ -89,11 +78,11 @@ public class FileChooser extends JDialog {
         panel2.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1, true, false));
         panel1.add(panel2, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         buttonOK = new JButton();
-        this.$$$loadButtonText$$$(buttonOK, ResourceBundle.getBundle("translations/FileChooserBundle_en_EN").getString("buttonOk"));
+        this.$$$loadButtonText$$$(buttonOK, ResourceBundle.getBundle("translations/FileChooserBundle").getString("buttonOk"));
         panel2.add(buttonOK, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         buttonCancel = new JButton();
-        this.$$$loadButtonText$$$(buttonCancel, ResourceBundle.getBundle("translations/FileChooserBundle_en_EN").getString("buttonCancel"));
-        buttonCancel.setToolTipText(ResourceBundle.getBundle("translations/FileChooserBundle_en_EN").getString("buttonCancel"));
+        this.$$$loadButtonText$$$(buttonCancel, ResourceBundle.getBundle("translations/FileChooserBundle").getString("buttonCancel"));
+        buttonCancel.setToolTipText(ResourceBundle.getBundle("translations/FileChooserBundle").getString("buttonCancel"));
         panel2.add(buttonCancel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         helpButton = new JButton();
         helpButton.setBorderPainted(false);
@@ -106,14 +95,14 @@ public class FileChooser extends JDialog {
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(4, 1, new Insets(0, 0, 0, 0), -1, -1));
         contentPane.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        final JLabel label1 = new JLabel();
-        this.$$$loadLabelText$$$(label1, ResourceBundle.getBundle("translations/FileChooserBundle_en_EN").getString("greetingLabel"));
-        panel3.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        greetingLabel = new JLabel();
+        this.$$$loadLabelText$$$(greetingLabel, ResourceBundle.getBundle("translations/FileChooserBundle").getString("greetingLabel"));
+        panel3.add(greetingLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
         panel3.add(spacer2, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        final JLabel label2 = new JLabel();
-        this.$$$loadLabelText$$$(label2, ResourceBundle.getBundle("translations/FileChooserBundle_en_EN").getString("askingLabel"));
-        panel3.add(label2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        askingLabel = new JLabel();
+        this.$$$loadLabelText$$$(askingLabel, ResourceBundle.getBundle("translations/FileChooserBundle").getString("askingLabel"));
+        panel3.add(askingLabel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         comboBox = new JComboBox();
         panel3.add(comboBox, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
@@ -213,6 +202,23 @@ public class FileChooser extends JDialog {
         getRootPane().setDefaultButton(buttonOK);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/balloonIcon256.png")));
         helpButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        initComboBox();
+
+        fillComboBox();
+
+        initListeners();
+
+        initKeyBindings();
+
+        initKeyListeners();
+
+
+        setResizable(false);
+
+        translate();
+
+        pack();
     }
 
     private void initKeyBindings() {
@@ -289,4 +295,12 @@ public class FileChooser extends JDialog {
         dispose();
     }
 
+    @Override
+    public void translate() {
+        Translation translation = new Translation("FileChooserBundle");
+        greetingLabel.setText(translation.getTranslatedString("greetingLabel"));
+        askingLabel.setText(translation.getTranslatedString("askingLabel"));
+        buttonOK.setText(translation.getTranslatedString("buttonOk"));
+        buttonCancel.setText(translation.getTranslatedString("buttonCancel"));
+    }
 }
