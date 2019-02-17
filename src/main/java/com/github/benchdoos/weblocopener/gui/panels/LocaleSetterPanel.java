@@ -149,14 +149,6 @@ public class LocaleSetterPanel extends JPanel implements SettingsPanel, Translat
     @Override
     public void loadSettings() {
         final Locale locale = PreferencesManager.getLocale();
-        DefaultComboBoxModel<Object> model = ((DefaultComboBoxModel<Object>) localeComboBox.getModel());
-
-        for (int i = 0; i < model.getSize(); i++) {
-            final Object elementAt = model.getElementAt(i);
-            final boolean equals = elementAt.equals(locale);
-            System.out.println(">> " + elementAt + " " + locale + " : " + equals);
-        }
-
         localeComboBox.setSelectedItem(locale);
     }
 
