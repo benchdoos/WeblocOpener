@@ -429,6 +429,7 @@ public class UpdateDialog extends JFrame implements Translatable {
                 log.info("Installation was interrupted: " + updateThread.isInterrupted());
                 updateThread = null;
                 buttonOK.setEnabled(true);
+                progressBar.setValue(0);
                 runCleanInstallerFile();
             } else {
                 runCleanInstallerFile();
