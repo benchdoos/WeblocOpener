@@ -55,7 +55,7 @@
                   <opaque value="true"/>
                   <requestFocusEnabled value="false"/>
                   <text resource-bundle="translations/UpdateDialogBundle" key="manualDownloadButtonText"/>
-                  <toolTipText resource-bundle="translations/UpdateDialogBundle_en_EN" key="manualDownloadButtonToolTip"/>
+                  <toolTipText resource-bundle="translations/UpdateDialogBundle" key="manualDownloadButtonToolTip"/>
                 </properties>
               </component>
               <hspacer id="b7c7d">

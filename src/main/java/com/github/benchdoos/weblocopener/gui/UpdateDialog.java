@@ -127,7 +127,7 @@ public class UpdateDialog extends JFrame implements Translatable {
         manualDownloadButton.setOpaque(true);
         manualDownloadButton.setRequestFocusEnabled(false);
         this.$$$loadButtonText$$$(manualDownloadButton, ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("manualDownloadButtonText"));
-        manualDownloadButton.setToolTipText(ResourceBundle.getBundle("translations/UpdateDialogBundle_en_EN").getString("manualDownloadButtonToolTip"));
+        manualDownloadButton.setToolTipText(ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("manualDownloadButtonToolTip"));
         panel2.add(manualDownloadButton, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         panel2.add(spacer1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
@@ -520,6 +520,7 @@ public class UpdateDialog extends JFrame implements Translatable {
         updateInfoButton.setToolTipText(translation.getTranslatedString("infoAboutUpdate"));
         buttonOK.setText(translation.getTranslatedString("buttonOk"));
         manualDownloadButton.setText(translation.getTranslatedString("manualDownloadButtonText"));
+        manualDownloadButton.setToolTipText(translation.getTranslatedString("manualDownloadButtonToolTip"));
         buttonCancel.setText(translation.getTranslatedString("buttonCancel"));
     }
 }
