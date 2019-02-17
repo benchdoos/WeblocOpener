@@ -449,7 +449,7 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel, T
         disabledDarkModeRadioButton.setText(translation.getTranslatedString("disabledName"));
         alwaysDarkModeRadioButton.setText(translation.getTranslatedString("alwaysName"));
         byTimeDarkModeRadioButton.setText(translation.getTranslatedString("byTimeName"));
-        disabledDarkModeRadioButton.setText(translation.getTranslatedString("byLocationName"));
+        byLocationDarkModeRadioButton.setText(translation.getTranslatedString("byLocationName"));
     }
 
     private void updateLocationVerificationStatus(boolean b) {
