@@ -488,6 +488,8 @@ public class SettingsDialog extends JFrame implements Translatable {
         buttonApply.setText(translation.getTranslatedString("buttonApply"));
         buttonOK.setText(translation.getTranslatedString("buttonOk"));
         buttonCancel.setText(translation.getTranslatedString("buttonCancel"));
+
+        settingsList.updateUI();
     }
 
     private void updateLocale() {
