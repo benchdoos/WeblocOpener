@@ -15,8 +15,10 @@
 
 package com.github.benchdoos.weblocopener.service;
 
+import com.github.benchdoos.jcolorful.core.JColorful;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.gui.FileChooser;
+import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.links.WeblocLink;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
@@ -25,6 +27,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -50,6 +53,25 @@ public class Analyzer {
         analyzeFile(filePath);
     }
 
+    /**
+     * Returns file extension
+     * Examples:
+     * <blockquote><pre>
+     * "hello.exe" returns "exe"
+     * "picture.gif" returns "gif"
+     * "document.txt" returns "txt"
+     * </pre></blockquote>
+     *
+     * @param file to get extension.
+     * @return String name of file extension
+     */
+    public static String getFileExtension(File file) {
+        if (file == null) {
+            throw new IllegalArgumentException("File can not be null");
+        }
+        return FilenameUtils.getExtension(file.getName());
+    }
+
     private void analyzeFile(String filePath) throws Exception {
         File file = new File(filePath);
         if (file.exists()) {
@@ -62,7 +84,15 @@ public class Analyzer {
             File chosen = null;
             if (weblocFiles != null) {
                 if (weblocFiles.size() > 1) {
-                    FileChooser fileChooser = new FileChooser(weblocFiles);
+                    FileChooser fileChooser;
+                    if (PreferencesManager.isDarkModeEnabledNow()) {
+                        JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
+                        colorful.colorizeGlobal();
+                        fileChooser = new FileChooser(weblocFiles);
+                        SwingUtilities.invokeLater(() -> colorful.colorize(fileChooser));
+                    } else {
+                        fileChooser = new FileChooser(weblocFiles);
+                    }
                     fileChooser.setLocation(FrameUtils.getFrameOnCenterLocationPoint(fileChooser));
                     fileChooser.setVisible(true);
                     chosen = fileChooser.getChosenFile();
@@ -132,25 +162,6 @@ public class Analyzer {
 
     public File getFile() {
         return selectedFile;
-    }
-
-    /**
-     * Returns file extension
-     * Examples:
-     * <blockquote><pre>
-     * "hello.exe" returns "exe"
-     * "picture.gif" returns "gif"
-     * "document.txt" returns "txt"
-     * </pre></blockquote>
-     *
-     * @param file to get extension.
-     * @return String name of file extension
-     */
-    public static String getFileExtension(File file) {
-        if (file == null) {
-            throw new IllegalArgumentException("File can not be null");
-        }
-        return FilenameUtils.getExtension(file.getName());
     }
 
     private int getMaximumValue(ArrayList<ComparedFile> values) {
