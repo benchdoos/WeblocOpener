@@ -49,7 +49,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.TooManyListenersException;
 
-public class SettingsDialog extends JFrame {
+public class SettingsDialog extends JFrame implements Translatable {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
     private Timer settingsSavedTimer = null;
@@ -97,24 +97,24 @@ public class SettingsDialog extends JFrame {
         panel2.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel2, new GridConstraints(1, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         buttonOK = new JButton();
-        this.$$$loadButtonText$$$(buttonOK, ResourceBundle.getBundle("translations/SettingsDialogBundle_en_EN").getString("buttonOk"));
+        this.$$$loadButtonText$$$(buttonOK, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("buttonOk"));
         panel2.add(buttonOK, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         buttonCancel = new JButton();
-        this.$$$loadButtonText$$$(buttonCancel, ResourceBundle.getBundle("translations/SettingsDialogBundle_en_EN").getString("buttonCancel"));
+        this.$$$loadButtonText$$$(buttonCancel, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("buttonCancel"));
         panel2.add(buttonCancel, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         buttonApply = new JButton();
-        this.$$$loadButtonText$$$(buttonApply, ResourceBundle.getBundle("translations/SettingsDialogBundle_en_EN").getString("buttonApply"));
+        this.$$$loadButtonText$$$(buttonApply, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("buttonApply"));
         panel2.add(buttonApply, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         aboutButton = new JButton();
-        this.$$$loadButtonText$$$(aboutButton, ResourceBundle.getBundle("translations/SettingsDialogBundle_en_EN").getString("buttonAbout"));
+        this.$$$loadButtonText$$$(aboutButton, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("buttonAbout"));
         panel1.add(aboutButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         dragAndDropNotice = new JLabel();
         dragAndDropNotice.setForeground(new Color(-6316129));
-        this.$$$loadLabelText$$$(dragAndDropNotice, ResourceBundle.getBundle("translations/SettingsDialogBundle_en_EN").getString("dragAndDropNotice"));
+        this.$$$loadLabelText$$$(dragAndDropNotice, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("dragAndDropNotice"));
         panel1.add(dragAndDropNotice, new GridConstraints(0, 0, 1, 5, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         settingsSavedLabel = new JLabel();
         settingsSavedLabel.setForeground(new Color(-16732650));
-        this.$$$loadLabelText$$$(settingsSavedLabel, ResourceBundle.getBundle("translations/SettingsDialogBundle_en_EN").getString("settingsSaved"));
+        this.$$$loadLabelText$$$(settingsSavedLabel, ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("settingsSaved"));
         panel1.add(settingsSavedLabel, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         donatePaypalButton = new JButton();
         donatePaypalButton.setBorderPainted(false);
@@ -393,6 +393,7 @@ public class SettingsDialog extends JFrame {
         setMinimumSize(new Dimension(640, 300));
 //        setSize(new Dimension(400, 260));
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
+        translate();
     }
 
     private void initSettingsList() {
@@ -470,11 +471,22 @@ public class SettingsDialog extends JFrame {
 
     private void onApply() {
         saveSettings();
-        updateUIDarkMode();
+        SwingUtilities.invokeLater(this::updateUIDarkMode);
         updateDragAndDropNotice();
         updateLocale();
 
         showOnApplyMessage();
+    }
+
+    @Override
+    public void translate() {
+        updateDragAndDropNotice();
+        Translation translation = new Translation("SettingsDialogBundle");
+        aboutButton.setText(translation.getTranslatedString("buttonAbout"));
+        settingsSavedLabel.setText(translation.getTranslatedString("settingsSaved"));
+        buttonApply.setText(translation.getTranslatedString("buttonApply"));
+        buttonOK.setText(translation.getTranslatedString("buttonOk"));
+        buttonCancel.setText(translation.getTranslatedString("buttonCancel"));
     }
 
     private void updateLocale() {
@@ -487,6 +499,7 @@ public class SettingsDialog extends JFrame {
                 translatable.translate();
             }
         }
+        this.translate();
     }
 
     private void onCancel() {
