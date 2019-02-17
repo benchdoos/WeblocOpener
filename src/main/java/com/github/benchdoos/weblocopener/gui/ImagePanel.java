@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -37,7 +37,6 @@ public class ImagePanel extends JPanel {
         setMinimumSize(size);
         setMaximumSize(size);
         setSize(size);
-        setLayout(null);
     }
 
     public ImagePanel(ImageIcon icon) {
@@ -47,7 +46,6 @@ public class ImagePanel extends JPanel {
         setMinimumSize(size);
         setMaximumSize(size);
         setSize(size);
-        setLayout(null);
     }
 
     public void paintComponent(Graphics g) {
