@@ -547,9 +547,15 @@ public class SettingsDialog extends JFrame implements Translatable {
             try {
                 final JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
                 colorful.colorize(this);
-                colorful.colorize(mainSetterPanel);
-                colorful.colorize(browserSetterPanel);
-                colorful.colorize(appearanceSetterPanel);
+
+                ListModel model = settingsList.getModel();
+
+                for (int i = 0; i < model.getSize(); i++) {
+                    Object o = model.getElementAt(i);
+                    if (o instanceof Component) {
+                        colorful.colorize(((Component) o));
+                    }
+                }
             } catch (Exception e) {
                 log.warn("Could not colorize component", e);
             }
