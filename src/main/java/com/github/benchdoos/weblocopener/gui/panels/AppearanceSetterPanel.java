@@ -77,6 +77,7 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
      * @noinspection ALL
      */
     private void $$$setupUI$$$() {
+        createUIComponents();
         contentPane = new JPanel();
         contentPane.setLayout(new GridLayoutManager(1, 1, new Insets(10, 10, 10, 10), -1, -1));
         final JPanel panel1 = new JPanel();
@@ -214,6 +215,12 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel {
         final Date endTime = endingTimePicker.getSelectedSimpleTime().toDate();
 
         return beginTime.after(endTime);
+    }
+
+    private void createUIComponents() {
+        locationTextField = new PlaceholderTextField();
+        ((PlaceholderTextField) locationTextField).setPlaceholder(
+                Translation.getTranslatedString("AppearanceSetterPanelBundle", "yourLocation"));
     }
 
     private void initDarkModeButtonGroup() {
