@@ -215,7 +215,6 @@ public class SettingsDialog extends JFrame {
 
 
     private void initDropTarget() {
-        Component component = this;
         final ImageIcon rickAndMortyIcon = new ImageIcon(Toolkit.getDefaultToolkit()
                 .getImage(getClass().getResource("/images/easter/rickAndMorty.gif")));
         final DropTarget dropTarget = new DropTarget() {
