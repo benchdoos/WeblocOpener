@@ -64,8 +64,7 @@ public class Translation {
             return messages.getString(message);
         } catch (Exception e) {
             log.warn("Could not localize string: " + bundleName + ":[" + message + "]", e);
-            throw new RuntimeException("Could not localize string: " + bundleName + ":[" + message + "]", e);
-
+            return message;
         }
     }
 
