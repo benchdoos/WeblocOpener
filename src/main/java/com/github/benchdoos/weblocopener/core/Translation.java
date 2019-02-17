@@ -25,8 +25,11 @@ import java.util.ResourceBundle;
 
 
 public class Translation {
+    public static final Locale[] SUPPORTED_LOCALES = {
+            new Locale("en", "EN"), new Locale("de", "DE"),
+            new Locale("fr", "FR"), new Locale("it", "IT"),
+            new Locale("ru", "RU")};
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
     private static volatile Locale locale;
     private final ResourceBundle messages;
     private final String bundlePath;

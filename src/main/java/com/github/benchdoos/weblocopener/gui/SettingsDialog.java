@@ -469,11 +469,24 @@ public class SettingsDialog extends JFrame {
     }
 
     private void onApply() {
-        updateRegistry();
+        saveSettings();
         updateUIDarkMode();
         updateDragAndDropNotice();
+        updateLocale();
 
         showOnApplyMessage();
+    }
+
+    private void updateLocale() {
+        ListModel model = settingsList.getModel();
+
+        for (int i = 0; i < model.getSize(); i++) {
+            Object o = model.getElementAt(i);
+            if (o instanceof Translatable) {
+                Translatable translatable = ((Translatable) o);
+                translatable.translate();
+            }
+        }
     }
 
     private void onCancel() {
@@ -481,7 +494,7 @@ public class SettingsDialog extends JFrame {
     }
 
     private void onSave() {
-        updateRegistry();
+        saveSettings();
         dispose();
     }
 
@@ -501,10 +514,16 @@ public class SettingsDialog extends JFrame {
         dragAndDropNotice.setText(translatedString.replace("{}", PreferencesManager.getConverterExportExtension()));
     }
 
-    private void updateRegistry() {
-        mainSetterPanel.saveSettings();
-        browserSetterPanel.saveSettings();
-        appearanceSetterPanel.saveSettings();
+    private void saveSettings() {
+        ListModel model = settingsList.getModel();
+
+        for (int i = 0; i < model.getSize(); i++) {
+            Object o = model.getElementAt(i);
+            if (o instanceof SettingsPanel) {
+                SettingsPanel panel = ((SettingsPanel) o);
+                panel.saveSettings();
+            }
+        }
     }
 
     private void updateUIDarkMode() {

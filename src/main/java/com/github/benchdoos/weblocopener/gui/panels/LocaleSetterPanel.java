@@ -15,17 +15,30 @@
 
 package com.github.benchdoos.weblocopener.gui.panels;
 
+import com.github.benchdoos.weblocopener.core.Translation;
+import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
+import com.github.benchdoos.weblocopener.gui.Translatable;
+import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopener.utils.Logging;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class LocaleSetterPanel extends JPanel implements SettingsPanel {
+import static com.github.benchdoos.weblocopener.core.Translation.SUPPORTED_LOCALES;
+
+public class LocaleSetterPanel extends JPanel implements SettingsPanel, Translatable {
+    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
+
     private JPanel contentPane;
-    private JComboBox localeComboBox;
+    private JComboBox<Object> localeComboBox;
+    private JLabel languageLabel;
 
     public LocaleSetterPanel() {
         initGui();
@@ -51,9 +64,9 @@ public class LocaleSetterPanel extends JPanel implements SettingsPanel {
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new GridLayoutManager(2, 3, new Insets(0, 0, 0, 0), -1, -1));
         contentPane.add(panel1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        final JLabel label1 = new JLabel();
-        this.$$$loadLabelText$$$(label1, ResourceBundle.getBundle("translations/LocaleSetterPanel").getString("language"));
-        panel1.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        languageLabel = new JLabel();
+        this.$$$loadLabelText$$$(languageLabel, ResourceBundle.getBundle("translations/LocaleSetterPanelBundle").getString("language"));
+        panel1.add(languageLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         panel1.add(spacer1, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
@@ -96,18 +109,76 @@ public class LocaleSetterPanel extends JPanel implements SettingsPanel {
         return contentPane;
     }
 
+    private void fillLocaleComboBox() {
+        String sysLocale = Translation.getTranslatedString("LocaleSetterPanelBundle", "languageDefault");
+        DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<>();
+        model.addElement(sysLocale);
+
+        for (Locale locale : SUPPORTED_LOCALES) {
+            model.addElement(locale);
+        }
+
+        localeComboBox.setModel(model);
+    }
+
     private void initGui() {
         setLayout(new GridLayout());
         add(contentPane);
+
+        fillLocaleComboBox();
+
+        initLocaleComboBox();
+
+        translate();
+    }
+
+    private void initLocaleComboBox() {
+        DefaultListCellRenderer renderer = new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Locale) {
+                    final Locale locale = (Locale) value;
+                    return super.getListCellRendererComponent(list, locale.getDisplayLanguage(locale), index, isSelected, cellHasFocus);
+                }
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        };
+        localeComboBox.setRenderer(renderer);
     }
 
     @Override
     public void loadSettings() {
+        final Locale locale = PreferencesManager.getLocale();
+        DefaultComboBoxModel<Object> model = ((DefaultComboBoxModel<Object>) localeComboBox.getModel());
 
+        for (int i = 0; i < model.getSize(); i++) {
+            final Object elementAt = model.getElementAt(i);
+            final boolean equals = elementAt.equals(locale);
+            System.out.println(">> " + elementAt + " " + locale + " : " + equals);
+        }
+
+        localeComboBox.setSelectedItem(locale);
     }
 
     @Override
     public void saveSettings() {
+        final Object selectedItem = localeComboBox.getSelectedItem();
+        if (selectedItem != null) {
+            if (selectedItem instanceof Locale) {
+                log.info("Saving settings: locale: {}", selectedItem);
+                PreferencesManager.setLocale(((Locale) selectedItem));
+            } else {
+                log.info("Saving settings: locale: {}", SettingsConstants.LOCALE_DEFAULT_VALUE);
+                PreferencesManager.setLocale(null);
+            }
+        } else {
+            log.warn("Not settings: locale: value is null");
+        }
+    }
 
+    @Override
+    public void translate() {
+        Translation translation = new Translation("LocaleSetterPanelBundle");
+        languageLabel.setText(translation.getTranslatedString("language"));
     }
 }

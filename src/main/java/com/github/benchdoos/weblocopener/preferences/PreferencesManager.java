@@ -37,7 +37,9 @@ public class PreferencesManager {
     private static final String KEY_DARK_MODE = "dark_mode";
     private static final String KEY_CONVERTER_EXPORT_EXTENSION = "converter_export_extension";
     private static final String KEY_LOCALE = "locale";
+
     private static final Preferences PREFERENCES = Preferences.userRoot().node(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME.toLowerCase());
+
     private static volatile SimpleTime lastDarkModeUpdateTime = null;
     private static volatile boolean lastDarkModeEnabled = false;
 
@@ -89,7 +91,8 @@ public class PreferencesManager {
             if (s.equalsIgnoreCase(SettingsConstants.LOCALE_DEFAULT_VALUE)) {
                 return Locale.getDefault();
             } else {
-                return new Locale(s);
+                final String[] split = s.split("_");
+                return new Locale(split[0], split[1]);
             }
         } catch (Exception e) {
             return Locale.getDefault();
@@ -97,7 +100,11 @@ public class PreferencesManager {
     }
 
     public static void setLocale(Locale locale) {
-        PREFERENCES.put(KEY_LOCALE, locale.toString());
+        if (locale != null) {
+            PREFERENCES.put(KEY_LOCALE, locale.toString());
+        } else {
+            PREFERENCES.put(KEY_LOCALE, SettingsConstants.LOCALE_DEFAULT_VALUE);
+        }
     }
 
     public static Object getRealDarkMode() {
