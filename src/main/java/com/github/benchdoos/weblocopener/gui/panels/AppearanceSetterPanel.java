@@ -44,7 +44,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.ResourceBundle;
 
-public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel, Translatable {
+public class AppearanceSetterPanel extends JPanel implements SettingsPanel, Translatable {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
     private JPanel contentPane;
@@ -434,8 +434,12 @@ public class AppearanceSetterPanel<S> extends JPanel implements SettingsPanel, T
 
     private void setLocationStatusLabelLoading() {
         try {
-            ImageIcon imageIcon =
-                    new ImageIcon(AppearanceSetterPanel.class.getResource("/images/loading.gif"));
+            ImageIcon imageIcon;
+            if (PreferencesManager.isDarkModeEnabledNow()) {
+                imageIcon = new ImageIcon(AppearanceSetterPanel.class.getResource("/images/loadingDark.gif"));
+            } else {
+                imageIcon = new ImageIcon(AppearanceSetterPanel.class.getResource("/images/loading.gif"));
+            }
             locationStatusLabel.setIcon(imageIcon);
         } catch (Exception e) {
             /*NOP*/
