@@ -482,6 +482,7 @@ public class SettingsDialog extends JFrame implements Translatable {
     public void translate() {
         updateDragAndDropNotice();
         Translation translation = new Translation("SettingsDialogBundle");
+        setTitle(translation.getTranslatedString("windowTitle"));
         aboutButton.setText(translation.getTranslatedString("buttonAbout"));
         settingsSavedLabel.setText(translation.getTranslatedString("settingsSaved"));
         buttonApply.setText(translation.getTranslatedString("buttonApply"));
