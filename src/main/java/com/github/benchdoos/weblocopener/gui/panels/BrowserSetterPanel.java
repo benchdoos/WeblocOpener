@@ -17,6 +17,7 @@ package com.github.benchdoos.weblocopener.gui.panels;
 
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
+import com.github.benchdoos.weblocopener.gui.Translatable;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
@@ -41,7 +42,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class BrowserSetterPanel extends JPanel implements SettingsPanel {
+public class BrowserSetterPanel extends JPanel implements SettingsPanel, Translatable {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private boolean onInit = true;
 
@@ -51,6 +52,7 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
     private JCheckBox incognitoCheckBox;
     private JTextField callTextField;
     private JLabel syntaxInfoLabel;
+    private JLabel openInLabel;
 
     public BrowserSetterPanel() {
         initGui();
@@ -82,11 +84,11 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
         browserComboBox = new JComboBox();
         browserComboBox.setMaximumRowCount(9);
         panel1.add(browserComboBox, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label1 = new JLabel();
-        this.$$$loadLabelText$$$(label1, ResourceBundle.getBundle("translations/SettingsDialogBundle_en_EN").getString("openInBrowser"));
-        panel1.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        openInLabel = new JLabel();
+        this.$$$loadLabelText$$$(openInLabel, ResourceBundle.getBundle("translations/BrowserSetterPanelBundle").getString("openInBrowser"));
+        panel1.add(openInLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         callLabel = new JLabel();
-        this.$$$loadLabelText$$$(callLabel, ResourceBundle.getBundle("translations/SettingsDialogBundle_en_EN").getString("customCallLabel"));
+        this.$$$loadLabelText$$$(callLabel, ResourceBundle.getBundle("translations/BrowserSetterPanelBundle").getString("customCallLabel"));
         callLabel.setVisible(true);
         panel1.add(callLabel, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         incognitoCheckBox = new JCheckBox();
@@ -103,6 +105,7 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
         syntaxInfoLabel.setIcon(new ImageIcon(getClass().getResource("/images/infoIcon16.png")));
         syntaxInfoLabel.setText("");
         panel1.add(syntaxInfoLabel, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        openInLabel.setLabelFor(browserComboBox);
     }
 
     /**
@@ -271,6 +274,7 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
 
         setSyntaxInfoButtonToolTip();
 
+        translate();
     }
 
     private void initListeners() {
@@ -413,5 +417,12 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel {
             }
         }
         return array;
+    }
+
+    @Override
+    public void translate() {
+        Translation translation = new Translation("BrowserSetterPanelBundle");
+        openInLabel.setText(translation.getTranslatedString("openInBrowser"));
+        callLabel.setText(translation.getTranslatedString("customCallLabel"));
     }
 }
