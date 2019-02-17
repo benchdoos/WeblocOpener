@@ -34,7 +34,7 @@
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="translations/SettingsDialogBundle" key="buttonOk"/>
+                  <text resource-bundle="translations/SettingsDialogBundle_en_EN" key="buttonOk"/>
                 </properties>
               </component>
               <component id="f248e" class="javax.swing.JButton" binding="buttonCancel">
@@ -42,7 +42,7 @@
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="translations/SettingsDialogBundle" key="buttonCancel"/>
+                  <text resource-bundle="translations/SettingsDialogBundle_en_EN" key="buttonCancel"/>
                 </properties>
               </component>
               <component id="dd8b0" class="javax.swing.JButton" binding="buttonApply">
@@ -50,7 +50,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="translations/SettingsDialogBundle" key="buttonApply"/>
+                  <text resource-bundle="translations/SettingsDialogBundle_en_EN" key="buttonApply"/>
                 </properties>
               </component>
             </children>
@@ -60,7 +60,7 @@
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text resource-bundle="translations/SettingsDialogBundle" key="buttonAbout"/>
+              <text resource-bundle="translations/SettingsDialogBundle_en_EN" key="buttonAbout"/>
             </properties>
           </component>
           <component id="6f46c" class="javax.swing.JLabel" binding="dragAndDropNotice">
@@ -69,7 +69,7 @@
             </constraints>
             <properties>
               <foreground color="-6316129"/>
-              <text resource-bundle="translations/SettingsDialogBundle" key="dragAndDropNotice"/>
+              <text resource-bundle="translations/SettingsDialogBundle_en_EN" key="dragAndDropNotice"/>
             </properties>
           </component>
           <component id="efcf0" class="javax.swing.JLabel" binding="settingsSavedLabel">
@@ -78,7 +78,7 @@
             </constraints>
             <properties>
               <foreground color="-16732650"/>
-              <text resource-bundle="translations/SettingsDialogBundle" key="settingsSaved"/>
+              <text resource-bundle="translations/SettingsDialogBundle_en_EN" key="settingsSaved"/>
             </properties>
           </component>
           <component id="2f532" class="javax.swing.JButton" binding="donatePaypalButton">

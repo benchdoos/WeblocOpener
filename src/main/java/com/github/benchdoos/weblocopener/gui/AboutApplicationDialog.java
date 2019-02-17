@@ -119,14 +119,14 @@ public class AboutApplicationDialog extends JDialog {
         this.$$$loadLabelText$$$(githubLinkLabel, ResourceBundle.getBundle("spelling").getString("github"));
         panel2.add(githubLinkLabel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         logLabel = new JLabel();
-        this.$$$loadLabelText$$$(logLabel, ResourceBundle.getBundle("translations/AboutApplicationDialogBundle").getString("logLabelTooltip"));
+        this.$$$loadLabelText$$$(logLabel, ResourceBundle.getBundle("translations/AboutApplicationDialogBundle_en_EN").getString("logLabelTooltip"));
         panel2.add(logLabel, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         feedbackLabel = new JLabel();
         feedbackLabel.setIcon(new ImageIcon(getClass().getResource("/images/feedbackIcon.png")));
         feedbackLabel.setText("");
         panel2.add(feedbackLabel, new GridConstraints(0, 5, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         librariesLabel = new JLabel();
-        this.$$$loadLabelText$$$(librariesLabel, ResourceBundle.getBundle("translations/AboutApplicationDialogBundle").getString("librariesLabel"));
+        this.$$$loadLabelText$$$(librariesLabel, ResourceBundle.getBundle("translations/AboutApplicationDialogBundle_en_EN").getString("librariesLabel"));
         panel2.add(librariesLabel, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         telegramLabel = new JLabel();
         telegramLabel.setIcon(new ImageIcon(getClass().getResource("/images/telegramIcon16.png")));
@@ -177,7 +177,7 @@ public class AboutApplicationDialog extends JDialog {
         descriptionTextPane.setFocusable(false);
         descriptionTextPane.setOpaque(false);
         descriptionTextPane.setRequestFocusEnabled(false);
-        descriptionTextPane.setText(ResourceBundle.getBundle("translations/AboutApplicationDialogBundle").getString("aboutAppInfo"));
+        descriptionTextPane.setText(ResourceBundle.getBundle("translations/AboutApplicationDialogBundle_en_EN").getString("aboutAppInfo"));
         descriptionTextPane.setVerifyInputWhenFocusTarget(false);
         descriptionTextPane.setVisible(true);
         scrollPane.setViewportView(descriptionTextPane);
@@ -198,7 +198,7 @@ public class AboutApplicationDialog extends JDialog {
         Font versionLabelFont = this.$$$getFont$$$(null, -1, 11, versionLabel.getFont());
         if (versionLabelFont != null) versionLabel.setFont(versionLabelFont);
         versionLabel.setForeground(new Color(-3153931));
-        this.$$$loadLabelText$$$(versionLabel, ResourceBundle.getBundle("translations/AboutApplicationDialogBundle").getString("appVersionLabel"));
+        this.$$$loadLabelText$$$(versionLabel, ResourceBundle.getBundle("translations/AboutApplicationDialogBundle_en_EN").getString("appVersionLabel"));
         panel5.add(versionLabel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_NORTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 

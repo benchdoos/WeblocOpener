@@ -105,16 +105,16 @@ public class EditDialog extends JFrame {
         panel2.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1, true, false));
         panel1.add(panel2, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         buttonOK = new JButton();
-        this.$$$loadButtonText$$$(buttonOK, ResourceBundle.getBundle("translations/EditDialogBundle").getString("buttonOk"));
+        this.$$$loadButtonText$$$(buttonOK, ResourceBundle.getBundle("translations/EditDialogBundle_en_EN").getString("buttonOk"));
         buttonOK.putClientProperty("hideActionText", Boolean.FALSE);
         panel2.add(buttonOK, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         buttonCancel = new JButton();
-        this.$$$loadButtonText$$$(buttonCancel, ResourceBundle.getBundle("translations/EditDialogBundle").getString("buttonCancel"));
+        this.$$$loadButtonText$$$(buttonCancel, ResourceBundle.getBundle("translations/EditDialogBundle_en_EN").getString("buttonCancel"));
         panel2.add(buttonCancel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         autoRenameFileCheckBox = new JCheckBox();
         autoRenameFileCheckBox.setEnabled(false);
-        this.$$$loadButtonText$$$(autoRenameFileCheckBox, ResourceBundle.getBundle("translations/EditDialogBundle").getString("autoRenameFile"));
-        autoRenameFileCheckBox.setToolTipText(ResourceBundle.getBundle("translations/EditDialogBundle").getString("canNotRenameToolTip"));
+        this.$$$loadButtonText$$$(autoRenameFileCheckBox, ResourceBundle.getBundle("translations/EditDialogBundle_en_EN").getString("autoRenameFile"));
+        autoRenameFileCheckBox.setToolTipText(ResourceBundle.getBundle("translations/EditDialogBundle_en_EN").getString("canNotRenameToolTip"));
         panel1.add(autoRenameFileCheckBox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(3, 1, new Insets(5, 10, 0, 10), -1, -1));
@@ -142,7 +142,7 @@ public class EditDialog extends JFrame {
         clearTextButton.setPressedIcon(new ImageIcon(getClass().getResource("/images/closeButtons/circleRedDarker12.png")));
         clearTextButton.setRolloverIcon(new ImageIcon(getClass().getResource("/images/closeButtons/circleRed12.png")));
         clearTextButton.setText("");
-        clearTextButton.setToolTipText(ResourceBundle.getBundle("translations/EditDialogBundle").getString("clearTextToolTip"));
+        clearTextButton.setToolTipText(ResourceBundle.getBundle("translations/EditDialogBundle_en_EN").getString("clearTextToolTip"));
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -156,7 +156,7 @@ public class EditDialog extends JFrame {
         if (createWeblocFileTextPaneFont != null) createWeblocFileTextPane.setFont(createWeblocFileTextPaneFont);
         createWeblocFileTextPane.setOpaque(false);
         createWeblocFileTextPane.setRequestFocusEnabled(true);
-        this.$$$loadLabelText$$$(createWeblocFileTextPane, ResourceBundle.getBundle("translations/EditDialogBundle").getString("EditWeblocLink"));
+        this.$$$loadLabelText$$$(createWeblocFileTextPane, ResourceBundle.getBundle("translations/EditDialogBundle_en_EN").getString("EditWeblocLink"));
         createWeblocFileTextPane.setVerifyInputWhenFocusTarget(false);
         createWeblocFileTextPane.setVisible(true);
         panel3.add(createWeblocFileTextPane, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_VERTICAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));

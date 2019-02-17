@@ -32,7 +32,7 @@
             </constraints>
             <properties>
               <labelFor value="dabbe"/>
-              <text resource-bundle="translations/SettingsDialogBundle" key="openInBrowser"/>
+              <text resource-bundle="translations/SettingsDialogBundle_en_EN" key="openInBrowser"/>
             </properties>
           </component>
           <component id="2de90" class="javax.swing.JLabel" binding="callLabel">
@@ -40,7 +40,7 @@
               <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text resource-bundle="translations/SettingsDialogBundle" key="customCallLabel"/>
+              <text resource-bundle="translations/SettingsDialogBundle_en_EN" key="customCallLabel"/>
               <visible value="true"/>
             </properties>
           </component>
@@ -51,7 +51,7 @@
             <properties>
               <enabled value="false"/>
               <text value=""/>
-              <toolTipText resource-bundle="translations/SettingsDialogBundle" key="incognitoModeTooltip"/>
+              <toolTipText resource-bundle="translations/SettingsDialogBundle_en_EN" key="incognitoModeTooltip"/>
             </properties>
           </component>
           <hspacer id="6a933">

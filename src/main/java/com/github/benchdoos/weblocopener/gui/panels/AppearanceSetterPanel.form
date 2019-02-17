@@ -21,7 +21,7 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text resource-bundle="translations/AppearanceSetterPanelBundle" key="darkMode"/>
+              <text resource-bundle="translations/AppearanceSetterPanelBundle_en_EN" key="darkMode"/>
             </properties>
           </component>
           <hspacer id="d3563">
@@ -84,7 +84,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="translations/AppearanceSetterPanelBundle" key="beginning"/>
+                  <text resource-bundle="translations/AppearanceSetterPanelBundle_en_EN" key="beginning"/>
                 </properties>
               </component>
               <component id="811e7" class="javax.swing.JLabel">
@@ -92,7 +92,7 @@
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="translations/AppearanceSetterPanelBundle" key="ending"/>
+                  <text resource-bundle="translations/AppearanceSetterPanelBundle_en_EN" key="ending"/>
                 </properties>
               </component>
               <component id="98387" class="javax.swing.JLabel" binding="timeStatusLabel">
@@ -139,7 +139,7 @@
                 </constraints>
                 <properties>
                   <selected value="true"/>
-                  <text resource-bundle="translations/AppearanceSetterPanelBundle" key="disabledName"/>
+                  <text resource-bundle="translations/AppearanceSetterPanelBundle_en_EN" key="disabledName"/>
                 </properties>
               </component>
               <component id="aade0" class="javax.swing.JRadioButton" binding="byTimeDarkModeRadioButton">
@@ -147,7 +147,7 @@
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="translations/AppearanceSetterPanelBundle" key="byTimeName"/>
+                  <text resource-bundle="translations/AppearanceSetterPanelBundle_en_EN" key="byTimeName"/>
                 </properties>
               </component>
               <component id="8131a" class="javax.swing.JRadioButton" binding="alwaysDarkModeRadioButton">
@@ -155,7 +155,7 @@
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="translations/AppearanceSetterPanelBundle" key="alwaysName"/>
+                  <text resource-bundle="translations/AppearanceSetterPanelBundle_en_EN" key="alwaysName"/>
                 </properties>
               </component>
               <component id="f7007" class="javax.swing.JRadioButton" binding="byLocationDarkModeRadioButton">
@@ -163,7 +163,7 @@
                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="translations/AppearanceSetterPanelBundle" key="byLocationName"/>
+                  <text resource-bundle="translations/AppearanceSetterPanelBundle_en_EN" key="byLocationName"/>
                 </properties>
               </component>
               <hspacer id="52204">
