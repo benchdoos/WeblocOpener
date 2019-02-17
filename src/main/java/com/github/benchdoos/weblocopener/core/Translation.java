@@ -15,6 +15,7 @@
 
 package com.github.benchdoos.weblocopener.core;
 
+import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,25 +27,29 @@ import java.util.ResourceBundle;
 public class Translation {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
+    private static volatile Locale locale;
     private final ResourceBundle messages;
     private final String bundlePath;
     private final String bundleName;
 
     public Translation(String bundleName) {
+        locale = PreferencesManager.getLocale();
+
         this.bundleName = bundleName;
         this.bundlePath = "translations/" + bundleName;
-        messages = getTranslation();
+        this.messages = getTranslation();
     }
 
     public static String getTranslatedString(String stringBundleName, String message) {
         try {
             final String bundlePath = "translations/" + stringBundleName;
-            Locale currentLocale = Locale.getDefault();
+            locale = PreferencesManager.getLocale();
 
-            log.debug("[TRANSLATION] Locale: {} {}; Bundle: {}:[{}]", currentLocale.getCountry(),
-                    currentLocale.getLanguage(), stringBundleName, message);
 
-            final ResourceBundle bundle = ResourceBundle.getBundle(bundlePath, currentLocale);
+            log.debug("[TRANSLATION] Locale: {} {}; Bundle: {}:[{}]", locale.getCountry(),
+                    locale.getLanguage(), stringBundleName, message);
+
+            final ResourceBundle bundle = ResourceBundle.getBundle(bundlePath, locale);
 
             return bundle.getString(message);
         } catch (Exception e) {
@@ -65,8 +70,6 @@ public class Translation {
     }
 
     private ResourceBundle getTranslation() {
-        Locale currentLocale = Locale.getDefault();
-
-        return ResourceBundle.getBundle(bundlePath, currentLocale);
+        return ResourceBundle.getBundle(bundlePath, locale);
     }
 }

@@ -22,6 +22,7 @@ import com.github.benchdoos.weblocopener.service.gui.darkMode.SimpleTime;
 
 import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.prefs.Preferences;
 
 /**
@@ -35,8 +36,8 @@ public class PreferencesManager {
     private static final String DEV_MODE_KEY = "dev_mode";
     private static final String KEY_DARK_MODE = "dark_mode";
     private static final String KEY_CONVERTER_EXPORT_EXTENSION = "converter_export_extension";
+    private static final String KEY_LOCALE = "locale";
     private static final Preferences PREFERENCES = Preferences.userRoot().node(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME.toLowerCase());
-
     private static volatile SimpleTime lastDarkModeUpdateTime = null;
     private static volatile boolean lastDarkModeEnabled = false;
 
@@ -54,6 +55,18 @@ public class PreferencesManager {
         }
     }
 
+    public static String getConverterExportExtension() {
+        final String s = PREFERENCES.get(KEY_CONVERTER_EXPORT_EXTENSION, SettingsConstants.CONVERTER_DEFAULT_EXTENSION);
+        if (s.equalsIgnoreCase(ApplicationConstants.WEBLOC_FILE_EXTENSION)) {
+            return SettingsConstants.CONVERTER_DEFAULT_EXTENSION;
+        }
+        return s;
+    }
+
+    public static void setConverterExportExtension(String value) {
+        PREFERENCES.put(KEY_CONVERTER_EXPORT_EXTENSION, value);
+    }
+
     private static String getDarkMode() {
         final String s = PREFERENCES.get(KEY_DARK_MODE, SettingsConstants.DARK_MODE_DEFAULT_VALUE.toString());
         if (s.equalsIgnoreCase(DARK_MODE.ALWAYS.toString())) {
@@ -67,6 +80,24 @@ public class PreferencesManager {
 
     public static void setDarkMode(String value) {
         PREFERENCES.put(KEY_DARK_MODE, value);
+    }
+
+    public static Locale getLocale() {
+        final String s = PREFERENCES.get(KEY_LOCALE, SettingsConstants.LOCALE_DEFAULT_VALUE);
+
+        try {
+            if (s.equalsIgnoreCase(SettingsConstants.LOCALE_DEFAULT_VALUE)) {
+                return Locale.getDefault();
+            } else {
+                return new Locale(s);
+            }
+        } catch (Exception e) {
+            return Locale.getDefault();
+        }
+    }
+
+    public static void setLocale(Locale locale) {
+        PREFERENCES.put(KEY_LOCALE, locale.toString());
     }
 
     public static Object getRealDarkMode() {
@@ -148,18 +179,6 @@ public class PreferencesManager {
 
     public static void setOpenFolderForQrCode(boolean openFolderForQrCode) {
         PREFERENCES.putBoolean(KEY_OPEN_FOR_QR, openFolderForQrCode);
-    }
-
-    public static String getConverterExportExtension() {
-        final String s = PREFERENCES.get(KEY_CONVERTER_EXPORT_EXTENSION, SettingsConstants.CONVERTER_DEFAULT_EXTENSION);
-        if (s.equalsIgnoreCase(ApplicationConstants.WEBLOC_FILE_EXTENSION)) {
-            return SettingsConstants.CONVERTER_DEFAULT_EXTENSION;
-        }
-        return s;
-    }
-
-    public static void setConverterExportExtension(String value) {
-        PREFERENCES.put(KEY_CONVERTER_EXPORT_EXTENSION, value);
     }
 
     public enum DARK_MODE {ALWAYS, DISABLED}
