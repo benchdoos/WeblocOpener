@@ -149,7 +149,7 @@ Name: "{commonprograms}\{#MyAppName} {cm:Settings}"; Filename: "{app}\{#MyAppExe
 ;--------------------------Windows task----------------------
 [Run]
 Filename: "schtasks"; \
-    Parameters: "/Create /F /SC DAILY /TN ""CheckUpdatesWeblocOpener"" /TR ""start weblocopener -update-silent"""; \
+    Parameters: "/Create /F /SC DAILY /TN ""CheckUpdatesWeblocOpener"" /TR ""'{app}\{#MyAppExeName}' -update-silent"; \
     Flags: runhidden
 
 [UninstallRun]
