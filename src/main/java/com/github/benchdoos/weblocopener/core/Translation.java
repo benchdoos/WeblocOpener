@@ -21,6 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 
@@ -55,10 +56,36 @@ public class Translation {
             final ResourceBundle bundle = ResourceBundle.getBundle(bundlePath, locale);
 
             return bundle.getString(message);
+        } catch (MissingResourceException e) {
+            log.warn("Could not find bundle {}:[{}] for locale: {}, trying to get necessary locale",
+                    stringBundleName, message);
+            final Locale supportedLocale = getSupportedLocale(locale);
+
+            log.info("For old locale: {} was found locale: {}", locale, supportedLocale);
+            log.info("APPLYING new locale: {}", supportedLocale);
+            locale = supportedLocale;
+            PreferencesManager.setLocale(supportedLocale);
+            return getTranslatedString(stringBundleName, message);
         } catch (Exception e) {
-            log.warn("Could not translate  string: {}:[{}]", stringBundleName, message, e);
+            log.warn("Could not translate string: {}:[{}] for locale: {}", stringBundleName, message, locale, e);
             throw new RuntimeException("Could not localize string: " + stringBundleName + ":[" + message + "]", e);
         }
+    }
+
+    private static Locale getSupportedLocale(Locale locale) {
+        log.info("Trying to get current locale for {}", locale);
+
+        for (Locale currentLocale : SUPPORTED_LOCALES) {
+            try {
+                if (locale.getLanguage().equalsIgnoreCase(currentLocale.getLanguage())) {
+                    return locale;
+                }
+            } catch (Exception e) {
+                log.warn("Could not get supported locale for locale: {}; current is: {}", locale, currentLocale, e);
+            }
+        }
+        log.warn("Could not get locale, switching to en_EN");
+        return new Locale("en", "EN");
     }
 
     public String getTranslatedString(String message) {
