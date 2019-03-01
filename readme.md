@@ -78,17 +78,17 @@ You can use any custom browser by your own with custom call, using syntax: `<fil
 
 ## Supported features
 
-| Feature                        | Windows       | UNIX           |  MacOS      |
-| -------------------------------|:-------------:|:-------------: |:-----------:|
-| Open                           | Yes           | Frozen         | Yes         |
-| Edit                           | Yes           | Frozen         | No          |
-| Create new                     | Yes           | Frozen         | Default     |
-| Generate QR-Code               | Yes           | Frozen         | No          |
-| URL auto-paste                 | Yes           | Frozen         | WO feature  |
-| Instant URL, QR-Code copy      | Yes           | Frozen         | No          |
-| Converter .webloc to .url to .desktop and backward| Yes    | Frozen         | No          |
-| Auto-update                    | Yes           | Frozen         | WO feature  |
-| Open in not default browser    | Yes           | Frozen         | Not         |
+| Feature                        | Windows       |  MacOS      |
+| -------------------------------|:-------------:|:-----------:|
+| Open                           | Yes           | Yes         |
+| Edit                           | Yes           | No          |
+| Create new                     | Yes           | Default     |
+| Generate QR-Code               | Yes           | No          |
+| URL auto-paste                 | Yes           | WO feature  |
+| Instant URL, QR-Code copy      | Yes           | No          |
+| Converter .webloc to .url to .desktop and backward| Yes    | No          |
+| Auto-update                    | Yes           | WO feature  |
+| Open in not default browser    | Yes           | Not         |
 
 
 ## Have questions? 
