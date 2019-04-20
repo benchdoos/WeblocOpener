@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -21,7 +21,7 @@ import static com.github.benchdoos.weblocopener.core.constants.ApplicationConsta
 
 public interface PathConstants {
     String APP_LOG_FOLDER_PATH = System
-            .getProperty("java.io.tmpdir") + WEBLOCOPENER_APPLICATION_NAME + File.separator + "Log";
+            .getProperty("java.io.tmpdir") + File.separator + WEBLOCOPENER_APPLICATION_NAME + File.separator + "Log";
     String APP_LOG_PROPERTY = "com.github.benchdoos.weblocopener.log.folder";
 
     String UPDATE_PATH_FILE = System.getProperty("java.io.tmpdir") + WEBLOCOPENER_APPLICATION_NAME + File.separator;
