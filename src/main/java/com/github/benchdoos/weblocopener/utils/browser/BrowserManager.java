@@ -18,6 +18,7 @@ package com.github.benchdoos.weblocopener.utils.browser;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.utils.Logging;
+import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
 import com.google.gson.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -46,8 +47,9 @@ public class BrowserManager {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Browser.class, new BrowserDeserializer());
         Gson gson = builder.create();
+        final String browserListJsonPath = getBrowserListJson();
         try {
-            String content = IOUtils.toString(BrowserManager.class.getResourceAsStream("/data/browsers.json"),
+            String content = IOUtils.toString(BrowserManager.class.getResourceAsStream(browserListJsonPath),
                     "UTF-8");
             JsonElement element = new JsonParser().parse(content);
             final JsonObject asJsonObject = element.getAsJsonObject();
@@ -57,11 +59,16 @@ public class BrowserManager {
                 result.add(browser);
             }
         } catch (IOException e) {
-            log.warn("Could not load browsers list", e);
+            log.warn("Could not load browsers list: {}", browserListJsonPath, e);
         } catch (Exception e) {
-            log.warn("Could not load browsers list, ignoring it", e);
+            log.warn("Could not load browsers list: {}, ignoring it", browserListJsonPath, e);
         }
         return result;
+    }
+
+    private static String getBrowserListJson() {
+        final SystemUtils.OS currentOS = SystemUtils.getCurrentOS();
+        return "/data/" + currentOS.toString().toLowerCase() + "/browsers.json";
     }
 
     public static void loadBrowserList() {
