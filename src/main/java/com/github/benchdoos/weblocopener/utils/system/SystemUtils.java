@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -24,7 +24,7 @@ import org.apache.logging.log4j.Logger;
 
 public class SystemUtils {
     private static final String MINIMUM_WINDOWS_VERSION = "5.1"; //Windows XP
-    private static final OS[] SUPPORTED = new OS[]{OS.WINDOWS};
+    private static final OS[] SUPPORTED = new OS[]{OS.WINDOWS, OS.UNIX};
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static final String CURRENT_OS_VERSION = getOsVersion();
     public static final boolean IS_WINDOWS_XP = isWindows()
