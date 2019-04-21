@@ -1,0 +1,11 @@
+Package: [[name]]
+Name: WeblocOpener
+Version: [[version]]
+Section: misc
+Priority: optional
+Architecture: all
+Depends: jdk (>= 1.8)
+Maintainer: Eugene Zrazhevsky <weblocopener@gmail.com>
+Description: Open MacOS .webloc links on Windows.
+Distribution: development
+Depends: default-jre | java8-runtime
