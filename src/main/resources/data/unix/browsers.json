@@ -9,6 +9,13 @@
     },
     {
       "browser": {
+        "name": "Google Chrome",
+        "call": "google-chrome %site",
+        "incognito": "google-chrome %site --incognito"
+      }
+    },
+    {
+      "browser": {
         "name": "Firefox",
         "call": "firefox %site",
         "incognito": "firefox --private-window %site"
