@@ -1,0 +1,18 @@
+{
+  "browsers": [
+    {
+      "browser": {
+        "name": "Chromium",
+        "call": "chromium %site",
+        "incognito": "chromium %site --incognito"
+      }
+    },
+    {
+      "browser": {
+        "name": "Firefox",
+        "call": "firefox %site",
+        "incognito": "firefox --private-window %site"
+      }
+    }
+  ]
+}

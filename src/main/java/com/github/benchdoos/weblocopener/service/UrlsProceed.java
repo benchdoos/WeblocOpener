@@ -21,6 +21,7 @@ import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.QrCodeUtils;
 import com.github.benchdoos.weblocopener.utils.UserUtils;
+import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
 import org.apache.logging.log4j.LogManager;
@@ -96,6 +97,31 @@ public class UrlsProceed {
     }
 
     private static void openUrlInNotDefaultBrowser(String url) throws IOException {
+        final SystemUtils.OS currentOS = SystemUtils.getCurrentOS();
+
+        switch (currentOS) {
+            case WINDOWS:
+                openUrlOnWindows(url);
+                break;
+            case UNIX:
+                openUrlOnUnix(url);
+                break;
+            default:
+                log.warn("Could not open url on current system: {}", currentOS);
+                break;
+        }
+    }
+
+    private static void openUrlOnUnix(String url) throws IOException {
+        if (!url.isEmpty()) {
+            String call = PreferencesManager.getBrowserValue().replace("%site", url);
+            String[] preparedCall = call.split(" ");
+            Runtime runtime = Runtime.getRuntime();
+            runtime.exec(preparedCall);
+        }
+    }
+
+    private static void openUrlOnWindows(String url) throws IOException {
         if (!url.isEmpty()) {
             String call = PreferencesManager.getBrowserValue().replace("%site", url);
             Runtime runtime = Runtime.getRuntime();
