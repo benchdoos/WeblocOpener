@@ -19,16 +19,22 @@ import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.DarkModeAnalyzer;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.SimpleTime;
+import com.github.benchdoos.weblocopener.utils.Logging;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 /**
  * Created by Eugene Zrazhevsky on 19.11.2016.
  */
 public class PreferencesManager {
+    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
+
     public static final String KEY_AUTO_UPDATE = "auto_update_enabled";
     private static final String KEY_OPEN_FOR_QR = "open_folder_for_qr";
     private static final String KEY_BROWSER = "browser";
@@ -54,6 +60,15 @@ public class PreferencesManager {
     public static void setBrowserValue(String callPath) {
         if (!callPath.isEmpty()) {
             PREFERENCES.put(KEY_BROWSER, callPath);
+        }
+    }
+
+    public static void flushPreferences() {
+        try {
+            PREFERENCES.flush();
+            log.info("Preferences flushed, new settings applied immediately");
+        } catch (BackingStoreException e) {
+            log.warn("Could not flush preferences immediately", e);
         }
     }
 

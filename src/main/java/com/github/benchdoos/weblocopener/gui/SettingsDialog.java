@@ -540,6 +540,7 @@ public class SettingsDialog extends JFrame implements Translatable {
                 panel.saveSettings();
             }
         }
+        PreferencesManager.flushPreferences();
     }
 
     private void updateUIDarkMode() {
