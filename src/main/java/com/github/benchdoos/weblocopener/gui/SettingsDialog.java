@@ -212,7 +212,7 @@ public class SettingsDialog extends JFrame implements Translatable {
     }
 
 
-    private void initDropTarget() {
+    private void initDragAndDropTarget() {
         final ImageIcon rickAndMortyIcon = new ImageIcon(Toolkit.getDefaultToolkit()
                 .getImage(getClass().getResource("/images/easter/rickAndMorty.gif")));
         final DropTarget dropTarget = new DropTarget() {
@@ -384,7 +384,7 @@ public class SettingsDialog extends JFrame implements Translatable {
 
         settingsSavedLabel.setVisible(false);
 
-        initDropTarget();
+        initDragAndDropTarget();
 
         browserSetterPanel.init(); //don't forget it or it will crash fileBrowser
 
