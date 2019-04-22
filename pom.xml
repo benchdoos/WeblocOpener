@@ -124,39 +124,43 @@
                     </arguments>
                 </configuration>
             </plugin>
-
             <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.github.benchdoos.weblocopener.core.Main</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <finalName>WeblocOpener</finalName>
-                    <attach>false</attach>
-                    <appendAssemblyId>false</appendAssemblyId>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.0.2</version>
                 <executions>
                     <execution>
-                        <id>assembly</id>
-                        <phase>package</phase>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <descriptors>
-                                <descriptor>assembly.xml</descriptor>
-                            </descriptors>
+                            <outputDirectory>${project.build.directory}/classes/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
                         </configuration>
                     </execution>
                 </executions>
-
             </plugin>
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                        <manifestEntries>
+                            <Class-Path>lib/</Class-Path>
+                        </manifestEntries>
+                    </archive>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                    <finalName>${project.name}</finalName>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
@@ -171,7 +175,7 @@
                     <chdir>.</chdir>
                     <priority>normal</priority>
                     <downloadUrl>http://java.com/download</downloadUrl>
-                    <!--<supportUrl></supportUrl>-->
+                    <supportUrl>https://github.com/benchdoos/WeblocOpener/issues</supportUrl>
                     <stayAlive>false</stayAlive>
                     <restartOnCrash>false</restartOnCrash>
                     <!--<manifest></manifest>-->
@@ -207,7 +211,7 @@
                 <executions>
                     <execution>
                         <id>l4j-clui</id>
-                        <phase>package</phase>
+                        <phase>verify</phase>
                         <goals>
                             <goal>launch4j</goal>
                         </goals>
