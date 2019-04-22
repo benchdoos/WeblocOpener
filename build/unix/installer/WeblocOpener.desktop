@@ -1,0 +1,16 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=WeblocOpener
+GenericName=WeblocOpener
+X-GNOME-FullName=WeblocOpener
+
+Exec=java -jar "/opt/WeblocOpener/WeblocOpener.jar"
+Icon=/opt/WeblocOpener/icons/WeblocOpener.ico
+
+Terminal=false
+Type=Application
+Categories=Library;
+Keywords=Links;Ссылки;
+StartupNotify=true
+X-Ubuntu-Gettext-Domain=passwordstorrager
