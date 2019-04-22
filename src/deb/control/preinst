@@ -1,2 +1,2 @@
 #!/bin/sh
-mkdir -p /usr/share/WeblocOpener/
+#mkdir -p /usr/share/WeblocOpener/
