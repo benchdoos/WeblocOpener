@@ -262,10 +262,10 @@
                                 <data>
                                     <!--Mime type icons-->
                                     <type>directory</type>
-                                    <src>${project.basedir}/build/unix/installer/icons/gnome/</src>
+                                    <src>${project.basedir}/build/unix/installer/icons/hicolor/</src>
                                     <mapper>
                                         <type>perm</type>
-                                        <prefix>/usr/share/icons/gnome/</prefix>
+                                        <prefix>/usr/share/icons/hicolor/</prefix>
                                         <user>loader</user>
                                         <group>loader</group>
                                     </mapper>
