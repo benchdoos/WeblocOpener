@@ -118,6 +118,7 @@ Name: "Russian"; MessagesFile: "{#MyAppAdditionalPath}\languages\Russian.isl"
 
 [Files]
 Source: "{#MyAppSourcePath}\build\WeblocOpener.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppSourcePath}\target\lib"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppAdditionalPath}\Template.webloc"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#ImagesPath}\icons.icl"; DestDir: "{app}"; Flags: ignoreversion
 
@@ -129,6 +130,7 @@ Type: files; Name: "{group}\{#MyAppName} {cm:Update}.lnk";
 Type: files; Name: "{commonprograms}\{#MyAppName} {cm:Update}.lnk"
 Type: files; Name: "{app}\Updater.jar"
 Type: files; Name: "{app}\readme.rtf"
+Type: filesandordirs; Name: "{app}\lib"
 
 Type: filesandordirs; Name: "{%TEMP}\{#MyAppName}\Log\{#MyAppName}\DEBUG"
 Type: filesandordirs; Name: "{%TEMP}\{#MyAppName}\Log\{#MyAppName}\INFO"

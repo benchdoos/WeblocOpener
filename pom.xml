@@ -136,7 +136,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/classes/lib</outputDirectory>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
@@ -149,18 +149,21 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.1.0</version>
                 <configuration>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                    <finalName>${project.name}</finalName>
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>com.github.benchdoos.weblocopener.core.Main</mainClass>
                         </manifest>
                         <manifestEntries>
                             <Class-Path>lib/</Class-Path>
                         </manifestEntries>
                     </archive>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                    <finalName>${project.name}</finalName>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
