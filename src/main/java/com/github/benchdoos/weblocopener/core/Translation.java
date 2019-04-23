@@ -58,7 +58,7 @@ public class Translation {
             return bundle.getString(message);
         } catch (MissingResourceException e) {
             log.warn("Could not find bundle {}:[{}] for locale: {}, trying to get necessary locale",
-                    stringBundleName, message);
+                    stringBundleName, message, locale);
             final Locale supportedLocale = getSupportedLocale(locale);
 
             log.info("For old locale: {} was found locale: {}", locale, supportedLocale);
