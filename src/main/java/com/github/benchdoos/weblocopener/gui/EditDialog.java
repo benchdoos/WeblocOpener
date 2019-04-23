@@ -70,7 +70,6 @@ public class EditDialog extends JFrame implements Translatable {
     private JButton buttonOK;
     private JButton buttonCancel;
     private JTextField textField;
-    private String errorTitle = "Error";
     private JLabel editLinkLabel;
     private JLabel urlPageTitle;
     private JButton clearTextButton;
@@ -122,8 +121,6 @@ public class EditDialog extends JFrame implements Translatable {
         final JPanel panel4 = new JPanel();
         panel4.setLayout(new GridBagLayout());
         panel3.add(panel4, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        Font textFieldFont = this.$$$getFont$$$(null, -1, 12, textField.getFont());
-        if (textFieldFont != null) textField.setFont(textFieldFont);
         textField.setText("");
         GridBagConstraints gbc;
         gbc = new GridBagConstraints();
@@ -389,7 +386,7 @@ public class EditDialog extends JFrame implements Translatable {
 
             private void updatePageFaviconIcon() {
                 final String pageUrl = textField.getText();
-                log.debug("Getting favicons from url: {}");
+                log.debug("Getting favicons from url: {}", pageUrl);
                 if (pageUrl != null && !pageUrl.isEmpty()) {
                     try {
                         URL url = new URL(FAVICON_GETTER_URL + pageUrl);
