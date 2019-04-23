@@ -28,7 +28,10 @@ import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.ResourceBundle;
 
 public class ModeSelectorDialog extends JFrame {
@@ -43,6 +46,7 @@ public class ModeSelectorDialog extends JFrame {
     private JRadioButton copyRadioButton;
     private JRadioButton generateQrRadioButton;
     private JRadioButton copyQrRadioButton;
+    private ButtonGroup buttonGroup;
 
     public ModeSelectorDialog(File file) {
         this.file = file;
@@ -74,6 +78,13 @@ public class ModeSelectorDialog extends JFrame {
         if (mode.equalsIgnoreCase(SettingsConstants.OPENER_UNIX_DEFAULT_SELECTOR_MODE)) {
             mode = ArgumentConstants.OPENER_OPEN_ARGUMENT;
         }
+
+        buttonGroup = new ButtonGroup();
+        buttonGroup.add(openRadioButton);
+        buttonGroup.add(editRadioButton);
+        buttonGroup.add(copyRadioButton);
+        buttonGroup.add(generateQrRadioButton);
+        buttonGroup.add(copyQrRadioButton);
     }
 
     private void colorizeThis() {
@@ -87,11 +98,50 @@ public class ModeSelectorDialog extends JFrame {
         buttonOK.addActionListener(e -> onOk());
         buttonCancel.addActionListener(e -> onCancel());
 
-        openRadioButton.addActionListener(e -> mode = ArgumentConstants.OPENER_OPEN_ARGUMENT);
-        editRadioButton.addActionListener(e -> mode = ArgumentConstants.OPENER_EDIT_ARGUMENT);
-        copyRadioButton.addActionListener(e -> mode = ArgumentConstants.OPENER_COPY_LINK_ARGUMENT);
-        generateQrRadioButton.addActionListener(e -> mode = ArgumentConstants.OPENER_QR_ARGUMENT);
-        copyQrRadioButton.addActionListener(e -> mode = ArgumentConstants.OPENER_COPY_QR_ARGUMENT);
+        rootPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(
+                KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        rootPane.registerKeyboardAction(e -> onSelectionMove(-1), KeyStroke.getKeyStroke(
+                KeyEvent.VK_UP, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT
+        );
+        rootPane.registerKeyboardAction(e -> onSelectionMove(1), KeyStroke.getKeyStroke(
+                KeyEvent.VK_DOWN, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT
+        );
+
+
+        openRadioButton.addChangeListener(e -> mode = ArgumentConstants.OPENER_OPEN_ARGUMENT);
+        editRadioButton.addChangeListener(e -> mode = ArgumentConstants.OPENER_EDIT_ARGUMENT);
+        copyRadioButton.addChangeListener(e -> mode = ArgumentConstants.OPENER_COPY_LINK_ARGUMENT);
+        generateQrRadioButton.addChangeListener(e -> mode = ArgumentConstants.OPENER_QR_ARGUMENT);
+        copyQrRadioButton.addChangeListener(e -> mode = ArgumentConstants.OPENER_COPY_QR_ARGUMENT);
+
+
+    }
+
+    private void onSelectionMove(int move) {
+        final Enumeration<AbstractButton> elements = buttonGroup.getElements();
+        ArrayList<JRadioButton> buttons = new ArrayList<>();
+        while (elements.hasMoreElements()) {
+            final AbstractButton abstractButton = elements.nextElement();
+            buttons.add(((JRadioButton) abstractButton));
+        }
+
+        for (int i = 0; i < buttons.size(); i++) {
+            JRadioButton current = buttons.get(i);
+            if (current.isSelected()) {
+                final int nextIndex = i + move;
+                if (nextIndex >= 0) {
+                    if (nextIndex < buttons.size()) {
+                        buttons.get(nextIndex).setSelected(true);
+                    } else {
+                        buttons.get(0).setSelected(true);
+                    }
+                } else {
+                    buttons.get(buttons.size() - 1).setSelected(true);
+                }
+                break;
+            }
+        }
     }
 
     private void onCancel() {
@@ -181,10 +231,11 @@ public class ModeSelectorDialog extends JFrame {
         ButtonGroup buttonGroup;
         buttonGroup = new ButtonGroup();
         buttonGroup.add(openRadioButton);
+        buttonGroup.add(openRadioButton);
+        buttonGroup.add(copyQrRadioButton);
         buttonGroup.add(editRadioButton);
         buttonGroup.add(copyRadioButton);
         buttonGroup.add(generateQrRadioButton);
-        buttonGroup.add(copyQrRadioButton);
     }
 
     /**

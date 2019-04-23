@@ -146,12 +146,13 @@
     </children>
   </grid>
   <buttonGroups>
-    <group name="selectionGroup">
+    <group name="buttonGroup">
       <member id="38451"/>
+      <member id="38451"/>
+      <member id="db1d9"/>
       <member id="66a56"/>
       <member id="6f31d"/>
       <member id="4d900"/>
-      <member id="db1d9"/>
     </group>
   </buttonGroups>
 </form>
