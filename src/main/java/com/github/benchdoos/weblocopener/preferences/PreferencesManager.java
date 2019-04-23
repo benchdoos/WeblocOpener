@@ -29,13 +29,14 @@ import java.util.Locale;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants.*;
+
 /**
  * Created by Eugene Zrazhevsky on 19.11.2016.
  */
 public class PreferencesManager {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
     public static final String KEY_AUTO_UPDATE = "auto_update_enabled";
+    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static final String KEY_OPEN_FOR_QR = "open_folder_for_qr";
     private static final String KEY_BROWSER = "browser";
     private static final String KEY_NOTIFICATIONS = "notifications";
@@ -43,6 +44,7 @@ public class PreferencesManager {
     private static final String KEY_DARK_MODE = "dark_mode";
     private static final String KEY_CONVERTER_EXPORT_EXTENSION = "converter_export_extension";
     private static final String KEY_LOCALE = "locale";
+    private static final String KEY_UNIX_OPENING_MODE = "unix_open_mode";
 
     private static final Preferences PREFERENCES = Preferences.userRoot().node(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME.toLowerCase());
 
@@ -202,6 +204,33 @@ public class PreferencesManager {
     public static void setOpenFolderForQrCode(boolean openFolderForQrCode) {
         PREFERENCES.putBoolean(KEY_OPEN_FOR_QR, openFolderForQrCode);
     }
+
+    public static String getUnixOpeningMode() {
+        return PREFERENCES.get(KEY_UNIX_OPENING_MODE, SettingsConstants.OPENER_UNIX_DEFAULT_SELECTOR_MODE);
+    }
+
+    public static void setUnixOpeningMode(String mode) {
+        switch (mode) {
+            case OPENER_CREATE_ARGUMENT:
+            case OPENER_EDIT_ARGUMENT:
+            case OPENER_QR_ARGUMENT:
+            case OPENER_COPY_LINK_ARGUMENT:
+            case OPENER_COPY_QR_ARGUMENT:
+            case SettingsConstants.OPENER_UNIX_DEFAULT_SELECTOR_MODE:
+                PREFERENCES.put(KEY_UNIX_OPENING_MODE, mode);
+                break;
+            default:
+                log.warn("Can not save mode: {}, supported modes are: {},{},{},{},{},{}", mode,
+                        OPENER_CREATE_ARGUMENT,
+                        OPENER_EDIT_ARGUMENT,
+                        OPENER_QR_ARGUMENT,
+                        OPENER_COPY_LINK_ARGUMENT,
+                        OPENER_COPY_QR_ARGUMENT, SettingsConstants.OPENER_UNIX_DEFAULT_SELECTOR_MODE);
+                break;
+
+        }
+    }
+
 
     public enum DARK_MODE {ALWAYS, DISABLED}
 }

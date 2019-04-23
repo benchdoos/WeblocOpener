@@ -29,4 +29,5 @@ public interface SettingsConstants {
     SimpleTime DARK_MODE_BEGINNING_DEFAULT_TIME = new SimpleTime(21, 0);
     SimpleTime DARK_MODE_ENDING_DEFAULT_TIME = new SimpleTime(7, 0);
     String LOCALE_DEFAULT_VALUE = "default";
+    String OPENER_UNIX_DEFAULT_SELECTOR_MODE = "default";
 }
