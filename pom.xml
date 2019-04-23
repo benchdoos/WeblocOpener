@@ -171,8 +171,8 @@
                 <configuration>
                     <dontWrapJar>false</dontWrapJar>
                     <headerType>gui</headerType>
-                    <jar>target\${project.name}.jar</jar>
-                    <outfile>build\${project.name}.exe</outfile>
+                    <jar>${project.build.directory}/${project.name}.jar</jar>
+                    <outfile>${project.basedir}/build/${project.name}.exe</outfile>
                     <!--<errTitle></errTitle>-->
                     <!--<cmdLine></cmdLine>-->
                     <chdir>.</chdir>
@@ -182,7 +182,7 @@
                     <stayAlive>false</stayAlive>
                     <restartOnCrash>false</restartOnCrash>
                     <!--<manifest></manifest>-->
-                    <icon>build\installer\images\balloonIcon256.ico</icon>
+                    <icon>${project.basedir}/build/installer/images/balloonIcon256.ico</icon>
                     <classPath>
                         <mainClass>com.github.benchdoos.weblocopener.core.Main</mainClass>
                         <addDependencies>true</addDependencies>
