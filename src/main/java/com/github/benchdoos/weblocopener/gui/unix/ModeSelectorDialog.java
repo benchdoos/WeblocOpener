@@ -13,7 +13,7 @@
  * Eugene Zrazhevsky <eugene.zrazhevsky@gmail.com>
  */
 
-package com.github.benchdoos.weblocopener.gui;
+package com.github.benchdoos.weblocopener.gui.unix;
 
 import com.github.benchdoos.jcolorful.core.JColorful;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;

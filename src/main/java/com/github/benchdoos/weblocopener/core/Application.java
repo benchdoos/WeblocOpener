@@ -19,6 +19,7 @@ import com.github.benchdoos.jcolorful.core.JColorful;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
 import com.github.benchdoos.weblocopener.gui.*;
+import com.github.benchdoos.weblocopener.gui.unix.ModeSelectorDialog;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
