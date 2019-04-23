@@ -17,7 +17,6 @@ package com.github.benchdoos.weblocopener.core;
 
 import com.github.benchdoos.jcolorful.core.JColorful;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
-import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.gui.*;
 import com.github.benchdoos.weblocopener.gui.unix.ModeSelectorDialog;
@@ -69,27 +68,6 @@ public class Application {
             runSettingsDialog();
         }
 
-    }
-
-    private void manageSoloArgument(String[] args) {
-        if (SystemUtils.getCurrentOS() == SystemUtils.OS.WINDOWS) {
-            manageArguments(args);
-        } else {
-            final String unixOpeningMode = PreferencesManager.getUnixOpeningMode();
-            log.info("Unix: opening mode is: {}", unixOpeningMode);
-            if (unixOpeningMode.equalsIgnoreCase(SettingsConstants.OPENER_UNIX_DEFAULT_SELECTOR_MODE)) {
-                runModeSelectorWindow(args);
-            } else {
-                String[] unixArgs = new String[]{unixOpeningMode, args[0]};
-                manageArguments(unixArgs);
-            }
-        }
-    }
-
-    private void runModeSelectorWindow(String[] args) {
-        String filePath = args[0];
-        ModeSelectorDialog modeSelectorDialog = new ModeSelectorDialog(new File(filePath));
-        modeSelectorDialog.setVisible(true);
     }
 
     private static String helpText() {
@@ -157,7 +135,7 @@ public class Application {
                         runCopyQrCode(args);
                         break;
 
-                    case ArgumentConstants.UPDATE_SILENT_ARGUMENT:
+                    case UPDATE_SILENT_ARGUMENT:
                         runUpdateSilent();
                         break;
                     default:
@@ -346,6 +324,53 @@ public class Application {
         if (isAutoUpdate) {
             new NonGuiUpdater();
         }
+    }
+
+    private void manageSoloArgument(String[] args) {
+        if (SystemUtils.getCurrentOS() == SystemUtils.OS.WINDOWS) {
+            manageArguments(args);
+        } else {
+            final String arg = args[0];
+            switch (arg) {
+                case OPENER_SETTINGS_ARGUMENT:
+                    CleanManager.clean();
+                    runSettingsDialog();
+                    break;
+                case OPENER_ABOUT_ARGUMENT:
+                    new AboutApplicationDialog().setVisible(true);
+                    break;
+                case OPENER_UPDATE_ARGUMENT:
+                    runUpdateDialog();
+                    break;
+                case UPDATE_SILENT_ARGUMENT:
+                    runUpdateSilent();
+                    break;
+                case OPENER_HELP_ARGUMENT_HYPHEN: {
+                    System.out.println(helpText());
+                    break;
+                }
+                default:
+                    manageArgumentsOnUnix(args);
+                    break;
+            }
+        }
+    }
+
+    private void manageArgumentsOnUnix(String[] args) {
+        final String unixOpeningMode = PreferencesManager.getUnixOpeningMode();
+        log.info("Unix: opening mode is: {}", unixOpeningMode);
+        if (unixOpeningMode.equalsIgnoreCase(SettingsConstants.OPENER_UNIX_DEFAULT_SELECTOR_MODE)) {
+            runModeSelectorWindow(args);
+        } else {
+            String[] unixArgs = new String[]{unixOpeningMode, args[0]};
+            manageArguments(unixArgs);
+        }
+    }
+
+    private void runModeSelectorWindow(String[] args) {
+        String filePath = args[0];
+        ModeSelectorDialog modeSelectorDialog = new ModeSelectorDialog(new File(filePath));
+        modeSelectorDialog.setVisible(true);
     }
 
     public enum UPDATE_MODE {NORMAL, SILENT}
