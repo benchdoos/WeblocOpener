@@ -18,6 +18,7 @@ package com.github.benchdoos.weblocopener.core;
 import com.github.benchdoos.jcolorful.core.JColorful;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
+import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.gui.*;
 import com.github.benchdoos.weblocopener.gui.unix.ModeSelectorDialog;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
@@ -63,15 +64,26 @@ public class Application {
         if (args.length > 1) {
             manageArguments(args);
         } else if (args.length == 1) {
-            if (SystemUtils.getCurrentOS() == SystemUtils.OS.WINDOWS) {
-                manageArguments(args);
-            } else {
-                runModeSelectorWindow(args);
-            }
+            manageSoloArgument(args);
         } else {
             runSettingsDialog();
         }
 
+    }
+
+    private void manageSoloArgument(String[] args) {
+        if (SystemUtils.getCurrentOS() == SystemUtils.OS.WINDOWS) {
+            manageArguments(args);
+        } else {
+            final String unixOpeningMode = PreferencesManager.getUnixOpeningMode();
+            log.info("Unix: opening mode is: {}", unixOpeningMode);
+            if (unixOpeningMode.equalsIgnoreCase(SettingsConstants.OPENER_UNIX_DEFAULT_SELECTOR_MODE)) {
+                runModeSelectorWindow(args);
+            } else {
+                String[] unixArgs = new String[]{unixOpeningMode, args[0]};
+                manageArguments(unixArgs);
+            }
+        }
     }
 
     private void runModeSelectorWindow(String[] args) {

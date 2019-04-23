@@ -100,6 +100,7 @@ public class ModeSelectorDialog extends JFrame {
     private void onOk() {
         if (saveSelectionCheckBox.isSelected()) {
             PreferencesManager.setUnixOpeningMode(mode);
+            PreferencesManager.flushPreferences();
         }
         if (!mode.equalsIgnoreCase(SettingsConstants.OPENER_UNIX_DEFAULT_SELECTOR_MODE)) {
             String[] args = new String[]{mode, file.getAbsolutePath()};
