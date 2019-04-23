@@ -16,6 +16,8 @@
 package com.github.benchdoos.weblocopener.core.constants;
 
 public interface ArgumentConstants {
+    String OPENER_OPEN_ARGUMENT = "-create"; //don't use it, this is for unix
+
     String OPENER_CREATE_ARGUMENT = "-create";
     String OPENER_EDIT_ARGUMENT = "-edit";
     String OPENER_SETTINGS_ARGUMENT = "-settings";
