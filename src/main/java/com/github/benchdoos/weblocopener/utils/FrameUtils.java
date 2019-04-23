@@ -78,7 +78,7 @@ public class FrameUtils {
      *
      * @param component Component to shake
      */
-    static void shakeFrame(final Component component) {
+    public static void shakeFrame(final Component component) {
         final Window window = findWindow(component);
 
         if (!timer.isRunning()) {

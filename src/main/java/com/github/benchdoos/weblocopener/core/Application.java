@@ -93,12 +93,15 @@ public class Application {
      *
      * @param args App start arguments
      */
-    private static void manageArguments(String[] args) {
+    public static void manageArguments(String[] args) {
         log.debug("Managing arguments: " + Arrays.toString(args));
         if (args.length > 0) {
             log.info("Got args: " + Arrays.toString(args));
             if (!args[0].isEmpty()) {
                 switch (args[0]) {
+                    case OPENER_OPEN_ARGUMENT:
+                        runAnalyzer(args[1]);
+                        break;
                     case OPENER_EDIT_ARGUMENT:
                         manageEditArgument(args);
                         break;
@@ -146,17 +149,7 @@ public class Application {
                         runUpdateSilent();
                         break;
                     default:
-                        final String filePath = args[0];
-                        try {
-                            String url = new Analyzer(filePath).getUrl();
-                            if (!url.isEmpty()) {
-                                UrlsProceed.openUrl(url);
-                            } else {
-                                runEditDialog(filePath);
-                            }
-                        } catch (Exception e) {
-                            log.warn("Could not open file: {}", filePath, e);
-                        }
+                        runAnalyzer(args[0]);
                         break;
                 }
             } else {
@@ -165,6 +158,20 @@ public class Application {
         } else {
             log.debug("No arguments found, launching settings");
             runSettingsDialog();
+        }
+    }
+
+    public static void runAnalyzer(String arg) {
+        final String filePath = arg;
+        try {
+            String url = new Analyzer(filePath).getUrl();
+            if (!url.isEmpty()) {
+                UrlsProceed.openUrl(url);
+            } else {
+                runEditDialog(filePath);
+            }
+        } catch (Exception e) {
+            log.warn("Could not open file: {}", filePath, e);
         }
     }
 

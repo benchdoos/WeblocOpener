@@ -16,7 +16,10 @@
 package com.github.benchdoos.weblocopener.gui.unix;
 
 import com.github.benchdoos.jcolorful.core.JColorful;
+import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
+import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
+import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -30,6 +33,7 @@ import java.util.ResourceBundle;
 
 public class ModeSelectorDialog extends JFrame {
     private final File file;
+    private String mode = PreferencesManager.getUnixOpeningMode();
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -58,10 +62,17 @@ public class ModeSelectorDialog extends JFrame {
 
         initActionListeners();
 
+        initSelectionMode();
 
         pack();
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
         setResizable(false);
+    }
+
+    private void initSelectionMode() {
+        if (mode.equalsIgnoreCase(SettingsConstants.OPENER_UNIX_DEFAULT_SELECTOR_MODE)) {
+            mode = ArgumentConstants.OPENER_OPEN_ARGUMENT;
+        }
     }
 
     private void colorizeThis() {
@@ -74,6 +85,12 @@ public class ModeSelectorDialog extends JFrame {
     private void initActionListeners() {
         buttonOK.addActionListener(e -> onOk());
         buttonCancel.addActionListener(e -> onCancel());
+
+        openRadioButton.addActionListener(e -> mode = ArgumentConstants.OPENER_OPEN_ARGUMENT);
+        editRadioButton.addActionListener(e -> mode = ArgumentConstants.OPENER_EDIT_ARGUMENT);
+        copyRadioButton.addActionListener(e -> mode = ArgumentConstants.OPENER_COPY_LINK_ARGUMENT);
+        generateQrRadioButton.addActionListener(e -> mode = ArgumentConstants.OPENER_QR_ARGUMENT);
+        copyQrRadioButton.addActionListener(e -> mode = ArgumentConstants.OPENER_COPY_QR_ARGUMENT);
     }
 
     private void onCancel() {
@@ -81,7 +98,16 @@ public class ModeSelectorDialog extends JFrame {
     }
 
     private void onOk() {
-        dispose();
+        if (saveSelectionCheckBox.isSelected()) {
+            PreferencesManager.setUnixOpeningMode(mode);
+        }
+        if (!mode.equalsIgnoreCase(SettingsConstants.OPENER_UNIX_DEFAULT_SELECTOR_MODE)) {
+            String[] args = new String[]{mode, file.getAbsolutePath()};
+            Application.manageArguments(args);
+            dispose();
+        } else {
+            FrameUtils.shakeFrame(this);
+        }
     }
 
     {
@@ -135,6 +161,7 @@ public class ModeSelectorDialog extends JFrame {
         panel4.setLayout(new GridLayoutManager(5, 1, new Insets(0, 0, 0, 0), -1, -1));
         panel3.add(panel4, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 2, false));
         openRadioButton = new JRadioButton();
+        openRadioButton.setSelected(true);
         this.$$$loadButtonText$$$(openRadioButton, ResourceBundle.getBundle("translations/ModeSelectorDialogBundle").getString("selectionOpen"));
         panel4.add(openRadioButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         editRadioButton = new JRadioButton();
