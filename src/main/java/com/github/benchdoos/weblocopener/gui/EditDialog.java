@@ -24,6 +24,7 @@ import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.UserUtils;
+import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -540,7 +541,7 @@ public class EditDialog extends JFrame implements Translatable {
             if (textField != null) {
                 setTextFieldFont(textField.getFont(), TextAttribute.UNDERLINE_ON);
                 if (!PreferencesManager.isDarkModeEnabledNow()) {
-                    textField.setForeground(Color.BLUE);
+                    prepareColor();
                 } else {
                     textField.setForeground(Color.decode("#1BA7FF"));
                 }
@@ -554,6 +555,19 @@ public class EditDialog extends JFrame implements Translatable {
                     textField.setForeground(ApplicationConstants.DARK_MODE_THEME.getTextComponentElement().getForegroundColor());
                 }
             }
+        }
+    }
+
+    private void prepareColor() {
+        if (SystemUtils.getCurrentOS() == SystemUtils.OS.UNIX) {
+            final Color background = textField.getBackground();
+            if (background.equals(Color.WHITE)) {
+                textField.setForeground(Color.BLUE);
+            } else {
+                textField.setForeground(Color.decode("#1BA7FF"));
+            }
+        } else {
+            textField.setForeground(Color.BLUE);
         }
     }
 
