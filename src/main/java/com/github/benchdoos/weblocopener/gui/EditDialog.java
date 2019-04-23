@@ -541,7 +541,7 @@ public class EditDialog extends JFrame implements Translatable {
             if (textField != null) {
                 setTextFieldFont(textField.getFont(), TextAttribute.UNDERLINE_ON);
                 if (!PreferencesManager.isDarkModeEnabledNow()) {
-                    prepareColor();
+                    prepareTextFieldColor();
                 } else {
                     textField.setForeground(Color.decode("#1BA7FF"));
                 }
@@ -558,7 +558,7 @@ public class EditDialog extends JFrame implements Translatable {
         }
     }
 
-    private void prepareColor() {
+    private void prepareTextFieldColor() {
         if (OperatingSystem.isUnix()) {
             final Color background = textField.getBackground();
             if (background.equals(Color.WHITE)) {
