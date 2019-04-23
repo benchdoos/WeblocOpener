@@ -53,6 +53,7 @@ public class ModeSelectorDialog extends JFrame {
     public void initGui() {
         setContentPane(contentPane);
         setTitle(file.getName());
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/balloonIcon256.png")));
 
         colorizeThis();
 
