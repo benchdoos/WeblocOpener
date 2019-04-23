@@ -46,11 +46,12 @@
 
     <!--
     Build JAR:
-    clean compile assembly:single
+    clean compile package
     Build JAR+EXE:
-    clean compile assembly:single launch4j:launch4j -X
+    clean compile package launch4j:launch4j -X
     Build JAR+EXE+SETUP:
-    clean compile assembly:single launch4j:launch4j exec:exec
+    clean compile package launch4j:launch4j exec:exec@unix
+    clean compile package launch4j:launch4j exec:exec@windows
     -->
     <build>
         <resources>
