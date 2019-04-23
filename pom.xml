@@ -110,30 +110,37 @@
                 <version>1.6.0</version>
                 <executions>
                     <execution>
+                        <id>unix</id>
                         <goals>
                             <goal>exec</goal>
                         </goals>
+                        <configuration>
+                            <executable>bash</executable>
+                            <workingDirectory>${project.basedir}/build</workingDirectory>
+                            <arguments>
+                                <argument>wine</argument>
+                                <argument>/home/doos/.wine/drive_c/Program Files (x86)/Inno Setup 5/ISCC.exe</argument>
+                                <argument>unix/WeblocOpener.iss</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>windows</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>C:\Program Files (x86)\Inno Setup 5\ISCC.exe</executable>
+                            <workingDirectory>${project.basedir}\build</workingDirectory>
+                            <arguments>
+                                <argument>WeblocOpener.iss</argument>
+                            </arguments>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <!--For Windows-->
-                    <!--
 
-                    <executable>C:\Program Files (x86)\Inno Setup 5\ISCC.exe</executable>
-                    <workingDirectory>${project.basedir}\build</workingDirectory>
-                    <arguments>
-                        <argument>WeblocOpener.iss</argument>
-                    </arguments>-->
-
-                    <executable>bash</executable>
-                    <workingDirectory>${project.basedir}/build</workingDirectory>
-                    <arguments>
-                        <argument>wine</argument>
-                        <argument>/home/doos/.wine/drive_c/Program Files (x86)/Inno Setup 5/ISCC.exe</argument>
-                        <argument>unix/WeblocOpener.iss</argument>
-                    </arguments>
-                </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -154,6 +161,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
