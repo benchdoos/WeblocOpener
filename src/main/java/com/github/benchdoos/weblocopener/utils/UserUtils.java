@@ -43,8 +43,8 @@ public class UserUtils {
                 UserUtils.class.getResource("/images/balloonIcon256.png")));
         trayIcon.setImageAutoSize(true);
 
+        final SystemTray tray = SystemTray.getSystemTray();
         try {
-            final SystemTray tray = SystemTray.getSystemTray();
             tray.add(trayIcon);
             trayIcon.displayMessage(title, message, messageType);
 
@@ -61,7 +61,8 @@ public class UserUtils {
             timer.setRepeats(false);
             timer.start();
         } catch (AWTException e) {
-            log.warn("Could not add icon to tray", e);
+            tray.remove(trayIcon);
+            log.warn("Could not add icon to tray, removing from tray", e);
         }
     }
 
