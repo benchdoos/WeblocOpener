@@ -29,6 +29,7 @@ import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.UserUtils;
 import com.github.benchdoos.weblocopener.utils.browser.BrowserManager;
+import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -58,8 +59,24 @@ public class Application {
 
         CoreUtils.enableLookAndFeel();
 
-        manageArguments(args);
+        if (args.length > 1) {
+            manageArguments(args);
+        } else if (args.length == 1) {
+            if (SystemUtils.getCurrentOS() == SystemUtils.OS.WINDOWS) {
+                manageArguments(args);
+            } else {
+                runModeSelectorWindow(args);
+            }
+        } else {
+            runSettingsDialog();
+        }
 
+    }
+
+    private void runModeSelectorWindow(String[] args) {
+        String filePath = args[0];
+        ModeSelectorDialog modeSelectorDialog = new ModeSelectorDialog(new File(filePath));
+        modeSelectorDialog.setVisible(true);
     }
 
     private static String helpText() {
