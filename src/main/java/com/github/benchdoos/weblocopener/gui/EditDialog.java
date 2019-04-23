@@ -24,7 +24,7 @@ import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.UserUtils;
-import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
+import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -559,7 +559,7 @@ public class EditDialog extends JFrame implements Translatable {
     }
 
     private void prepareColor() {
-        if (SystemUtils.getCurrentOS() == SystemUtils.OS.UNIX) {
+        if (OperatingSystem.isUnix()) {
             final Color background = textField.getBackground();
             if (background.equals(Color.WHITE)) {
                 textField.setForeground(Color.BLUE);

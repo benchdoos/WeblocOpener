@@ -30,7 +30,7 @@ import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.UserUtils;
 import com.github.benchdoos.weblocopener.utils.browser.BrowserManager;
-import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
+import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -327,7 +327,7 @@ public class Application {
     }
 
     private void manageSoloArgument(String[] args) {
-        if (SystemUtils.getCurrentOS() == SystemUtils.OS.WINDOWS) {
+        if (OperatingSystem.isWindows()) {
             manageArguments(args);
         } else {
             final String arg = args[0];

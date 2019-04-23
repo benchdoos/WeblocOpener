@@ -21,28 +21,26 @@ import com.github.benchdoos.weblocopener.utils.Logging;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static com.github.benchdoos.weblocopener.utils.system.OperatingSystem.*;
+
 
 public class SystemUtils {
     private static final String MINIMUM_WINDOWS_VERSION = "5.1"; //Windows XP
-    private static final OS[] SUPPORTED = new OS[]{OS.WINDOWS, OS.UNIX};
+    private static final OperatingSystem.OS[] SUPPORTED = new OperatingSystem.OS[]{OperatingSystem.OS.WINDOWS, OperatingSystem.OS.UNIX};
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static final String CURRENT_OS_VERSION = getOsVersion();
     public static final boolean IS_WINDOWS_XP = isWindows()
             && Internal.versionCompare(SystemUtils.CURRENT_OS_VERSION, "5.1") >= 0
             && Internal.versionCompare(SystemUtils.CURRENT_OS_VERSION, "6.0") < 0;
-    private static final OS CURRENT_OS = getCurrentOS();
+    private static final OperatingSystem.OS CURRENT_OS = getCurrentOS();
 
-
-    private static String getOsName() {
-        return System.getProperty("os.name").toLowerCase();
-    }
 
     private static String getOsVersion() {
         return System.getProperty("os.version");
     }
 
     private static String getRealSystemArch() {
-        if (getCurrentOS() == OS.WINDOWS) {
+        if (getCurrentOS() == OperatingSystem.OS.WINDOWS) {
             String arch = System.getenv("PROCESSOR_ARCHITECTURE");
             String wow64Arch = System.getenv("PROCESSOR_ARCHITEW6432");
 
@@ -55,7 +53,7 @@ public class SystemUtils {
     public static void checkIfSystemIsSupported() throws UnsupportedSystemException {
         initSystem();
         if (isSupported()) {
-            if (CURRENT_OS == OS.WINDOWS) {
+            if (CURRENT_OS == OperatingSystem.OS.WINDOWS) {
                 checkWindows();
             }
         } else {
@@ -82,30 +80,12 @@ public class SystemUtils {
     }
 
     private static boolean isSupported() {
-        for (OS supportedSystems : SUPPORTED) {
+        for (OperatingSystem.OS supportedSystems : SUPPORTED) {
             if (SystemUtils.CURRENT_OS.equals(supportedSystems)) {
                 return true;
             }
         }
         return false;
-    }
-
-    private static boolean isWindows() {
-        return (getOsName().contains("win"));
-    }
-
-    private static boolean isMac() {
-        return (getOsName().contains("mac"));
-    }
-
-    private static boolean isUnix() {
-        return (getOsName().contains("nix")
-                || getOsName().contains("nux")
-                || getOsName().contains("aix"));
-    }
-
-    private static boolean isSolaris() {
-        return (getOsName().contains("sunos"));
     }
 
     private static String getSystemParameters() {
@@ -129,19 +109,18 @@ public class SystemUtils {
         }
     }
 
-    public static OS getCurrentOS() {
+    public static OperatingSystem.OS getCurrentOS() {
         if (isWindows()) {
-            return OS.WINDOWS;
+            return OperatingSystem.OS.WINDOWS;
         } else if (isMac()) {
-            return OS.MAC_OS;
+            return OperatingSystem.OS.MAC_OS;
         } else if (isUnix()) {
-            return OS.UNIX;
+            return OperatingSystem.OS.UNIX;
         } else if (isSolaris()) {
-            return OS.SOLARIS;
-        } else return OS.UNSUPPORTED;
+            return OperatingSystem.OS.SOLARIS;
+        } else return OperatingSystem.OS.UNSUPPORTED;
     }
 
-    public enum OS {WINDOWS, MAC_OS, UNIX, SOLARIS, UNSUPPORTED}
 
 
 }

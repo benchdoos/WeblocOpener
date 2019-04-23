@@ -25,7 +25,7 @@ import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
-import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
+import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -287,8 +287,7 @@ public class MainSetterPanel extends JPanel implements SettingsPanel, Translatab
     }
 
     private void initUnixOpenModePanel() {
-        final boolean isUnix = SystemUtils.getCurrentOS() == SystemUtils.OS.UNIX;
-        unixOpenModePanel.setVisible(isUnix);
+        unixOpenModePanel.setVisible(OperatingSystem.isUnix());
     }
 
     private void loadConverterValue() {
@@ -353,7 +352,7 @@ public class MainSetterPanel extends JPanel implements SettingsPanel, Translatab
         PreferencesManager.setOpenFolderForQrCode(folder);
         PreferencesManager.setNotificationsShown(notification);
 
-        if (SystemUtils.getCurrentOS() == SystemUtils.OS.UNIX) {
+        if (OperatingSystem.isUnix()) {
             PreferencesManager.setUnixOpeningMode(this.mode);
         }
     }

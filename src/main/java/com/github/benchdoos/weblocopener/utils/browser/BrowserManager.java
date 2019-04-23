@@ -18,6 +18,7 @@ package com.github.benchdoos.weblocopener.utils.browser;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.utils.Logging;
+import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
 import com.google.gson.*;
 import org.apache.commons.io.IOUtils;
@@ -67,7 +68,7 @@ public class BrowserManager {
     }
 
     private static String getBrowserListJson() {
-        final SystemUtils.OS currentOS = SystemUtils.getCurrentOS();
+        final OperatingSystem.OS currentOS = SystemUtils.getCurrentOS();
         return "/data/" + currentOS.toString().toLowerCase() + "/browsers.json";
     }
 

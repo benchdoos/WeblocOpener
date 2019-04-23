@@ -21,6 +21,7 @@ import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.QrCodeUtils;
 import com.github.benchdoos.weblocopener.utils.UserUtils;
+import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
@@ -97,7 +98,7 @@ public class UrlsProceed {
     }
 
     private static void openUrlInNotDefaultBrowser(String url) throws IOException {
-        final SystemUtils.OS currentOS = SystemUtils.getCurrentOS();
+        final OperatingSystem.OS currentOS = SystemUtils.getCurrentOS();
 
         switch (currentOS) {
             case WINDOWS:
