@@ -293,7 +293,7 @@
                                     <!--Icons needed-->
                                     <type>files</type>
                                     <paths>
-                                        <path>${project.basedir}/build/unix/installer/icons/WeblocOpener.ico</path>
+                                        <path>${project.basedir}/build/unix/installer/icons/WeblocOpener.png</path>
                                     </paths>
                                     <dst>/opt/${project.name}/icons</dst>
                                 </data>

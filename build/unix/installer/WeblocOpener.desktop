@@ -7,7 +7,7 @@ GenericName=WeblocOpener
 X-GNOME-FullName=WeblocOpener
 
 Exec=java -jar "/opt/WeblocOpener/WeblocOpener.jar" %U
-Icon=/opt/WeblocOpener/icons/WeblocOpener.ico
+Icon=/opt/WeblocOpener/icons/WeblocOpener.png
 
 Terminal=false
 Type=Application
