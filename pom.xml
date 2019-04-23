@@ -117,10 +117,14 @@
                 </executions>
                 <configuration>
                     <!--TODO: change to variables-->
-                    <executable>C:\Program Files (x86)\Inno Setup 5\ISCC.exe</executable>
-                    <workingDirectory>${project.basedir}\build</workingDirectory>
+                    <executable>bash</executable>
+                    <workingDirectory>${project.basedir}/build</workingDirectory>
                     <arguments>
-                        <argument>WeblocOpener.iss</argument>
+                        <!--                        <argument>iscc</argument>-->
+                        <!--                        <argument>"${project.basedir}/build/unix/WeblocOpener.iss"</argument>-->
+                        <argument>wine</argument>
+                        <argument>/home/doos/.wine/drive_c/Program Files (x86)/Inno Setup 5/ISCC.exe</argument>
+                        <argument>unix/WeblocOpener.iss</argument>
                     </arguments>
                 </configuration>
             </plugin>
