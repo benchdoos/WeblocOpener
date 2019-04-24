@@ -19,6 +19,7 @@ public interface ArgumentConstants {
     String OPENER_OPEN_ARGUMENT = "-open"; //don't use it, this is for unix
 
     String OPENER_CREATE_ARGUMENT = "-create";
+    String OPENER_CREATE_NEW_ARGUMENT = "-create-new";
     String OPENER_EDIT_ARGUMENT = "-edit";
     String OPENER_SETTINGS_ARGUMENT = "-settings";
     String OPENER_UPDATE_ARGUMENT = "-update";

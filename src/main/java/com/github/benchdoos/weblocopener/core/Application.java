@@ -19,6 +19,7 @@ import com.github.benchdoos.jcolorful.core.JColorful;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.gui.*;
+import com.github.benchdoos.weblocopener.gui.unix.CreateNewFileDialog;
 import com.github.benchdoos.weblocopener.gui.unix.ModeSelectorDialog;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
@@ -31,6 +32,7 @@ import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.UserUtils;
 import com.github.benchdoos.weblocopener.utils.browser.BrowserManager;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
+import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -329,9 +331,12 @@ public class Application {
     private void manageSoloArgument(String[] args) {
         if (OperatingSystem.isWindows()) {
             manageArguments(args);
-        } else {
+        } else if (OperatingSystem.isUnix()) {
             final String arg = args[0];
             switch (arg) {
+                case OPENER_CREATE_NEW_ARGUMENT:
+                    runCreateNewFileWindow();
+                    break;
                 case OPENER_SETTINGS_ARGUMENT:
                     CleanManager.clean();
                     runSettingsDialog();
@@ -353,7 +358,14 @@ public class Application {
                     manageArgumentsOnUnix(args);
                     break;
             }
+        } else {
+            log.warn("System is not supported yet: {}", SystemUtils.getCurrentOS());
         }
+    }
+
+    private void runCreateNewFileWindow() {
+        CreateNewFileDialog createNewFileDialog = new CreateNewFileDialog();
+        createNewFileDialog.setVisible(true);
     }
 
     private void manageArgumentsOnUnix(String[] args) {

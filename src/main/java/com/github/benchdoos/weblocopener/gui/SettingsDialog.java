@@ -20,6 +20,7 @@ import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.StringConstants;
 import com.github.benchdoos.weblocopener.gui.panels.*;
+import com.github.benchdoos.weblocopener.gui.unix.CreateNewFileDialog;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
@@ -129,6 +130,7 @@ public class SettingsDialog extends JFrame implements Translatable {
         addNewFileButton = new JButton();
         addNewFileButton.setMargin(new Insets(0, 5, 0, 5));
         addNewFileButton.setText("+");
+        addNewFileButton.setToolTipText(ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("createNewFile"));
         panel1.add(addNewFileButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
         contentPane.add(spacer2, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
@@ -404,7 +406,10 @@ public class SettingsDialog extends JFrame implements Translatable {
     }
 
     private void createNewFile() {
-        System.out.println("Creation of new file will be here!");
+        CreateNewFileDialog createNewFileDialog = new CreateNewFileDialog();
+        createNewFileDialog.setModal(true);
+        createNewFileDialog.setLocation(FrameUtils.getFrameOnCenterOfParentFrame(this, createNewFileDialog));
+        createNewFileDialog.setVisible(true);
     }
 
     private void initSettingsList() {
