@@ -365,6 +365,7 @@ public class Application {
 
     private void runCreateNewFileWindow() {
         CreateNewFileDialog createNewFileDialog = new CreateNewFileDialog();
+        createNewFileDialog.setModal(false);
         createNewFileDialog.setVisible(true);
     }
 
