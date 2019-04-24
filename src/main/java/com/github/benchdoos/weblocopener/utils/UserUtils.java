@@ -19,6 +19,7 @@ import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.StringConstants;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -150,7 +151,27 @@ public class UserUtils {
 
     public static void showTrayMessage(String title, String message, TrayIcon.MessageType messageType) {
         if (PreferencesManager.isNotificationsShown()) {
-            createTrayMessage(title, message, messageType);
+            if (SystemTray.isSupported()) {
+                if (!OperatingSystem.isUnix()) { // fixme why is not working on ubuntu 19?
+                    createTrayMessage(title, message, messageType);
+                }
+            } else {
+                log.warn("System is not supported yet.");
+                showMessage(null, title, message, getJOptionPaneMessageLevel(messageType));
+            }
+        }
+    }
+
+    private static int getJOptionPaneMessageLevel(TrayIcon.MessageType messageType) {
+        switch (messageType) {
+            case INFO:
+                return JOptionPane.INFORMATION_MESSAGE;
+            case ERROR:
+                return JOptionPane.ERROR_MESSAGE;
+            case WARNING:
+                return JOptionPane.WARNING_MESSAGE;
+            default:
+                return JOptionPane.PLAIN_MESSAGE;
         }
     }
 
