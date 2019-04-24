@@ -20,6 +20,7 @@ import com.github.benchdoos.weblocopener.service.gui.darkMode.SimpleTime;
 
 public interface SettingsConstants {
     boolean IS_APP_AUTO_UPDATE_DEFAULT_VALUE = true;
+    boolean IS_APP_BETA_UPDATE_INSTALLING_DEFAULT_VALUE = false;
     boolean OPEN_FOLDER_FOR_QR_CODE = true;
     boolean SHOW_NOTIFICATIONS_TO_USER = true;
     String BROWSER_DEFAULT_VALUE = "default";

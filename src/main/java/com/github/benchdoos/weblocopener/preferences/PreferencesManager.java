@@ -36,6 +36,7 @@ import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants
  */
 public class PreferencesManager {
     public static final String KEY_AUTO_UPDATE = "auto_update_enabled";
+    private static final String KEY_BETA_UPDATE_INSTALL = "install_beta_updates";
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static final String KEY_OPEN_FOR_QR = "open_folder_for_qr";
     private static final String KEY_BROWSER = "browser";
@@ -145,6 +146,14 @@ public class PreferencesManager {
 
     public static void setAutoUpdateActive(boolean autoUpdateActive) {
         PREFERENCES.putBoolean(KEY_AUTO_UPDATE, autoUpdateActive);
+    }
+
+    public static boolean isBetaUpdateInstalling() {
+        return PREFERENCES.getBoolean(KEY_BETA_UPDATE_INSTALL, SettingsConstants.IS_APP_BETA_UPDATE_INSTALLING_DEFAULT_VALUE);
+    }
+
+    public static void setBetaUpdateInstalling(boolean betaUpdatesInstalling) {
+        PREFERENCES.putBoolean(KEY_BETA_UPDATE_INSTALL, betaUpdatesInstalling);
     }
 
     public static boolean isDarkModeEnabledNow() {
