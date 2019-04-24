@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2018.  Eugene Zrazhevsky and others.
+ * (C) Copyright 2019.  Eugene Zrazhevsky and others.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,6 +15,8 @@
 
 package com.github.benchdoos.weblocopener.update;
 
+import java.util.StringJoiner;
+
 /**
  * Created by Eugene Zrazhevsky on 03.11.2016.
  */
@@ -24,6 +26,15 @@ public class AppVersion {
     private long size;
     private String updateTitle;
     private String updateInfo;
+    private boolean beta;
+
+    public boolean isBeta() {
+        return beta;
+    }
+
+    public void setBeta(boolean beta) {
+        this.beta = beta;
+    }
 
     public String getDownloadUrl() {
         return downloadUrl;
@@ -60,8 +71,14 @@ public class AppVersion {
 
     @Override
     public String toString() {
-        return "AppVersion: {" + version + "\ndownload:[" + downloadUrl + "], size: " + getKilobyteFromByte() + "kb}" +
-                "\n" + updateInfo;
+        return new StringJoiner(", ", AppVersion.class.getSimpleName() + "[", "]")
+                .add("version='" + version + "'")
+                .add("downloadUrl='" + downloadUrl + "'")
+                .add("size=" + size)
+                .add("updateTitle='" + updateTitle + "'")
+                .add("updateInfo='" + updateInfo + "'")
+                .add("beta=" + beta)
+                .toString();
     }
 
     private long getKilobyteFromByte() {
