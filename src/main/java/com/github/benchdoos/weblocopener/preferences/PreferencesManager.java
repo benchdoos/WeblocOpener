@@ -212,7 +212,6 @@ public class PreferencesManager {
     public static void setUnixOpeningMode(String mode) {
         switch (mode) {
             case OPENER_OPEN_ARGUMENT:
-            case OPENER_CREATE_ARGUMENT:
             case OPENER_EDIT_ARGUMENT:
             case OPENER_QR_ARGUMENT:
             case OPENER_COPY_LINK_ARGUMENT:
@@ -221,9 +220,8 @@ public class PreferencesManager {
                 PREFERENCES.put(KEY_UNIX_OPENING_MODE, mode);
                 break;
             default:
-                log.warn("Can not save mode: {}, supported modes are: {},{},{},{},{},{},{}", mode,
+                log.warn("Can not save mode: {}, supported modes are: {},{},{},{},{},{}", mode,
                         OPENER_OPEN_ARGUMENT,
-                        OPENER_CREATE_ARGUMENT,
                         OPENER_EDIT_ARGUMENT,
                         OPENER_QR_ARGUMENT,
                         OPENER_COPY_LINK_ARGUMENT,
