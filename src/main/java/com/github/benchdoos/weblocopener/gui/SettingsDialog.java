@@ -395,6 +395,8 @@ public class SettingsDialog extends JFrame implements Translatable {
 
         initDragAndDropTarget();
 
+        initCreationNewFileOption();
+
         browserSetterPanel.init(); //don't forget it or it will crash fileBrowser
 
 
@@ -403,6 +405,11 @@ public class SettingsDialog extends JFrame implements Translatable {
 //        setSize(new Dimension(400, 260));
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
         translate();
+    }
+
+    private void initCreationNewFileOption() {
+        contentPane.registerKeyboardAction(e -> createNewFile(), KeyStroke.getKeyStroke("control N"),
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
     private void createNewFile() {
