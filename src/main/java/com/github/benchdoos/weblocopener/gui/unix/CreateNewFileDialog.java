@@ -16,20 +16,32 @@
 package com.github.benchdoos.weblocopener.gui.unix;
 
 import com.github.benchdoos.weblocopener.core.Translation;
+import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.gui.PlaceholderTextField;
+import com.github.benchdoos.weblocopener.service.links.WeblocLink;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
+import com.github.benchdoos.weblocopener.utils.Logging;
+import com.github.benchdoos.weblocopener.utils.UserUtils;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ResourceBundle;
 
 public class CreateNewFileDialog extends JDialog {
+    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
+
     private JPanel contentPane;
     private JButton buttonSave;
     private JButton buttonCancel;
@@ -82,11 +94,54 @@ public class CreateNewFileDialog extends JDialog {
     }
 
     private void onOK() {
-        dispose();
+        final String text = urlTextField.getText();
+        try {
+            final URL url = new URL(text);
+            String path = saveFileBrowser();
+            if (path != null) {
+                final String suffix = "." + ApplicationConstants.WEBLOC_FILE_EXTENSION;
+                if (!path.endsWith(suffix)) {
+                    path += suffix;
+                }
+                try {
+                    new WeblocLink().createLink(new File(path), url);
+                    dispose();
+                } catch (IOException e) {
+                    log.warn("Could not create .webloc link at: {} with url: {}", path, url, e);
+                    UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                            Translation.getTranslatedString("CreateNewFileBundle", "errorSave")
+                                    + " " + new File(path).getName() + " \n" + e.getLocalizedMessage(),
+                            TrayIcon.MessageType.ERROR);
+                }
+            }
+        } catch (MalformedURLException e) {
+            log.warn("Could not create url from text: {}, cause: {}", text, e.getMessage());
+            FrameUtils.shakeFrame(this);
+        }
     }
 
     private void onCancel() {
         dispose();
+    }
+
+    private String saveFileBrowser() {
+        log.debug("Opening File Browser");
+
+        FileDialog fileDialog = new FileDialog(FrameUtils.findDialog(this),
+                Translation.getTranslatedString("CreateNewFileBundle", "saveAsFile"),
+                FileDialog.SAVE);
+        try {
+            fileDialog.setIconImage(Toolkit.getDefaultToolkit()
+                    .getImage(getClass().getResource("/images/balloonIcon256.png")));
+            final String property = System.getProperty("user.home");
+            System.out.println(">" + property);
+            fileDialog.setDirectory(property);
+            return FrameUtils.getFilePathFromFileDialog(fileDialog, log);
+        } catch (Exception e) {
+            log.warn("Could not launch File Browser", e);
+            fileDialog.dispose();
+            return null;
+        }
     }
 
     private void createUIComponents() {
@@ -163,4 +218,5 @@ public class CreateNewFileDialog extends JDialog {
     public JComponent $$$getRootComponent$$$() {
         return contentPane;
     }
+
 }

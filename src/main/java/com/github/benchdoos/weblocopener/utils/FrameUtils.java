@@ -28,6 +28,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.font.TextAttribute;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -209,5 +210,20 @@ public class FrameUtils {
         Map<TextAttribute, Integer> fontAttributes = new HashMap<>();
         fontAttributes.put(TextAttribute.UNDERLINE, attribute2);
         textField.setFont(font.deriveFont(fontAttributes));
+    }
+
+    public static String getFilePathFromFileDialog(FileDialog fileDialog, Logger log) {
+        fileDialog.setVisible(true);
+        File[] f = fileDialog.getFiles();
+        if (f.length > 0) {
+            final String absolutePath = fileDialog.getFiles()[0].getAbsolutePath();
+            log.debug("Choice: " + absolutePath);
+            fileDialog.dispose();
+            return absolutePath;
+        } else {
+            log.debug("Choice canceled");
+            fileDialog.dispose();
+            return null;
+        }
     }
 }

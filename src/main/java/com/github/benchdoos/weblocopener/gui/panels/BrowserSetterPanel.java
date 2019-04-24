@@ -38,7 +38,6 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -324,18 +323,7 @@ public class BrowserSetterPanel extends JPanel implements SettingsPanel, Transla
             fd.setDirectory(System.getProperty("user.dir"));
             fd.setFile("*.exe");
             fd.setMultipleMode(false);
-            fd.setVisible(true);
-            File[] f = fd.getFiles();
-            if (f.length > 0) {
-                final String absolutePath = fd.getFiles()[0].getAbsolutePath();
-                log.debug("Choice: " + absolutePath);
-                fd.dispose();
-                return absolutePath;
-            } else {
-                log.debug("Choice canceled");
-                fd.dispose();
-                return null;
-            }
+            return FrameUtils.getFilePathFromFileDialog(fd, log);
         } catch (Exception e) {
             log.warn("Could not launch File Browser", e);
             fd.dispose();
