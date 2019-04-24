@@ -64,6 +64,15 @@ public class CreateNewFileDialog extends JDialog {
     private void initWindowGui() {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowActivated(WindowEvent e) {
+                if (urlTextField.getText().isEmpty()) {
+                    FrameUtils.fillTextFieldWithClipboard(urlTextField);
+                }
+                super.windowActivated(e);
+            }
+
+            @Override
             public void windowClosing(WindowEvent e) {
                 onCancel();
             }

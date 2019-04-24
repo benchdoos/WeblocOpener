@@ -46,8 +46,6 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.*;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
@@ -55,8 +53,6 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOC_FILE_EXTENSION;
@@ -64,7 +60,6 @@ import static com.github.benchdoos.weblocopener.core.constants.StringConstants.F
 
 
 public class EditDialog extends JFrame implements Translatable {
-    private final static int DEFAULT_APPLICATION_WIDTH = 450;
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private final String pathToEditingFile;
     private JPanel contentPane;
@@ -270,28 +265,10 @@ public class EditDialog extends JFrame implements Translatable {
             log.debug("Got URL [" + url + "] from [" + pathToEditingFile + "]");
         } catch (Exception e) {
             log.warn("Can not read url from: [" + pathToEditingFile + "]: ", e);
-            fillTextFieldWithClipboard();
+            FrameUtils.fillTextFieldWithClipboard(textField);
         }
     }
 
-    private void fillTextFieldWithClipboard() {
-        String data = "<empty clipboard>";
-        try {
-            data = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-            URL url = new URL(data);
-            UrlValidator urlValidator = new UrlValidator();
-            if (urlValidator.isValid(data)) {
-                textField.setText(url.toString());
-                setTextFieldFont(textField.getFont(), TextAttribute.UNDERLINE_ON);
-                textField.setCaretPosition(textField.getText().length());
-                textField.selectAll();
-                log.debug("Got URL from clipboard: " + url);
-            }
-        } catch (UnsupportedFlavorException | IllegalStateException | HeadlessException | IOException e) {
-            textField.setText("");
-            log.warn("Can not read URL from clipboard: [" + data + "]", e);
-        }
-    }
 
     private void initGui() {
         createTitle();
@@ -316,7 +293,7 @@ public class EditDialog extends JFrame implements Translatable {
             @Override
             public void windowActivated(WindowEvent e) {
                 if (textField.getText().isEmpty()) {
-                    fillTextFieldWithClipboard();
+                    FrameUtils.fillTextFieldWithClipboard(textField);
                 }
                 super.windowActivated(e);
             }
@@ -539,7 +516,7 @@ public class EditDialog extends JFrame implements Translatable {
         UrlValidator urlValidator = new UrlValidator();
         if (urlValidator.isValid(textField.getText())) {
             if (textField != null) {
-                setTextFieldFont(textField.getFont(), TextAttribute.UNDERLINE_ON);
+                FrameUtils.setTextFieldFont(textField, textField.getFont(), TextAttribute.UNDERLINE_ON);
                 if (!PreferencesManager.isDarkModeEnabledNow()) {
                     prepareTextFieldColor();
                 } else {
@@ -548,7 +525,7 @@ public class EditDialog extends JFrame implements Translatable {
             }
         } else {
             if (textField != null) {
-                setTextFieldFont(textField.getFont(), TextAttribute.SUPERSCRIPT_SUB);
+                FrameUtils.setTextFieldFont(textField, textField.getFont(), TextAttribute.SUPERSCRIPT_SUB);
                 if (!PreferencesManager.isDarkModeEnabledNow()) {
                     textField.setForeground(Color.BLACK);
                 } else {
@@ -659,11 +636,6 @@ public class EditDialog extends JFrame implements Translatable {
         }
     }
 
-    private void setTextFieldFont(Font font, int attribute2) {
-        Map<TextAttribute, Integer> fontAttributes = new HashMap<>();
-        fontAttributes.put(TextAttribute.UNDERLINE, attribute2);
-        textField.setFont(font.deriveFont(fontAttributes));
-    }
 
     @Override
     public void setVisible(boolean b) {

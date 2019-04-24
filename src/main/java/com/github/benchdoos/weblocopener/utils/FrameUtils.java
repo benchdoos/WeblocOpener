@@ -15,17 +15,30 @@
 
 package com.github.benchdoos.weblocopener.utils;
 
+import org.apache.commons.validator.routines.UrlValidator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.font.TextAttribute;
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Eugene Zrazhevsky on 30.10.2016.
  */
 public class FrameUtils {
+    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
+
     private static final Timer timer = new Timer(60, null);
 
     /**
@@ -171,5 +184,30 @@ public class FrameUtils {
                 }
             }
         };
+    }
+
+    public static void fillTextFieldWithClipboard(JTextField textField) {
+        String data = "<empty clipboard>";
+        try {
+            data = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
+            URL url = new URL(data);
+            UrlValidator urlValidator = new UrlValidator();
+            if (urlValidator.isValid(data)) {
+                textField.setText(url.toString());
+                setTextFieldFont(textField, textField.getFont(), TextAttribute.UNDERLINE_ON);
+                textField.setCaretPosition(textField.getText().length());
+                textField.selectAll();
+                log.debug("Got URL from clipboard: " + url);
+            }
+        } catch (UnsupportedFlavorException | IllegalStateException | HeadlessException | IOException e) {
+            textField.setText("");
+            log.warn("Can not read URL from clipboard: [" + data + "]", e);
+        }
+    }
+
+    public static void setTextFieldFont(JTextField textField, Font font, int attribute2) {
+        Map<TextAttribute, Integer> fontAttributes = new HashMap<>();
+        fontAttributes.put(TextAttribute.UNDERLINE, attribute2);
+        textField.setFont(font.deriveFont(fontAttributes));
     }
 }
