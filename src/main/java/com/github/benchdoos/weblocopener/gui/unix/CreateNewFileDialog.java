@@ -134,7 +134,6 @@ public class CreateNewFileDialog extends JDialog {
             fileDialog.setIconImage(Toolkit.getDefaultToolkit()
                     .getImage(getClass().getResource("/images/balloonIcon256.png")));
             final String property = System.getProperty("user.home");
-            System.out.println(">" + property);
             fileDialog.setDirectory(property);
             return FrameUtils.getFilePathFromFileDialog(fileDialog, log);
         } catch (Exception e) {
