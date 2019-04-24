@@ -42,6 +42,22 @@ public class FrameUtils {
     }
 
     /**
+     * Returns the location of point of window, when it should be on center of the parent window.
+     *
+     * @param parent window
+     * @param window that should be in center of the parent window
+     * @return Point of <code>Window</code> that is moved to center of the screen.
+     * @see Component#getLocation()
+     */
+    public static Point getFrameOnCenterOfParentFrame(Window parent, Window window) {
+        Dimension size = window.getSize();
+        int width = (int) ((parent.getSize().width / (double) 2) - (size.getWidth() / (double) 2));
+        int height = (int) ((parent.getSize().height / (double) 2) - (size.getHeight() / (double) 2));
+
+        return new Point(width + parent.getLocation().x, height + parent.getLocation().y);
+    }
+
+    /**
      * Finds window on component given.
      *
      * @param component Component where window is located.
