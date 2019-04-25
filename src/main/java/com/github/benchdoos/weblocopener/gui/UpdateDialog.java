@@ -288,9 +288,6 @@ public class UpdateDialog extends JFrame implements Translatable {
     }
 
     private void compareVersions(String str) {
-        System.out.println("Current application version: " + CoreUtils.getCurrentApplicationVersion());
-        System.out.println("Server application version: " + serverApplicationVersion);
-
         switch (Internal.versionCompare(serverApplicationVersion)) {
             case SERVER_VERSION_IS_NEWER:
                 buttonOK.setEnabled(true);
@@ -304,19 +301,6 @@ public class UpdateDialog extends JFrame implements Translatable {
                 buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkUp2Date"));
                 break;
         }
-
-        /*if (Internal.versionCompare(str, serverApplicationVersion.getVersion()) < 0) {
-            //Need to update
-            buttonOK.setEnabled(true);
-            buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOk"));
-        } else if (Internal.versionCompare(str, serverApplicationVersion.getVersion()) > 0) {
-            //App version is bigger then on server
-            buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkDev"));
-            buttonOK.setEnabled(PreferencesManager.isDevMode());
-        } else if (Internal.versionCompare(str, serverApplicationVersion.getVersion()) == 0) {
-            //No reason to update;
-            buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkUp2Date"));
-        }*/
     }
 
     private void createDefaultActionListeners() {
