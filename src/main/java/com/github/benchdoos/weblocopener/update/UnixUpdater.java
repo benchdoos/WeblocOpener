@@ -18,6 +18,7 @@ package com.github.benchdoos.weblocopener.update;
 import com.github.benchdoos.weblocopener.core.constants.PathConstants;
 import com.github.benchdoos.weblocopener.gui.UpdateDialog;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopener.utils.Internal;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import org.apache.commons.io.FileUtils;
@@ -34,13 +35,24 @@ import java.net.URL;
 public class UnixUpdater implements Updater {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static ApplicationVersion latestReleaseVersion = null;
+    private static ApplicationVersion latestBetaVersion = null;
 
     @Override
     public ApplicationVersion getLatestAppVersion() {
+        final ApplicationVersion latestReleaseAppVersion = getLatestReleaseAppVersion();
+
         if (PreferencesManager.isBetaUpdateInstalling()) {
-            return getLatestBetaAppVersion();
+            final ApplicationVersion latestBetaAppVersion = getLatestBetaAppVersion();
+
+            if (latestBetaAppVersion != null) {
+                if (Internal.versionCompare(latestBetaAppVersion, latestReleaseAppVersion)
+                        == Internal.VersionCompare.SERVER_VERSION_IS_NEWER) {
+                    return latestBetaAppVersion;
+                }
+            }
+            return latestReleaseAppVersion;
         } else {
-            return getLatestReleaseAppVersion();
+            return latestReleaseAppVersion;
         }
     }
 
@@ -53,7 +65,9 @@ public class UnixUpdater implements Updater {
 
     @Override
     public ApplicationVersion getLatestBetaAppVersion() {
-        return null;
+        if (latestBetaVersion != null) return latestBetaVersion;
+
+        return latestBetaVersion = UpdaterManager.getLatestBetaVersion(Updater.DEBIAN_SETUP_DEFAULT_NAME);
     }
 
     @Override
