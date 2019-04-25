@@ -144,6 +144,7 @@
                 </constraints>
                 <properties>
                   <text resource-bundle="translations/MainSetterPanelBundle" key="betaUpdateInstallCheckBox"/>
+                  <toolTipText resource-bundle="translations/MainSetterPanelBundle" key="betaUpdateTooltip"/>
                 </properties>
               </component>
             </children>
