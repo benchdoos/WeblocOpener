@@ -19,7 +19,6 @@ package com.github.benchdoos.weblocopener.update;
 import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
 import com.github.benchdoos.weblocopener.core.constants.PathConstants;
 import com.github.benchdoos.weblocopener.gui.UpdateDialog;
-import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import org.apache.commons.io.FileUtils;
@@ -51,11 +50,7 @@ public class WindowsUpdater implements Updater {
 
     @Override
     public ApplicationVersion getLatestAppVersion() {
-        if (PreferencesManager.isBetaUpdateInstalling()) {
-            return getLatestBetaAppVersion();
-        } else {
-            return getLatestReleaseAppVersion();
-        }
+        return UpdaterManager.getLatestVersion(this);
     }
 
     @Override

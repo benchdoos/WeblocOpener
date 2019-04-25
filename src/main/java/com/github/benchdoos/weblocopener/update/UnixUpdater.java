@@ -17,8 +17,6 @@ package com.github.benchdoos.weblocopener.update;
 
 import com.github.benchdoos.weblocopener.core.constants.PathConstants;
 import com.github.benchdoos.weblocopener.gui.UpdateDialog;
-import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopener.utils.Internal;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import org.apache.commons.io.FileUtils;
@@ -39,22 +37,7 @@ public class UnixUpdater implements Updater {
 
     @Override
     public ApplicationVersion getLatestAppVersion() {
-        final ApplicationVersion latestReleaseAppVersion = getLatestReleaseAppVersion();
-
-        if (PreferencesManager.isBetaUpdateInstalling()) {
-            final ApplicationVersion latestBetaAppVersion = getLatestBetaAppVersion();
-
-            if (latestBetaAppVersion != null) {
-                log.debug("Comparing latest beta version: {} and latest release version: {}", latestBetaAppVersion, latestReleaseAppVersion);
-                if (Internal.versionCompare(latestBetaAppVersion, latestReleaseAppVersion)
-                        == Internal.VersionCompare.SERVER_VERSION_IS_NEWER) {
-                    return latestBetaAppVersion;
-                }
-            }
-            return latestReleaseAppVersion;
-        } else {
-            return latestReleaseAppVersion;
-        }
+        return UpdaterManager.getLatestVersion(this);
     }
 
     @Override

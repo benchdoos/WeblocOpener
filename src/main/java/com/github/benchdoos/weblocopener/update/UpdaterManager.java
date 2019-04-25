@@ -15,6 +15,8 @@
 
 package com.github.benchdoos.weblocopener.update;
 
+import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopener.utils.Internal;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
@@ -39,6 +41,25 @@ public class UpdaterManager {
     private static final int CONNECTION_TIMEOUT = 500;
     private static final String DEFAULT_ENCODING = "UTF-8";
 
+
+    public static ApplicationVersion getLatestVersion(Updater updater) {
+        final ApplicationVersion latestReleaseAppVersion = updater.getLatestReleaseAppVersion();
+
+        if (PreferencesManager.isBetaUpdateInstalling()) {
+            final ApplicationVersion latestBetaAppVersion = updater.getLatestBetaAppVersion();
+
+            if (latestBetaAppVersion != null) {
+                log.debug("Comparing latest beta version: {} and latest release version: {}", latestBetaAppVersion, latestReleaseAppVersion);
+                if (Internal.versionCompare(latestBetaAppVersion, latestReleaseAppVersion)
+                        == Internal.VersionCompare.SERVER_VERSION_IS_NEWER) {
+                    return latestBetaAppVersion;
+                }
+            }
+            return latestReleaseAppVersion;
+        } else {
+            return latestReleaseAppVersion;
+        }
+    }
 
     private static HttpsURLConnection createConnection(@NotNull String urlString) throws IOException {
         try {
