@@ -34,10 +34,34 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 public class UpdaterManager {
+    //todo add json deserializer
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static final int CONNECTION_TIMEOUT = 500;
     private static final String DEFAULT_ENCODING = "UTF-8";
 
+
+    private static HttpsURLConnection createConnection(@NotNull String urlString) throws IOException {
+        try {
+            HttpsURLConnection connection;
+            log.debug("Creating connection to github: {}", urlString);
+
+            URL url = new URL(urlString);
+
+            connection = (HttpsURLConnection) url.openConnection();
+            connection.setConnectTimeout(CONNECTION_TIMEOUT);
+
+            if (!connection.getDoOutput()) {
+                connection.setDoOutput(true);
+            }
+            if (!connection.getDoInput()) {
+                connection.setDoInput(true);
+            }
+            return connection;
+        } catch (IOException e) {
+            log.warn("Could not establish connection to github: {}", urlString, e);
+            throw new IOException(e);
+        }
+    }
 
     public static Updater getUpdaterForCurrentOperatingSystem() {
         if (OperatingSystem.isWindows()) {
@@ -76,31 +100,21 @@ public class UpdaterManager {
         return applicationVersion;
     }
 
-    private static HttpsURLConnection createConnection(@NotNull String urlString) throws IOException {
-        try {
-            HttpsURLConnection connection;
-            log.debug("Creating connection to github: {}", urlString);
+    private static ApplicationVersion formAppVersionFromAllReleasesJson(String setupName, JsonArray array) {
+        ApplicationVersion latestBeta = null;
 
-            URL url = new URL(urlString);
-
-            connection = (HttpsURLConnection) url.openConnection();
-            connection.setConnectTimeout(CONNECTION_TIMEOUT);
-
-            if (!connection.getDoOutput()) {
-                connection.setDoOutput(true);
+        for (JsonElement jsonElement : array) {
+            final ApplicationVersion applicationVersion = formAppVersionFromLatestReleaseJson(setupName, jsonElement.getAsJsonObject());
+            if (applicationVersion.isBeta()) {
+                latestBeta = applicationVersion;
+                break;
             }
-            if (!connection.getDoInput()) {
-                connection.setDoInput(true);
-            }
-            return connection;
-        } catch (IOException e) {
-            log.warn("Could not establish connection to github: {}", urlString, e);
-            throw new IOException(e);
         }
+        return latestBeta;
     }
 
-    static ApplicationVersion getLatestReleaseAppVersion(String setupName, HttpsURLConnection connection) throws IOException {
-        log.debug("Getting current server application version");
+    private static ApplicationVersion getLatestReleaseAppVersion(String setupName, HttpsURLConnection connection) throws IOException {
+        log.debug("Getting current server application release version");
         String input;
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING));
 
@@ -110,6 +124,19 @@ public class UpdaterManager {
         JsonObject root = parser.parse(input).getAsJsonObject();
 
         return UpdaterManager.formAppVersionFromLatestReleaseJson(setupName, root);
+    }
+
+    private static ApplicationVersion getLatestBetaAppVersion(String setupName, HttpsURLConnection connection) throws IOException {
+        log.debug("Getting latest server beta application version");
+        String input;
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING));
+
+        input = bufferedReader.readLine();
+
+        JsonParser parser = new JsonParser();
+        JsonArray root = parser.parse(input).getAsJsonArray();
+
+        return UpdaterManager.formAppVersionFromAllReleasesJson(setupName, root);
     }
 
     static ApplicationVersion getLatestReleaseVersion(String setupName) {
@@ -122,6 +149,20 @@ public class UpdaterManager {
             return serverLatestReleaseApplicationVersion;
         } catch (IOException e) {
             log.warn("Can not get release application version", e);
+            return null;
+        }
+    }
+
+    public static ApplicationVersion getLatestBetaVersion(String setupName) {
+        try {
+            final HttpsURLConnection connection = UpdaterManager.createConnection(Updater.ALL_RELEASES_URL);
+            final ApplicationVersion serverLatestBetaApplicationVersion = getLatestBetaAppVersion(setupName, connection);
+
+            log.info("Server latest beta application version: {}", serverLatestBetaApplicationVersion);
+
+            return serverLatestBetaApplicationVersion;
+        } catch (IOException e) {
+            log.warn("Can not get latest beta application version", e);
             return null;
         }
     }
