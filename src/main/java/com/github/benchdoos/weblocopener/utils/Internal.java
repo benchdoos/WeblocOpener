@@ -35,9 +35,7 @@ public class Internal {
      * The result is a positive integer if str1 is _numerically_ greater than str2.
      * The result is zero if the strings are _numerically_ equal.
      * @apiNote It does not work if "1.10" is supposed to be equal to "1.10.0".
-     * @deprecated use {@link #versionCompare(ApplicationVersion)} instead
      */
-    @Deprecated
     public static int versionCompare(String str1, String str2) {
         if (str1 == null) {
             str1 = "0.0";
