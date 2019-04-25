@@ -399,7 +399,7 @@ public class UpdateDialog extends JFrame implements Translatable {
             @Override
             public void windowClosed(WindowEvent e) {
                 String str = CoreUtils.getApplicationVersionString();
-                if (Internal.versionCompare(str, serverApplicationVersion.getVersion()) == 0) {
+                if (Internal.versionCompare(serverApplicationVersion) == Internal.VersionCompare.VERSIONS_ARE_EQUAL) {
                     NonGuiUpdater.tray.remove(NonGuiUpdater.trayIcon);
                     System.exit(0);
                 }
