@@ -45,6 +45,7 @@ public class UnixUpdater implements Updater {
             final ApplicationVersion latestBetaAppVersion = getLatestBetaAppVersion();
 
             if (latestBetaAppVersion != null) {
+                log.debug("Comparing latest beta version: {} and latest release version: {}", latestBetaAppVersion, latestReleaseAppVersion);
                 if (Internal.versionCompare(latestBetaAppVersion, latestReleaseAppVersion)
                         == Internal.VersionCompare.SERVER_VERSION_IS_NEWER) {
                     return latestBetaAppVersion;
