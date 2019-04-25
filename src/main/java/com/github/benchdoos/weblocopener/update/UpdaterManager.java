@@ -39,12 +39,13 @@ import java.util.regex.Pattern;
 
 public class UpdaterManager {
     //todo add json deserializer
+
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static final int CONNECTION_TIMEOUT = 500;
     private static final String DEFAULT_ENCODING = "UTF-8";
     private static final Pattern BETA_FROM_RELEASE_TITLE_PATTERN = Pattern.compile("\\(beta\\.(\\d+)\\)");
 
-    public static ApplicationVersion getLatestVersion(Updater updater) {
+    static ApplicationVersion getLatestVersion(Updater updater) {
         final ApplicationVersion latestReleaseAppVersion = updater.getLatestReleaseAppVersion();
 
         if (PreferencesManager.isBetaUpdateInstalling()) {
@@ -189,7 +190,7 @@ public class UpdaterManager {
         }
     }
 
-    public static ApplicationVersion getLatestBetaVersion(String setupName) {
+    static ApplicationVersion getLatestBetaVersion(String setupName) {
         try {
             final HttpsURLConnection connection = UpdaterManager.createConnection(Updater.ALL_RELEASES_URL);
             final ApplicationVersion serverLatestBetaApplicationVersion = getLatestBetaAppVersion(setupName, connection);
