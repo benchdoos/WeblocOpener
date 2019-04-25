@@ -60,18 +60,28 @@ public class Internal {
         return Integer.signum(values1.length - values2.length);
     }
 
+    /**
+     * @return {@link VersionCompare}: comparing to current application version
+     */
     public static VersionCompare versionCompare(@NotNull ApplicationVersion serverVersion) {
         ApplicationVersion currentApplicationVersion = CoreUtils.getCurrentApplicationVersion();
 
-        final int compare = new Version(serverVersion).compareTo(new Version(currentApplicationVersion));
+        return versionCompare(serverVersion, currentApplicationVersion);
+    }
+
+
+    /**
+     * @param serverVersion  server version to compare
+     * @param currentVersion to compare with
+     * @return {@link VersionCompare}: comparing to given application version
+     */
+    public static VersionCompare versionCompare(@NotNull ApplicationVersion serverVersion, @NotNull ApplicationVersion currentVersion) {
+        final int compare = new Version(serverVersion).compareTo(new Version(currentVersion));
         if (compare < 0) {
-            System.out.println("CURRENT? VERSION IS NEWER");
             return VersionCompare.CURRENT_VERSION_IS_NEWER;
         } else if (compare > 0) {
-            System.out.println("CURRENT? VERSION IS NEWER");
             return VersionCompare.SERVER_VERSION_IS_NEWER;
         } else {
-            System.out.println("VERSIONS ARE EQUAL");
             return VersionCompare.VERSIONS_ARE_EQUAL;
         }
     }
