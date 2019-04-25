@@ -31,8 +31,10 @@ public interface Updater {
 
 
     /**
-     * @return latest {@link ApplicationVersion}, giving Beta or Release version,
-     * based on {@link PreferencesManager#isBetaUpdateInstalling()} setting
+     * @return latest {@link ApplicationVersion}, giving Beta if
+     * {@link PreferencesManager#isBetaUpdateInstalling()} is {@code true}
+     * and Release is older then Beta version,
+     * otherwise  will return Release version.
      */
     ApplicationVersion getLatestAppVersion();
 
@@ -42,7 +44,7 @@ public interface Updater {
     ApplicationVersion getLatestReleaseAppVersion();
 
     /**
-     * @return latest Beta OR Release {@link ApplicationVersion}
+     * @return latest Beta version {@link ApplicationVersion}
      */
     ApplicationVersion getLatestBetaAppVersion();
 
