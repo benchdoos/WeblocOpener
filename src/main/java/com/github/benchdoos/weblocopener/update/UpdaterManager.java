@@ -34,13 +34,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UpdaterManager {
     //todo add json deserializer
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static final int CONNECTION_TIMEOUT = 500;
     private static final String DEFAULT_ENCODING = "UTF-8";
-
+    private static final Pattern BETA_FROM_RELEASE_TITLE_PATTERN = Pattern.compile("\\(beta\\.(\\d+)\\)");
 
     public static ApplicationVersion getLatestVersion(Updater updater) {
         final ApplicationVersion latestReleaseAppVersion = updater.getLatestReleaseAppVersion();
@@ -108,7 +110,7 @@ public class UpdaterManager {
         applicationVersion.setUpdateInfo(root.getAsJsonObject().get(info).getAsString());
         applicationVersion.setUpdateTitle(root.getAsJsonObject().get(name).getAsString());
         final boolean isPreRelease = root.getAsJsonObject().get(prerelease).getAsBoolean();
-        applicationVersion.setBeta(new Beta(isPreRelease ? 1 : 0));
+        applicationVersion.setBeta(tryGetBetaFromName(applicationVersion.getUpdateTitle(), new Beta(isPreRelease ? 1 : 0)));
 
         JsonArray asserts = root.getAsJsonArray(assets);
         for (JsonElement assert_ : asserts) {
@@ -119,6 +121,19 @@ public class UpdaterManager {
             }
         }
         return applicationVersion;
+    }
+
+    private static Beta tryGetBetaFromName(String updateTitle, Beta beta) {
+        try {
+            Matcher matcher = BETA_FROM_RELEASE_TITLE_PATTERN.matcher(updateTitle);
+            if (matcher.find()) {
+                int betaVersion = Integer.parseInt(matcher.group(1));
+                return new Beta(betaVersion);
+            }
+
+        } catch (Exception ignore) {
+        }
+        return beta;
     }
 
     private static ApplicationVersion formAppVersionFromAllReleasesJson(String setupName, JsonArray array) {
