@@ -20,7 +20,6 @@ import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.update.UpdaterManager;
-import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.Internal;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.UserUtils;
@@ -71,9 +70,25 @@ public class NonGuiUpdater {
     }
 
     private void compareVersions() {
-        String str = PreferencesManager.isDevMode() ? "1.0.0.0" : CoreUtils.getApplicationVersionString();
-        if (Internal.versionCompare(str, serverApplicationVersion.getVersion()) < 0) {
-            //create tray icon and show pop-up
+
+        if (!PreferencesManager.isDevMode()) {
+            switch (Internal.versionCompare(serverApplicationVersion)) {
+                case SERVER_VERSION_IS_NEWER:
+                    onNewVersionAvailable();
+                    break;
+                case CURRENT_VERSION_IS_NEWER:
+                    log.info("Current version is newer");
+                    break;
+                case VERSIONS_ARE_EQUAL:
+                    log.info("There are no updates available");
+                    break;
+            }
+        } else onNewVersionAvailable();
+    }
+
+    private void onNewVersionAvailable() {
+        if (serverApplicationVersion.getDownloadUrl() != null) {
+            //todo change to JOptionPane for unix, until trayIcon does not work
             createTrayIcon();
 
             trayIcon.displayMessage(Translation.getTranslatedString("UpdateDialogBundle", "windowTitle"),
@@ -81,6 +96,8 @@ public class NonGuiUpdater {
                             "newVersionAvailableTrayNotification")
                             + ": " + serverApplicationVersion.getVersion(),
                     TrayIcon.MessageType.INFO);
+        } else {
+            log.warn("Update is available, but there is no version for current system: {}", serverApplicationVersion);
         }
     }
 
