@@ -69,7 +69,7 @@ You can use any custom browser by your own with custom call, using syntax: `<fil
 - **You can simply use it to open the link directly on your phone! Or you can share yor QR-Code by copying it to clipboard.**
 [<img src="https://benchdoos.github.io/img/faq/faq_qr_save.png"  width="888" />](#what-can-weblocopener-do)
 
-- **Auto-update tool will help you receive new updates just from the server. You should not check, if there is an update, WeblocOpener updater will notify you if there is a new version of the app.** 
+- **Auto-update tool will help you receive new updates just from the server. You should not check, if there is an update, WeblocOpener windowsUpdater will notify you if there is a new version of the app.** 
 [<img src="https://benchdoos.github.io/img/faq/faq_update.png"  width="888" />](#what-can-weblocopener-do)
 
 - **Find out, what's new in new update. Use info icon on Updater to check it out.** 

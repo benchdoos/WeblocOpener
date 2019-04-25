@@ -141,7 +141,7 @@ public class UserUtils {
         String msg;
         if (messageLevel == JOptionPane.ERROR_MESSAGE) {
 
-            msg = "<HTML><BODY><P>" + message + " <br>" + Translation.getTranslatedString("CommonsBundle", "pleaseVisitMessage") + " " +
+            msg = "<HTML><BODY><P>" + message + "<br>" + Translation.getTranslatedString("CommonsBundle", "pleaseVisitMessage") + " " +
                     "<a href=\"" + StringConstants.UPDATE_WEB_URL + "\">" + StringConstants.UPDATE_WEB_URL + "</P></BODY></HTML>";
         } else {
             msg = message;

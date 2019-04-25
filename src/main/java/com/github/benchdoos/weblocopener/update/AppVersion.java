@@ -57,7 +57,10 @@ public class AppVersion {
     }
 
     public void setVersion(String version) {
-        this.version = version.replace("v", "");
+        if (version != null) {
+            version = version.replace("v", ""); // this may fix old versions "v" start
+        }
+        this.version = version;
     }
 
     public long getSize() {

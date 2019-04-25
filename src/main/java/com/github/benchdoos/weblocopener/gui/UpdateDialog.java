@@ -24,6 +24,7 @@ import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.update.AppVersion;
 import com.github.benchdoos.weblocopener.update.Updater;
+import com.github.benchdoos.weblocopener.update.UpdaterManager;
 import com.github.benchdoos.weblocopener.utils.*;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -66,8 +67,6 @@ public class UpdateDialog extends JFrame implements Translatable {
     private JButton manualDownloadButton;
 
     private UpdateDialog() {
-        serverAppVersion = new AppVersion();
-
         iniGui();
         loadProperties();
 
@@ -260,11 +259,12 @@ public class UpdateDialog extends JFrame implements Translatable {
 
     public void checkForUpdates() {
         progressBar.setIndeterminate(true);
-        try {
-            updater = new Updater();
+        updater = UpdaterManager.getUpdaterForCurrentOperatingSystem();
+        System.out.println(updater);
+        if (updater != null) {
             createDefaultActionListeners();
 
-            serverAppVersion = updater.getAppVersion();
+            serverAppVersion = updater.getLatestAppVersion();
             progressBar.setIndeterminate(false);
             availableVersionLabel.setText(serverAppVersion.getVersion());
             setNewVersionSizeInfo();
@@ -274,10 +274,9 @@ public class UpdateDialog extends JFrame implements Translatable {
 
             String str = CoreUtils.getApplicationVersionString();
             compareVersions(str);
-        } catch (IOException e) {
+        } else {
             removeAllListeners(buttonOK);
 
-            Updater.canNotConnectManage(e);
             progressBar.setIndeterminate(false);
             buttonOK.setEnabled(true);
             buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "retryButton"));
@@ -289,7 +288,21 @@ public class UpdateDialog extends JFrame implements Translatable {
     }
 
     private void compareVersions(String str) {
-        if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
+        switch (Internal.versionCompare(serverAppVersion)) {
+            case SERVER_VERSION_IS_NEWER:
+                buttonOK.setEnabled(true);
+                buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOk"));
+                break;
+            case CURRENT_VERSION_IS_NEWER:
+                buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkDev"));
+                buttonOK.setEnabled(PreferencesManager.isDevMode());
+                break;
+            case VERSIONS_ARE_EQUAL:
+                buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkUp2Date"));
+                break;
+        }
+
+        /*if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
             //Need to update
             buttonOK.setEnabled(true);
             buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOk"));
@@ -300,7 +313,7 @@ public class UpdateDialog extends JFrame implements Translatable {
         } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
             //No reason to update;
             buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkUp2Date"));
-        }
+        }*/
     }
 
     private void createDefaultActionListeners() {
@@ -374,10 +387,10 @@ public class UpdateDialog extends JFrame implements Translatable {
                 log.debug("Calling to download setup manually");
                 URL url = null;
                 if (updater != null) {
-                    if (updater.getAppVersion() != null) {
+                    if (updater.getLatestAppVersion() != null) {
                         try {
-                            log.debug("Trying to open [" + updater.getAppVersion().getDownloadUrl() + "]");
-                            url = new URL(updater.getAppVersion().getDownloadUrl());
+                            log.debug("Trying to open [" + updater.getLatestAppVersion().getDownloadUrl() + "]");
+                            url = new URL(updater.getLatestAppVersion().getDownloadUrl());
                             UrlValidator urlValidator = new UrlValidator();
                             UserUtils.openWebUrl(url);
                         } catch (MalformedURLException e1) {
@@ -445,14 +458,22 @@ public class UpdateDialog extends JFrame implements Translatable {
         buttonOK.setEnabled(false);
         if (!Thread.currentThread().isInterrupted()) {
             try {
-                Updater.startUpdate(serverAppVersion);
+                updater.startUpdate(serverAppVersion);
             } catch (IOException e) {
-                log.warn("Could not start update", e);
+                if (serverAppVersion.getDownloadUrl() != null) {
+                    log.warn("Could not start update", e);
 
-                Translation translation = new Translation("UpdateDialogBundle");
-                UserUtils.showErrorMessageToUser(this,
-                        translation.getTranslatedString("lostConnectionTitle"),
-                        translation.getTranslatedString("lostConnectionMessage"));
+                    Translation translation = new Translation("UpdateDialogBundle");
+                    UserUtils.showErrorMessageToUser(this,
+                            translation.getTranslatedString("unableToUpdateTitle"),
+                            translation.getTranslatedString("lostConnectionMessage"));
+                } else {
+                    log.warn("Could not start update, there is no available version for this system", e);
+                    Translation translation = new Translation("UpdateDialogBundle");
+                    UserUtils.showErrorMessageToUser(this,
+                            translation.getTranslatedString("unableToUpdateTitle"),
+                            translation.getTranslatedString("noAvailableVersion"));
+                }
             }
             if (!Thread.currentThread().isInterrupted()) {
                 dispose();

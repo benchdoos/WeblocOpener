@@ -20,16 +20,17 @@ import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.update.AppVersion;
 import com.github.benchdoos.weblocopener.update.Updater;
+import com.github.benchdoos.weblocopener.update.UpdaterManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.Internal;
 import com.github.benchdoos.weblocopener.utils.Logging;
+import com.github.benchdoos.weblocopener.utils.UserUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 
 import static com.github.benchdoos.weblocopener.utils.system.SystemUtils.IS_WINDOWS_XP;
 
@@ -52,13 +53,20 @@ public class NonGuiUpdater {
         initGui();
 
         Updater updater;
-        try {
-            updater = new Updater();
+        updater = UpdaterManager.getUpdaterForCurrentOperatingSystem();
 
-            serverAppVersion = updater.getAppVersion();
+        final AppVersion latestAppVersion = updater.getLatestAppVersion();
+        if (latestAppVersion != null) {
+            serverAppVersion = latestAppVersion;
             compareVersions();
-        } catch (IOException e) {
-            Updater.canNotConnectManage(e);
+        } else {
+            log.warn("Can not get server version");
+            if (Application.updateMode != Application.UPDATE_MODE.SILENT) {
+                Translation translation = new Translation("UpdaterBundle");
+                UserUtils.showErrorMessageToUser(null, translation.getTranslatedString("canNotUpdateTitle"),
+                        translation.getTranslatedString("canNotUpdateMessage"));
+            }
+
         }
     }
 

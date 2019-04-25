@@ -17,6 +17,7 @@ package com.github.benchdoos.weblocopener.utils;
 
 import com.github.benchdoos.weblocopener.core.Main;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
+import com.github.benchdoos.weblocopener.update.AppVersion;
 import org.apache.commons.io.FileExistsException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -89,7 +90,7 @@ public class CoreUtils {
     /**
      * @param file to get it's name
      * @return filename for file without extension
-     * */
+     */
     public static String getFileName(File file) {
         if (file == null) {
             throw new IllegalArgumentException("File can not be null");
@@ -191,5 +192,21 @@ public class CoreUtils {
         g2d.dispose();
 
         return dimg;
+    }
+
+    public static AppVersion getCurrentAppVersion() {
+        AppVersion appVersion = new AppVersion();
+        appVersion.setVersion(getApplicationVersionString());
+        try {
+            Properties properties = new Properties();
+            properties.load(Main.class.getResourceAsStream("/application.properties"));
+            String betaString = properties.getProperty("application.beta", "false");
+            appVersion.setBeta(Boolean.parseBoolean(betaString));
+
+            return appVersion;
+        } catch (Exception e) {
+            log.warn("Could not load application AppVersion info", e);
+            return appVersion;
+        }
     }
 }
