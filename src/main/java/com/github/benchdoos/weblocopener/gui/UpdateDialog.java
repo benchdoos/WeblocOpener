@@ -65,6 +65,7 @@ public class UpdateDialog extends JFrame implements Translatable {
     private JButton updateInfoButton;
     private Thread updateThread;
     private JButton manualDownloadButton;
+    private JLabel betaLabel;
 
     private UpdateDialog() {
         iniGui();
@@ -131,13 +132,13 @@ public class UpdateDialog extends JFrame implements Translatable {
         final Spacer spacer1 = new Spacer();
         panel2.add(spacer1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayoutManager(4, 6, new Insets(10, 10, 0, 10), -1, -1));
+        panel3.setLayout(new GridLayoutManager(4, 7, new Insets(10, 10, 0, 10), -1, -1));
         contentPane.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
         panel3.add(spacer2, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         progressBar = new JProgressBar();
         progressBar.setStringPainted(false);
-        panel3.add(progressBar, new GridConstraints(2, 0, 1, 6, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(progressBar, new GridConstraints(2, 0, 1, 7, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         currentVersionStringLabel = new JLabel();
         this.$$$loadLabelText$$$(currentVersionStringLabel, ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("currentVersionStringLabel"));
         panel3.add(currentVersionStringLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -155,13 +156,13 @@ public class UpdateDialog extends JFrame implements Translatable {
         availableVersionLabel.setText("");
         panel3.add(availableVersionLabel, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer3 = new Spacer();
-        panel3.add(spacer3, new GridConstraints(1, 4, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        panel3.add(spacer3, new GridConstraints(1, 5, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         newVersionSizeLabel = new JLabel();
         newVersionSizeLabel.setText("");
         panel3.add(newVersionSizeLabel, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         unitLabel = new JLabel();
         unitLabel.setText("");
-        panel3.add(unitLabel, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(unitLabel, new GridConstraints(1, 4, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         updateInfoButton = new JButton();
         updateInfoButton.setBorderPainted(false);
         updateInfoButton.setContentAreaFilled(false);
@@ -174,7 +175,10 @@ public class UpdateDialog extends JFrame implements Translatable {
         updateInfoButton.setRequestFocusEnabled(false);
         updateInfoButton.setText("");
         updateInfoButton.setToolTipText(ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("infoAboutUpdate"));
-        panel3.add(updateInfoButton, new GridConstraints(1, 5, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(updateInfoButton, new GridConstraints(1, 6, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        betaLabel = new JLabel();
+        betaLabel.setText("(beta)");
+        panel3.add(betaLabel, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
@@ -265,6 +269,8 @@ public class UpdateDialog extends JFrame implements Translatable {
             createDefaultActionListeners();
 
             serverApplicationVersion = updater.getLatestAppVersion();
+            betaLabel.setVisible(serverApplicationVersion.isBeta());
+
             progressBar.setIndeterminate(false);
             availableVersionLabel.setText(serverApplicationVersion.getVersion());
             setNewVersionSizeInfo();
@@ -272,8 +278,7 @@ public class UpdateDialog extends JFrame implements Translatable {
             updateInfoButton.setEnabled(true);
 
 
-            String str = CoreUtils.getApplicationVersionString();
-            compareVersions(str);
+            compareVersions();
         } else {
             removeAllListeners(buttonOK);
 
@@ -287,7 +292,7 @@ public class UpdateDialog extends JFrame implements Translatable {
         }
     }
 
-    private void compareVersions(String str) {
+    private void compareVersions() {
         switch (Internal.versionCompare(serverApplicationVersion)) {
             case SERVER_VERSION_IS_NEWER:
                 buttonOK.setEnabled(true);
@@ -343,26 +348,52 @@ public class UpdateDialog extends JFrame implements Translatable {
 
         }
 
+        betaLabel.setVisible(false);
+
         createDefaultActionListeners();
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+
+        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        initListeners();
+
+        initWindowListeners();
+
+
+        translate();
+
+        pack();
+        setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
+        setSize(new Dimension(400, 170));
+        setResizable(false);
+    }
+
+    private void initWindowListeners() {
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 onCancel();
             }
         });
 
-        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-
-        updateInfoButton.addActionListener(new ActionListener() {
+        addWindowListener(new WindowAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                onUpdateInfoButton();
+            public void windowClosed(WindowEvent e) {
+                String str = CoreUtils.getApplicationVersionString();
+                if (Internal.versionCompare(serverApplicationVersion) == Internal.VersionCompare.VERSIONS_ARE_EQUAL) {
+                    NonGuiUpdater.tray.remove(NonGuiUpdater.trayIcon);
+                    System.exit(0);
+                }
+                super.windowClosed(e);
             }
-        });
 
-        updateInfoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        });
+    }
+
+    private void initListeners() {
+        initUpdateInfoButton();
 
         manualDownloadButton.addActionListener(new ActionListener() {
             @Override
@@ -394,26 +425,17 @@ public class UpdateDialog extends JFrame implements Translatable {
                 UserUtils.openWebUrl(StringConstants.UPDATE_WEB_URL);
             }
         });
+    }
 
-        addWindowListener(new WindowAdapter() {
+    private void initUpdateInfoButton() {
+        updateInfoButton.addActionListener(new ActionListener() {
             @Override
-            public void windowClosed(WindowEvent e) {
-                String str = CoreUtils.getApplicationVersionString();
-                if (Internal.versionCompare(serverApplicationVersion) == Internal.VersionCompare.VERSIONS_ARE_EQUAL) {
-                    NonGuiUpdater.tray.remove(NonGuiUpdater.trayIcon);
-                    System.exit(0);
-                }
-                super.windowClosed(e);
+            public void actionPerformed(ActionEvent e) {
+                onUpdateInfoButton();
             }
-
         });
 
-        translate();
-
-        pack();
-        setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
-        setSize(new Dimension(400, 170));
-        setResizable(false);
+        updateInfoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
     private void loadProperties() {
