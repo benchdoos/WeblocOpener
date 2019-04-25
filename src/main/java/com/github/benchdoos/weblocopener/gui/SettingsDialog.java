@@ -28,6 +28,7 @@ import com.github.benchdoos.weblocopener.utils.Converter;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.UserUtils;
+import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -408,8 +409,12 @@ public class SettingsDialog extends JFrame implements Translatable {
     }
 
     private void initCreationNewFileOption() {
-        contentPane.registerKeyboardAction(e -> createNewFile(), KeyStroke.getKeyStroke("control N"),
-                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        final boolean unix = OperatingSystem.isUnix();
+        addNewFileButton.setVisible(unix);
+        if (unix) {
+            contentPane.registerKeyboardAction(e -> createNewFile(), KeyStroke.getKeyStroke("control N"),
+                    JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        }
     }
 
     private void createNewFile() {
