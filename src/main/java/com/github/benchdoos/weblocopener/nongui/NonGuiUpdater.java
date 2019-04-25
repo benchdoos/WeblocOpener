@@ -18,13 +18,13 @@ package com.github.benchdoos.weblocopener.nongui;
 import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopener.update.AppVersion;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.update.UpdaterManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.Internal;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.UserUtils;
+import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -45,7 +45,7 @@ public class NonGuiUpdater {
     public static TrayIcon trayIcon;
 
 
-    private AppVersion serverAppVersion = null;
+    private ApplicationVersion serverApplicationVersion = null;
 
 
     public NonGuiUpdater() {
@@ -55,9 +55,9 @@ public class NonGuiUpdater {
         Updater updater;
         updater = UpdaterManager.getUpdaterForCurrentOperatingSystem();
 
-        final AppVersion latestAppVersion = updater.getLatestAppVersion();
-        if (latestAppVersion != null) {
-            serverAppVersion = latestAppVersion;
+        final ApplicationVersion latestApplicationVersion = updater.getLatestAppVersion();
+        if (latestApplicationVersion != null) {
+            serverApplicationVersion = latestApplicationVersion;
             compareVersions();
         } else {
             log.warn("Can not get server version");
@@ -72,14 +72,14 @@ public class NonGuiUpdater {
 
     private void compareVersions() {
         String str = PreferencesManager.isDevMode() ? "1.0.0.0" : CoreUtils.getApplicationVersionString();
-        if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
+        if (Internal.versionCompare(str, serverApplicationVersion.getVersion()) < 0) {
             //create tray icon and show pop-up
             createTrayIcon();
 
             trayIcon.displayMessage(Translation.getTranslatedString("UpdateDialogBundle", "windowTitle"),
                     Translation.getTranslatedString("UpdateDialogBundle",
                             "newVersionAvailableTrayNotification")
-                            + ": " + serverAppVersion.getVersion(),
+                            + ": " + serverApplicationVersion.getVersion(),
                     TrayIcon.MessageType.INFO);
         }
     }

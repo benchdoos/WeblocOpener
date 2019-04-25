@@ -21,6 +21,7 @@ import com.github.benchdoos.weblocopener.core.constants.PathConstants;
 import com.github.benchdoos.weblocopener.gui.UpdateDialog;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.Logging;
+import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,8 +40,8 @@ import java.net.URL;
 public class WindowsUpdater implements Updater {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
-    private static AppVersion latestReleaseVersion = null;
-    private static AppVersion latestBetaVersion = null;
+    private static ApplicationVersion latestReleaseVersion = null;
+    private static ApplicationVersion latestBetaVersion = null;
 
     private static void update(File file) throws IOException {
         Runtime runtime = Runtime.getRuntime();
@@ -49,7 +50,7 @@ public class WindowsUpdater implements Updater {
     }
 
     @Override
-    public AppVersion getLatestAppVersion() {
+    public ApplicationVersion getLatestAppVersion() {
         if (PreferencesManager.isBetaUpdateInstalling()) {
             return getLatestBetaAppVersion();
         } else {
@@ -58,41 +59,41 @@ public class WindowsUpdater implements Updater {
     }
 
     @Override
-    public AppVersion getLatestReleaseAppVersion() {
+    public ApplicationVersion getLatestReleaseAppVersion() {
         if (latestReleaseVersion != null) return latestReleaseVersion;
         return latestReleaseVersion = UpdaterManager.getLatestReleaseVersion(Updater.WINDOWS_SETUP_DEFAULT_NAME);
     }
 
     @Override
-    public AppVersion getLatestBetaAppVersion() {
+    public ApplicationVersion getLatestBetaAppVersion() {
         return null;//todo add downloading beta
     }
 
     @Override
-    public void startUpdate(AppVersion appVersion) throws IOException {
-        log.info("Starting update for {}", appVersion.getVersion());
+    public void startUpdate(ApplicationVersion applicationVersion) throws IOException {
+        log.info("Starting update for {}", applicationVersion.getVersion());
         File installerFile = new File(
                 PathConstants.UPDATE_PATH_FILE + DEBIAN_SETUP_DEFAULT_NAME);
-        updateProgressBar(appVersion, installerFile);
+        updateProgressBar(applicationVersion, installerFile);
 
         try {
-            FileUtils.copyURLToFile(new URL(appVersion.getDownloadUrl()), installerFile, Updater.CONNECTION_TIMEOUT, Updater.CONNECTION_TIMEOUT);
+            FileUtils.copyURLToFile(new URL(applicationVersion.getDownloadUrl()), installerFile, Updater.CONNECTION_TIMEOUT, Updater.CONNECTION_TIMEOUT);
 
             update(installerFile);
         } catch (IOException e) {
-            log.warn("Can not download file: {} to {}", appVersion.getDownloadUrl(), installerFile, e);
+            log.warn("Can not download file: {} to {}", applicationVersion.getDownloadUrl(), installerFile, e);
             installerFile.deleteOnExit();
             throw new IOException(e);
         }
     }
 
-    private void updateProgressBar(AppVersion appVersion, File file) {
+    private void updateProgressBar(ApplicationVersion applicationVersion, File file) {
         if (UpdateDialog.getInstance() != null) {
             JProgressBar progressBar = UpdateDialog.getInstance().getProgressBar();
             ITaskbarList3 taskBar = null;
             Pointer<?> pointer;
 
-            final long size = appVersion.getSize();
+            final long size = applicationVersion.getSize();
             progressBar.setMaximum(Math.toIntExact(size));
             progressBar.setStringPainted(true);
 
@@ -112,7 +113,7 @@ public class WindowsUpdater implements Updater {
                     finalTaskBar.SetProgressValue((Pointer<Integer>) pointer, progressBar.getValue(),
                             progressBar.getMaximum());
                 }
-                if (file.length() == appVersion.getSize()) {
+                if (file.length() == applicationVersion.getSize()) {
                     timer.stop();
                 }
             };

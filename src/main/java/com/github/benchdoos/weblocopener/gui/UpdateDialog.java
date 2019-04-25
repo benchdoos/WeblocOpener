@@ -22,10 +22,10 @@ import com.github.benchdoos.weblocopener.core.constants.PathConstants;
 import com.github.benchdoos.weblocopener.core.constants.StringConstants;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopener.update.AppVersion;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.update.UpdaterManager;
 import com.github.benchdoos.weblocopener.utils.*;
+import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -54,7 +54,7 @@ public class UpdateDialog extends JFrame implements Translatable {
     private JButton buttonCancel;
     private Timer messageTimer;
     private Updater updater = null;
-    private AppVersion serverAppVersion;
+    private ApplicationVersion serverApplicationVersion;
     private JPanel contentPane;
     private JLabel currentVersionLabel;
     private JLabel availableVersionLabel;
@@ -264,9 +264,9 @@ public class UpdateDialog extends JFrame implements Translatable {
         if (updater != null) {
             createDefaultActionListeners();
 
-            serverAppVersion = updater.getLatestAppVersion();
+            serverApplicationVersion = updater.getLatestAppVersion();
             progressBar.setIndeterminate(false);
-            availableVersionLabel.setText(serverAppVersion.getVersion());
+            availableVersionLabel.setText(serverApplicationVersion.getVersion());
             setNewVersionSizeInfo();
 
             updateInfoButton.setEnabled(true);
@@ -288,7 +288,10 @@ public class UpdateDialog extends JFrame implements Translatable {
     }
 
     private void compareVersions(String str) {
-        switch (Internal.versionCompare(serverAppVersion)) {
+        System.out.println("Current application version: " + CoreUtils.getCurrentApplicationVersion());
+        System.out.println("Server application version: " + serverApplicationVersion);
+
+        switch (Internal.versionCompare(serverApplicationVersion)) {
             case SERVER_VERSION_IS_NEWER:
                 buttonOK.setEnabled(true);
                 buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOk"));
@@ -302,15 +305,15 @@ public class UpdateDialog extends JFrame implements Translatable {
                 break;
         }
 
-        /*if (Internal.versionCompare(str, serverAppVersion.getVersion()) < 0) {
+        /*if (Internal.versionCompare(str, serverApplicationVersion.getVersion()) < 0) {
             //Need to update
             buttonOK.setEnabled(true);
             buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOk"));
-        } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) > 0) {
+        } else if (Internal.versionCompare(str, serverApplicationVersion.getVersion()) > 0) {
             //App version is bigger then on server
             buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkDev"));
             buttonOK.setEnabled(PreferencesManager.isDevMode());
-        } else if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
+        } else if (Internal.versionCompare(str, serverApplicationVersion.getVersion()) == 0) {
             //No reason to update;
             buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkUp2Date"));
         }*/
@@ -333,8 +336,8 @@ public class UpdateDialog extends JFrame implements Translatable {
         buttonCancel.addActionListener(e -> onCancel());
     }
 
-    public AppVersion getAppVersion() {
-        return serverAppVersion;
+    public ApplicationVersion getAppVersion() {
+        return serverApplicationVersion;
     }
 
     public JButton getButtonCancel() {
@@ -412,7 +415,7 @@ public class UpdateDialog extends JFrame implements Translatable {
             @Override
             public void windowClosed(WindowEvent e) {
                 String str = CoreUtils.getApplicationVersionString();
-                if (Internal.versionCompare(str, serverAppVersion.getVersion()) == 0) {
+                if (Internal.versionCompare(str, serverApplicationVersion.getVersion()) == 0) {
                     NonGuiUpdater.tray.remove(NonGuiUpdater.trayIcon);
                     System.exit(0);
                 }
@@ -458,9 +461,9 @@ public class UpdateDialog extends JFrame implements Translatable {
         buttonOK.setEnabled(false);
         if (!Thread.currentThread().isInterrupted()) {
             try {
-                updater.startUpdate(serverAppVersion);
+                updater.startUpdate(serverApplicationVersion);
             } catch (IOException e) {
-                if (serverAppVersion.getDownloadUrl() != null) {
+                if (serverApplicationVersion.getDownloadUrl() != null) {
                     log.warn("Could not start update", e);
 
                     Translation translation = new Translation("UpdateDialogBundle");
@@ -486,16 +489,16 @@ public class UpdateDialog extends JFrame implements Translatable {
     }
 
     private void onUpdateInfoButton() {
-        if (serverAppVersion != null) {
-            if (!serverAppVersion.getUpdateInfo().isEmpty()) {
+        if (serverApplicationVersion != null) {
+            if (!serverApplicationVersion.getUpdateInfo().isEmpty()) {
                 UpdateInfoDialog dialog;
                 if (PreferencesManager.isDarkModeEnabledNow()) {
                     JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
                     colorful.colorizeGlobal();
-                    dialog = new UpdateInfoDialog(serverAppVersion);
+                    dialog = new UpdateInfoDialog(serverApplicationVersion);
                     colorful.colorize(dialog);
                 } else {
-                    dialog = new UpdateInfoDialog(serverAppVersion);
+                    dialog = new UpdateInfoDialog(serverApplicationVersion);
                 }
                 dialog.setVisible(true);
             }
@@ -512,7 +515,7 @@ public class UpdateDialog extends JFrame implements Translatable {
 
     private void runCleanInstallerFile() {
         final String installerFilePath = PathConstants.UPDATE_PATH_FILE + StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME
-                + serverAppVersion.getVersion() + ".exe";
+                + serverApplicationVersion.getVersion() + ".exe";
         log.info("Deleting file: " + installerFilePath);
         File installer = new File(installerFilePath);
         installer.deleteOnExit();
@@ -520,15 +523,15 @@ public class UpdateDialog extends JFrame implements Translatable {
 
 
     private void setNewVersionSizeInfo() {
-        if (serverAppVersion.getSize() > 1024 * 1024) {
-            double size = serverAppVersion.getSize() / 1024 / (double) 1024;
+        if (serverApplicationVersion.getSize() > 1024 * 1024) {
+            double size = serverApplicationVersion.getSize() / 1024 / (double) 1024;
             size = size * 100;
             int i = (int) Math.round(size);
             size = (double) i / 100;
             newVersionSizeLabel.setText(Double.toString(size));
             unitLabel.setText("MB");
         } else {
-            newVersionSizeLabel.setText(serverAppVersion.getSize() / 1024 + "");
+            newVersionSizeLabel.setText(serverApplicationVersion.getSize() / 1024 + "");
             unitLabel.setText("KB");
         }
     }

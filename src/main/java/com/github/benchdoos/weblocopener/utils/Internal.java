@@ -15,7 +15,7 @@
 
 package com.github.benchdoos.weblocopener.utils;
 
-import com.github.benchdoos.weblocopener.update.AppVersion;
+import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import com.github.benchdoos.weblocopener.utils.version.Version;
 import org.jetbrains.annotations.NotNull;
 
@@ -60,10 +60,10 @@ public class Internal {
         return Integer.signum(values1.length - values2.length);
     }
 
-    public static VersionCompare versionCompare(@NotNull AppVersion serverVersion) {
-        AppVersion currentAppVersion = CoreUtils.getCurrentAppVersion();
+    public static VersionCompare versionCompare(@NotNull ApplicationVersion serverVersion) {
+        ApplicationVersion currentApplicationVersion = CoreUtils.getCurrentApplicationVersion();
 
-        final int compare = new Version(serverVersion).compareTo(new Version(currentAppVersion));
+        final int compare = new Version(serverVersion).compareTo(new Version(currentApplicationVersion));
         if (compare < 0) {
             System.out.println("CURRENT? VERSION IS NEWER");
             return VersionCompare.CURRENT_VERSION_IS_NEWER;

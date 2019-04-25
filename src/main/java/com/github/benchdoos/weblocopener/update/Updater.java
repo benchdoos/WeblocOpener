@@ -16,6 +16,7 @@
 package com.github.benchdoos.weblocopener.update;
 
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 
 import java.io.IOException;
 
@@ -30,20 +31,20 @@ public interface Updater {
 
 
     /**
-     * @return latest {@link AppVersion}, giving Beta or Release version,
+     * @return latest {@link ApplicationVersion}, giving Beta or Release version,
      * based on {@link PreferencesManager#isBetaUpdateInstalling()} setting
      */
-    AppVersion getLatestAppVersion();
+    ApplicationVersion getLatestAppVersion();
 
     /**
-     * @return latest Release {@link AppVersion}
+     * @return latest Release {@link ApplicationVersion}
      */
-    AppVersion getLatestReleaseAppVersion();
+    ApplicationVersion getLatestReleaseAppVersion();
 
     /**
-     * @return latest Beta OR Release {@link AppVersion}
+     * @return latest Beta OR Release {@link ApplicationVersion}
      */
-    AppVersion getLatestBetaAppVersion();
+    ApplicationVersion getLatestBetaAppVersion();
 
-    void startUpdate(AppVersion appVersion) throws IOException;
+    void startUpdate(ApplicationVersion applicationVersion) throws IOException;
 }

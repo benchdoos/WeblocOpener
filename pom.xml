@@ -33,7 +33,7 @@
         <java.version>1.8</java.version>
         <copyright>Copyright © 2016-2019 Eugene Zrazhevsky</copyright>
 
-        <application.version.beta>false</application.version.beta>
+        <application.version.beta.version>0</application.version.beta.version>
     </properties>
 
     <scm>

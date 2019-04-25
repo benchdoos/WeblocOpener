@@ -15,21 +15,20 @@
 
 package com.github.benchdoos.weblocopener.utils.version;
 
-import com.github.benchdoos.weblocopener.update.AppVersion;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.StringJoiner;
 
 public class Version implements Comparable<Version> {
-    private final AppVersion appVersion;
+    private final ApplicationVersion applicationVersion;
     private int major;
     private int minor;
     private int micro;
     private int build;
 
-    public Version(AppVersion appVersion) {
-        this.appVersion = appVersion;
-        init(this.appVersion);
+    public Version(ApplicationVersion applicationVersion) {
+        this.applicationVersion = applicationVersion;
+        init(this.applicationVersion);
     }
 
 
@@ -59,9 +58,9 @@ public class Version implements Comparable<Version> {
     // build: 132
 
 
-    private void init(@NotNull AppVersion appVersion) {
+    private void init(@NotNull ApplicationVersion applicationVersion) {
 
-        final String version = appVersion.getVersion();
+        final String version = applicationVersion.getVersion();
         if (version == null) {
             return;
         }

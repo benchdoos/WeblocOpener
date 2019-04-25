@@ -17,7 +17,8 @@ package com.github.benchdoos.weblocopener.utils;
 
 import com.github.benchdoos.weblocopener.core.Main;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
-import com.github.benchdoos.weblocopener.update.AppVersion;
+import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
+import com.github.benchdoos.weblocopener.utils.version.Beta;
 import org.apache.commons.io.FileExistsException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -194,19 +195,21 @@ public class CoreUtils {
         return dimg;
     }
 
-    public static AppVersion getCurrentAppVersion() {
-        AppVersion appVersion = new AppVersion();
-        appVersion.setVersion(getApplicationVersionString());
+    public static ApplicationVersion getCurrentApplicationVersion() {
+        ApplicationVersion applicationVersion = new ApplicationVersion();
+        applicationVersion.setVersion(getApplicationVersionString());
         try {
             Properties properties = new Properties();
             properties.load(Main.class.getResourceAsStream("/application.properties"));
-            String betaString = properties.getProperty("application.beta", "false");
-            appVersion.setBeta(Boolean.parseBoolean(betaString));
+            String betaString = properties.getProperty("application.beta", "0");
+            final int i = Integer.parseInt(betaString);
 
-            return appVersion;
+            applicationVersion.setBeta(new Beta(i));
+
+            return applicationVersion;
         } catch (Exception e) {
-            log.warn("Could not load application AppVersion info", e);
-            return appVersion;
+            log.warn("Could not load application ApplicationVersion info", e);
+            return applicationVersion;
         }
     }
 }

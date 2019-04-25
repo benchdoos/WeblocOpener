@@ -13,26 +13,26 @@
  * Eugene Zrazhevsky <eugene.zrazhevsky@gmail.com>
  */
 
-package com.github.benchdoos.weblocopener.update;
+package com.github.benchdoos.weblocopener.utils.version;
 
 import java.util.StringJoiner;
 
 /**
  * Created by Eugene Zrazhevsky on 03.11.2016.
  */
-public class AppVersion {
+public class ApplicationVersion {
     private String version;
     private String downloadUrl;
     private long size;
     private String updateTitle;
     private String updateInfo;
-    private boolean beta;
+    private Beta beta = new Beta(0);
 
     public boolean isBeta() {
-        return beta;
+        return beta.isBeta();
     }
 
-    public void setBeta(boolean beta) {
+    public void setBeta(Beta beta) {
         this.beta = beta;
     }
 
@@ -40,7 +40,7 @@ public class AppVersion {
         return downloadUrl;
     }
 
-    void setDownloadUrl(String downloadUrl) {
+    public void setDownloadUrl(String downloadUrl) {
         this.downloadUrl = downloadUrl;
     }
 
@@ -48,7 +48,7 @@ public class AppVersion {
         return updateTitle;
     }
 
-    void setUpdateTitle(String updateTitle) {
+    public void setUpdateTitle(String updateTitle) {
         this.updateTitle = updateTitle;
     }
 
@@ -74,7 +74,7 @@ public class AppVersion {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", AppVersion.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", ApplicationVersion.class.getSimpleName() + "[", "]")
                 .add("version='" + version + "'")
                 .add("downloadUrl='" + downloadUrl + "'")
                 .add("size=" + size)
@@ -92,7 +92,8 @@ public class AppVersion {
         return updateInfo;
     }
 
-    void setUpdateInfo(String updateInfo) {
+    public void setUpdateInfo(String updateInfo) {
         this.updateInfo = updateInfo;
     }
+
 }

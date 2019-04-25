@@ -17,6 +17,8 @@ package com.github.benchdoos.weblocopener.update;
 
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
+import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
+import com.github.benchdoos.weblocopener.utils.version.Beta;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -45,7 +47,7 @@ public class UpdaterManager {
         } else return null;
     }
 
-    private static AppVersion formAppVersionFromLatestReleaseJson(String setupName, JsonObject root) {
+    private static ApplicationVersion formAppVersionFromLatestReleaseJson(String setupName, JsonObject root) {
         final String version = "tag_name";
         final String browser_download_url = "browser_download_url";
         final String assets = "assets";
@@ -54,23 +56,24 @@ public class UpdaterManager {
         final String info = "body";
         final String prerelease = "prerelease"; //beta if true
 
-        AppVersion appVersion = new AppVersion();
+        ApplicationVersion applicationVersion = new ApplicationVersion();
 
 
-        appVersion.setVersion(root.getAsJsonObject().get(version).getAsString());
-        appVersion.setUpdateInfo(root.getAsJsonObject().get(info).getAsString());
-        appVersion.setUpdateTitle(root.getAsJsonObject().get(name).getAsString());
-        appVersion.setBeta(root.getAsJsonObject().get(prerelease).getAsBoolean());
+        applicationVersion.setVersion(root.getAsJsonObject().get(version).getAsString());
+        applicationVersion.setUpdateInfo(root.getAsJsonObject().get(info).getAsString());
+        applicationVersion.setUpdateTitle(root.getAsJsonObject().get(name).getAsString());
+        final boolean isPreRelease = root.getAsJsonObject().get(prerelease).getAsBoolean();
+        applicationVersion.setBeta(new Beta(isPreRelease ? 1 : 0));
 
         JsonArray asserts = root.getAsJsonArray(assets);
         for (JsonElement assert_ : asserts) {
             JsonObject userObject = assert_.getAsJsonObject();
             if (userObject.get(name).getAsString().equals(setupName)) {
-                appVersion.setDownloadUrl(userObject.get(browser_download_url).getAsString());
-                appVersion.setSize(userObject.get(size).getAsLong());
+                applicationVersion.setDownloadUrl(userObject.get(browser_download_url).getAsString());
+                applicationVersion.setSize(userObject.get(size).getAsLong());
             }
         }
-        return appVersion;
+        return applicationVersion;
     }
 
     private static HttpsURLConnection createConnection(@NotNull String urlString) throws IOException {
@@ -96,7 +99,7 @@ public class UpdaterManager {
         }
     }
 
-    static AppVersion getLatestReleaseAppVersion(String setupName, HttpsURLConnection connection) throws IOException {
+    static ApplicationVersion getLatestReleaseAppVersion(String setupName, HttpsURLConnection connection) throws IOException {
         log.debug("Getting current server application version");
         String input;
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING));
@@ -109,10 +112,10 @@ public class UpdaterManager {
         return UpdaterManager.formAppVersionFromLatestReleaseJson(setupName, root);
     }
 
-    static AppVersion getLatestReleaseVersion(String setupName) {
+    static ApplicationVersion getLatestReleaseVersion(String setupName) {
         try {
             final HttpsURLConnection connection = UpdaterManager.createConnection(Updater.LATEST_RELEASE_URL);
-            final AppVersion serverLatestReleaseApplicationVersion = getLatestReleaseAppVersion(setupName, connection);
+            final ApplicationVersion serverLatestReleaseApplicationVersion = getLatestReleaseAppVersion(setupName, connection);
 
             log.info("Server application version: {}", serverLatestReleaseApplicationVersion);
 

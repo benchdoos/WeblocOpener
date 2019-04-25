@@ -17,10 +17,10 @@ package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopener.update.AppVersion;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.UserUtils;
+import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -41,13 +41,13 @@ import static com.github.benchdoos.weblocopener.utils.system.SystemUtils.IS_WIND
 class UpdateInfoDialog extends JDialog {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
-    private AppVersion appVersion;
+    private ApplicationVersion applicationVersion;
     private JPanel contentPane;
     private JButton buttonOK;
     private JTextPane textPane;
 
-    UpdateInfoDialog(AppVersion appVersion) {
-        this.appVersion = appVersion;
+    UpdateInfoDialog(ApplicationVersion applicationVersion) {
+        this.applicationVersion = applicationVersion;
         createGUI();
     }
 
@@ -125,7 +125,7 @@ class UpdateInfoDialog extends JDialog {
     }
 
     private void createGUI() {
-        setTitle(Translation.getTranslatedString("UpdateDialogBundle", "infoAboutUpdate") + " — " + appVersion.getVersion());
+        setTitle(Translation.getTranslatedString("UpdateDialogBundle", "infoAboutUpdate") + " — " + applicationVersion.getVersion());
         if (IS_WINDOWS_XP) {
             setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateInfoDialog.class.getResource("/images/infoIcon16_white.png")));
         } else {
@@ -141,7 +141,7 @@ class UpdateInfoDialog extends JDialog {
                 JComponent.WHEN_IN_FOCUSED_WINDOW);
 
 
-        textPane.setText(generatePageForDisplay(appVersion.getUpdateTitle(), appVersion.getUpdateInfo()));
+        textPane.setText(generatePageForDisplay(applicationVersion.getUpdateTitle(), applicationVersion.getUpdateInfo()));
 
         textPane.registerKeyboardAction(e -> onOK(), KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
                 JComponent.WHEN_FOCUSED);
