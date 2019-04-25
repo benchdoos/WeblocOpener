@@ -61,7 +61,9 @@ public class WindowsUpdater implements Updater {
 
     @Override
     public ApplicationVersion getLatestBetaAppVersion() {
-        return null;//todo add downloading beta
+        if (latestBetaVersion != null) return latestBetaVersion;
+
+        return latestBetaVersion = UpdaterManager.getLatestBetaVersion(Updater.WINDOWS_SETUP_DEFAULT_NAME);
     }
 
     @Override
