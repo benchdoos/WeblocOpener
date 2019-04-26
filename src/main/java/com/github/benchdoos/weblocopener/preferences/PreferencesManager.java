@@ -46,6 +46,7 @@ public class PreferencesManager {
     private static final String KEY_CONVERTER_EXPORT_EXTENSION = "converter_export_extension";
     private static final String KEY_LOCALE = "locale";
     private static final String KEY_UNIX_OPENING_MODE = "unix_open_mode";
+    private static final String KEY_LATEST_UPDATE_CHECK = "last_update_check";
 
     private static final Preferences PREFERENCES = Preferences.userRoot().node(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME.toLowerCase());
 
@@ -238,6 +239,14 @@ public class PreferencesManager {
                 break;
 
         }
+    }
+
+    public static Long getLatestUpdateRunning() {
+        return PREFERENCES.getLong(KEY_LATEST_UPDATE_CHECK, 0);
+    }
+
+    public static void setLatestUpdateRunning(long time) {
+        PREFERENCES.putLong(KEY_LATEST_UPDATE_CHECK, time);
     }
 
 
