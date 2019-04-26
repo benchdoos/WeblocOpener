@@ -35,7 +35,6 @@ public class CleanManager {
                 for (File file : files) {
                     final boolean windows = file.getName().contains(Updater.WINDOWS_SETUP_DEFAULT_NAME);
                     final boolean debian = file.getName().contains(Updater.DEBIAN_SETUP_DEFAULT_NAME);
-                    System.out.println("file: " + file);
                     if (windows || debian) {
                         final boolean delete = file.delete();
                         log.info("Setup file was deleted ({}): {}", file, delete);
