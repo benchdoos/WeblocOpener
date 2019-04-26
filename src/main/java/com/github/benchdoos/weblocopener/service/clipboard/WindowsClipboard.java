@@ -22,14 +22,18 @@ import java.awt.image.BufferedImage;
 public class WindowsClipboard implements Clipboard {
     @Override
     public void copy(String string) {
-        StringSelection stringSelection = new StringSelection(string);
-        java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(stringSelection, null);
+        if (string != null) {
+            StringSelection stringSelection = new StringSelection(string);
+            java.awt.datatransfer.Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
+        }
     }
 
     @Override
     public void copy(BufferedImage image) {
-        CopyImageToClipBoard ci = new CopyImageToClipBoard();
-        ci.copyImage(image);
+        if (image != null) {
+            CopyImageToClipBoard ci = new CopyImageToClipBoard();
+            ci.copyImage(image);
+        }
     }
 }

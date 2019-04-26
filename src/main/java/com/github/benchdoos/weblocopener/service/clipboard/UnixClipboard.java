@@ -15,16 +15,44 @@
 
 package com.github.benchdoos.weblocopener.service.clipboard;
 
+import com.github.benchdoos.weblocopener.utils.Logging;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 
 public class UnixClipboard implements Clipboard {
+    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
+    private static final int TIMER_ALIVE = 60_000; //60 secs
+
     @Override
     public void copy(String string) {
-        throw new UnsupportedOperationException();
+        if (string != null) {
+            UnixClipboardHelper thread = new UnixClipboardHelper(string);
+            thread.start();
+
+            interrupt(thread);
+        }
+    }
+
+    private void interrupt(UnixClipboardHelper thread) {
+        log.info("Copy thread {} will be interrupted in {} sec.", thread.getName(), TIMER_ALIVE / 1000);
+        Timer timer = new Timer(TIMER_ALIVE, e -> {
+            log.debug("Closing copy thread: {}", thread.getName());
+            thread.interrupt();
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
 
     @Override
     public void copy(BufferedImage image) {
-        throw new UnsupportedOperationException();
+        if (image != null) {
+            UnixClipboardHelper thread = new UnixClipboardHelper(image);
+            thread.start();
+
+            interrupt(thread);
+        }
     }
 }

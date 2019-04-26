@@ -20,6 +20,7 @@ import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
+import com.github.benchdoos.weblocopener.service.clipboard.ClipboardManager;
 import com.github.benchdoos.weblocopener.service.gui.MousePickListener;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
@@ -162,7 +163,7 @@ public class ShowQrDialog extends JFrame implements Translatable {
         copyImageButton.addActionListener(e -> {
             try {
                 final BufferedImage image = UrlsProceed.generateQrCode(url);
-                CoreUtils.copyImageToClipBoard(image);
+                ClipboardManager.getClipboardForSystem().copy(image);
 
                 UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
                         Translation.getTranslatedString("ShowQrDialogBundle", "successCopyImage"),

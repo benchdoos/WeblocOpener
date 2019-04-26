@@ -18,12 +18,14 @@ package com.github.benchdoos.weblocopener.service.clipboard;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 
 public class ClipboardManager {
+    private static final Clipboard DEFAULT_CLIPBOARD = new WindowsClipboard();
+
     public static Clipboard getClipboardForSystem() {
         if (OperatingSystem.isWindows()) {
             return new WindowsClipboard();
         } else if (OperatingSystem.isUnix()) {
             return new UnixClipboard();
         }
-        return null;
+        return DEFAULT_CLIPBOARD;
     }
 }
