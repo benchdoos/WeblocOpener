@@ -15,7 +15,7 @@
 
 package com.github.benchdoos.weblocopener.utils;
 
-import com.github.benchdoos.weblocopener.core.constants.StringConstants;
+import com.github.benchdoos.weblocopener.update.Updater;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,7 +33,10 @@ public class CleanManager {
             final File[] files = folder.listFiles();
             if (files != null) {
                 for (File file : files) {
-                    if (file.getName().contains(StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME)) {
+                    final boolean windows = file.getName().contains(Updater.WINDOWS_SETUP_DEFAULT_NAME);
+                    final boolean debian = file.getName().contains(Updater.DEBIAN_SETUP_DEFAULT_NAME);
+                    System.out.println("file: " + file);
+                    if (windows || debian) {
                         final boolean delete = file.delete();
                         log.info("Setup file was deleted ({}): {}", file, delete);
                     }

@@ -97,7 +97,6 @@ public class Application {
                         manageEditArgument(args);
                         break;
                     case OPENER_SETTINGS_ARGUMENT:
-                        CleanManager.clean();
                         runSettingsDialog();
                         break;
 
@@ -286,6 +285,8 @@ public class Application {
     }
 
     public static void runSettingsDialog() {
+        CleanManager.clean();
+
         SettingsDialog settingsDialog;
         if (PreferencesManager.isDarkModeEnabledNow()) {
             JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
@@ -336,7 +337,6 @@ public class Application {
                     runCreateNewFileWindow();
                     break;
                 case OPENER_SETTINGS_ARGUMENT:
-                    CleanManager.clean();
                     runSettingsDialog();
                     break;
                 case OPENER_ABOUT_ARGUMENT:
