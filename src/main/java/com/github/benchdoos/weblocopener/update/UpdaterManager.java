@@ -34,6 +34,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,6 +48,7 @@ public class UpdaterManager {
 
     static ApplicationVersion getLatestVersion(Updater updater) {
         final ApplicationVersion latestReleaseAppVersion = updater.getLatestReleaseAppVersion();
+        PreferencesManager.setLatestUpdateCheck(new Date());
 
         if (PreferencesManager.isBetaUpdateInstalling()) {
             final ApplicationVersion latestBetaAppVersion = updater.getLatestBetaAppVersion();

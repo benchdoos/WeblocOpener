@@ -167,7 +167,7 @@ public class NonGuiUpdater {
         try {
             tray.add(trayIcon);
         } catch (AWTException e) {
-            e.printStackTrace();
+            log.warn("Can not add trayIcon", e);
         }
     }
 

@@ -316,7 +316,7 @@ public class Application {
         new Thread(updateDialog::checkForUpdates).start();
     }
 
-    private static void runUpdateSilent() {
+    static void runUpdateSilent() {
         updateMode = UPDATE_MODE.SILENT;
         boolean isAutoUpdate = PreferencesManager.isAutoUpdateActive();
 

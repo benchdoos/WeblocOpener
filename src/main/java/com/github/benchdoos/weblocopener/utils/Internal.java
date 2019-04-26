@@ -19,10 +19,14 @@ import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import com.github.benchdoos.weblocopener.utils.version.Version;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Date;
+
 /**
  * Created by Eugene Zrazhevsky on 03.11.2016.
  */
 public class Internal {
+    private final static long MILLIS_PER_DAY = 24 * 60 * 60 * 1000L;
+
     /**
      * Compares two version strings.
      * <p>
@@ -90,5 +94,10 @@ public class Internal {
         SERVER_VERSION_IS_NEWER,
         CURRENT_VERSION_IS_NEWER,
         VERSIONS_ARE_EQUAL
+    }
+
+    public static boolean isCurrentTimeOlderOn24Hours(Date date) {
+        return Math.abs(new Date().getTime() - date.getTime()) > MILLIS_PER_DAY;
+
     }
 }
