@@ -57,7 +57,8 @@ public class UnixClipboardHelper extends Thread {
                 copy(image);
             }
         } catch (IOException e) {
-            log.warn("Can not copy or something is wrong, but I guess it's ok!", e);
+            log.warn("Can not copy or something is wrong, but I guess it's ok!");
+            log.trace("Can not copy or something is wrong, but I guess it's ok!", e);
         }
         super.run();
     }
