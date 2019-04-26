@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -241,12 +242,14 @@ public class PreferencesManager {
         }
     }
 
-    public static Long getLatestUpdateRunning() {
-        return PREFERENCES.getLong(KEY_LATEST_UPDATE_CHECK, 0);
+    public static Date getLatestUpdateCheck() {
+        final long aLong = PREFERENCES.getLong(KEY_LATEST_UPDATE_CHECK, 0);
+
+        return new Date(aLong);
     }
 
-    public static void setLatestUpdateRunning(long time) {
-        PREFERENCES.putLong(KEY_LATEST_UPDATE_CHECK, time);
+    public static void setLatestUpdateCheck(Date date) {
+        PREFERENCES.putLong(KEY_LATEST_UPDATE_CHECK, date.getTime());
     }
 
 
