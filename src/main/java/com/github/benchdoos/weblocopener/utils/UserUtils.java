@@ -20,6 +20,10 @@ import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.StringConstants;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
+import com.notification.NotificationManager;
+import com.notification.manager.SimpleManager;
+import com.notification.types.IconNotification;
+import com.utils.Time;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,6 +41,7 @@ import java.net.URL;
 public class UserUtils {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static final int MAXIMUM_MESSAGE_SIZE = 150;
+    private static final int TIME_NOTIFICATION_DELAY = 5000;
 
     private static void createTrayMessage(String title, String message, TrayIcon.MessageType messageType) {
         final int delay = 7000;
@@ -152,7 +157,9 @@ public class UserUtils {
     public static void showTrayMessage(String title, String message, TrayIcon.MessageType messageType) {
         if (PreferencesManager.isNotificationsShown()) {
             if (SystemTray.isSupported()) {
-                if (!OperatingSystem.isUnix()) { // fixme why is not working on ubuntu 19?
+                if (OperatingSystem.isUnix()) {
+                    createUnixNotification(title, message, messageType);
+                } else {
                     createTrayMessage(title, message, messageType);
                 }
             } else {
@@ -160,6 +167,36 @@ public class UserUtils {
                 showMessage(null, title, message, getJOptionPaneMessageLevel(messageType));
             }
         }
+    }
+
+    private static void createUnixNotification(String title, String message, TrayIcon.MessageType messageType) {
+        IconNotification notification = new IconNotification();
+        notification.setTitle(title);
+        notification.setSubtitle(message);
+        notification.setCloseOnClick(true);
+
+        switch (messageType) {
+            case WARNING: {
+                final Image image = Toolkit.getDefaultToolkit().getImage(
+                        UserUtils.class.getResource("/images/notification/warning.png"));
+                notification.setIcon(new ImageIcon(image));
+                break;
+            }
+            case ERROR: {
+                final Image image = Toolkit.getDefaultToolkit().getImage(
+                        UserUtils.class.getResource("/images/notification/error.png"));
+                notification.setIcon(new ImageIcon(image));
+                break;
+            }
+            case INFO: {
+                final Image image = Toolkit.getDefaultToolkit().getImage(
+                        UserUtils.class.getResource("/images/notification/info.png"));
+                notification.setIcon(new ImageIcon(image));
+                break;
+            }
+        }
+        NotificationManager manager = new SimpleManager();
+        manager.addNotification(notification, Time.milliseconds(TIME_NOTIFICATION_DELAY));
     }
 
     private static int getJOptionPaneMessageLevel(TrayIcon.MessageType messageType) {

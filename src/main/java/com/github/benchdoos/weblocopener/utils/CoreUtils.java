@@ -179,6 +179,10 @@ public class CoreUtils {
 
     }
 
+    public static BufferedImage resize(Image img, int width, int height) {
+        return resize(toBufferedImage(img), width, height);
+    }
+
     public static BufferedImage resize(BufferedImage img, int widht, int height) {
         Image tmp = img.getScaledInstance(widht, height, Image.SCALE_SMOOTH);
         BufferedImage dimg = new BufferedImage(widht, height, BufferedImage.TYPE_INT_ARGB);
@@ -188,6 +192,20 @@ public class CoreUtils {
         g2d.dispose();
 
         return dimg;
+    }
+
+    private static BufferedImage toBufferedImage(Image img) {
+        if (img instanceof BufferedImage) {
+            return (BufferedImage) img;
+        }
+
+        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D bGr = bimage.createGraphics();
+        bGr.drawImage(img, 0, 0, null);
+        bGr.dispose();
+
+        return bimage;
     }
 
     public static ApplicationVersion getCurrentApplicationVersion() {
