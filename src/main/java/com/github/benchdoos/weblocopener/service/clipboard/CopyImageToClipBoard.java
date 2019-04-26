@@ -13,12 +13,14 @@
  * Eugene Zrazhevsky <eugene.zrazhevsky@gmail.com>
  */
 
-package com.github.benchdoos.weblocopener.utils;
+package com.github.benchdoos.weblocopener.service.clipboard;
 
+import com.github.benchdoos.weblocopener.utils.Logging;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.*;
 import java.awt.image.BufferedImage;
 
@@ -32,7 +34,7 @@ public class CopyImageToClipBoard implements ClipboardOwner {
             Rectangle screen = new Rectangle(screenSize);
             BufferedImage i = robot.createScreenCapture(screen);
             TransferableImage trans = new TransferableImage(i);
-            Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
+            java.awt.datatransfer.Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
             c.setContents(trans, this);
         } catch (AWTException e) {
             log.warn("Can not copy image to clipboard", e);
@@ -41,7 +43,7 @@ public class CopyImageToClipBoard implements ClipboardOwner {
 
     void copyImage(BufferedImage bi) {
         TransferableImage trans = new TransferableImage(bi);
-        Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
+        java.awt.datatransfer.Clipboard c = Toolkit.getDefaultToolkit().getSystemClipboard();
         c.setContents(trans, this);
     }
 

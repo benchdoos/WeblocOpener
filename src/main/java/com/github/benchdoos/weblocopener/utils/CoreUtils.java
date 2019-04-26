@@ -179,11 +179,6 @@ public class CoreUtils {
 
     }
 
-    public static void copyImageToClipBoard(BufferedImage image) {
-        CopyImageToClipBoard ci = new CopyImageToClipBoard();
-        ci.copyImage(image);
-    }
-
     public static BufferedImage resize(BufferedImage img, int widht, int height) {
         Image tmp = img.getScaledInstance(widht, height, Image.SCALE_SMOOTH);
         BufferedImage dimg = new BufferedImage(widht, height, BufferedImage.TYPE_INT_ARGB);

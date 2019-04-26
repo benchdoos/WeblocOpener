@@ -25,6 +25,7 @@ import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
+import com.github.benchdoos.weblocopener.service.clipboard.ClipboardManager;
 import com.github.benchdoos.weblocopener.service.links.WeblocLink;
 import com.github.benchdoos.weblocopener.utils.CleanManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
@@ -37,8 +38,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
@@ -209,9 +208,7 @@ public class Application {
         String url;
         try {
             url = new Analyzer(path).getUrl();
-            StringSelection stringSelection = new StringSelection(url);
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clipboard.setContents(stringSelection, null);
+            ClipboardManager.getClipboardForSystem().copy(url);
             log.info("Successfully copied url to clipboard from: " + path);
 
             try {
@@ -233,7 +230,8 @@ public class Application {
                 String url;
                 url = new Analyzer(path).getUrl();
                 final BufferedImage image = UrlsProceed.generateQrCode(url);
-                CoreUtils.copyImageToClipBoard(image);
+
+                ClipboardManager.getClipboardForSystem().copy(image);
 
                 UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
                         Translation.getTranslatedString("ShowQrDialogBundle", "successCopyImage"),
