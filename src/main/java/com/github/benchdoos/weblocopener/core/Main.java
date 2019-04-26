@@ -16,8 +16,6 @@
 package com.github.benchdoos.weblocopener.core;
 
 import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
-import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopener.utils.Internal;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.UserUtils;
 import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
@@ -43,8 +41,6 @@ public class Main {
         try {
             SystemUtils.checkIfSystemIsSupported();
 
-            checkIfUpdatesAvailable();
-
             new Application(args);
         } catch (UnsupportedSystemException e) {
             log.fatal("System not supported", e);
@@ -52,12 +48,6 @@ public class Main {
         }
     }
 
-    private void checkIfUpdatesAvailable() {
-        if (Internal.isCurrentTimeOlderOn24Hours(PreferencesManager.getLatestUpdateCheck())) {
-            Thread checker = new Thread(Application::runUpdateSilent);
-            checker.start();
-        }
-    }
 
     private static void initLogging(MODE mode) {
         switch (mode) {

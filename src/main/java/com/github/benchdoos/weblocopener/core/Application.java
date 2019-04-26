@@ -27,10 +27,7 @@ import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.service.clipboard.ClipboardManager;
 import com.github.benchdoos.weblocopener.service.links.WeblocLink;
-import com.github.benchdoos.weblocopener.utils.CleanManager;
-import com.github.benchdoos.weblocopener.utils.CoreUtils;
-import com.github.benchdoos.weblocopener.utils.Logging;
-import com.github.benchdoos.weblocopener.utils.UserUtils;
+import com.github.benchdoos.weblocopener.utils.*;
 import com.github.benchdoos.weblocopener.utils.browser.BrowserManager;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
@@ -66,6 +63,7 @@ public class Application {
         } else if (args.length == 1) {
             manageSoloArgument(args);
         } else {
+            checkIfUpdatesAvailable();
             runSettingsDialog();
         }
 
@@ -91,12 +89,15 @@ public class Application {
             if (!args[0].isEmpty()) {
                 switch (args[0]) {
                     case OPENER_OPEN_ARGUMENT:
+                        checkIfUpdatesAvailable();
                         runAnalyzer(args[1]);
                         break;
                     case OPENER_EDIT_ARGUMENT:
+                        checkIfUpdatesAvailable();
                         manageEditArgument(args);
                         break;
                     case OPENER_SETTINGS_ARGUMENT:
+                        checkIfUpdatesAvailable();
                         runSettingsDialog();
                         break;
 
@@ -121,17 +122,20 @@ public class Application {
                         break;
                     }
                     case OPENER_QR_ARGUMENT:
+                        checkIfUpdatesAvailable();
                         if (args.length > 1) {
                             runQrDialog(args[1]);
                         }
                         break;
                     case OPENER_COPY_LINK_ARGUMENT:
+                        checkIfUpdatesAvailable();
                         if (args.length > 1) {
                             runCopyLink(args[1]);
                         }
                         break;
 
                     case OPENER_COPY_QR_ARGUMENT:
+                        checkIfUpdatesAvailable();
                         runCopyQrCode(args);
                         break;
 
@@ -139,6 +143,7 @@ public class Application {
                         runUpdateSilent();
                         break;
                     default:
+                        checkIfUpdatesAvailable();
                         runAnalyzer(args[0]);
                         break;
                 }
@@ -337,6 +342,7 @@ public class Application {
                     runCreateNewFileWindow();
                     break;
                 case OPENER_SETTINGS_ARGUMENT:
+                    checkIfUpdatesAvailable();
                     runSettingsDialog();
                     break;
                 case OPENER_ABOUT_ARGUMENT:
@@ -371,6 +377,7 @@ public class Application {
         final String unixOpeningMode = PreferencesManager.getUnixOpeningMode();
         log.info("Unix: opening mode is: {}", unixOpeningMode);
         if (unixOpeningMode.equalsIgnoreCase(SettingsConstants.OPENER_UNIX_DEFAULT_SELECTOR_MODE)) {
+            checkIfUpdatesAvailable();
             runModeSelectorWindow(args);
         } else {
             String[] unixArgs = new String[]{unixOpeningMode, args[0]};
@@ -385,4 +392,15 @@ public class Application {
     }
 
     public enum UPDATE_MODE {NORMAL, SILENT}
+
+    private static void checkIfUpdatesAvailable() {
+        log.debug("Checking if updates available");
+        if (Internal.isCurrentTimeOlderOn24Hours(PreferencesManager.getLatestUpdateCheck())) {
+            log.info("Checking if updates are available now, last check was at: {}", PreferencesManager.getLatestUpdateCheck());
+            Thread checker = new Thread(Application::runUpdateSilent);
+            checker.start();
+        } else {
+            log.info("Updates were checked less then 24h ago");
+        }
+    }
 }
