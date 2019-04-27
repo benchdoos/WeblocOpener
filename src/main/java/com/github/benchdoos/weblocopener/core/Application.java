@@ -207,9 +207,11 @@ public class Application {
                 log.warn("Could not edit file: {}", path, e);
             }
         } else {
+            Translation translation = new Translation("CommonsBundle");
+            final String message = translation.getTranslatedString("incorrectEditArgument");
             NotificationManager.getForcedNotification(null).showErrorNotification(
-                    "Error",
-                    "Argument '-edit' should have location path parameter.");//todo should be translated???
+                    translation.getTranslatedString("errorTitle"),
+                    message);
         }
     }
 
