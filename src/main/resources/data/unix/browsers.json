@@ -20,6 +20,13 @@
         "call": "firefox %site",
         "incognito": "firefox --private-window %site"
       }
+    },
+    {
+      "browser": {
+        "name": "Opera",
+        "call": "opera %site",
+        "incognito": "opera --private %site"
+      }
     }
   ]
 }
