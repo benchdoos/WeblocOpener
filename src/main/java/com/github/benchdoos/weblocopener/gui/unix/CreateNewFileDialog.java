@@ -18,6 +18,7 @@ package com.github.benchdoos.weblocopener.gui.unix;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.gui.PlaceholderTextField;
+import com.github.benchdoos.weblocopener.gui.Translatable;
 import com.github.benchdoos.weblocopener.service.links.WeblocLink;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
@@ -39,7 +40,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CreateNewFileDialog extends JDialog {
+public class CreateNewFileDialog extends JDialog implements Translatable {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
     private JPanel contentPane;
@@ -61,6 +62,8 @@ public class CreateNewFileDialog extends JDialog {
         initActionListeners();
 
         initWindowGui();
+
+        translate();
 
         pack();
         setResizable(false);
@@ -219,4 +222,9 @@ public class CreateNewFileDialog extends JDialog {
         return contentPane;
     }
 
+    @Override
+    public void translate() {
+        buttonSave.setText(Translation.getTranslatedString("CreateNewFileBundle", "saveButton"));
+        buttonCancel.setText(Translation.getTranslatedString("CommonsBundle", "cancelButton"));
+    }
 }
