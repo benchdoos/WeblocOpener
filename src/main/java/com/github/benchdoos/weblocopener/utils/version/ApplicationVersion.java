@@ -28,6 +28,10 @@ public class ApplicationVersion {
     private String updateInfo;
     private Beta beta = new Beta(0);
 
+    public Beta getBeta() {
+        return beta;
+    }
+
     public boolean isBeta() {
         return beta.isBeta();
     }
