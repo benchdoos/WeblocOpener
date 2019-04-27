@@ -17,9 +17,11 @@ package com.github.benchdoos.weblocopener.gui.unix;
 
 import com.github.benchdoos.jcolorful.core.JColorful;
 import com.github.benchdoos.weblocopener.core.Application;
+import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
+import com.github.benchdoos.weblocopener.gui.Translatable;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
@@ -40,7 +42,7 @@ import java.util.ResourceBundle;
 
 import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants.*;
 
-public class ModeSelectorDialog extends JFrame {
+public class ModeSelectorDialog extends JFrame implements Translatable {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
     private final File file;
@@ -54,6 +56,7 @@ public class ModeSelectorDialog extends JFrame {
     private JRadioButton copyRadioButton;
     private JRadioButton generateQrRadioButton;
     private JRadioButton copyQrRadioButton;
+    private JLabel windowTitleLabel;
     private ButtonGroup buttonGroup;
 
     public ModeSelectorDialog(File file) {
@@ -78,6 +81,8 @@ public class ModeSelectorDialog extends JFrame {
         initButtonGroup();
 
         initSelectionMode();
+
+        translate();
 
         pack();
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
@@ -244,9 +249,9 @@ public class ModeSelectorDialog extends JFrame {
         panel3.add(saveSelectionCheckBox, new GridConstraints(4, 0, 1, 2, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JSeparator separator1 = new JSeparator();
         panel3.add(separator1, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        final JLabel label1 = new JLabel();
-        this.$$$loadLabelText$$$(label1, ResourceBundle.getBundle("translations/ModeSelectorDialogBundle").getString("windowTitle"));
-        panel3.add(label1, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        windowTitleLabel = new JLabel();
+        this.$$$loadLabelText$$$(windowTitleLabel, ResourceBundle.getBundle("translations/ModeSelectorDialogBundle").getString("windowTitle"));
+        panel3.add(windowTitleLabel, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel4 = new JPanel();
         panel4.setLayout(new GridLayoutManager(5, 1, new Insets(0, 0, 0, 0), -1, -1));
         panel3.add(panel4, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 2, false));
@@ -337,4 +342,21 @@ public class ModeSelectorDialog extends JFrame {
         return contentPane;
     }
 
+    @Override
+    public void translate() {
+        Translation translation = new Translation("ModeSelectorDialogBundle");
+        windowTitleLabel.setText(translation.getTranslatedString("windowTitle"));
+        openRadioButton.setText(translation.getTranslatedString("selectionOpen"));
+        editRadioButton.setText(translation.getTranslatedString("selectionEdit"));
+        copyRadioButton.setText(translation.getTranslatedString("selectionCopy"));
+        generateQrRadioButton.setText(translation.getTranslatedString("selectionQr"));
+        copyQrRadioButton.setText(translation.getTranslatedString("selectionCopyQr"));
+        saveSelectionCheckBox.setText(translation.getTranslatedString("saveCheckBox"));
+        saveSelectionCheckBox.setToolTipText(translation.getTranslatedString("saveCheckBoxToolTip"));
+
+
+        Translation common = new Translation("CommonsBundle");
+        buttonOK.setText(common.getTranslatedString("okButton"));
+        buttonCancel.setText(common.getTranslatedString("cancelButton"));
+    }
 }
