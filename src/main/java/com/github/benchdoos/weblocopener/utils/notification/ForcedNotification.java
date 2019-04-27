@@ -25,52 +25,16 @@ import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import java.awt.*;
 
-public class ForcedErrorNotification implements Notification {
+public class ForcedNotification implements Notification {
     private static final int MAXIMUM_MESSAGE_SIZE = 150;
+
     private final Component component;
 
-    public ForcedErrorNotification(Component component) {
+    public ForcedNotification(Component component) {
         this.component = component;
     }
 
-    @Override
-    public void showInfoNotification(String title, String message) {
-        showWarningMessageToUser(component, title, message);
-    }
-
-    @Override
-    public void showWarningNotification(String title, String message) {
-        showWarningMessageToUser(component, title, message);
-    }
-
-    @Override
-    public void showErrorNotification(String title, String message) {
-        showWarningMessageToUser(component, title, message);
-    }
-
-    private void showWarningMessageToUser(Component parentComponent, String title, String message) {
-        FrameUtils.shakeFrame(parentComponent);
-        showMessage(parentComponent, title, message, JOptionPane.WARNING_MESSAGE);
-    }
-
-    private static void showMessage(Component parentComponent, String title, String message, int messageLevel) {
-        if (message.length() > MAXIMUM_MESSAGE_SIZE) {
-            message = message.substring(0, Math.min(message.length(), MAXIMUM_MESSAGE_SIZE)) + "...";
-        }
-
-        String msg;
-        if (messageLevel == JOptionPane.ERROR_MESSAGE) {
-
-            msg = "<HTML><BODY><P>" + message + "<br>" + Translation.getTranslatedString("CommonsBundle", "pleaseVisitMessage") + " " +
-                    "<a href=\"" + StringConstants.UPDATE_WEB_URL + "\">" + StringConstants.UPDATE_WEB_URL + "</P></BODY></HTML>";
-        } else {
-            msg = message;
-        }
-        showDefaultSystemErrorMessage(parentComponent, title, msg, messageLevel);
-    }
-
-
-    private static void showDefaultSystemErrorMessage(Component parentComponent, String title, String message, int messageLevel) {
+    private void showDefaultSystemErrorMessage(Component parentComponent, String title, String message, int messageLevel) {
         JEditorPane jEditorPane = new JEditorPane();
         jEditorPane.setContentType("text/html");
         jEditorPane.setEditable(false);
@@ -102,4 +66,38 @@ public class ForcedErrorNotification implements Notification {
                 jEditorPane,
                 "[" + ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME + "] " + title, messageType);
     }
+
+    private void showMessage(String title, String message, int messageLevel) {
+        if (message.length() > MAXIMUM_MESSAGE_SIZE) {
+            message = message.substring(0, Math.min(message.length(), MAXIMUM_MESSAGE_SIZE)) + "...";
+        }
+
+        String msg;
+        if (messageLevel == JOptionPane.ERROR_MESSAGE) {
+
+            msg = "<HTML><BODY><P>" + message + "<br>" + Translation.getTranslatedString("CommonsBundle", "pleaseVisitMessage") + " " +
+                    "<a href=\"" + StringConstants.UPDATE_WEB_URL + "\">" + StringConstants.UPDATE_WEB_URL + "</P></BODY></HTML>";
+        } else {
+            msg = message;
+        }
+        showDefaultSystemErrorMessage(component, title, msg, messageLevel);
+    }
+
+    @Override
+    public void showInfoNotification(String title, String message) {
+        showMessage(title, message, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void showWarningNotification(String title, String message) {
+        FrameUtils.shakeFrame(component);
+        showMessage(title, message, JOptionPane.WARNING_MESSAGE);
+    }
+
+    @Override
+    public void showErrorNotification(String title, String message) {
+        FrameUtils.shakeFrame(component);
+        showMessage(title, message, JOptionPane.ERROR_MESSAGE);
+    }
+
 }

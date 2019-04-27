@@ -31,6 +31,6 @@ public class NotificationManager {
     }
 
     public static Notification getForcedNotification(Component component) {
-        return new ForcedErrorNotification(component);
+        return new ForcedNotification(component);
     }
 }
