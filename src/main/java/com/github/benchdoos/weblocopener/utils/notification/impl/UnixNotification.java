@@ -15,69 +15,99 @@
 
 package com.github.benchdoos.weblocopener.utils.notification.impl;
 
-import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.notification.Notification;
-import com.notification.NotificationManager;
-import com.notification.manager.SimpleManager;
-import com.notification.types.IconNotification;
-import com.utils.Time;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class UnixNotification implements Notification {
-    private static final int TIME_NOTIFICATION_DELAY = 5000;
+    public static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
+    private static final int TIME_NOTIFICATION_DELAY = 50_000; //5 secs
+
+    private static void createNotification(String title, String message, TrayIcon.MessageType messageType) {
+
+        title = prepareString(title);
+        message = prepareString(message);
+
+        URI uri = getImageUriForMessageType(messageType);
+
+        showNotification(title, message, uri);
+    }
+
+    private static String prepareString(String string) {
+        return string == null ? "" : string;
+    }
+
+    private static URI getImageUriForMessageType(TrayIcon.MessageType messageType) {
+        URI uri = null;
+        try {
+            switch (messageType) {
+                case WARNING: {
+                    uri = UnixNotification.class.getResource("/images/notification/warning.png").toURI();
+                    break;
+                }
+                case ERROR: {
+                    uri = UnixNotification.class.getResource("/images/notification/error.png").toURI();
+                    break;
+                }
+                default: {
+                    uri = UnixNotification.class.getResource("/images/notification/info.png").toURI();
+                    break;
+                }
+            }
+
+
+        } catch (URISyntaxException e) {
+            log.warn("Can not get image", e);
+        }
+        return uri;
+    }
+
+    private static void showNotification(String title, String message, URI uri) {
+        try {
+            Runtime runtime = Runtime.getRuntime();
+
+            String filePath = "";
+            final String[] command;
+
+            if (uri != null) {
+                filePath = new File(uri).getAbsolutePath();
+                command = new String[]{
+                        "/usr/bin/notify-send",
+                        "-t", String.valueOf(TIME_NOTIFICATION_DELAY),
+                        title, message,
+                        "-i", filePath};
+            } else {
+                command = new String[]{
+                        "/usr/bin/notify-send",
+                        "-t", String.valueOf(TIME_NOTIFICATION_DELAY),
+                        title, message};
+            }
+
+            runtime.exec(command);
+        } catch (IOException e) {
+            log.warn("Can not create notification", e);
+        }
+    }
 
     @Override
     public void showInfoNotification(String title, String message) {
-        showNotification(title, message, TrayIcon.MessageType.INFO);
+        createNotification(title, message, TrayIcon.MessageType.INFO);
     }
 
     @Override
     public void showWarningNotification(String title, String message) {
-        showNotification(title, message, TrayIcon.MessageType.WARNING);
-
+        createNotification(title, message, TrayIcon.MessageType.WARNING);
     }
 
     @Override
     public void showErrorNotification(String title, String message) {
-        showNotification(title, message, TrayIcon.MessageType.ERROR);
-    }
-
-    private void showNotification(String title, String message, TrayIcon.MessageType type) {
-        if (PreferencesManager.isNotificationsShown()) {
-            createNotification(title, message, type);
-        }
-    }
-
-
-    private static void createNotification(String title, String message, TrayIcon.MessageType messageType) {
-        IconNotification notification = new IconNotification();
-        notification.setTitle(title);
-        notification.setSubtitle(message);
-        notification.setCloseOnClick(true);
-
-        switch (messageType) {
-            case WARNING: {
-                final Image image = Toolkit.getDefaultToolkit().getImage(
-                        UnixNotification.class.getResource("/images/notification/warning.png"));
-                notification.setIcon(new ImageIcon(image));
-                break;
-            }
-            case ERROR: {
-                final Image image = Toolkit.getDefaultToolkit().getImage(
-                        UnixNotification.class.getResource("/images/notification/error.png"));
-                notification.setIcon(new ImageIcon(image));
-                break;
-            }
-            case INFO: {
-                final Image image = Toolkit.getDefaultToolkit().getImage(
-                        UnixNotification.class.getResource("/images/notification/info.png"));
-                notification.setIcon(new ImageIcon(image));
-                break;
-            }
-        }
-        NotificationManager manager = new SimpleManager();
-        manager.addNotification(notification, Time.milliseconds(TIME_NOTIFICATION_DELAY));
+        createNotification(title, message, TrayIcon.MessageType.ERROR);
     }
 }

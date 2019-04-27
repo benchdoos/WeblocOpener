@@ -23,7 +23,7 @@ import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import java.awt.*;
 
 public class NotificationManager {
-    private static final Notification DEFAULT_NOTIFICATION = new UnixNotification();
+    private static final Notification DEFAULT_NOTIFICATION = new WindowsNotification();
 
     public static Notification getNotificationForCurrentOS() {
         if (OperatingSystem.isWindows()) {
