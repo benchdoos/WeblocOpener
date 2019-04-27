@@ -17,9 +17,9 @@ package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
-import com.github.benchdoos.weblocopener.utils.UserUtils;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -166,7 +166,7 @@ class UpdateInfoDialog extends JDialog {
                     log.warn("Can not open mail for: '" + url + "'", ex);
                 }
             } else {
-                UserUtils.openWebUrl(url);
+                UrlsProceed.openUrl(url);
             }
         }
     }
