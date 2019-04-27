@@ -206,12 +206,16 @@ public class Application {
                 log.warn("Could not edit file: {}", path, e);
             }
         } else {
-            Translation translation = new Translation("CommonsBundle");
-            final String message = translation.getTranslatedString("incorrectEditArgument");
-            NotificationManager.getForcedNotification(null).showErrorNotification(
-                    translation.getTranslatedString("errorTitle"),
-                    message);
+            showIncorrectArgumentMessage(OPENER_EDIT_ARGUMENT);
         }
+    }
+
+    private static void showIncorrectArgumentMessage(String argument) {
+        Translation translation = new Translation("CommonsBundle");
+        final String message = translation.getTranslatedString("incorrectArgument").replace("{}", argument);
+        NotificationManager.getForcedNotification(null).showErrorNotification(
+                translation.getTranslatedString("errorTitle"),
+                message);
     }
 
     private static void runCopyLink(String path) {
@@ -326,7 +330,7 @@ public class Application {
         new Thread(updateDialog::checkForUpdates).start();
     }
 
-    static void runUpdateSilent() {
+    private static void runUpdateSilent() {
         updateMode = UPDATE_MODE.SILENT;
         boolean isAutoUpdate = PreferencesManager.isAutoUpdateActive();
 
@@ -373,6 +377,12 @@ public class Application {
                     System.out.println(helpText());
                     break;
                 }
+                case OPENER_EDIT_ARGUMENT:
+                    manageEditArgument(args);
+                    break;
+                case OPENER_OPEN_ARGUMENT:
+                    showIncorrectArgumentMessage(OPENER_OPEN_ARGUMENT);
+                    break;
                 default:
                     manageArgumentsOnUnix(args);
                     break;
