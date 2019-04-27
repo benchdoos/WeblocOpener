@@ -25,6 +25,7 @@ import com.github.benchdoos.weblocopener.service.gui.MousePickListener;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
+import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -490,7 +491,12 @@ public class AboutApplicationDialog extends JDialog {
 
         Translation translation = new Translation("AboutApplicationDialogBundle");
         setTitle(translation.getTranslatedString("windowTitle"));
-        versionLabel.setText(translation.getTranslatedString("appVersionLabel") + " " + CoreUtils.getApplicationVersionString());
+
+        final ApplicationVersion currentApplicationVersion = CoreUtils.getCurrentApplicationVersion();
+        String versionAdditionalInfo = currentApplicationVersion.isBeta() ?
+                " (beta." + currentApplicationVersion.getBeta().getVersion() + ")" : "";
+
+        versionLabel.setText(translation.getTranslatedString("appVersionLabel") + " " + currentApplicationVersion.getVersion() + versionAdditionalInfo);
 
         siteLinkLabel.setText(createHtmlLink(translation.getTranslatedString("visitLabel")));
 
