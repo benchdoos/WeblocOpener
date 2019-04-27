@@ -17,7 +17,7 @@ Subscribe on telegram [channel](https://vk.cc/6wK7k1)
 Download [Latest version](https://vk.cc/7Flxoe)
 
 ## Introduction:
-WeblocOpener is a simple way to open, edit, create MacOS Safari `.webloc` files on Windows.
+WeblocOpener is a simple way to open, edit, create MacOS Safari `.webloc` files on Windows and Debian GNU/Linux.
 
 ## What is `.webloc` file?
 `.webloc` extension is usually means that in front of you is a MacOS Safari web-url. 
@@ -31,7 +31,7 @@ So that's why this application was created - for these users.
 ## What can WeblocOpener do?
 
 
-- **WeblocOpener gives full MacOs `.webloc` files support on Windows.**
+- **WeblocOpener gives full MacOs `.webloc` files support on Windows and Debian GNU/Linux.**
 [<img src="https://benchdoos.github.io/img/faq/faq_support.png"  width="888" />](#what-can-weblocopener-do)
 
 - **Open `.webloc` files.** 
@@ -45,7 +45,7 @@ You can use any custom browser by your own with custom call, using syntax: `<fil
 - **Convert `.webloc` to `.url` and backward by using drag and drop on settings window** 
 [<img src="https://benchdoos.github.io/img/faq/faq_convert_files.png"  width="888" />](#what-can-weblocopener-do)
 
-- **Create new `.webloc` files. Created files are fully supported by Safari on MacOS and WeblocOpener on Windows.** 
+- **Create new `.webloc` files. Created files are fully supported by Safari on MacOS and WeblocOpener on Windows or Unix.** 
 [<img src="https://benchdoos.github.io/img/faq/faq_create.png"  width="888" />](#what-can-weblocopener-do)
 
 - **Edit created files. Unlike `.webloc` files on MacOS that can not be edited by default (except for text editors), WeblocOpener provides the ability to edit `.webloc` files on Windows.** 
@@ -78,17 +78,17 @@ You can use any custom browser by your own with custom call, using syntax: `<fil
 
 ## Supported features
 
-| Feature                        | Windows       |  MacOS      |
-| -------------------------------|:-------------:|:-----------:|
-| Open                           | Yes           | Yes         |
-| Edit                           | Yes           | No          |
-| Create new                     | Yes           | Default     |
-| Generate QR-Code               | Yes           | No          |
-| URL auto-paste                 | Yes           | WO feature  |
-| Instant URL, QR-Code copy      | Yes           | No          |
-| Converter .webloc to .url to .desktop and backward| Yes    | No          |
-| Auto-update                    | Yes           | WO feature  |
-| Open in not default browser    | Yes           | Not         |
+| Feature                                           | Windows       |Unix          |  MacOS      |
+| --------------------------------------------------|:-------------:|-------------:|:-----------:|
+| Open                                              | Yes           |Yes           | Yes         |
+| Edit                                              | Yes           |Yes           | No          |
+| Create new                                        | Yes           |Yes           | Default     |
+| Generate QR-Code                                  | Yes           |Yes           | No          |
+| URL auto-paste                                    | Yes           |Yes           | WO feature  |
+| Instant URL, QR-Code copy                         | Yes           |Partly        | No          |
+| Converter .webloc to .url to .desktop and backward| Yes           |Yes           | No          |
+| Auto-update                                       | Yes           |Yes           | WO feature  |
+| Open in not default browser                       | Yes           |Yes           | Not         |
 
 
 ## Have questions? 
@@ -99,7 +99,7 @@ You can use any custom browser by your own with custom call, using syntax: `<fil
 ## System Requirements
 <ul class="SystemRequirements">
     <b>Operating system:</b>
-    <li>Windows XP, Vista, 7, 8, 10</li>
+    <li>Windows XP, Vista, 7, 8, 10 / Debian GNU/Linux (Ubuntu, etc...)</li>
     <b>CPU:</b>
     <li>Pentium 2 266MHz or better</li>
     <b>Memory:</b>
