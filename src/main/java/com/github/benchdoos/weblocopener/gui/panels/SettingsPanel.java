@@ -19,4 +19,8 @@ public interface SettingsPanel {
     void loadSettings();
 
     void saveSettings();
+
+    void setName(String name);
+
+    String getName();
 }

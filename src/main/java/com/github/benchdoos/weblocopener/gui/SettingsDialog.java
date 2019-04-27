@@ -440,19 +440,28 @@ public class SettingsDialog extends JFrame implements Translatable {
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 if (value instanceof SettingsPanel) {
-                    String name = "";
-                    if (value instanceof MainSetterPanel) {
-                        name = Translation.getTranslatedString("SettingsDialogBundle", "settingsMainPanelName");
-                    } else if (value instanceof BrowserSetterPanel) {
-                        name = Translation.getTranslatedString("SettingsDialogBundle", "settingsBrowserPanelName");
-                    } else if (value instanceof AppearanceSetterPanel) {
-                        name = Translation.getTranslatedString("SettingsDialogBundle", "settingsAppearancePanelName");
-                    } else if (value instanceof LocaleSetterPanel) {
-                        name = Translation.getTranslatedString("SettingsDialogBundle", "settingsLocalePanelName");
+                    final SettingsPanel panel = (SettingsPanel) value;
+                    String name = panel.getName();
+                    if (name == null) {
+                        name = getTranslatedString(value, name);
+                        panel.setName(name);
                     }
                     return super.getListCellRendererComponent(list, name, index, isSelected, cellHasFocus);
                 }
                 return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+
+            String getTranslatedString(Object value, String name) {
+                if (value instanceof MainSetterPanel) {
+                    name = Translation.getTranslatedString("SettingsDialogBundle", "settingsMainPanelName");
+                } else if (value instanceof BrowserSetterPanel) {
+                    name = Translation.getTranslatedString("SettingsDialogBundle", "settingsBrowserPanelName");
+                } else if (value instanceof AppearanceSetterPanel) {
+                    name = Translation.getTranslatedString("SettingsDialogBundle", "settingsAppearancePanelName");
+                } else if (value instanceof LocaleSetterPanel) {
+                    name = Translation.getTranslatedString("SettingsDialogBundle", "settingsLocalePanelName");
+                }
+                return name;
             }
         });
 
@@ -530,7 +539,16 @@ public class SettingsDialog extends JFrame implements Translatable {
 
         createNewFileButton.setToolTipText(translation.getTranslatedString("createNewFile"));
 
+        refreshSettingsList();
         settingsList.updateUI();
+    }
+
+    private void refreshSettingsList() {
+        final ListModel<SettingsPanel> model = settingsList.getModel();
+        for (int i = 0; i < model.getSize(); i++) {
+            final SettingsPanel panel = model.getElementAt(i);
+            panel.setName(null);
+        }
     }
 
     private void updateLocale() {
