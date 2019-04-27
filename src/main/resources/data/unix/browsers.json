@@ -27,6 +27,13 @@
         "call": "opera %site",
         "incognito": "opera --private %site"
       }
+    },
+    {
+      "browser": {
+        "name": "Yandex",
+        "call": "yandex-browser %site",
+        "incognito": "yandex-browser -incognito %site"
+      }
     }
   ]
 }
