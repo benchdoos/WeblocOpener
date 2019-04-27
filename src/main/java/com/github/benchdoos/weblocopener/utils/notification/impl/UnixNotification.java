@@ -21,10 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 public class UnixNotification implements Notification {
     public static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
@@ -35,60 +32,37 @@ public class UnixNotification implements Notification {
         title = prepareString(title);
         message = prepareString(message);
 
-        URI uri = getImageUriForMessageType(messageType);
 
-        showNotification(title, message, uri);
+        showNotification(title, message, getMessageType(messageType));
     }
 
     private static String prepareString(String string) {
         return string == null ? "" : string;
     }
 
-    private static URI getImageUriForMessageType(TrayIcon.MessageType messageType) {
-        URI uri = null;
-        try {
-            switch (messageType) {
-                case WARNING: {
-                    uri = UnixNotification.class.getResource("/images/notification/warning.png").toURI();
-                    break;
-                }
-                case ERROR: {
-                    uri = UnixNotification.class.getResource("/images/notification/error.png").toURI();
-                    break;
-                }
-                default: {
-                    uri = UnixNotification.class.getResource("/images/notification/info.png").toURI();
-                    break;
-                }
+    private static String getMessageType(TrayIcon.MessageType messageType) {
+        switch (messageType) {
+            case WARNING: {
+                return "dialog-warning";
             }
-
-
-        } catch (URISyntaxException e) {
-            log.warn("Can not get image", e);
+            case ERROR: {
+                return "dialog-error";
+            }
+            default: {
+                return "dialog-information";
+            }
         }
-        return uri;
     }
 
-    private static void showNotification(String title, String message, URI uri) {
+    private static void showNotification(String title, String message, String type) {
         try {
             Runtime runtime = Runtime.getRuntime();
 
-            String filePath = "";
-            final String[] command;
-
-            if (uri != null) {
-                filePath = new File(uri).getAbsolutePath();
-                command = new String[]{
-                        "/usr/bin/notify-send",
-                        "-t", String.valueOf(TIME_NOTIFICATION_DELAY),
-                        title, message,
-                        "-i", filePath};
-            } else {
-                command = new String[]{
-                        "/usr/bin/notify-send",
-                        "-t", String.valueOf(TIME_NOTIFICATION_DELAY),
-                        title, message};
-            }
+            final String[] command = new String[]{
+                    "/usr/bin/notify-send",
+                    "-t", String.valueOf(TIME_NOTIFICATION_DELAY),
+                    title, message,
+                    "--icon=" + type};
 
             runtime.exec(command);
         } catch (IOException e) {
