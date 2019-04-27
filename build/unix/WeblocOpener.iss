@@ -28,7 +28,7 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
-OutputDir={#MyAppAdditionalPath}\setup
+OutputDir={#MyAppSourcePath}\target
 OutputBaseFilename=WeblocOpenerSetup
 LicenseFile={#MyAppAdditionalPath}\languages\license\License.rtf
 
