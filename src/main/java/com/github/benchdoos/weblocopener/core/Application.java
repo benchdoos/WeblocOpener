@@ -393,7 +393,19 @@ public class Application {
     }
 
     private void runCreateNewFileWindow() {
-        CreateNewFileDialog createNewFileDialog = new CreateNewFileDialog();
+        CreateNewFileDialog createNewFileDialog;
+
+        if (PreferencesManager.isDarkModeEnabledNow()) {
+            JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
+            colorful.colorizeGlobal();
+
+            createNewFileDialog = new CreateNewFileDialog();
+
+            colorful.colorize(createNewFileDialog);
+        } else {
+            createNewFileDialog = new CreateNewFileDialog();
+        }
+
         createNewFileDialog.setModal(false);
         createNewFileDialog.setVisible(true);
     }
