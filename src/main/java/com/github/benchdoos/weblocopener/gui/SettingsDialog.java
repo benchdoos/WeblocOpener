@@ -66,7 +66,7 @@ public class SettingsDialog extends JFrame implements Translatable {
     private JLabel settingsSavedLabel;
     private JButton donatePaypalButton;
     private JLabel dragAndDropNotice;
-    private JButton addNewFileButton;
+    private JButton createNewFileButton;
     private BrowserSetterPanel browserSetterPanel;
     private MainSetterPanel mainSetterPanel;
     private AppearanceSetterPanel appearanceSetterPanel;
@@ -128,11 +128,11 @@ public class SettingsDialog extends JFrame implements Translatable {
         donatePaypalButton.setOpaque(false);
         donatePaypalButton.setText("");
         panel1.add(donatePaypalButton, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        addNewFileButton = new JButton();
-        addNewFileButton.setMargin(new Insets(0, 5, 0, 5));
-        addNewFileButton.setText("+");
-        addNewFileButton.setToolTipText(ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("createNewFile"));
-        panel1.add(addNewFileButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        createNewFileButton = new JButton();
+        createNewFileButton.setMargin(new Insets(0, 5, 0, 5));
+        createNewFileButton.setText("+");
+        createNewFileButton.setToolTipText(ResourceBundle.getBundle("translations/SettingsDialogBundle").getString("createNewFile"));
+        panel1.add(createNewFileButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
         contentPane.add(spacer2, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JSplitPane splitPane1 = new JSplitPane();
@@ -374,7 +374,7 @@ public class SettingsDialog extends JFrame implements Translatable {
 
         aboutButton.addActionListener(e -> onAbout());
 
-        addNewFileButton.addActionListener(e -> createNewFile());
+        createNewFileButton.addActionListener(e -> createNewFile());
 
 
         // call onCancel() when cross is clicked
@@ -410,7 +410,7 @@ public class SettingsDialog extends JFrame implements Translatable {
 
     private void initCreationNewFileOption() {
         final boolean unix = OperatingSystem.isUnix();
-        addNewFileButton.setVisible(unix);
+        createNewFileButton.setVisible(unix);
         if (unix) {
             contentPane.registerKeyboardAction(e -> createNewFile(), KeyStroke.getKeyStroke("control N"),
                     JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -516,6 +516,8 @@ public class SettingsDialog extends JFrame implements Translatable {
         buttonApply.setText(translation.getTranslatedString("buttonApply"));
         buttonOK.setText(translation.getTranslatedString("buttonOk"));
         buttonCancel.setText(translation.getTranslatedString("buttonCancel"));
+
+        createNewFileButton.setToolTipText(translation.getTranslatedString("createNewFile"));
 
         settingsList.updateUI();
     }
