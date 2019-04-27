@@ -21,7 +21,7 @@ Keywords=Link;Ссылки;webloc;
 StartupNotify=true
 X-Ubuntu-Gettext-Domain=weblocopener
 
-Actions=NewFile;
+Actions=NewFile;CheckUpdates;
 
 [Desktop Action NewFile]
 Name=Create new .webloc file
@@ -30,3 +30,11 @@ Name[fr]=Créer un nouveau fichier .webloc
 Name[it]=Crea un nuovo file .webloc
 Name[ru]=Создать новый файл .webloc
 Exec=java -jar "/opt/WeblocOpener/WeblocOpener.jar" -create-new
+
+[Desktop Action CheckUpdates]
+Name=Check updates
+Name[de]=Updates suchen
+Name[fr]=Vérifier mises à jour
+Name[it]=Controlla gli aggiornamenti
+Name[ru]=Проверить обновления
+Exec=java -jar "/opt/WeblocOpener/WeblocOpener.jar" -update
