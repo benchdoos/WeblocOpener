@@ -25,7 +25,6 @@ import com.github.benchdoos.weblocopener.service.gui.MousePickListener;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
-import com.github.benchdoos.weblocopener.utils.UserUtils;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -325,7 +324,7 @@ public class AboutApplicationDialog extends JDialog {
         siteLinkLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                UserUtils.openWebUrl(StringConstants.UPDATE_WEB_URL);
+                UrlsProceed.openUrl(StringConstants.UPDATE_WEB_URL);
             }
         });
         siteLinkLabel.setToolTipText(StringConstants.UPDATE_WEB_URL);
@@ -334,7 +333,7 @@ public class AboutApplicationDialog extends JDialog {
         githubLinkLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                UserUtils.openWebUrl(StringConstants.GITHUB_WEB_URL);
+                UrlsProceed.openUrl(StringConstants.GITHUB_WEB_URL);
             }
         });
         githubLinkLabel.setToolTipText(StringConstants.GITHUB_WEB_URL);

@@ -22,7 +22,7 @@ import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.update.UpdaterManager;
 import com.github.benchdoos.weblocopener.utils.Internal;
 import com.github.benchdoos.weblocopener.utils.Logging;
-import com.github.benchdoos.weblocopener.utils.UserUtils;
+import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -62,7 +62,8 @@ public class NonGuiUpdater {
             log.warn("Can not get server version");
             if (Application.updateMode != Application.UPDATE_MODE.SILENT) {
                 Translation translation = new Translation("UpdaterBundle");
-                UserUtils.showErrorMessageToUser(null, translation.getTranslatedString("canNotUpdateTitle"),
+                NotificationManager.getForcedNotification(null).showErrorNotification(
+                        translation.getTranslatedString("canNotUpdateTitle"),
                         translation.getTranslatedString("canNotUpdateMessage"));
             }
 

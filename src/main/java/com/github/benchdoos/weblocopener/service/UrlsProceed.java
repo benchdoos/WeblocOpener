@@ -20,7 +20,7 @@ import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.QrCodeUtils;
-import com.github.benchdoos.weblocopener.utils.UserUtils;
+import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
 import com.google.zxing.WriterException;
@@ -91,8 +91,9 @@ public class UrlsProceed {
             }
         } catch (IOException e) {
             log.warn("Can not open url: " + url, e);
-            UserUtils.showWarningMessageToUser(null, null,
-                    Translation.getTranslatedString(
+            NotificationManager
+                    .getForcedNotification(null).showErrorNotification(
+                    null, Translation.getTranslatedString(
                             "CommonsBundle", "urlIsCorruptMessage") + url);
         }
     }

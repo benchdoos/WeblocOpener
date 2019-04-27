@@ -25,7 +25,7 @@ import com.github.benchdoos.weblocopener.service.gui.MousePickListener;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
-import com.github.benchdoos.weblocopener.utils.UserUtils;
+import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.google.zxing.WriterException;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -165,15 +165,12 @@ public class ShowQrDialog extends JFrame implements Translatable {
                 final BufferedImage image = UrlsProceed.generateQrCode(url);
                 ClipboardManager.getClipboardForSystem().copy(image);
 
-                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
-                        Translation.getTranslatedString("ShowQrDialogBundle", "successCopyImage"),
-                        TrayIcon.MessageType.INFO);
+                NotificationManager.getNotificationForCurrentOS().showInfoNotification(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                        Translation.getTranslatedString("ShowQrDialogBundle", "successCopyImage"));
             } catch (IOException | WriterException ex) {
                 log.warn("Could not create qr-code image for url: {}", url, ex);
-                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
-                        Translation.getTranslatedString("ShowQrDialogBundle", "errorCopyImage")
-                        , TrayIcon.MessageType.ERROR);
-
+                NotificationManager.getNotificationForCurrentOS().showErrorNotification(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                        Translation.getTranslatedString("ShowQrDialogBundle", "errorCopyImage"));
             }
         });
 

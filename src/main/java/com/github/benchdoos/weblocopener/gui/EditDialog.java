@@ -23,7 +23,7 @@ import com.github.benchdoos.weblocopener.service.links.WeblocLink;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
-import com.github.benchdoos.weblocopener.utils.UserUtils;
+import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -556,12 +556,10 @@ public class EditDialog extends JFrame implements Translatable {
             final String fileName = urlPageTitle.getToolTipText() + "." + WEBLOC_FILE_EXTENSION;
 
             log.warn("Could not rename file {} to {}", pathToEditingFile, fileName, e);
-
-
-            UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+            NotificationManager.getNotificationForCurrentOS().showWarningNotification(
+                    ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
                     Translation.getTranslatedString(
-                            "EditDialogBundle", "canNotRenameFileMessage") + " " + fileName,
-                    TrayIcon.MessageType.WARNING);
+                            "EditDialogBundle", "canNotRenameFileMessage") + " " + fileName);
         }
     }
 
@@ -603,7 +601,7 @@ public class EditDialog extends JFrame implements Translatable {
             message += urlText.length() > incorrectUrl.length() ? incorrectUrl + "...]" : incorrectUrl + "]";
 
 
-            UserUtils.showWarningMessageToUser(this,
+            NotificationManager.getForcedNotification(this).showErrorNotification(
                     Translation.getTranslatedString("EditDialogBundle", "errorTitle"),
                     message);
         } catch (IOException e) {
@@ -611,7 +609,7 @@ public class EditDialog extends JFrame implements Translatable {
 
             String message = Translation.getTranslatedString(
                     "EditDialogBundle", "canNotSaveFile") + "<br>" + e.getMessage();
-            UserUtils.showWarningMessageToUser(this,
+            NotificationManager.getForcedNotification(this).showWarningNotification(
                     Translation.getTranslatedString("EditDialogBundle", "errorTitle"),
                     "<html>" + message + "</html>");
         }
@@ -628,8 +626,9 @@ public class EditDialog extends JFrame implements Translatable {
                 final String successMessage = Translation.getTranslatedString("EditDialogBundle",
                         "fileSuccessfullyRenamedMessage");
 
-                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
-                        successMessage + " " + CoreUtils.fixFileName(fileName), TrayIcon.MessageType.INFO);
+                NotificationManager.getNotificationForCurrentOS().showInfoNotification(
+                        ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                        successMessage + " " + CoreUtils.fixFileName(fileName));
             } else {
                 throw new FileNotFoundException("File can not be found: " + file);
             }

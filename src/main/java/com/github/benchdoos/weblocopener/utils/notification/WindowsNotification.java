@@ -18,7 +18,6 @@ package com.github.benchdoos.weblocopener.utils.notification;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.Logging;
-import com.github.benchdoos.weblocopener.utils.UserUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -53,7 +52,7 @@ public class WindowsNotification implements Notification {
     private void createTrayMessage(String title, String message, TrayIcon.MessageType messageType) {
         final int delay = 7000;
         final TrayIcon trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(
-                UserUtils.class.getResource("/images/balloonIcon256.png")));
+                WindowsNotification.class.getResource("/images/balloonIcon256.png")));
         trayIcon.setImageAutoSize(true);
 
         final SystemTray tray = SystemTray.getSystemTray();

@@ -27,7 +27,7 @@ import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.utils.Converter;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
-import com.github.benchdoos.weblocopener.utils.UserUtils;
+import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -284,19 +284,21 @@ public class SettingsDialog extends JFrame implements Translatable {
                     }
 
                     if (files.size() == list.size()) {
-                        UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                        NotificationManager.getNotificationForCurrentOS().showInfoNotification(
+                                ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
                                 translation.getTranslatedString("allFilesSuccessfullyConverted")
-                                        + files.size() + "/" + list.size(), TrayIcon.MessageType.INFO);
+                                        + files.size() + "/" + list.size());
                     } else {
-                        UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                        NotificationManager.getNotificationForCurrentOS().showWarningNotification(
+                                ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
                                 translation.getTranslatedString("someFilesFailedToConvert")
-                                        + files.size() + "/" + list.size(), TrayIcon.MessageType.WARNING);
+                                        + files.size() + "/" + list.size());
                     }
                 } catch (Exception ex) {
                     log.warn("Can not open files from drop", ex);
-                    UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
-                            translation.getTranslatedString("couldNotConvertFiles"),
-                            TrayIcon.MessageType.ERROR);
+                    NotificationManager.getNotificationForCurrentOS().showErrorNotification(
+                            ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                            translation.getTranslatedString("couldNotConvertFiles"));
                 }
             }
 
@@ -546,9 +548,9 @@ public class SettingsDialog extends JFrame implements Translatable {
 
     private void showOnApplyMessage() {
         if (PreferencesManager.isNotificationsShown()) {
-            UserUtils.showTrayMessage(
+            NotificationManager.getNotificationForCurrentOS().showInfoNotification(
                     Translation.getTranslatedString("" +
-                            "SettingsDialogBundle", "settingsSaved"), null, TrayIcon.MessageType.INFO);
+                            "SettingsDialogBundle", "settingsSaved"), null);
         } else {
             showInsideSettingsWindowApplyMessage();
         }

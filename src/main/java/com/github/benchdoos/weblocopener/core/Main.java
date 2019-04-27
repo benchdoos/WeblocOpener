@@ -17,7 +17,7 @@ package com.github.benchdoos.weblocopener.core;
 
 import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
 import com.github.benchdoos.weblocopener.utils.Logging;
-import com.github.benchdoos.weblocopener.utils.UserUtils;
+import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
 import com.github.benchdoos.weblocopener.utils.system.UnsupportedSystemException;
 import org.apache.logging.log4j.LogManager;
@@ -44,7 +44,9 @@ public class Main {
             new Application(args);
         } catch (UnsupportedSystemException e) {
             log.fatal("System not supported", e);
-            UserUtils.showErrorMessageToUser(null, "System is not supported", e.getMessage());
+            NotificationManager.getForcedNotification(null).showErrorNotification(
+                    "System is not supported", e.getMessage()
+            );
         }
     }
 

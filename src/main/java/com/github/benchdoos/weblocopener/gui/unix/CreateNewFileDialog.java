@@ -21,7 +21,7 @@ import com.github.benchdoos.weblocopener.gui.PlaceholderTextField;
 import com.github.benchdoos.weblocopener.service.links.WeblocLink;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
-import com.github.benchdoos.weblocopener.utils.UserUtils;
+import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -108,10 +108,11 @@ public class CreateNewFileDialog extends JDialog {
                     dispose();
                 } catch (IOException e) {
                     log.warn("Could not create .webloc link at: {} with url: {}", path, url, e);
-                    UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                    NotificationManager.getNotificationForCurrentOS().showErrorNotification(
+                            ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
                             Translation.getTranslatedString("CreateNewFileBundle", "errorSave")
-                                    + " " + new File(path).getName() + " \n" + e.getLocalizedMessage(),
-                            TrayIcon.MessageType.ERROR);
+                                    + " " + new File(path).getName() + " \n" + e.getLocalizedMessage()
+                    );
                 }
             }
         } catch (MalformedURLException e) {

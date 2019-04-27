@@ -16,7 +16,6 @@
 package com.github.benchdoos.weblocopener.utils.notification;
 
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopener.utils.UserUtils;
 import com.notification.NotificationManager;
 import com.notification.manager.SimpleManager;
 import com.notification.types.IconNotification;
@@ -60,19 +59,19 @@ public class UnixNotification implements Notification {
         switch (messageType) {
             case WARNING: {
                 final Image image = Toolkit.getDefaultToolkit().getImage(
-                        UserUtils.class.getResource("/images/notification/warning.png"));
+                        UnixNotification.class.getResource("/images/notification/warning.png"));
                 notification.setIcon(new ImageIcon(image));
                 break;
             }
             case ERROR: {
                 final Image image = Toolkit.getDefaultToolkit().getImage(
-                        UserUtils.class.getResource("/images/notification/error.png"));
+                        UnixNotification.class.getResource("/images/notification/error.png"));
                 notification.setIcon(new ImageIcon(image));
                 break;
             }
             case INFO: {
                 final Image image = Toolkit.getDefaultToolkit().getImage(
-                        UserUtils.class.getResource("/images/notification/info.png"));
+                        UnixNotification.class.getResource("/images/notification/info.png"));
                 notification.setIcon(new ImageIcon(image));
                 break;
             }

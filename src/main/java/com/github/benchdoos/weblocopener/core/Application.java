@@ -27,8 +27,12 @@ import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.service.clipboard.ClipboardManager;
 import com.github.benchdoos.weblocopener.service.links.WeblocLink;
-import com.github.benchdoos.weblocopener.utils.*;
+import com.github.benchdoos.weblocopener.utils.CleanManager;
+import com.github.benchdoos.weblocopener.utils.CoreUtils;
+import com.github.benchdoos.weblocopener.utils.Internal;
+import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.browser.BrowserManager;
+import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
 import org.apache.logging.log4j.LogManager;
@@ -203,8 +207,9 @@ public class Application {
                 log.warn("Could not edit file: {}", path, e);
             }
         } else {
-            UserUtils.showErrorMessageToUser(null, "Error",
-                    "Argument '-edit' should have location path parameter.");
+            NotificationManager.getForcedNotification(null).showErrorNotification(
+                    "Error",
+                    "Argument '-edit' should have location path parameter.");//todo should be translated???
         }
     }
 
@@ -216,9 +221,9 @@ public class Application {
             log.info("Successfully copied url to clipboard from: " + path);
 
             try {
-                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
-                        Translation.getTranslatedString("CommonsBundle", "linkCopied"),
-                        TrayIcon.MessageType.INFO);
+                NotificationManager.getNotificationForCurrentOS().showInfoNotification(
+                        ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                        Translation.getTranslatedString("CommonsBundle", "linkCopied"));
             } catch (Exception e) {
                 log.warn("Could not show message for user", e);
             }
@@ -237,15 +242,13 @@ public class Application {
 
                 ClipboardManager.getClipboardForSystem().copy(image);
 
-                UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
-                        Translation.getTranslatedString("ShowQrDialogBundle", "successCopyImage"),
-                        TrayIcon.MessageType.INFO);
+                NotificationManager.getNotificationForCurrentOS().showInfoNotification(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                        Translation.getTranslatedString("ShowQrDialogBundle", "successCopyImage"));
             }
         } catch (Exception e) {
             log.warn("Could not copy qr code for {}", args[1], e);
-            UserUtils.showTrayMessage(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
-                    Translation.getTranslatedString("ShowQrDialogBundle", "errorCopyImage")
-                    , TrayIcon.MessageType.ERROR);
+            NotificationManager.getNotificationForCurrentOS().showErrorNotification(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
+                    Translation.getTranslatedString("ShowQrDialogBundle", "errorCopyImage"));
         }
     }
 
@@ -332,6 +335,17 @@ public class Application {
         }
     }
 
+    private static void checkIfUpdatesAvailable() {
+        log.debug("Checking if updates available");
+        if (Internal.isCurrentTimeOlderOn24Hours(PreferencesManager.getLatestUpdateCheck())) {
+            log.info("Checking if updates are available now, last check was at: {}", PreferencesManager.getLatestUpdateCheck());
+            Thread checker = new Thread(Application::runUpdateSilent);
+            checker.start();
+        } else {
+            log.info("Updates were checked less then 24h ago");
+        }
+    }
+
     private void manageSoloArgument(String[] args) {
         if (OperatingSystem.isWindows()) {
             manageArguments(args);
@@ -392,15 +406,4 @@ public class Application {
     }
 
     public enum UPDATE_MODE {NORMAL, SILENT}
-
-    private static void checkIfUpdatesAvailable() {
-        log.debug("Checking if updates available");
-        if (Internal.isCurrentTimeOlderOn24Hours(PreferencesManager.getLatestUpdateCheck())) {
-            log.info("Checking if updates are available now, last check was at: {}", PreferencesManager.getLatestUpdateCheck());
-            Thread checker = new Thread(Application::runUpdateSilent);
-            checker.start();
-        } else {
-            log.info("Updates were checked less then 24h ago");
-        }
-    }
 }
