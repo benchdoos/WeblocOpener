@@ -160,17 +160,16 @@ public class Application {
         }
     }
 
-    public static void runAnalyzer(String arg) {
-        final String filePath = arg;
+    private static void runAnalyzer(String arg) {
         try {
-            String url = new Analyzer(filePath).getUrl();
+            String url = new Analyzer(arg).getUrl();
             if (!url.isEmpty()) {
                 UrlsProceed.openUrl(url);
             } else {
-                runEditDialog(filePath);
+                runEditDialog(arg);
             }
         } catch (Exception e) {
-            log.warn("Could not open file: {}", filePath, e);
+            log.warn("Could not open file: {}", arg, e);
         }
     }
 
