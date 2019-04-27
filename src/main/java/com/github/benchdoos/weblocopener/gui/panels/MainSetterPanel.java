@@ -379,6 +379,9 @@ public class MainSetterPanel extends JPanel implements SettingsPanel, Translatab
         openFolderForQRCheckBox.setText(translation.getTranslatedString("openFolderForQRCheckBox"));
         showNotificationsToUserCheckBox.setText(translation.getTranslatedString("showNotificationsCheckBox"));
         convertToLabel.setText(translation.getTranslatedString("convertTo"));
+
+        betaInstallCheckBox.setText(translation.getTranslatedString("betaUpdateInstallCheckBox"));
+        betaInstallCheckBox.setToolTipText(translation.getTranslatedString("betaUpdateTooltip"));
     }
 
     class UnixOpenMode {
