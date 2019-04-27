@@ -342,7 +342,7 @@ public class Application {
 
     private static void checkIfUpdatesAvailable() {
         log.debug("Checking if updates available");
-        if (Internal.isCurrentTimeOlderOn24Hours(PreferencesManager.getLatestUpdateCheck())) {
+        if (Internal.isCurrentTimeOlder(PreferencesManager.getLatestUpdateCheck(), 24)) {
             log.info("Checking if updates are available now, last check was at: {}", PreferencesManager.getLatestUpdateCheck());
             Thread checker = new Thread(Application::runUpdateSilent);
             checker.start();

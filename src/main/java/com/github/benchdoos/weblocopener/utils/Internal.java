@@ -25,7 +25,7 @@ import java.util.Date;
  * Created by Eugene Zrazhevsky on 03.11.2016.
  */
 public class Internal {
-    private final static long MILLIS_PER_DAY = 24 * 60 * 60 * 1000L;
+    private final static long MILLIS_PER_HOUR = 60 * 60 * 1000L;
 
     /**
      * Compares two version strings.
@@ -96,8 +96,8 @@ public class Internal {
         VERSIONS_ARE_EQUAL
     }
 
-    public static boolean isCurrentTimeOlderOn24Hours(Date date) {
-        return Math.abs(new Date().getTime() - date.getTime()) > MILLIS_PER_DAY;
+    public static boolean isCurrentTimeOlder(Date date, int hours) {
+        return Math.abs(new Date().getTime() - date.getTime()) > hours * MILLIS_PER_HOUR;
 
     }
 }
