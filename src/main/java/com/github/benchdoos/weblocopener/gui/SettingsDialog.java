@@ -420,8 +420,17 @@ public class SettingsDialog extends JFrame implements Translatable {
     }
 
     private void createNewFile() {
-        CreateNewFileDialog createNewFileDialog = new CreateNewFileDialog();
-        createNewFileDialog.setModal(true);
+        CreateNewFileDialog createNewFileDialog;
+        if (PreferencesManager.isDarkModeEnabledNow()) {
+            JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
+            colorful.colorizeGlobal();
+            createNewFileDialog = new CreateNewFileDialog();
+
+            colorful.colorize(createNewFileDialog);
+        } else {
+            createNewFileDialog = new CreateNewFileDialog();
+        }
+        createNewFileDialog.setModal(false);
         createNewFileDialog.setLocation(FrameUtils.getFrameOnCenterOfParentFrame(this, createNewFileDialog));
         createNewFileDialog.setVisible(true);
     }
