@@ -545,6 +545,16 @@ public class SettingsDialog extends JFrame implements Translatable {
     }
 
     private void showOnApplyMessage() {
+        if (PreferencesManager.isNotificationsShown()) {
+            UserUtils.showTrayMessage(
+                    Translation.getTranslatedString("" +
+                            "SettingsDialogBundle", "settingsSaved"), null, TrayIcon.MessageType.INFO);
+        } else {
+            showInsideSettingsWindowApplyMessage();
+        }
+    }
+
+    private void showInsideSettingsWindowApplyMessage() {
         settingsSavedLabel.setVisible(true);
         if (settingsSavedTimer == null) {
             settingsSavedTimer = new Timer(5000, e -> {
