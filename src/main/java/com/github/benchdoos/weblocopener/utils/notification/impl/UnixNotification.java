@@ -13,9 +13,10 @@
  * Eugene Zrazhevsky <eugene.zrazhevsky@gmail.com>
  */
 
-package com.github.benchdoos.weblocopener.utils.notification;
+package com.github.benchdoos.weblocopener.utils.notification.impl;
 
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopener.utils.notification.Notification;
 import com.notification.NotificationManager;
 import com.notification.manager.SimpleManager;
 import com.notification.types.IconNotification;

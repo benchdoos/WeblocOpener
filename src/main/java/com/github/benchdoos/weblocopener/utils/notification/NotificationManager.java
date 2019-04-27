@@ -15,6 +15,9 @@
 
 package com.github.benchdoos.weblocopener.utils.notification;
 
+import com.github.benchdoos.weblocopener.utils.notification.impl.ForcedNotification;
+import com.github.benchdoos.weblocopener.utils.notification.impl.UnixNotification;
+import com.github.benchdoos.weblocopener.utils.notification.impl.WindowsNotification;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 
 import java.awt.*;
