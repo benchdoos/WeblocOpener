@@ -85,7 +85,7 @@ You can use any custom browser by your own with custom call, using syntax: `<fil
 | Create new                                        | Yes           |Yes           | Default     |
 | Generate QR-Code                                  | Yes           |Yes           | No          |
 | URL auto-paste                                    | Yes           |Yes           | WO feature  |
-| Instant URL, QR-Code copy                         | Yes           |Partly        | No          |
+| Instant URL, QR-Code copy                         | Yes           |Yes           | No          |
 | Converter .webloc to .url to .desktop and backward| Yes           |Yes           | No          |
 | Auto-update                                       | Yes           |Yes           | WO feature  |
 | Open in not default browser                       | Yes           |Yes           | Not         |
