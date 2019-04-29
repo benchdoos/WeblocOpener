@@ -17,6 +17,8 @@ package com.github.benchdoos.weblocopener.nongui;
 
 import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.core.Translation;
+import com.github.benchdoos.weblocopener.nongui.notify.UnixNotify;
+import com.github.benchdoos.weblocopener.nongui.notify.WindowsNotify;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.update.UpdaterManager;
@@ -28,29 +30,20 @@ import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import static com.github.benchdoos.weblocopener.utils.system.SystemUtils.IS_WINDOWS_XP;
-
 /**
  * Created by Eugene Zrazhevsky on 04.11.2016.
  */
 
 
 public class NonGuiUpdater {
-    public static final SystemTray tray = SystemTray.getSystemTray();
+
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-    public static TrayIcon trayIcon;
 
 
     private ApplicationVersion serverApplicationVersion = null;
 
 
     public NonGuiUpdater() {
-
-        initGui();
 
         Updater updater;
         updater = UpdaterManager.getUpdaterForCurrentOperatingSystem();
@@ -92,108 +85,16 @@ public class NonGuiUpdater {
         if (serverApplicationVersion.getDownloadUrl() != null) {
             //todo change to JOptionPane for unix, until trayIcon does not work
             if (OperatingSystem.isWindows()) {
-                createTrayIcon();
-                showUpdateAvailableTrayIconMessage();
+                WindowsNotify windowsNotify = new WindowsNotify();
+                windowsNotify.notifyUser(serverApplicationVersion);
             } else if (OperatingSystem.isUnix()) {
-                Translation translation = new Translation("UpdateDialogBundle");
-                final String windowTitle = translation.getTranslatedString("windowTitle");
-                final String windowMessage = translation.getTranslatedString("newVersionAvailableTrayNotification")
-                        + ": " + serverApplicationVersion.getVersion();
-
-                NotificationManager.getNotificationForCurrentOS().showInfoNotification(windowTitle, windowMessage);
+                UnixNotify unixNotify = new UnixNotify();
+                unixNotify.notifyUser(serverApplicationVersion);
             }
 
 
         } else {
             log.warn("Update is available, but there is no version for current system: {}", serverApplicationVersion);
-        }
-    }
-
-    private void showUpdateAvailableTrayIconMessage() {
-        Translation translation = new Translation("UpdateDialogBundle");
-        final String windowTitle = translation.getTranslatedString("windowTitle");
-        final String windowMessage = translation.getTranslatedString("newVersionAvailableTrayNotification")
-                + ": " + serverApplicationVersion.getVersion();
-        trayIcon.displayMessage(windowTitle, windowMessage, TrayIcon.MessageType.INFO);
-    }
-
-    private CheckboxMenuItem createCheckBoxItem() {
-        final CheckboxMenuItem autoUpdateCheckBox = new CheckboxMenuItem(
-                Translation.getTranslatedString("NonGuiUpdaterBundle", "autoUpdateCheckBox"));
-
-        log.debug(PreferencesManager.KEY_AUTO_UPDATE + ": " + PreferencesManager.isAutoUpdateActive());
-        autoUpdateCheckBox.setState(PreferencesManager.isAutoUpdateActive());
-        autoUpdateCheckBox.addItemListener(e -> {
-            log.debug(PreferencesManager.KEY_AUTO_UPDATE + ": " + autoUpdateCheckBox.getState());
-            PreferencesManager.setAutoUpdateActive(autoUpdateCheckBox.getState());
-        });
-        return autoUpdateCheckBox;
-    }
-
-    private MenuItem createExitItem() {
-        MenuItem exit = new MenuItem(
-                Translation.getTranslatedString("NonGuiUpdaterBundle", "exitButton"));
-
-        exit.addActionListener(e -> tray.remove(trayIcon));
-        return exit;
-    }
-
-    private MenuItem createSettingsItem() {
-        MenuItem settings = new MenuItem(
-                Translation.getTranslatedString("NonGuiUpdaterBundle", "settingsButton"));
-        settings.addActionListener(e -> {
-            Application.runSettingsDialog();
-            tray.remove(trayIcon);
-        });
-        return settings;
-    }
-
-    private void createTrayIcon() {
-
-        PopupMenu trayMenu = new PopupMenu();
-
-        MenuItem settings = createSettingsItem();
-        trayMenu.add(settings);
-        trayMenu.addSeparator();
-
-
-        final CheckboxMenuItem autoUpdateCheckBox = createCheckBoxItem();
-        trayMenu.add(autoUpdateCheckBox);
-        trayMenu.addSeparator();
-
-        MenuItem exit = createExitItem();
-        trayMenu.add(exit);
-
-        trayIcon.setImageAutoSize(true);
-        trayIcon.setPopupMenu(trayMenu);
-
-        trayIcon.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getButton() == 1) {
-                    trayIcon.removeMouseListener(this);
-                    Application.runUpdateDialog();
-                    tray.remove(trayIcon);
-                }
-                super.mouseClicked(e);
-            }
-        });
-
-        trayIcon.setToolTip(Translation.getTranslatedString("UpdateDialogBundle", "windowTitle"));
-        try {
-            tray.add(trayIcon);
-        } catch (AWTException e) {
-            log.warn("Can not add trayIcon", e);
-        }
-    }
-
-    private void initGui() {
-        if (IS_WINDOWS_XP) {
-            trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(
-                    NonGuiUpdater.class.getResource("/images/updateIconWhite256.png")));
-        } else {
-            trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(
-                    NonGuiUpdater.class.getResource("/images/updateIconBlue256.png")));
         }
     }
 }

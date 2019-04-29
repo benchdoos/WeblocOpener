@@ -20,7 +20,6 @@ import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.PathConstants;
 import com.github.benchdoos.weblocopener.core.constants.StringConstants;
-import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.update.Updater;
@@ -400,7 +399,8 @@ public class UpdateDialog extends JFrame implements Translatable {
             public void windowClosed(WindowEvent e) {
                 String str = CoreUtils.getApplicationVersionString();
                 if (Internal.versionCompare(serverApplicationVersion) == Internal.VersionCompare.VERSIONS_ARE_EQUAL) {
-                    NonGuiUpdater.tray.remove(NonGuiUpdater.trayIcon);
+                    //todo... what to do with this?
+//                    NonGuiUpdater.tray.remove(NonGuiUpdater.trayIcon);
                     System.exit(0);
                 }
                 super.windowClosed(e);
