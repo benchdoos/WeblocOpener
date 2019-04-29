@@ -23,7 +23,7 @@ WeblocOpener is a simple way to open, edit, create MacOS Safari `.webloc` files 
 `.webloc` extension is usually means that in front of you is a MacOS Safari web-url. 
 Actually it is a text document, formatted to property list - PLIST 1.0 
 ([see](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/AboutInformationPropertyListFiles.html)).
-You can open it with any text-editor (like notepad on Windows) to find out the url, saved in `.webloc` file.
+You can open it with any text-editor (like notepad on Windows or gedit on Ubuntu) to find out the url, saved in `.webloc` file.
 But if you need to open a big number of files or open them often - using text-editor wouldn't be the fastest and the easiest solution.
 So that's why this application was created - for these users.
 
