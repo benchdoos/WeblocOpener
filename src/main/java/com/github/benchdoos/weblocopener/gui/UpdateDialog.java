@@ -393,20 +393,6 @@ public class UpdateDialog extends JFrame implements Translatable {
                 onCancel();
             }
         });
-
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                String str = CoreUtils.getApplicationVersionString();
-                if (Internal.versionCompare(serverApplicationVersion) == Internal.VersionCompare.VERSIONS_ARE_EQUAL) {
-                    //todo... what to do with this?
-//                    NonGuiUpdater.tray.remove(NonGuiUpdater.trayIcon);
-                    System.exit(0);
-                }
-                super.windowClosed(e);
-            }
-
-        });
     }
 
     private void initListeners() {
