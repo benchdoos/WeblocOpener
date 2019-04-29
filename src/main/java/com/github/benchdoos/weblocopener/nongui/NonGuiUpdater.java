@@ -23,6 +23,7 @@ import com.github.benchdoos.weblocopener.update.UpdaterManager;
 import com.github.benchdoos.weblocopener.utils.Internal;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
+import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -90,16 +91,30 @@ public class NonGuiUpdater {
     private void onNewVersionAvailable() {
         if (serverApplicationVersion.getDownloadUrl() != null) {
             //todo change to JOptionPane for unix, until trayIcon does not work
-            createTrayIcon();
+            if (OperatingSystem.isWindows()) {
+                createTrayIcon();
+                showUpdateAvailableTrayIconMessage();
+            } else if (OperatingSystem.isUnix()) {
+                Translation translation = new Translation("UpdateDialogBundle");
+                final String windowTitle = translation.getTranslatedString("windowTitle");
+                final String windowMessage = translation.getTranslatedString("newVersionAvailableTrayNotification")
+                        + ": " + serverApplicationVersion.getVersion();
 
-            trayIcon.displayMessage(Translation.getTranslatedString("UpdateDialogBundle", "windowTitle"),
-                    Translation.getTranslatedString("UpdateDialogBundle",
-                            "newVersionAvailableTrayNotification")
-                            + ": " + serverApplicationVersion.getVersion(),
-                    TrayIcon.MessageType.INFO);
+                NotificationManager.getNotificationForCurrentOS().showInfoNotification(windowTitle, windowMessage);
+            }
+
+
         } else {
             log.warn("Update is available, but there is no version for current system: {}", serverApplicationVersion);
         }
+    }
+
+    private void showUpdateAvailableTrayIconMessage() {
+        Translation translation = new Translation("UpdateDialogBundle");
+        final String windowTitle = translation.getTranslatedString("windowTitle");
+        final String windowMessage = translation.getTranslatedString("newVersionAvailableTrayNotification")
+                + ": " + serverApplicationVersion.getVersion();
+        trayIcon.displayMessage(windowTitle, windowMessage, TrayIcon.MessageType.INFO);
     }
 
     private CheckboxMenuItem createCheckBoxItem() {
