@@ -15,18 +15,8 @@
 
 package com.github.benchdoos.weblocopener.nongui.notify;
 
-import com.github.benchdoos.weblocopener.core.Translation;
-import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 
-public class UnixNotify implements Notify {
-    @Override
-    public void notifyUser(ApplicationVersion serverVersion) {
-        Translation translation = new Translation("UpdateDialogBundle");
-        final String windowTitle = translation.getTranslatedString("windowTitle");
-        final String windowMessage = translation.getTranslatedString("newVersionAvailableTrayNotification")
-                + ": " + serverVersion.getVersion();
-
-        NotificationManager.getNotificationForCurrentOS().showInfoNotification(windowTitle, windowMessage);
-    }
+public interface Notifier {
+    void notifyUser(ApplicationVersion serverVersion);
 }

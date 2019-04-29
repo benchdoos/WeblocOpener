@@ -15,16 +15,18 @@
 
 package com.github.benchdoos.weblocopener.nongui.notify;
 
+import com.github.benchdoos.weblocopener.nongui.notify.impl.UnixNotifier;
+import com.github.benchdoos.weblocopener.nongui.notify.impl.WindowsNotifier;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 
 public class NotifyManager {
-    private static final Notify DEFAULT_NOTIFY = new WindowsNotify();
+    private static final Notifier DEFAULT_NOTIFIER = new WindowsNotifier();
 
-    public static Notify getNotifierForSystem() {
+    public static Notifier getNotifierForSystem() {
         if (OperatingSystem.isWindows()) {
-            return new WindowsNotify();
+            return new WindowsNotifier();
         } else if (OperatingSystem.isUnix()) {
-            return new UnixNotify();
-        } else return DEFAULT_NOTIFY;
+            return new UnixNotifier();
+        } else return DEFAULT_NOTIFIER;
     }
 }

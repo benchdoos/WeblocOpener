@@ -13,11 +13,12 @@
  * Eugene Zrazhevsky <eugene.zrazhevsky@gmail.com>
  */
 
-package com.github.benchdoos.weblocopener.nongui.notify;
+package com.github.benchdoos.weblocopener.nongui.notify.impl;
 
 import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
+import com.github.benchdoos.weblocopener.nongui.notify.Notifier;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
@@ -30,13 +31,13 @@ import java.awt.event.MouseEvent;
 
 import static com.github.benchdoos.weblocopener.utils.system.SystemUtils.IS_WINDOWS_XP;
 
-public class WindowsNotify implements Notify {
+public class WindowsNotifier implements Notifier {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static final SystemTray tray = SystemTray.getSystemTray();
     private TrayIcon trayIcon;
 
 
-    public WindowsNotify() {
+    public WindowsNotifier() {
         initGui();
     }
 
