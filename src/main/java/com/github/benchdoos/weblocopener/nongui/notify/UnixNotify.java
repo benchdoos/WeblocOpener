@@ -20,11 +20,6 @@ import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 
 public class UnixNotify implements Notify {
-    public UnixNotify() {
-
-    }
-
-
     @Override
     public void notifyUser(ApplicationVersion serverVersion) {
         Translation translation = new Translation("UpdateDialogBundle");
