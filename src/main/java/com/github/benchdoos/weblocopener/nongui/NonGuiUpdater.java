@@ -17,15 +17,13 @@ package com.github.benchdoos.weblocopener.nongui;
 
 import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.core.Translation;
-import com.github.benchdoos.weblocopener.nongui.notify.UnixNotify;
-import com.github.benchdoos.weblocopener.nongui.notify.WindowsNotify;
+import com.github.benchdoos.weblocopener.nongui.notify.NotifyManager;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.update.UpdaterManager;
 import com.github.benchdoos.weblocopener.utils.Internal;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
-import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -83,16 +81,7 @@ public class NonGuiUpdater {
 
     private void onNewVersionAvailable() {
         if (serverApplicationVersion.getDownloadUrl() != null) {
-            //todo change to JOptionPane for unix, until trayIcon does not work
-            if (OperatingSystem.isWindows()) {
-                WindowsNotify windowsNotify = new WindowsNotify();
-                windowsNotify.notifyUser(serverApplicationVersion);
-            } else if (OperatingSystem.isUnix()) {
-                UnixNotify unixNotify = new UnixNotify();
-                unixNotify.notifyUser(serverApplicationVersion);
-            }
-
-
+            NotifyManager.getNotifierForSystem().notifyUser(serverApplicationVersion);
         } else {
             log.warn("Update is available, but there is no version for current system: {}", serverApplicationVersion);
         }
