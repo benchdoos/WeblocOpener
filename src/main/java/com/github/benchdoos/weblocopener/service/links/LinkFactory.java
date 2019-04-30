@@ -21,12 +21,12 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.File;
 
 public class LinkFactory {
-    public AbstractLink getLink(File file) {
+    public Link getLink(File file) {
         String originalExtension = FilenameUtils.getExtension(file.getName());
         return getAbstractLink(originalExtension);
     }
 
-    private AbstractLink getAbstractLink(String originalExtension) {
+    private Link getAbstractLink(String originalExtension) {
         switch (originalExtension) {
             case ApplicationConstants.WEBLOC_FILE_EXTENSION:
                 return new WeblocLink();
@@ -39,7 +39,7 @@ public class LinkFactory {
         }
     }
 
-    public AbstractLink getLink(String extension) {
+    public Link getLink(String extension) {
         return getAbstractLink(extension);
     }
 }

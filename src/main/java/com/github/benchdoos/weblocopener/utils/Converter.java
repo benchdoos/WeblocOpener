@@ -16,7 +16,7 @@
 package com.github.benchdoos.weblocopener.utils;
 
 import com.github.benchdoos.weblocopener.service.Analyzer;
-import com.github.benchdoos.weblocopener.service.links.AbstractLink;
+import com.github.benchdoos.weblocopener.service.links.Link;
 import com.github.benchdoos.weblocopener.service.links.LinkFactory;
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FilenameUtils;
@@ -34,9 +34,9 @@ public class Converter {
         log.debug("Converting file: {} to new extension: {}", originalFile, extension);
         validateFile(originalFile, extension);
 
-        AbstractLink originalLink = new LinkFactory().getLink(originalFile);
+        Link originalLink = new LinkFactory().getLink(originalFile);
         final URL originalUrl = originalLink.getUrl(originalFile);
-        AbstractLink convertedLink = new LinkFactory().getLink(extension);
+        Link convertedLink = new LinkFactory().getLink(extension);
 
         File file = prepareNewFile(originalFile, extension);
         if (!file.exists()) {

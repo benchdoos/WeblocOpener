@@ -29,7 +29,7 @@ import java.text.ParseException;
 /**
  * Link for MacOS {@code .webloc} file
  */
-public class WeblocLink implements AbstractLink {
+public class WeblocLink implements Link {
     @Override
     public void createLink(File file, URL url) throws IOException {
         NSDictionary root = new NSDictionary();

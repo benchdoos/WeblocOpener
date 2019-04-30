@@ -23,7 +23,7 @@ import java.net.URL;
 /**
  * Link for Windows {@code .url} file
  */
-public class InternetShortcutLink implements AbstractLink {
+public class InternetShortcutLink implements Link {
     /**
      * Create an Internet shortcut
      *

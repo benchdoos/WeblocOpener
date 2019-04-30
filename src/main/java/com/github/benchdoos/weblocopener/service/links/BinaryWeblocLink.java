@@ -15,32 +15,33 @@
 
 package com.github.benchdoos.weblocopener.service.links;
 
-import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
+import com.dd.plist.NSDictionary;
+import com.dd.plist.PropertyListFormatException;
+import com.dd.plist.PropertyListParser;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 
-/**
- * Link for Linux {@code .desktop} file
- */
-public class DesktopEntryLink implements Link {
+public class BinaryWeblocLink implements Link {
     @Override
     public void createLink(File file, URL url) throws IOException {
-        FileWriter writer = new FileWriter(file);
-        writer.write("[Desktop Entry]\n");
-        writer.write("Encoding=" + ApplicationConstants.DEFAULT_APPLICATION_CHARSET + "\n");
-        writer.write("Name=" + file.getName() + "\n");
-        writer.write("URL=" + url.toString() + "\n");
-        writer.write("Type=Link" + "\n");
-        writer.write("Icon=text-html" + "\n");
-        writer.flush();
-        writer.close();
+        NSDictionary root = new NSDictionary();
+        root.put("URL", url.toString());
+        PropertyListParser.saveAsBinary(root, file);
     }
 
     @Override
     public URL getUrl(File file) throws IOException {
-        return LinkUtils.getUrl(file);
+        try {
+            NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(file);
+            return new URL(rootDict.objectForKey("URL").toString());
+        } catch (PropertyListFormatException | ParseException | ParserConfigurationException | SAXException e) {
+            throw new IOException("Could not parse file: " + file, e);
+        }
     }
+
 }

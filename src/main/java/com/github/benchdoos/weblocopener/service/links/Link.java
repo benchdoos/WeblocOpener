@@ -19,7 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-public interface AbstractLink {
+public interface Link {
     /**
      * Creates link of current file format from url
      *
