@@ -16,9 +16,11 @@
 package com.github.benchdoos.weblocopener.service.links;
 
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
+import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
+import java.util.Arrays;
 
 public class LinkFactory {
     public Link getLink(File file) {
@@ -39,7 +41,41 @@ public class LinkFactory {
         }
     }
 
+    public static Link getLinkByName(String name) {
+        switch (LinkType.valueOf(name)) {
+            case webloc:
+                return new WeblocLink();
+            case url:
+                return new InternetShortcutLink();
+            case desktop:
+                return new DesktopEntryLink();
+            case binary_webloc:
+                return new BinaryWeblocLink();
+            default:
+                return getLinkByName(SettingsConstants.URL_PROCESSOR.toString());
+        }
+    }
+
+
+    public static String getNameByLink(Link link) {
+        final Class<? extends Link> aClass = link.getClass();
+        if (aClass == WeblocLink.class) {
+            return LinkType.webloc.toString();
+        } else if (aClass == BinaryWeblocLink.class) {
+            return LinkType.binary_webloc.toString();
+        } else if (aClass == InternetShortcutLink.class) {
+            return LinkType.url.toString();
+        } else if (aClass == DesktopEntryLink.class) {
+            return LinkType.desktop.toString();
+        } else
+            throw new IllegalArgumentException(
+                    "Provided link [" + aClass + "] does not much to supported: " + Arrays.toString(LinkType.values()));
+
+    }
+
     public Link getLink(String extension) {
         return getAbstractLink(extension);
     }
+
+    public enum LinkType {webloc, binary_webloc, url, desktop}
 }

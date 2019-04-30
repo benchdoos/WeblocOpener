@@ -19,6 +19,8 @@ import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.DarkModeAnalyzer;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.SimpleTime;
+import com.github.benchdoos.weblocopener.service.links.Link;
+import com.github.benchdoos.weblocopener.service.links.LinkFactory;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,7 +51,7 @@ public class PreferencesManager {
     private static final String KEY_LOCALE = "locale";
     private static final String KEY_UNIX_OPENING_MODE = "unix_open_mode";
     private static final String KEY_LATEST_UPDATE_CHECK = "last_update_check";
-    private static final String KEY_WEBLOC_BINARY = "webloc_binary";
+    private static final String KEY_URL_PROCESSOR = "url_processor";
 
     private static final Preferences PREFERENCES = Preferences.userRoot().node(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME.toLowerCase());
 
@@ -254,14 +256,14 @@ public class PreferencesManager {
         PREFERENCES.putLong(KEY_LATEST_UPDATE_CHECK, date.getTime());
     }
 
-    public static boolean createBinaryWebloc() {
-        return PREFERENCES.getBoolean(KEY_WEBLOC_BINARY, SettingsConstants.SAVE_WEBLOC_AS_BINARY);
+    public static Link getLink() {
+        final String result = PREFERENCES.get(KEY_URL_PROCESSOR, SettingsConstants.URL_PROCESSOR.toString());
+        return LinkFactory.getLinkByName(result);
     }
 
-    public static void setBinaryWebloc(boolean saveAsBinary) {
-        PREFERENCES.putBoolean(KEY_WEBLOC_BINARY, saveAsBinary);
+    public static void setLink(Link link) {
+        PREFERENCES.put(KEY_URL_PROCESSOR, LinkFactory.getNameByLink(link));
     }
-
 
     public enum DARK_MODE {ALWAYS, DISABLED}
 }
