@@ -580,7 +580,7 @@ public class EditDialog extends JFrame implements Translatable {
             URL url = new URL(urlText);
             UrlValidator urlValidator = new UrlValidator();
             if (urlValidator.isValid(urlText)) {
-                new WeblocLink().createLink(new File(pathToEditingFile), url);
+                PreferencesManager.getLink().createLink(new File(pathToEditingFile), url);
 
                 manageFileName();
 
