@@ -36,9 +36,10 @@ import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants
  * Created by Eugene Zrazhevsky on 19.11.2016.
  */
 public class PreferencesManager {
+    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
+
     public static final String KEY_AUTO_UPDATE = "auto_update_enabled";
     private static final String KEY_BETA_UPDATE_INSTALL = "install_beta_updates";
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static final String KEY_OPEN_FOR_QR = "open_folder_for_qr";
     private static final String KEY_BROWSER = "browser";
     private static final String KEY_NOTIFICATIONS = "notifications";
@@ -48,6 +49,7 @@ public class PreferencesManager {
     private static final String KEY_LOCALE = "locale";
     private static final String KEY_UNIX_OPENING_MODE = "unix_open_mode";
     private static final String KEY_LATEST_UPDATE_CHECK = "last_update_check";
+    private static final String KEY_WEBLOC_BINARY = "webloc_binary";
 
     private static final Preferences PREFERENCES = Preferences.userRoot().node(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME.toLowerCase());
 
@@ -250,6 +252,14 @@ public class PreferencesManager {
 
     public static void setLatestUpdateCheck(Date date) {
         PREFERENCES.putLong(KEY_LATEST_UPDATE_CHECK, date.getTime());
+    }
+
+    public static boolean createBinaryWebloc() {
+        return PREFERENCES.getBoolean(KEY_WEBLOC_BINARY, SettingsConstants.SAVE_WEBLOC_AS_BINARY);
+    }
+
+    public static void setBinaryWebloc(boolean saveAsBinary) {
+        PREFERENCES.putBoolean(KEY_WEBLOC_BINARY, saveAsBinary);
     }
 
 
