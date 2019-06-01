@@ -49,6 +49,11 @@ public class InternetShortcutLink implements Link {
     }
 
     @Override
+    public String getExtension() {
+        return "url";
+    }
+
+    @Override
     public boolean equals(Object obj) {
         return obj instanceof InternetShortcutLink;
     }

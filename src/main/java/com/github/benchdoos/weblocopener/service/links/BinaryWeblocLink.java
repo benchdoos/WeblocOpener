@@ -50,6 +50,11 @@ public class BinaryWeblocLink implements Link {
         return Translation.getTranslatedString("CommonsBundle", "binaryWeblocLinkName");
     }
 
+    @Override
+    public String getExtension() {
+        return "webloc";
+    }
+
 
     @Override
     public boolean equals(Object obj) {

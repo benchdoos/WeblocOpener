@@ -20,6 +20,7 @@ import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.gui.PlaceholderTextField;
 import com.github.benchdoos.weblocopener.gui.Translatable;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopener.service.links.Link;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
@@ -101,13 +102,17 @@ public class CreateNewFileDialog extends JDialog implements Translatable {
         try {
             final URL url = new URL(text);
             String path = saveFileBrowser();
+            final Link link = PreferencesManager.getLink();
+
             if (path != null) {
-                final String suffix = "." + ApplicationConstants.WEBLOC_FILE_EXTENSION;
+                final String suffix = "." + link.getExtension();
                 if (!path.endsWith(suffix)) {
                     path += suffix;
                 }
                 try {
-                    PreferencesManager.getLink().createLink(new File(path), url);
+                    log.debug("Link with url: {} at location: {} will be created as: {}", url, path, link.getClass().getSimpleName());
+
+                    link.createLink(new File(path), url);
                     dispose();
                 } catch (IOException e) {
                     log.warn("Could not create .webloc link at: {} with url: {}", path, url, e);

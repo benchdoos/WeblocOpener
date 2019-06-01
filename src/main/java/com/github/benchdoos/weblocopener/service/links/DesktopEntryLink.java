@@ -49,6 +49,11 @@ public class DesktopEntryLink implements Link {
         return ".desktop";
     }
 
+    @Override
+    public String getExtension() {
+        return "desktop";
+    }
+
 
     @Override
     public boolean equals(Object obj) {

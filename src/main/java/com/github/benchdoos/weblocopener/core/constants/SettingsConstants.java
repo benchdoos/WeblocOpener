@@ -24,7 +24,7 @@ public interface SettingsConstants {
     boolean IS_APP_BETA_UPDATE_INSTALLING_DEFAULT_VALUE = false;
     boolean OPEN_FOLDER_FOR_QR_CODE = true;
     boolean SHOW_NOTIFICATIONS_TO_USER = true;
-    LinkFactory.LinkType URL_PROCESSOR = LinkFactory.LinkType.webloc;
+    LinkFactory.LinkType URL_PROCESSOR = LinkFactory.LinkType.binary_webloc;
     String BROWSER_DEFAULT_VALUE = "default";
     String CONVERTER_DEFAULT_EXTENSION = ApplicationConstants.URL_FILE_EXTENSION;
     PreferencesManager.DARK_MODE DARK_MODE_DEFAULT_VALUE = PreferencesManager.DARK_MODE.DISABLED;

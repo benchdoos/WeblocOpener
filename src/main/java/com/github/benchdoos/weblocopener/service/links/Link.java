@@ -38,4 +38,6 @@ public interface Link {
 
     String getName();
 
+    String getExtension();
+
 }

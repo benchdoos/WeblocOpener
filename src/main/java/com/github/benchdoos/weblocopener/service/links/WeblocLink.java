@@ -52,6 +52,11 @@ public class WeblocLink implements Link {
         return ".webloc";
     }
 
+    @Override
+    public String getExtension() {
+        return "webloc";
+    }
+
 
     @Override
     public boolean equals(Object obj) {
