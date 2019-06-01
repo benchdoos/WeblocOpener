@@ -36,4 +36,6 @@ public interface Link {
      */
     URL getUrl(File file) throws IOException;
 
+    String getName();
+
 }

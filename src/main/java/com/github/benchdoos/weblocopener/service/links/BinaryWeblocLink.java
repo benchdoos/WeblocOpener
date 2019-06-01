@@ -18,6 +18,7 @@ package com.github.benchdoos.weblocopener.service.links;
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListFormatException;
 import com.dd.plist.PropertyListParser;
+import com.github.benchdoos.weblocopener.core.Translation;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -42,6 +43,17 @@ public class BinaryWeblocLink implements Link {
         } catch (PropertyListFormatException | ParseException | ParserConfigurationException | SAXException e) {
             throw new IOException("Could not parse file: " + file, e);
         }
+    }
+
+    @Override
+    public String getName() {
+        return Translation.getTranslatedString("CommonsBundle", "binaryWeblocLinkName");
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof BinaryWeblocLink;
     }
 
 }

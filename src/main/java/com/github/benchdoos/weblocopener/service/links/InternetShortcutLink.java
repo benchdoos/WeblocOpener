@@ -42,4 +42,14 @@ public class InternetShortcutLink implements Link {
     public URL getUrl(File file) throws IOException {
         return LinkUtils.getUrl(file);
     }
+
+    @Override
+    public String getName() {
+        return ".url";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof InternetShortcutLink;
+    }
 }

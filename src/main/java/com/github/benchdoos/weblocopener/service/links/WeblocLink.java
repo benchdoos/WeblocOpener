@@ -46,4 +46,15 @@ public class WeblocLink implements Link {
             throw new IOException("Could not parse file: " + file, e);
         }
     }
+
+    @Override
+    public String getName() {
+        return ".webloc";
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof WeblocLink;
+    }
 }

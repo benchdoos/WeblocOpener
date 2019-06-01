@@ -21,6 +21,8 @@ import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.gui.Translatable;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopener.service.links.Link;
+import com.github.benchdoos.weblocopener.service.links.LinkFactory;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -31,6 +33,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.StringJoiner;
 
@@ -45,7 +48,8 @@ public class FileProcessingPanel extends JPanel implements SettingsPanel, Transl
     private JComboBox<UnixOpenMode> unixOpenModeComboBox;
     private JLabel convertToLabel;
     private JComboBox<String> converterComboBox;
-
+    private JLabel createFileByDefaultLabel;
+    private JComboBox<Link> createFileExtensionComboBox;
 
     public FileProcessingPanel() {
         initGui();
@@ -60,7 +64,33 @@ public class FileProcessingPanel extends JPanel implements SettingsPanel, Transl
         loadUnixOpenModeComboBox();
         fillConvertComboBox();
 
+        initCreateFileExtensionComboBox();
+        fillCreateFileExtensionComboBox();
+
         translate();
+    }
+
+    private void initCreateFileExtensionComboBox() {
+        createFileExtensionComboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Link) {
+                    final Link link = (Link) value;
+
+                    return super.getListCellRendererComponent(list, link.getName(), index, isSelected, cellHasFocus);
+                }
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
+    }
+
+    private void fillCreateFileExtensionComboBox() {
+        final List<Link> supportedLinks = LinkFactory.getSupportedLinks();
+        DefaultComboBoxModel<Link> model = new DefaultComboBoxModel<>();
+        for (Link link : supportedLinks) {
+            model.addElement(link);
+        }
+        createFileExtensionComboBox.setModel(model);
     }
 
     @Override
@@ -68,11 +98,19 @@ public class FileProcessingPanel extends JPanel implements SettingsPanel, Transl
         Translation translation = new Translation("MainSetterPanelBundle");
         convertToLabel.setText(translation.getTranslatedString("convertTo"));
         unixOpenModeLabel.setText(translation.getTranslatedString("unixOpenModeLabel"));
+        createFileByDefaultLabel.setText(translation.getTranslatedString("createFileLabel"));
     }
 
     @Override
     public void loadSettings() {
         loadConverterValue();
+        loadUnixOpenModeComboBox();
+        loadCreateFile();
+    }
+
+    private void loadCreateFile() {
+        final Link link = PreferencesManager.getLink();
+        createFileExtensionComboBox.setSelectedItem(link);
     }
 
     private void fillConvertComboBox() {
@@ -96,6 +134,8 @@ public class FileProcessingPanel extends JPanel implements SettingsPanel, Transl
             this.mode = mode.getMode();
         }
 
+        saveCreateLinkValue();
+
         saveConverterValue();
         log.info("Saving settings: " +
                         "converter will save: {}, " +
@@ -106,6 +146,11 @@ public class FileProcessingPanel extends JPanel implements SettingsPanel, Transl
         if (OperatingSystem.isUnix()) {
             PreferencesManager.setUnixOpeningMode(this.mode);
         }
+    }
+
+    private void saveCreateLinkValue() {
+        final Link selectedItem = ((Link) createFileExtensionComboBox.getSelectedItem());
+        PreferencesManager.setLink(selectedItem);
     }
 
     private void initUnixOpenModeComboBox() {
@@ -169,7 +214,6 @@ public class FileProcessingPanel extends JPanel implements SettingsPanel, Transl
         unixOpenModePanel.setVisible(OperatingSystem.isUnix());
     }
 
-
     private void saveConverterValue() {
         final Object selectedItem = converterComboBox.getSelectedItem();
         if (selectedItem != null) {
@@ -212,36 +256,44 @@ public class FileProcessingPanel extends JPanel implements SettingsPanel, Transl
         contentPane = new JPanel();
         contentPane.setLayout(new GridLayoutManager(1, 1, new Insets(10, 10, 10, 10), -1, -1));
         final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         contentPane.add(panel1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
-        panel1.add(spacer1, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel1.add(spacer1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JPanel panel2 = new JPanel();
-        panel2.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel2.setLayout(new GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        converterComboBox = new JComboBox();
-        final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
-        converterComboBox.setModel(defaultComboBoxModel1);
-        panel2.add(converterComboBox, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         convertToLabel = new JLabel();
         this.$$$loadLabelText$$$(convertToLabel, ResourceBundle.getBundle("translations/MainSetterPanelBundle").getString("convertTo"));
-        panel2.add(convertToLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(convertToLabel, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JPanel panel3 = new JPanel();
+        panel3.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel2.add(panel3, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        createFileByDefaultLabel = new JLabel();
+        this.$$$loadLabelText$$$(createFileByDefaultLabel, ResourceBundle.getBundle("translations/MainSetterPanelBundle").getString("createFileLabel"));
+        panel3.add(createFileByDefaultLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        createFileExtensionComboBox = new JComboBox();
+        panel3.add(createFileExtensionComboBox, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         unixOpenModePanel = new JPanel();
         unixOpenModePanel.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
-        panel1.add(unixOpenModePanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel2.add(unixOpenModePanel, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         unixOpenModeLabel = new JLabel();
         this.$$$loadLabelText$$$(unixOpenModeLabel, ResourceBundle.getBundle("translations/MainSetterPanelBundle").getString("unixOpenModeLabel"));
         unixOpenModePanel.add(unixOpenModeLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         unixOpenModeComboBox = new JComboBox();
-        final DefaultComboBoxModel defaultComboBoxModel2 = new DefaultComboBoxModel();
-        defaultComboBoxModel2.addElement("Ask every time");
-        defaultComboBoxModel2.addElement("Open");
-        defaultComboBoxModel2.addElement("Edit");
-        defaultComboBoxModel2.addElement("Copy to clipboard");
-        defaultComboBoxModel2.addElement("Generate QR-Code");
-        defaultComboBoxModel2.addElement("Copy QR-Code");
-        unixOpenModeComboBox.setModel(defaultComboBoxModel2);
+        final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
+        defaultComboBoxModel1.addElement("Ask every time");
+        defaultComboBoxModel1.addElement("Open");
+        defaultComboBoxModel1.addElement("Edit");
+        defaultComboBoxModel1.addElement("Copy to clipboard");
+        defaultComboBoxModel1.addElement("Generate QR-Code");
+        defaultComboBoxModel1.addElement("Copy QR-Code");
+        unixOpenModeComboBox.setModel(defaultComboBoxModel1);
         unixOpenModePanel.add(unixOpenModeComboBox, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        converterComboBox = new JComboBox();
+        final DefaultComboBoxModel defaultComboBoxModel2 = new DefaultComboBoxModel();
+        converterComboBox.setModel(defaultComboBoxModel2);
+        panel2.add(converterComboBox, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         convertToLabel.setLabelFor(converterComboBox);
     }
 

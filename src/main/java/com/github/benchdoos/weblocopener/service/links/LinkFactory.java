@@ -20,7 +20,9 @@ import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class LinkFactory {
     public Link getLink(File file) {
@@ -71,6 +73,15 @@ public class LinkFactory {
             throw new IllegalArgumentException(
                     "Provided link [" + aClass + "] does not much to supported: " + Arrays.toString(LinkType.values()));
 
+    }
+
+    public static List<Link> getSupportedLinks() {
+        ArrayList<Link> result = new ArrayList<>();
+        for (LinkType type : LinkType.values()) {
+            final Link linkByName = getLinkByName(type.toString());
+            result.add(linkByName);
+        }
+        return result;
     }
 
     public Link getLink(String extension) {
