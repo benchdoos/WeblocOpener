@@ -309,6 +309,10 @@ public class AboutApplicationDialog extends JDialog {
             descriptionTextPane.setText(
                     Translation.getTranslatedString("AboutApplicationDialogBundle", "aboutAppInfo")
                             .replace("{}", "color:white;"));
+        } else {
+            descriptionTextPane.setText(
+                    Translation.getTranslatedString("AboutApplicationDialogBundle", "aboutAppInfo")
+                            .replace("{}", "color:black;"));
         }
 
         initLinks();
