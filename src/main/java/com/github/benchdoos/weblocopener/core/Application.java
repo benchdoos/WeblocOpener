@@ -19,17 +19,14 @@ import com.github.benchdoos.jcolorful.core.JColorful;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.gui.*;
-import com.github.benchdoos.weblocopener.gui.unix.CreateNewFileDialog;
 import com.github.benchdoos.weblocopener.gui.unix.ModeSelectorDialog;
+import com.github.benchdoos.weblocopener.gui.wrappers.CreateNewFileFrameWrapper;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.service.clipboard.ClipboardManager;
-import com.github.benchdoos.weblocopener.utils.CleanManager;
-import com.github.benchdoos.weblocopener.utils.CoreUtils;
-import com.github.benchdoos.weblocopener.utils.Internal;
-import com.github.benchdoos.weblocopener.utils.Logging;
+import com.github.benchdoos.weblocopener.utils.*;
 import com.github.benchdoos.weblocopener.utils.browser.BrowserManager;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
@@ -392,21 +389,18 @@ public class Application {
     }
 
     private void runCreateNewFileWindow() {
-        CreateNewFileDialog createNewFileDialog;
-
+        CreateNewFileFrameWrapper createNewFileFrameWrapper;
         if (PreferencesManager.isDarkModeEnabledNow()) {
             JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
             colorful.colorizeGlobal();
+            createNewFileFrameWrapper = new CreateNewFileFrameWrapper();
 
-            createNewFileDialog = new CreateNewFileDialog();
-
-            colorful.colorize(createNewFileDialog);
+            colorful.colorize(createNewFileFrameWrapper);
         } else {
-            createNewFileDialog = new CreateNewFileDialog();
+            createNewFileFrameWrapper = new CreateNewFileFrameWrapper();
         }
-
-        createNewFileDialog.setModal(false);
-        createNewFileDialog.setVisible(true);
+        createNewFileFrameWrapper.setLocation(FrameUtils.getFrameOnCenterLocationPoint(createNewFileFrameWrapper));
+        createNewFileFrameWrapper.setVisible(true);
     }
 
     private void manageArgumentsOnUnix(String[] args) {

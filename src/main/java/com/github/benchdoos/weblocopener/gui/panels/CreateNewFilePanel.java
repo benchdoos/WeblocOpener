@@ -13,7 +13,7 @@
  * Eugene Zrazhevsky <eugene.zrazhevsky@gmail.com>
  */
 
-package com.github.benchdoos.weblocopener.gui.unix;
+package com.github.benchdoos.weblocopener.gui.panels;
 
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
@@ -33,42 +33,48 @@ import org.apache.logging.log4j.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class CreateNewFileDialog extends JDialog implements Translatable {
+public class CreateNewFilePanel extends JPanel implements Translatable {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
+    private Window parentWindow;
+
     private JPanel contentPane;
+
     private JButton buttonSave;
     private JButton buttonCancel;
     private JTextField urlTextField;
 
-    public CreateNewFileDialog() {
+    public CreateNewFilePanel() {
         $$$setupUI$$$();
         initGui();
     }
 
     public void initGui() {
-        setContentPane(contentPane);
-        getRootPane().setDefaultButton(buttonSave);
-        setTitle(Translation.getTranslatedString("CreateNewFileBundle", "windowTitle"));
-
+        updateWindowTitle(parentWindow);
 
         initActionListeners();
 
         initWindowGui();
 
         translate();
+    }
 
-        pack();
-        setResizable(false);
-        setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
+    public void setParentWindow(Window parentWindow) {
+        this.parentWindow = parentWindow;
+    }
+
+    private void updateWindowTitle(Window parentWindow) {
+        if (parentWindow instanceof JDialog) {
+            ((JDialog) parentWindow).setTitle(Translation.getTranslatedString("CreateNewFileBundle", "windowTitle"));
+        } else if (parentWindow instanceof JFrame) {
+            ((JFrame) parentWindow).setTitle(Translation.getTranslatedString("CreateNewFileBundle", "windowTitle"));
+        }
     }
 
     private void initActionListeners() {
@@ -78,23 +84,11 @@ public class CreateNewFileDialog extends JDialog implements Translatable {
     }
 
     private void initWindowGui() {
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowActivated(WindowEvent e) {
-                if (urlTextField.getText().isEmpty()) {
-                    FrameUtils.fillTextFieldWithClipboard(urlTextField);
-                }
-                super.windowActivated(e);
-            }
-
-            @Override
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-        });
-
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+    }
+
+    public JTextField getUrlTextField() {
+        return urlTextField;
     }
 
     private void onOK() {
@@ -113,7 +107,7 @@ public class CreateNewFileDialog extends JDialog implements Translatable {
                     log.debug("Link with url: {} at location: {} will be created as: {}", url, path, link.getClass().getSimpleName());
 
                     link.createLink(new File(path), url);
-                    dispose();
+                    parentWindow.dispose();
                 } catch (IOException e) {
                     log.warn("Could not create .webloc link at: {} with url: {}", path, url, e);
                     NotificationManager.getNotificationForCurrentOS().showErrorNotification(
@@ -130,7 +124,7 @@ public class CreateNewFileDialog extends JDialog implements Translatable {
     }
 
     private void onCancel() {
-        dispose();
+        parentWindow.dispose();
     }
 
     private String saveFileBrowser() {
@@ -231,5 +225,9 @@ public class CreateNewFileDialog extends JDialog implements Translatable {
     public void translate() {
         buttonSave.setText(Translation.getTranslatedString("CreateNewFileBundle", "saveButton"));
         buttonCancel.setText(Translation.getTranslatedString("CommonsBundle", "cancelButton"));
+    }
+
+    public JButton getOkButton() {
+        return buttonSave;
     }
 }

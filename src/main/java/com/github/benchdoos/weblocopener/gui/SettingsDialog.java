@@ -20,7 +20,7 @@ import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.StringConstants;
 import com.github.benchdoos.weblocopener.gui.panels.*;
-import com.github.benchdoos.weblocopener.gui.unix.CreateNewFileDialog;
+import com.github.benchdoos.weblocopener.gui.wrappers.CreateNewFileDialogWrapper;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
@@ -403,19 +403,19 @@ public class SettingsDialog extends JFrame implements Translatable {
     }
 
     private void createNewFile() {
-        CreateNewFileDialog createNewFileDialog;
+        CreateNewFileDialogWrapper jFrameWrapper;
         if (PreferencesManager.isDarkModeEnabledNow()) {
             JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
             colorful.colorizeGlobal();
-            createNewFileDialog = new CreateNewFileDialog();
+            jFrameWrapper = new CreateNewFileDialogWrapper();
 
-            colorful.colorize(createNewFileDialog);
+            colorful.colorize(jFrameWrapper);
         } else {
-            createNewFileDialog = new CreateNewFileDialog();
+            jFrameWrapper = new CreateNewFileDialogWrapper();
         }
-        createNewFileDialog.setModal(false);
-        createNewFileDialog.setLocation(FrameUtils.getFrameOnCenterOfParentFrame(this, createNewFileDialog));
-        createNewFileDialog.setVisible(true);
+        jFrameWrapper.setModal(true);
+        jFrameWrapper.setLocation(FrameUtils.getFrameOnCenterOfParentFrame(this, jFrameWrapper));
+        jFrameWrapper.setVisible(true);
     }
 
     private void initSettingsList() {
