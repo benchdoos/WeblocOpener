@@ -24,6 +24,8 @@ import com.github.benchdoos.weblocopener.gui.wrappers.CreateNewFileDialogWrapper
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
+import com.github.benchdoos.weblocopener.service.links.BinaryWeblocLink;
+import com.github.benchdoos.weblocopener.service.links.LinkFactory;
 import com.github.benchdoos.weblocopener.utils.Converter;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
@@ -253,7 +255,7 @@ public class SettingsDialog extends JFrame implements Translatable {
                             if (fileExtension.equalsIgnoreCase(ApplicationConstants.URL_FILE_EXTENSION)
                                     || fileExtension.equalsIgnoreCase(ApplicationConstants.DESKTOP_FILE_EXTENSION)) {
                                 try {
-                                    files.add(Converter.convert(file, ApplicationConstants.WEBLOC_FILE_EXTENSION));
+                                    files.add(Converter.convert(file, new BinaryWeblocLink()));
                                     try {
                                         FileUtils.forceDelete(file);
                                     } catch (IOException e) {
@@ -265,7 +267,7 @@ public class SettingsDialog extends JFrame implements Translatable {
 
                             } else if (fileExtension.equalsIgnoreCase(ApplicationConstants.WEBLOC_FILE_EXTENSION)) {
                                 try {
-                                    files.add(Converter.convert(file, PreferencesManager.getConverterExportExtension()));
+                                    files.add(Converter.convert(file, LinkFactory.getLinkByName(PreferencesManager.getConverterExportExtension())));
                                     try {
                                         FileUtils.forceDelete(file);
                                     } catch (IOException e) {

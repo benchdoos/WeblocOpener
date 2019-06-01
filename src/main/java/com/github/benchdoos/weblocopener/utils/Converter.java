@@ -30,15 +30,14 @@ import java.net.URL;
 public class Converter {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
-    public static File convert(File originalFile, String extension) throws Exception {
-        log.debug("Converting file: {} to new extension: {}", originalFile, extension);
-        validateFile(originalFile, extension);
+    public static File convert(File originalFile, Link convertedLink) throws Exception {
+        log.debug("Converting file: {} to new extension: {}", originalFile, convertedLink.getExtension());
+        validateFile(originalFile, convertedLink);
 
         Link originalLink = new LinkFactory().getLink(originalFile);
         final URL originalUrl = originalLink.getUrl(originalFile);
-        Link convertedLink = new LinkFactory().getLink(extension);
 
-        File file = prepareNewFile(originalFile, extension);
+        File file = prepareNewFile(originalFile, convertedLink.getExtension());
         if (!file.exists()) {
             convertedLink.createLink(file, originalUrl);
             return file;
@@ -54,7 +53,9 @@ public class Converter {
         return new File(filePath);
     }
 
-    private static void validateFile(File originalUrlFile, String extension) throws FileNotFoundException {
+    private static void validateFile(File originalUrlFile, Link link) throws FileNotFoundException {
+        final String extension = link.getExtension();
+
         if (originalUrlFile == null) {
             throw new IllegalArgumentException("Original file can not be null");
         }
