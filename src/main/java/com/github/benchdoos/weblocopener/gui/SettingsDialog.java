@@ -70,7 +70,6 @@ public class SettingsDialog extends JFrame implements Translatable {
     private BrowserSetterPanel browserSetterPanel;
     private MainSetterPanel mainSetterPanel;
     private AppearanceSetterPanel appearanceSetterPanel;
-    private LocaleSetterPanel localeSetterPanel;
     private FileProcessingPanel fileProcessingPanel;
 
 
@@ -472,14 +471,12 @@ public class SettingsDialog extends JFrame implements Translatable {
         mainSetterPanel = new MainSetterPanel();
         browserSetterPanel = new BrowserSetterPanel();
         appearanceSetterPanel = new AppearanceSetterPanel();
-        localeSetterPanel = new LocaleSetterPanel();
         fileProcessingPanel = new FileProcessingPanel();
 
         model.addElement(mainSetterPanel);
         model.addElement(browserSetterPanel);
         model.addElement(fileProcessingPanel);
         model.addElement(appearanceSetterPanel);
-        model.addElement(localeSetterPanel);
         settingsList.setModel(model);
 
         if (PreferencesManager.isDarkModeEnabledNow()) {
@@ -488,7 +485,6 @@ public class SettingsDialog extends JFrame implements Translatable {
             colorful.colorize(browserSetterPanel);
             colorful.colorize(fileProcessingPanel);
             colorful.colorize(appearanceSetterPanel);
-            colorful.colorize(localeSetterPanel);
         }
     }
 
