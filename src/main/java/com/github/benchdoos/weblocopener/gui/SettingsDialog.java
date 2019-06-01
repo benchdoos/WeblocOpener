@@ -71,6 +71,7 @@ public class SettingsDialog extends JFrame implements Translatable {
     private MainSetterPanel mainSetterPanel;
     private AppearanceSetterPanel appearanceSetterPanel;
     private LocaleSetterPanel localeSetterPanel;
+    private FileProcessingPanel fileProcessingPanel;
 
 
     public SettingsDialog() {
@@ -442,27 +443,11 @@ public class SettingsDialog extends JFrame implements Translatable {
                 if (value instanceof SettingsPanel) {
                     final SettingsPanel panel = (SettingsPanel) value;
                     String name = panel.getName();
-                    if (name == null) {
-                        name = getTranslatedString(value, name);
-                        panel.setName(name);
-                    }
                     return super.getListCellRendererComponent(list, name, index, isSelected, cellHasFocus);
                 }
                 return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             }
 
-            String getTranslatedString(Object value, String name) {
-                if (value instanceof MainSetterPanel) {
-                    name = Translation.getTranslatedString("SettingsDialogBundle", "settingsMainPanelName");
-                } else if (value instanceof BrowserSetterPanel) {
-                    name = Translation.getTranslatedString("SettingsDialogBundle", "settingsBrowserPanelName");
-                } else if (value instanceof AppearanceSetterPanel) {
-                    name = Translation.getTranslatedString("SettingsDialogBundle", "settingsAppearancePanelName");
-                } else if (value instanceof LocaleSetterPanel) {
-                    name = Translation.getTranslatedString("SettingsDialogBundle", "settingsLocalePanelName");
-                }
-                return name;
-            }
         });
 
         settingsList.addListSelectionListener(e -> {
@@ -488,9 +473,11 @@ public class SettingsDialog extends JFrame implements Translatable {
         browserSetterPanel = new BrowserSetterPanel();
         appearanceSetterPanel = new AppearanceSetterPanel();
         localeSetterPanel = new LocaleSetterPanel();
+        fileProcessingPanel = new FileProcessingPanel();
 
         model.addElement(mainSetterPanel);
         model.addElement(browserSetterPanel);
+        model.addElement(fileProcessingPanel);
         model.addElement(appearanceSetterPanel);
         model.addElement(localeSetterPanel);
         settingsList.setModel(model);
@@ -499,6 +486,7 @@ public class SettingsDialog extends JFrame implements Translatable {
             final JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
             colorful.colorize(mainSetterPanel);
             colorful.colorize(browserSetterPanel);
+            colorful.colorize(fileProcessingPanel);
             colorful.colorize(appearanceSetterPanel);
             colorful.colorize(localeSetterPanel);
         }
