@@ -28,7 +28,6 @@ import com.github.benchdoos.weblocopener.utils.Converter;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
-import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -385,6 +384,8 @@ public class SettingsDialog extends JFrame implements Translatable {
         contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                 JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
+        contentPane.registerKeyboardAction(e -> createNewFile(), KeyStroke.getKeyStroke("control N"),
+                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
         scrollpane.setBorder(null);
 
@@ -392,25 +393,13 @@ public class SettingsDialog extends JFrame implements Translatable {
 
         initDragAndDropTarget();
 
-        initCreationNewFileOption();
-
         browserSetterPanel.init(); //don't forget it or it will crash fileBrowser
 
 
         pack();
         setMinimumSize(new Dimension(640, 300));
-//        setSize(new Dimension(400, 260));
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
         translate();
-    }
-
-    private void initCreationNewFileOption() {
-        final boolean unix = OperatingSystem.isUnix();
-        createNewFileButton.setVisible(unix);
-        if (unix) {
-            contentPane.registerKeyboardAction(e -> createNewFile(), KeyStroke.getKeyStroke("control N"),
-                    JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-        }
     }
 
     private void createNewFile() {
