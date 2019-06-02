@@ -188,7 +188,7 @@ public class ShowQrDialog extends JFrame implements Translatable {
                 createImageForFile(qrFile);
 
                 if (PreferencesManager.openFolderForQrCode()) {
-                    FileUtils.openFileInExplorer(qrFile);
+                    FileUtils.openFileInFileBrowser(qrFile);
                 } else {
                     log.debug("Opening folder for qr-code is blocked by settings");
                 }

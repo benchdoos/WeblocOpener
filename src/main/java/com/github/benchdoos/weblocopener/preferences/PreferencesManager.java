@@ -221,12 +221,12 @@ public class PreferencesManager {
         PREFERENCES.putBoolean(KEY_OPEN_FOR_QR, openFolderForQrCode);
     }
 
-    public static void openFolderForNewFile(boolean value) {
+    public static void setOpenFolderForNewFile(boolean value) {
         PREFERENCES.putBoolean(KEY_OPEN_FOR_NEW_FILE, value);
     }
 
 
-    public static boolean setOpenFolderForNewFile() {
+    public static boolean openFolderForNewFile() {
         return PREFERENCES.getBoolean(KEY_OPEN_FOR_NEW_FILE, SettingsConstants.OPEN_FOLDER_FOR_NEW_FILE);
     }
 

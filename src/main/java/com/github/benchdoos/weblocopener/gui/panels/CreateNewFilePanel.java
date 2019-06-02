@@ -21,6 +21,7 @@ import com.github.benchdoos.weblocopener.gui.PlaceholderTextField;
 import com.github.benchdoos.weblocopener.gui.Translatable;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.links.Link;
+import com.github.benchdoos.weblocopener.utils.FileUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
@@ -97,6 +98,13 @@ public class CreateNewFilePanel extends JPanel implements Translatable {
                     log.debug("Link with url: {} at location: {} will be created as: {}", url, path, link.getClass().getSimpleName());
 
                     link.createLink(new File(path), url);
+
+                    if (PreferencesManager.openFolderForNewFile()) {
+                        FileUtils.openFileInFileBrowser(new File(path));
+                    } else {
+                        log.info("Opening in file browser disabled by settings");
+                    }
+
                     parentWindow.dispose();
                 } catch (IOException e) {
                     log.warn("Could not create .webloc link at: {} with url: {}", path, url, e);

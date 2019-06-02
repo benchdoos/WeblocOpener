@@ -50,6 +50,7 @@ public class FileProcessingPanel extends JPanel implements SettingsPanel, Transl
     private JComboBox<String> converterComboBox;
     private JLabel createFileByDefaultLabel;
     private JComboBox<Link> createFileExtensionComboBox;
+    private JCheckBox openInBrowser;
 
     public FileProcessingPanel() {
         initGui();
@@ -99,10 +100,12 @@ public class FileProcessingPanel extends JPanel implements SettingsPanel, Transl
         convertToLabel.setText(translation.getTranslatedString("convertTo"));
         unixOpenModeLabel.setText(translation.getTranslatedString("unixOpenModeLabel"));
         createFileByDefaultLabel.setText(translation.getTranslatedString("createFileLabel"));
+        openInBrowser.setText(translation.getTranslatedString("openInFileBrowser"));
     }
 
     @Override
     public void loadSettings() {
+        openInBrowser.setSelected(PreferencesManager.openFolderForNewFile());
         loadConverterValue();
         loadUnixOpenModeComboBox();
         loadCreateFile();
@@ -133,6 +136,8 @@ public class FileProcessingPanel extends JPanel implements SettingsPanel, Transl
         if (mode != null) {
             this.mode = mode.getMode();
         }
+
+        PreferencesManager.setOpenFolderForNewFile(openInBrowser.isSelected());
 
         saveCreateLinkValue();
 
@@ -261,11 +266,11 @@ public class FileProcessingPanel extends JPanel implements SettingsPanel, Transl
         final Spacer spacer1 = new Spacer();
         panel1.add(spacer1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JPanel panel2 = new JPanel();
-        panel2.setLayout(new GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel2.setLayout(new GridLayoutManager(4, 2, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         convertToLabel = new JLabel();
         this.$$$loadLabelText$$$(convertToLabel, ResourceBundle.getBundle("translations/MainSetterPanelBundle").getString("convertTo"));
-        panel2.add(convertToLabel, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(convertToLabel, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
         panel2.add(panel3, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -276,7 +281,7 @@ public class FileProcessingPanel extends JPanel implements SettingsPanel, Transl
         panel3.add(createFileExtensionComboBox, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         unixOpenModePanel = new JPanel();
         unixOpenModePanel.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
-        panel2.add(unixOpenModePanel, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel2.add(unixOpenModePanel, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         unixOpenModeLabel = new JLabel();
         this.$$$loadLabelText$$$(unixOpenModeLabel, ResourceBundle.getBundle("translations/MainSetterPanelBundle").getString("unixOpenModeLabel"));
         unixOpenModePanel.add(unixOpenModeLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -293,7 +298,10 @@ public class FileProcessingPanel extends JPanel implements SettingsPanel, Transl
         converterComboBox = new JComboBox();
         final DefaultComboBoxModel defaultComboBoxModel2 = new DefaultComboBoxModel();
         converterComboBox.setModel(defaultComboBoxModel2);
-        panel2.add(converterComboBox, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel2.add(converterComboBox, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        openInBrowser = new JCheckBox();
+        this.$$$loadButtonText$$$(openInBrowser, ResourceBundle.getBundle("translations/MainSetterPanelBundle").getString("openInFileBrowser"));
+        panel2.add(openInBrowser, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         convertToLabel.setLabelFor(converterComboBox);
     }
 
@@ -320,6 +328,33 @@ public class FileProcessingPanel extends JPanel implements SettingsPanel, Transl
         component.setText(result.toString());
         if (haveMnemonic) {
             component.setDisplayedMnemonic(mnemonic);
+            component.setDisplayedMnemonicIndex(mnemonicIndex);
+        }
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private void $$$loadButtonText$$$(AbstractButton component, String text) {
+        StringBuffer result = new StringBuffer();
+        boolean haveMnemonic = false;
+        char mnemonic = '\0';
+        int mnemonicIndex = -1;
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == '&') {
+                i++;
+                if (i == text.length()) break;
+                if (!haveMnemonic && text.charAt(i) != '&') {
+                    haveMnemonic = true;
+                    mnemonic = text.charAt(i);
+                    mnemonicIndex = result.length();
+                }
+            }
+            result.append(text.charAt(i));
+        }
+        component.setText(result.toString());
+        if (haveMnemonic) {
+            component.setMnemonic(mnemonic);
             component.setDisplayedMnemonicIndex(mnemonicIndex);
         }
     }
