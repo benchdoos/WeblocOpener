@@ -44,6 +44,8 @@ public class CreateNewFileDialogWrapper extends JDialog {
 
         setTitle(Translation.getTranslatedString("CreateNewFileBundle", "windowTitle"));
 
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/balloonIcon256.png")));
+
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         pack();
         setResizable(false);

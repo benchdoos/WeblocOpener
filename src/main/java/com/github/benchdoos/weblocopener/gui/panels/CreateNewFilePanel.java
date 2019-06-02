@@ -56,8 +56,6 @@ public class CreateNewFilePanel extends JPanel implements Translatable {
     }
 
     public void initGui() {
-        updateWindowTitle(parentWindow);
-
         initActionListeners();
 
         initWindowGui();
@@ -67,14 +65,6 @@ public class CreateNewFilePanel extends JPanel implements Translatable {
 
     public void setParentWindow(Window parentWindow) {
         this.parentWindow = parentWindow;
-    }
-
-    private void updateWindowTitle(Window parentWindow) {
-        if (parentWindow instanceof JDialog) {
-            ((JDialog) parentWindow).setTitle(Translation.getTranslatedString("CreateNewFileBundle", "windowTitle"));
-        } else if (parentWindow instanceof JFrame) {
-            ((JFrame) parentWindow).setTitle(Translation.getTranslatedString("CreateNewFileBundle", "windowTitle"));
-        }
     }
 
     private void initActionListeners() {
