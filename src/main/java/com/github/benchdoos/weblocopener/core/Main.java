@@ -47,6 +47,8 @@ public class Main {
             NotificationManager.getForcedNotification(null).showErrorNotification(
                     "System is not supported", e.getMessage()
             );
+        } catch (Exception e) {
+            log.fatal("System exited with exception", e);
         }
     }
 
