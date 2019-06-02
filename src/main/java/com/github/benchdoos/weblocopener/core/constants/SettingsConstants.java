@@ -23,6 +23,7 @@ public interface SettingsConstants {
     boolean IS_APP_AUTO_UPDATE_DEFAULT_VALUE = true;
     boolean IS_APP_BETA_UPDATE_INSTALLING_DEFAULT_VALUE = false;
     boolean OPEN_FOLDER_FOR_QR_CODE = true;
+    boolean OPEN_FOLDER_FOR_NEW_FILE = false;
     boolean SHOW_NOTIFICATIONS_TO_USER = true;
     LinkFactory.LinkType URL_PROCESSOR = LinkFactory.LinkType.binary_webloc;
     String BROWSER_DEFAULT_VALUE = "default";

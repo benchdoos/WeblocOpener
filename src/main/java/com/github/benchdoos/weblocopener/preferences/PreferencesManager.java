@@ -52,6 +52,7 @@ public class PreferencesManager {
     private static final String KEY_UNIX_OPENING_MODE = "unix_open_mode";
     private static final String KEY_LATEST_UPDATE_CHECK = "last_update_check";
     private static final String KEY_URL_PROCESSOR = "url_processor";
+    private static final String KEY_OPEN_FOR_NEW_FILE = "open_folder_for_new_file";
 
     private static final Preferences PREFERENCES = Preferences.userRoot().node(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME.toLowerCase());
 
@@ -218,6 +219,15 @@ public class PreferencesManager {
 
     public static void setOpenFolderForQrCode(boolean openFolderForQrCode) {
         PREFERENCES.putBoolean(KEY_OPEN_FOR_QR, openFolderForQrCode);
+    }
+
+    public static void openFolderForNewFile(boolean value) {
+        PREFERENCES.putBoolean(KEY_OPEN_FOR_NEW_FILE, value);
+    }
+
+
+    public static boolean setOpenFolderForNewFile() {
+        return PREFERENCES.getBoolean(KEY_OPEN_FOR_NEW_FILE, SettingsConstants.OPEN_FOLDER_FOR_NEW_FILE);
     }
 
     public static String getUnixOpeningMode() {
