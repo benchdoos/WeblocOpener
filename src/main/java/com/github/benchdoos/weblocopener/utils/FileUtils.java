@@ -26,7 +26,12 @@ import java.io.IOException;
 public class FileUtils {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
-    public static void openFileInExplorer(File file) {
+    public static void openFileInFileBrowser(File file) {
+        Thread thread = new Thread(() -> openFile(file));
+        thread.start();
+    }
+
+    private static void openFile(File file) {
         log.info("Opening file in system file manager: {}", file);
         try {
             log.debug("Current system is: {}", OperatingSystem.getOsName());
@@ -44,12 +49,14 @@ public class FileUtils {
                 log.warn("Could not open parent for file: {}, skipping.", file, ex1);
             }
         }
-
     }
 
     private static void openFileInNautilusUnix(File file) throws IOException {
+        if (file.getAbsolutePath().contains(" ")) {
+            throw new IOException("Path contains spaces, so...");
+        }
         log.debug("Opening {} in nautilus", file);
-        Runtime.getRuntime().exec("nautilus " + file);
+        Runtime.getRuntime().exec("nautilus \'" + file + "\'");
     }
 
     private static void openFileInWindowsExplorer(File file) throws IOException {
