@@ -23,6 +23,7 @@ import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.service.clipboard.ClipboardManager;
 import com.github.benchdoos.weblocopener.service.gui.MousePickListener;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
+import com.github.benchdoos.weblocopener.utils.FileUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
@@ -186,7 +187,11 @@ public class ShowQrDialog extends JFrame implements Translatable {
                         + File.separator + s + "-qr.jpg");
                 createImageForFile(qrFile);
 
-                openFileInExplorer(qrFile);
+                if (PreferencesManager.openFolderForQrCode()) {
+                    FileUtils.openFileInExplorer(qrFile);
+                } else {
+                    log.debug("Opening folder for qr-code is blocked by settings");
+                }
             } catch (Exception e1) {
                 log.warn("Could not save qr-code image", e1);
             }
@@ -223,25 +228,6 @@ public class ShowQrDialog extends JFrame implements Translatable {
 
     private void onCancel() {
         dispose();
-    }
-
-    private void openFileInExplorer(File qrFile) {
-        if (PreferencesManager.openFolderForQrCode()) {
-            log.info("Opening image file: {}", qrFile);
-            try {
-                Runtime.getRuntime().exec("explorer.exe /select,\"" + qrFile + "\"");
-            } catch (IOException ex) {
-                log.warn("Could not open file {} in explorer", qrFile, ex);
-                try {
-                    log.debug("Opening parent: {}", qrFile.getParentFile());
-                    Desktop.getDesktop().open(qrFile.getParentFile());
-                } catch (Exception ex1) {
-                    log.warn("Could not open parent for file: {}, skipping.", qrFile, ex1);
-                }
-            }
-        } else {
-            log.debug("Opening folder for qr-code is blocked by settings");
-        }
     }
 
     @Override
