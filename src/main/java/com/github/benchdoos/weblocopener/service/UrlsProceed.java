@@ -43,7 +43,7 @@ public class UrlsProceed {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
     public static BufferedImage generateQrCode(String url) throws IOException, WriterException {
-        MatrixToImageConfig conf = null;
+        final MatrixToImageConfig conf;
         if (PreferencesManager.isDarkModeEnabledNow()) {
             conf = new MatrixToImageConfig(Color.WHITE.getRGB(), Color.BLACK.getRGB());
         } else {
