@@ -28,6 +28,9 @@ import com.google.gson.JsonParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.kohsuke.github.GHRelease;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -39,7 +42,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class UpdaterManager {
-    //todo add json deserializer
+    private static final String REPOSITORY_NAME = "benchdoos/weblocopener";
 
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static final int CONNECTION_TIMEOUT = 500;
@@ -62,6 +65,19 @@ public class UpdaterManager {
             }
         }
         return latestReleaseAppVersion;
+    }
+
+    static ApplicationVersion getLatestReleaseVersion(String setupName) {
+        try {
+            final GitHub github = GitHub.connectAnonymously();
+            final GHRepository repository = github.getRepository(REPOSITORY_NAME);
+            final GHRelease latestRelease = repository.getLatestRelease();
+            return getApplicationVersion(latestRelease, setupName);
+
+        } catch (IOException e) {
+            log.warn("Can not get release application version", e);
+            return null;
+        }
     }
 
     private static HttpsURLConnection createConnection(@NotNull String urlString) throws IOException {
@@ -124,17 +140,18 @@ public class UpdaterManager {
         return applicationVersion;
     }
 
-    private static Beta tryGetBetaFromName(String updateTitle, Beta beta) {
+    static ApplicationVersion getLatestBetaVersion(String setupName) {
         try {
-            Matcher matcher = BETA_FROM_RELEASE_TITLE_PATTERN.matcher(updateTitle);
-            if (matcher.find()) {
-                int betaVersion = Integer.parseInt(matcher.group(1));
-                return new Beta(betaVersion);
-            }
+            final HttpsURLConnection connection = UpdaterManager.createConnection(Updater.ALL_RELEASES_URL);
+            final ApplicationVersion serverLatestBetaApplicationVersion = getLatestBetaAppVersion(setupName, connection);
 
-        } catch (Exception ignore) {
+            log.info("Server latest beta application version: {}", serverLatestBetaApplicationVersion);
+
+            return serverLatestBetaApplicationVersion;
+        } catch (IOException e) {
+            log.warn("Can not get latest beta application version", e);
+            return null;
         }
-        return beta;
     }
 
     private static ApplicationVersion formAppVersionFromAllReleasesJson(String setupName, JsonArray array) {
@@ -150,19 +167,6 @@ public class UpdaterManager {
         return latestBeta;
     }
 
-    private static ApplicationVersion getLatestReleaseAppVersion(String setupName, HttpsURLConnection connection) throws IOException {
-        log.debug("Getting current server application release version");
-        String input;
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream(), DEFAULT_ENCODING));
-
-        input = bufferedReader.readLine();
-
-        JsonParser parser = new JsonParser();
-        JsonObject root = parser.parse(input).getAsJsonObject();
-
-        return UpdaterManager.formAppVersionFromLatestReleaseJson(setupName, root);
-    }
-
     private static ApplicationVersion getLatestBetaAppVersion(String setupName, HttpsURLConnection connection) throws IOException {
         log.debug("Getting latest server beta application version");
         String input;
@@ -176,31 +180,31 @@ public class UpdaterManager {
         return UpdaterManager.formAppVersionFromAllReleasesJson(setupName, root);
     }
 
-    static ApplicationVersion getLatestReleaseVersion(String setupName) {
-        try {
-            final HttpsURLConnection connection = UpdaterManager.createConnection(Updater.LATEST_RELEASE_URL);
-            final ApplicationVersion serverLatestReleaseApplicationVersion = getLatestReleaseAppVersion(setupName, connection);
-
-            log.info("Server application version: {}", serverLatestReleaseApplicationVersion);
-
-            return serverLatestReleaseApplicationVersion;
-        } catch (IOException e) {
-            log.warn("Can not get release application version", e);
-            return null;
-        }
+    private static ApplicationVersion getApplicationVersion(GHRelease latestRelease, String setupName) throws IOException {
+        ApplicationVersion version = new ApplicationVersion();
+        version.setUpdateTitle(latestRelease.getName());
+        version.setUpdateInfo(latestRelease.getBody());
+        version.setVersion(latestRelease.getTagName());
+        version.setBeta(tryGetBetaFromName(version.getUpdateTitle(), new Beta(latestRelease.isPrerelease() ? 1 : 0)));
+        latestRelease.getAssets().forEach(asset -> {
+            if (asset.getName().equalsIgnoreCase(setupName)) {
+                version.setDownloadUrl(asset.getBrowserDownloadUrl());
+                version.setSize(asset.getSize());
+            }
+        });
+        return version;
     }
 
-    static ApplicationVersion getLatestBetaVersion(String setupName) {
+    private static Beta tryGetBetaFromName(String updateTitle, Beta beta) {
         try {
-            final HttpsURLConnection connection = UpdaterManager.createConnection(Updater.ALL_RELEASES_URL);
-            final ApplicationVersion serverLatestBetaApplicationVersion = getLatestBetaAppVersion(setupName, connection);
+            Matcher matcher = BETA_FROM_RELEASE_TITLE_PATTERN.matcher(updateTitle);
+            if (matcher.find()) {
+                int betaVersion = Integer.parseInt(matcher.group(1));
+                return new Beta(betaVersion);
+            }
 
-            log.info("Server latest beta application version: {}", serverLatestBetaApplicationVersion);
-
-            return serverLatestBetaApplicationVersion;
-        } catch (IOException e) {
-            log.warn("Can not get latest beta application version", e);
-            return null;
+        } catch (Exception ignore) {
         }
+        return beta;
     }
 }
