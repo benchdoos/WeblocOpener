@@ -22,7 +22,6 @@ import com.github.benchdoos.weblocopener.core.constants.StringConstants;
 import com.github.benchdoos.weblocopener.gui.panels.*;
 import com.github.benchdoos.weblocopener.gui.wrappers.CreateNewFileDialogWrapper;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.service.links.BinaryWeblocLink;
 import com.github.benchdoos.weblocopener.service.links.LinkFactory;
@@ -251,7 +250,7 @@ public class SettingsDialog extends JFrame implements Translatable {
                                 log.warn("Rick and Morty easter egg is broken", e);
                             }
 
-                            final String fileExtension = Analyzer.getFileExtension(file);
+                            final String fileExtension = com.github.benchdoos.weblocopener.utils.FileUtils.getFileExtension(file);
                             if (fileExtension.equalsIgnoreCase(ApplicationConstants.URL_FILE_EXTENSION)
                                     || fileExtension.equalsIgnoreCase(ApplicationConstants.DESKTOP_FILE_EXTENSION)) {
                                 try {

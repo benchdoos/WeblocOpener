@@ -16,6 +16,7 @@
 package com.github.benchdoos.weblocopener.utils;
 
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,6 +26,25 @@ import java.io.IOException;
 
 public class FileUtils {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
+
+    /**
+     * Returns file extension
+     * Examples:
+     * <blockquote><pre>
+     * "hello.exe" returns "exe"
+     * "picture.gif" returns "gif"
+     * "document.txt" returns "txt"
+     * </pre></blockquote>
+     *
+     * @param file to get extension.
+     * @return String name of file extension
+     */
+    public static String getFileExtension(final File file) {
+        if (file == null) {
+            throw new IllegalArgumentException("File can not be null");
+        }
+        return FilenameUtils.getExtension(file.getName());
+    }
 
     public static void openFileInFileBrowser(File file) {
         Thread thread = new Thread(() -> openFile(file));
@@ -58,7 +78,6 @@ public class FileUtils {
         log.debug("Opening {} in nautilus", file);
         Runtime.getRuntime().exec("nautilus \'" + file + "\'");
     }
-
     private static void openFileInWindowsExplorer(File file) throws IOException {
         log.debug("Opening {} in Explorer", file);
         Runtime.getRuntime().exec("explorer.exe /select,\"" + file + "\"");

@@ -15,7 +15,6 @@
 
 package com.github.benchdoos.weblocopener.utils;
 
-import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.links.Link;
 import com.github.benchdoos.weblocopener.service.links.LinkFactory;
 import org.apache.commons.io.FileExistsException;
@@ -62,7 +61,7 @@ public class Converter {
         if (!originalUrlFile.exists()) {
             throw new FileNotFoundException("File does not exist: " + originalUrlFile);
         }
-        if (Analyzer.getFileExtension(originalUrlFile).equalsIgnoreCase(extension)) {
+        if (FileUtils.getFileExtension(originalUrlFile).equalsIgnoreCase(extension)) {
             throw new IllegalArgumentException("File extension " + originalUrlFile + " equals to new extension " + extension);
         }
     }

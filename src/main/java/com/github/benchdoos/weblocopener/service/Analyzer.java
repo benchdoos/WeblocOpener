@@ -20,6 +20,7 @@ import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.gui.FileChooser;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.links.WeblocLink;
+import com.github.benchdoos.weblocopener.utils.FileUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import lombok.AllArgsConstructor;
@@ -41,7 +42,7 @@ public class Analyzer {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
 
-    private String url = "";//todo change into URL
+    private String url = "";
     private File selectedFile = null;
 
     public Analyzer(final String filePath) throws Exception {
@@ -55,29 +56,10 @@ public class Analyzer {
         analyzeFile(filePath);
     }
 
-    /**
-     * Returns file extension
-     * Examples:
-     * <blockquote><pre>
-     * "hello.exe" returns "exe"
-     * "picture.gif" returns "gif"
-     * "document.txt" returns "txt"
-     * </pre></blockquote>
-     *
-     * @param file to get extension.
-     * @return String name of file extension
-     */
-    public static String getFileExtension(final File file) {
-        if (file == null) {
-            throw new IllegalArgumentException("File can not be null");
-        }
-        return FilenameUtils.getExtension(file.getName());
-    }
-
     private void analyzeFile(final String filePath) throws Exception {
         final File file = new File(filePath);
         if (file.exists()) {
-            if (getFileExtension(file).equalsIgnoreCase(ApplicationConstants.WEBLOC_FILE_EXTENSION)) {
+            if (FileUtils.getFileExtension(file).equalsIgnoreCase(ApplicationConstants.WEBLOC_FILE_EXTENSION)) {
                 selectedFile = file;
             }
         } else {
@@ -135,12 +117,11 @@ public class Analyzer {
             final File[] files = parent.listFiles();
             if (files != null) {
                 for (File current : files) {
-                    if (getFileExtension(current).equalsIgnoreCase(ApplicationConstants.WEBLOC_FILE_EXTENSION)) {
+                    if (FileUtils.getFileExtension(current).equalsIgnoreCase(ApplicationConstants.WEBLOC_FILE_EXTENSION)) {
                         int compared = compareFileNames(file, current);
                         values.add(new ComparedFile(compared, current));
                     }
                 }
-
                 final int maximumValue = getMaximumValue(values);
 
                 return getAllFilesWithMaximumValue(maximumValue, values);
@@ -167,13 +148,10 @@ public class Analyzer {
     }
 
     private int getMaximumValue(final ArrayList<ComparedFile> values) {
-        int result = 0;
-        for (ComparedFile comparedFile : values) {
-            if (comparedFile.getEqualSymbols() > result) {
-                result = comparedFile.getEqualSymbols();
-            }
-        }
-        return result;
+        return values.stream()
+                .mapToInt(ComparedFile::getEqualSymbols)
+                .filter(comparedFile -> comparedFile >= 0)
+                .max().orElse(0);
     }
 
     public String getUrl() {
