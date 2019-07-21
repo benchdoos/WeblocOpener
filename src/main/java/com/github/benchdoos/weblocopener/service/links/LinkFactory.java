@@ -25,24 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class LinkFactory {
-    public Link getLink(final File file) {
-        final String originalExtension = FilenameUtils.getExtension(file.getName());
-        return getAbstractLink(originalExtension);
-    }
-
-    private Link getAbstractLink(final String originalExtension) {
-        switch (originalExtension) {
-            case ApplicationConstants.WEBLOC_FILE_EXTENSION:
-                return new WeblocLink();
-            case ApplicationConstants.URL_FILE_EXTENSION:
-                return new InternetShortcutLink();
-            case ApplicationConstants.DESKTOP_FILE_EXTENSION:
-                return new DesktopEntryLink();
-            default:
-                return null;
-        }
-    }
-
     public static Link getLinkByName(final String name) {
         switch (LinkType.valueOf(name)) {
             case webloc:
@@ -57,7 +39,6 @@ public class LinkFactory {
                 return getLinkByName(SettingsConstants.URL_PROCESSOR.toString());
         }
     }
-
 
     public static String getNameByLink(final Link link) {
         final Class<? extends Link> aClass = link.getClass();
@@ -84,9 +65,27 @@ public class LinkFactory {
         return result;
     }
 
+    public Link getLink(final File file) {
+        final String originalExtension = FilenameUtils.getExtension(file.getName());
+        return getAbstractLink(originalExtension);
+    }
+
+    private Link getAbstractLink(final String originalExtension) {
+        switch (originalExtension) {
+            case ApplicationConstants.WEBLOC_FILE_EXTENSION:
+                return new WeblocLink();
+            case ApplicationConstants.URL_FILE_EXTENSION:
+                return new InternetShortcutLink();
+            case ApplicationConstants.DESKTOP_FILE_EXTENSION:
+                return new DesktopEntryLink();
+            default:
+                return null;
+        }
+    }
+
     public Link getLink(final String extension) {
         return getAbstractLink(extension);
     }
 
-    public enum LinkType {webloc, binary_webloc, url, desktop}
+    public enum LinkType {binary_webloc, webloc, url, desktop}
 }
