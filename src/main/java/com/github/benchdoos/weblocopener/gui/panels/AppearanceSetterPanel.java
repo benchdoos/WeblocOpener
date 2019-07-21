@@ -27,12 +27,10 @@ import com.github.benchdoos.weblocopener.service.gui.darkMode.Location;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.LocationManager;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.SimpleTime;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
-import com.github.benchdoos.weblocopener.utils.Logging;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -44,8 +42,9 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+@Log4j2
 public class AppearanceSetterPanel extends JPanel implements SettingsPanel, Translatable {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
+
 
     private JPanel contentPane;
     private JPanel byLocationPanel;

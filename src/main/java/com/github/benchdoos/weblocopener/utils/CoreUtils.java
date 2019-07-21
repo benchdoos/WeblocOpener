@@ -19,9 +19,8 @@ import com.github.benchdoos.weblocopener.core.Main;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import com.github.benchdoos.weblocopener.utils.version.Beta;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileExistsException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,9 +32,8 @@ import java.net.URL;
 import java.util.Properties;
 import java.util.Scanner;
 
+@Log4j2
 public class CoreUtils {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
     static String getApplicationVersionFullInformationString() {
         final Properties properties = new Properties();
         try {

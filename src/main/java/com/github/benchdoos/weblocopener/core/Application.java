@@ -26,13 +26,15 @@ import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.Analyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.service.clipboard.ClipboardManager;
-import com.github.benchdoos.weblocopener.utils.*;
+import com.github.benchdoos.weblocopener.utils.CleanManager;
+import com.github.benchdoos.weblocopener.utils.CoreUtils;
+import com.github.benchdoos.weblocopener.utils.FrameUtils;
+import com.github.benchdoos.weblocopener.utils.Internal;
 import com.github.benchdoos.weblocopener.utils.browser.BrowserManager;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -43,14 +45,14 @@ import java.util.Arrays;
 import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants.*;
 import static java.awt.Frame.MAXIMIZED_HORIZ;
 
+@Log4j2
 public class Application {
     private static final String CORRECT_CREATION_SYNTAX = "-create <file path> <url>";
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
     public static UPDATE_MODE updateMode = UPDATE_MODE.NORMAL;
 
 
-    Application(String[] args) {
+    Application(final String[] args) {
         log.info("{} starts in mode: {}", ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, Main.getCurrentMode());
         log.info("{} starts with arguments: {}", ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, Arrays.toString(args));
 

@@ -24,12 +24,10 @@ import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.gui.Translatable;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
-import com.github.benchdoos.weblocopener.utils.Logging;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,9 +40,8 @@ import java.util.ResourceBundle;
 
 import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants.*;
 
+@Log4j2
 public class ModeSelectorDialog extends JFrame implements Translatable {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
     private final File file;
     private String mode = PreferencesManager.getUnixOpeningMode();
     private JPanel contentPane;

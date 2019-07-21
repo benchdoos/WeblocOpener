@@ -21,9 +21,7 @@ import com.github.benchdoos.weblocopener.service.gui.darkMode.DarkModeAnalyzer;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.SimpleTime;
 import com.github.benchdoos.weblocopener.service.links.Link;
 import com.github.benchdoos.weblocopener.service.links.LinkFactory;
-import com.github.benchdoos.weblocopener.utils.Logging;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.time.ZoneId;
 import java.util.Calendar;
@@ -37,9 +35,8 @@ import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants
 /**
  * Created by Eugene Zrazhevsky on 19.11.2016.
  */
+@Log4j2
 public class PreferencesManager {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
     public static final String KEY_AUTO_UPDATE = "auto_update_enabled";
     private static final String KEY_BETA_UPDATE_INSTALL = "install_beta_updates";
     private static final String KEY_OPEN_FOR_QR = "open_folder_for_qr";

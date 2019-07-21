@@ -15,8 +15,8 @@
 
 package com.github.benchdoos.weblocopener.utils;
 
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.validator.routines.UrlValidator;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
@@ -37,9 +37,8 @@ import java.util.Map;
 /**
  * Created by Eugene Zrazhevsky on 30.10.2016.
  */
+@Log4j2
 public class FrameUtils {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
     private static final Timer timer = new Timer(60, null);
 
     /**
@@ -49,7 +48,7 @@ public class FrameUtils {
      * @see Component#getLocation
      */
     public static Point getFrameOnCenterLocationPoint(Window window) {
-        Dimension size = window.getSize();
+        final Dimension size = window.getSize();
         int width = (int) ((Toolkit.getDefaultToolkit().getScreenSize().width / (double) 2) - (size.getWidth() / (double) 2));
         int height = (int) ((Toolkit.getDefaultToolkit().getScreenSize().height / (double) 2) - (size.getHeight() / (double) 2));
         return new Point(width, height);
@@ -64,7 +63,7 @@ public class FrameUtils {
      * @see Component#getLocation()
      */
     public static Point getFrameOnCenterOfParentFrame(Window parent, Window window) {
-        Dimension size = window.getSize();
+        final Dimension size = window.getSize();
         int width = (int) ((parent.getSize().width / (double) 2) - (size.getWidth() / (double) 2));
         int height = (int) ((parent.getSize().height / (double) 2) - (size.getHeight() / (double) 2));
 
@@ -188,33 +187,37 @@ public class FrameUtils {
     }
 
     public static void fillTextFieldWithClipboard(JTextField textField) {
-        String data = "<empty clipboard>";
+        final String data;
         try {
             data = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
-            URL url = new URL(data);
-            UrlValidator urlValidator = new UrlValidator();
-            if (urlValidator.isValid(data)) {
-                textField.setText(url.toString());
-                setTextFieldFont(textField, textField.getFont(), TextAttribute.UNDERLINE_ON);
-                textField.setCaretPosition(textField.getText().length());
-                textField.selectAll();
-                log.debug("Got URL from clipboard: " + url);
+            try {
+                final URL url = new URL(data);
+                final UrlValidator urlValidator = new UrlValidator();
+                if (urlValidator.isValid(data)) {
+                    textField.setText(url.toString());
+                    setTextFieldFont(textField, textField.getFont(), TextAttribute.UNDERLINE_ON);
+                    textField.setCaretPosition(textField.getText().length());
+                    textField.selectAll();
+                    log.debug("Got URL from clipboard: " + url);
+                }
+            } catch (IllegalStateException | HeadlessException e) {
+                textField.setText("");
+                log.warn("Can not read URL from clipboard: {}", data, e);
             }
-        } catch (UnsupportedFlavorException | IllegalStateException | HeadlessException | IOException e) {
-            textField.setText("");
-            log.warn("Can not read URL from clipboard: [" + data + "]", e);
+        } catch (UnsupportedFlavorException | IOException e) {
+            log.warn("Can not read URL from clipboard", e);
         }
     }
 
     public static void setTextFieldFont(JTextField textField, Font font, int attribute2) {
-        Map<TextAttribute, Integer> fontAttributes = new HashMap<>();
+        final Map<TextAttribute, Integer> fontAttributes = new HashMap<>();
         fontAttributes.put(TextAttribute.UNDERLINE, attribute2);
         textField.setFont(font.deriveFont(fontAttributes));
     }
 
     public static String getFilePathFromFileDialog(FileDialog fileDialog, Logger log) {
         fileDialog.setVisible(true);
-        File[] f = fileDialog.getFiles();
+        final File[] f = fileDialog.getFiles();
         if (f.length > 0) {
             final String absolutePath = fileDialog.getFiles()[0].getAbsolutePath();
             log.debug("Choice: " + absolutePath);

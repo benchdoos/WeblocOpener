@@ -23,13 +23,11 @@ import com.github.benchdoos.weblocopener.gui.Translatable;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.links.Link;
 import com.github.benchdoos.weblocopener.service.links.LinkFactory;
-import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,9 +35,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.StringJoiner;
 
+@Log4j2
 public class FileProcessingPanel extends JPanel implements SettingsPanel, Translatable {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
     private JPanel contentPane;
     private String mode;
 

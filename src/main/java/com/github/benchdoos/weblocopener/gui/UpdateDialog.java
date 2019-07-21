@@ -27,16 +27,14 @@ import com.github.benchdoos.weblocopener.update.UpdaterManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Internal;
-import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import com.github.benchdoos.weblocopener.utils.version.Beta;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.validator.routines.UrlValidator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,9 +48,8 @@ import java.util.ResourceBundle;
 import static com.github.benchdoos.weblocopener.utils.system.SystemUtils.IS_WINDOWS_XP;
 
 @SuppressWarnings({"ALL", "ResultOfMethodCallIgnored"})
+@Log4j2
 public class UpdateDialog extends JFrame implements Translatable {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
     private static volatile UpdateDialog instance = null;
     private JProgressBar progressBar;
     private JButton buttonOK;

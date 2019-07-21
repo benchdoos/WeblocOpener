@@ -27,15 +27,13 @@ import com.github.benchdoos.weblocopener.service.links.BinaryWeblocLink;
 import com.github.benchdoos.weblocopener.service.links.LinkFactory;
 import com.github.benchdoos.weblocopener.utils.Converter;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
-import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,9 +49,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.TooManyListenersException;
 
+@Log4j2
 public class SettingsDialog extends JFrame implements Translatable {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
     private Timer settingsSavedTimer = null;
     private JPanel contentPane;
     private JButton buttonOK;

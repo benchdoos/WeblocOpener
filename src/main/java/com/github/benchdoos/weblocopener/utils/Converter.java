@@ -17,18 +17,16 @@ package com.github.benchdoos.weblocopener.utils;
 
 import com.github.benchdoos.weblocopener.service.links.Link;
 import com.github.benchdoos.weblocopener.service.links.LinkFactory;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
 
+@Log4j2
 public class Converter {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
     public static File convert(final File originalFile, final Link convertedLink) throws Exception {
         log.debug("Converting file: {} to new extension: {}", originalFile, convertedLink.getExtension());
         validateFile(originalFile, convertedLink);

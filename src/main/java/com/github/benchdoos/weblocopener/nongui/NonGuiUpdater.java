@@ -23,24 +23,17 @@ import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.update.UpdaterManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.Internal;
-import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Created by Eugene Zrazhevsky on 04.11.2016.
  */
 
-
+@Log4j2
 public class NonGuiUpdater {
-
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
-
     private ApplicationVersion serverApplicationVersion = null;
-
 
     public NonGuiUpdater() {
 
@@ -59,7 +52,6 @@ public class NonGuiUpdater {
                         translation.getTranslatedString("canNotUpdateTitle"),
                         translation.getTranslatedString("canNotUpdateMessage"));
             }
-
         }
     }
 

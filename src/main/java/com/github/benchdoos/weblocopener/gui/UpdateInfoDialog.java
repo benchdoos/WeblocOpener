@@ -19,13 +19,11 @@ import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
-import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
@@ -38,9 +36,8 @@ import java.util.ResourceBundle;
 
 import static com.github.benchdoos.weblocopener.utils.system.SystemUtils.IS_WINDOWS_XP;
 
+@Log4j2
 class UpdateInfoDialog extends JDialog {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
     private ApplicationVersion applicationVersion;
     private JPanel contentPane;
     private JButton buttonOK;

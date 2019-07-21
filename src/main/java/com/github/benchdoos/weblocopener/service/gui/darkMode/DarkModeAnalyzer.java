@@ -15,23 +15,20 @@
 
 package com.github.benchdoos.weblocopener.service.gui.darkMode;
 
-import com.github.benchdoos.weblocopener.utils.Logging;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
+@Log4j2
 public class DarkModeAnalyzer {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
     private static Calendar getCalendarForTime(String s) {
         final String[] time = s.split(":");
         final String hour = time[0];
         final String minute = time[1];
 
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hour));
         cal.set(Calendar.MINUTE, Integer.parseInt(minute));
         cal.set(Calendar.SECOND, 0);
@@ -50,8 +47,8 @@ public class DarkModeAnalyzer {
     }
 
     private static TimeRange getEndTimeRange(String[] split) {
-        Calendar endBegin = getCalendarForTime(split[0]);
-        Calendar endEnd = getCalendarForTime(split[1]);
+        final Calendar endBegin = getCalendarForTime(split[0]);
+        final Calendar endEnd = getCalendarForTime(split[1]);
         endEnd.add(Calendar.DATE, 1);
 
         return new TimeRange(endBegin.getTime(), endEnd.getTime());

@@ -22,13 +22,11 @@ import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.links.WeblocLink;
 import com.github.benchdoos.weblocopener.utils.FileUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
-import com.github.benchdoos.weblocopener.utils.Logging;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.extern.log4j.Log4j2;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.io.File;
@@ -37,11 +35,8 @@ import java.util.ArrayList;
 
 import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOC_FILE_EXTENSION;
 
-
+@Log4j2
 public class Analyzer {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
-
     private String url = "";
     private File selectedFile = null;
 
