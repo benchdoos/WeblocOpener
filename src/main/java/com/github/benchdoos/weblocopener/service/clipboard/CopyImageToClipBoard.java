@@ -15,18 +15,15 @@
 
 package com.github.benchdoos.weblocopener.service.clipboard;
 
-import com.github.benchdoos.weblocopener.utils.Logging;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.*;
 import java.awt.image.BufferedImage;
 
+@Log4j2
 public class CopyImageToClipBoard implements ClipboardOwner {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
     CopyImageToClipBoard() {
         try {
             Robot robot = new Robot();

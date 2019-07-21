@@ -17,11 +17,9 @@ package com.github.benchdoos.weblocopener.update;
 
 import com.github.benchdoos.weblocopener.core.constants.PathConstants;
 import com.github.benchdoos.weblocopener.gui.UpdateDialog;
-import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,8 +28,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+@Log4j2
 public class UnixUpdater implements Updater {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static ApplicationVersion latestReleaseVersion = null;
     private static ApplicationVersion latestBetaVersion = null;
 

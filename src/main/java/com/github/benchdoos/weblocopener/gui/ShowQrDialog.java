@@ -25,14 +25,12 @@ import com.github.benchdoos.weblocopener.service.gui.MousePickListener;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FileUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
-import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.google.zxing.WriterException;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -45,9 +43,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
+@Log4j2
 public class ShowQrDialog extends JFrame implements Translatable {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
     private final String url;
     private final BufferedImage qrCodeImage;
     private final File weblocFile;

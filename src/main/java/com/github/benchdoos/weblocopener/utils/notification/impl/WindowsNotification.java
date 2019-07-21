@@ -17,17 +17,14 @@ package com.github.benchdoos.weblocopener.utils.notification.impl;
 
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.notification.Notification;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import javax.swing.*;
 import java.awt.*;
 
+@Log4j2
 public class WindowsNotification implements Notification {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
     @Override
     public void showInfoNotification(String title, String message) {
         showNotification(title, message, TrayIcon.MessageType.INFO);

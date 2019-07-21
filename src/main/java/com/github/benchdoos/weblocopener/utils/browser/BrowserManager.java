@@ -17,13 +17,11 @@ package com.github.benchdoos.weblocopener.utils.browser;
 
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
-import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
 import com.google.gson.*;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,12 +29,9 @@ import java.util.ArrayList;
 /**
  * Created by Eugene Zrazhevsky on 24.08.2017.
  */
+@Log4j2
 public class BrowserManager {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
-
     private static ArrayList<Browser> browserList = new ArrayList<>();
-
 
     public static ArrayList<Browser> getBrowserList() {
         return browserList;

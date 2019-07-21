@@ -17,17 +17,15 @@ package com.github.benchdoos.weblocopener.utils.system;
 
 
 import com.github.benchdoos.weblocopener.utils.Internal;
-import com.github.benchdoos.weblocopener.utils.Logging;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import static com.github.benchdoos.weblocopener.utils.system.OperatingSystem.*;
 
-
+@Log4j2
 public class SystemUtils {
     private static final String MINIMUM_WINDOWS_VERSION = "5.1"; //Windows XP
     private static final OperatingSystem.OS[] SUPPORTED = new OperatingSystem.OS[]{OperatingSystem.OS.WINDOWS, OperatingSystem.OS.UNIX};
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
+
     private static final String CURRENT_OS_VERSION = getOsVersion();
     public static final boolean IS_WINDOWS_XP = isWindows()
             && Internal.versionCompare(SystemUtils.CURRENT_OS_VERSION, "5.1") >= 0

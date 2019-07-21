@@ -15,15 +15,13 @@
 
 package com.github.benchdoos.weblocopener.service.clipboard;
 
-import com.github.benchdoos.weblocopener.utils.Logging;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 
+@Log4j2
 public class UnixClipboard implements Clipboard {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static final int TIMER_ALIVE = 60_000; //60 secs
 
     @Override
@@ -31,7 +29,6 @@ public class UnixClipboard implements Clipboard {
         if (string != null) {
             UnixClipboardHelper thread = new UnixClipboardHelper(string);
             thread.start();
-
             interrupt(thread);
         }
     }

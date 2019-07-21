@@ -16,16 +16,14 @@
 package com.github.benchdoos.weblocopener.utils;
 
 import com.github.benchdoos.weblocopener.update.Updater;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
 
 import static com.github.benchdoos.weblocopener.core.constants.PathConstants.UPDATE_PATH_FILE;
 
+@Log4j2
 public class CleanManager {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
     public static void clean() {
         File folder = new File(UPDATE_PATH_FILE);
         log.info("Cleaning: {}", folder);

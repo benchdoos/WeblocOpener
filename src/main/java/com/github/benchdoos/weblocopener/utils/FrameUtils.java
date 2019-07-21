@@ -15,8 +15,8 @@
 
 package com.github.benchdoos.weblocopener.utils;
 
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.validator.routines.UrlValidator;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
@@ -37,9 +37,8 @@ import java.util.Map;
 /**
  * Created by Eugene Zrazhevsky on 30.10.2016.
  */
+@Log4j2
 public class FrameUtils {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
     private static final Timer timer = new Timer(60, null);
 
     /**
@@ -49,7 +48,7 @@ public class FrameUtils {
      * @see Component#getLocation
      */
     public static Point getFrameOnCenterLocationPoint(Window window) {
-        Dimension size = window.getSize();
+        final Dimension size = window.getSize();
         int width = (int) ((Toolkit.getDefaultToolkit().getScreenSize().width / (double) 2) - (size.getWidth() / (double) 2));
         int height = (int) ((Toolkit.getDefaultToolkit().getScreenSize().height / (double) 2) - (size.getHeight() / (double) 2));
         return new Point(width, height);
@@ -64,7 +63,7 @@ public class FrameUtils {
      * @see Component#getLocation()
      */
     public static Point getFrameOnCenterOfParentFrame(Window parent, Window window) {
-        Dimension size = window.getSize();
+        final Dimension size = window.getSize();
         int width = (int) ((parent.getSize().width / (double) 2) - (size.getWidth() / (double) 2));
         int height = (int) ((parent.getSize().height / (double) 2) - (size.getHeight() / (double) 2));
 

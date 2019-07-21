@@ -16,17 +16,15 @@
 package com.github.benchdoos.weblocopener.utils;
 
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
+@Log4j2
 public class FileUtils {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
     /**
      * Returns file extension
      * Examples:
@@ -78,6 +76,7 @@ public class FileUtils {
         log.debug("Opening {} in nautilus", file);
         Runtime.getRuntime().exec("nautilus \'" + file + "\'");
     }
+
     private static void openFileInWindowsExplorer(File file) throws IOException {
         log.debug("Opening {} in Explorer", file);
         Runtime.getRuntime().exec("explorer.exe /select,\"" + file + "\"");

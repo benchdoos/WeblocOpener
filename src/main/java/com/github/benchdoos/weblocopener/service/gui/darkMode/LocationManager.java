@@ -16,22 +16,19 @@
 package com.github.benchdoos.weblocopener.service.gui.darkMode;
 
 import com.github.benchdoos.weblocopener.utils.ConnectionUtils;
-import com.github.benchdoos.weblocopener.utils.Logging;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
+@Log4j2
 public class LocationManager {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-
-    private String locationName;
+    private final String locationName;
 
     public LocationManager(String locationName) {
         this.locationName = locationName;

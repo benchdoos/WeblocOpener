@@ -18,15 +18,13 @@ package com.github.benchdoos.weblocopener.service;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.QrCodeUtils;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageConfig;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -39,8 +37,8 @@ import java.net.URL;
 /**
  * Created by Eugene Zrazhevsky on 30.10.2016.
  */
+@Log4j2
 public class UrlsProceed {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
     public static BufferedImage generateQrCode(String url) throws IOException, WriterException {
         final MatrixToImageConfig conf;
@@ -61,7 +59,7 @@ public class UrlsProceed {
      *
      * @param url Url to open.
      */
-    public static void openUrl(String url) {
+    public static void openUrl(final String url) {
         if (PreferencesManager.getBrowserValue().equals(SettingsConstants.BROWSER_DEFAULT_VALUE)
                 || PreferencesManager.getBrowserValue().isEmpty()) {
             log.info("Opening URL in default browser: " + url);
@@ -77,13 +75,13 @@ public class UrlsProceed {
 
     }
 
-    private static void openUrlInDefaultBrowser(String url) {
+    private static void openUrlInDefaultBrowser(final String url) {
         if (!Desktop.isDesktopSupported()) {
             log.warn("Desktop is not supported");
             return;
         }
 
-        Desktop desktop = Desktop.getDesktop();
+        final Desktop desktop = Desktop.getDesktop();
 
         try {
             if (!url.isEmpty()) {
@@ -98,7 +96,7 @@ public class UrlsProceed {
         }
     }
 
-    private static void openUrlInNotDefaultBrowser(String url) throws IOException {
+    private static void openUrlInNotDefaultBrowser(final String url) throws IOException {
         final OperatingSystem.OS currentOS = SystemUtils.getCurrentOS();
 
         switch (currentOS) {
@@ -114,24 +112,24 @@ public class UrlsProceed {
         }
     }
 
-    private static void openUrlOnUnix(String url) throws IOException {
+    private static void openUrlOnUnix(final String url) throws IOException {
         if (!url.isEmpty()) {
-            String call = PreferencesManager.getBrowserValue().replace("%site", url);
-            String[] preparedCall = call.split(" ");
-            Runtime runtime = Runtime.getRuntime();
+            final String call = PreferencesManager.getBrowserValue().replace("%site", url);
+            final String[] preparedCall = call.split(" ");
+            final Runtime runtime = Runtime.getRuntime();
             runtime.exec(preparedCall);
         }
     }
 
-    private static void openUrlOnWindows(String url) throws IOException {
+    private static void openUrlOnWindows(final String url) throws IOException {
         if (!url.isEmpty()) {
-            String call = PreferencesManager.getBrowserValue().replace("%site", url);
-            Runtime runtime = Runtime.getRuntime();
+            final String call = PreferencesManager.getBrowserValue().replace("%site", url);
+            final Runtime runtime = Runtime.getRuntime();
             final String command = "cmd /c " + call;
             if (call.startsWith("start")) {
-                Process process = runtime.exec(command);
+                final Process process = runtime.exec(command);
 
-                BufferedReader stdError = new BufferedReader(new
+                final BufferedReader stdError = new BufferedReader(new
                         InputStreamReader(process.getErrorStream()));
 
                 // read the output from the command
@@ -151,6 +149,4 @@ public class UrlsProceed {
 
         }
     }
-
-
 }

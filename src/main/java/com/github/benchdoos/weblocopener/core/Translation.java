@@ -16,21 +16,19 @@
 package com.github.benchdoos.weblocopener.core;
 
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopener.utils.Logging;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-
+@Log4j2
 public class Translation {
     public static final Locale[] SUPPORTED_LOCALES = {
             new Locale("en", "EN"), new Locale("de", "DE"),
             new Locale("fr", "FR"), new Locale("it", "IT"),
             new Locale("ru", "RU")};
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
+
     private static volatile Locale locale;
     private final ResourceBundle messages;
     private final String bundlePath;

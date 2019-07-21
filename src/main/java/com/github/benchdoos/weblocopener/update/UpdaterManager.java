@@ -17,12 +17,10 @@ package com.github.benchdoos.weblocopener.update;
 
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.Internal;
-import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import com.github.benchdoos.weblocopener.utils.version.Beta;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.kohsuke.github.GHRelease;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
@@ -33,10 +31,9 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Log4j2
 public class UpdaterManager {
     private static final String REPOSITORY_NAME = "benchdoos/weblocopener";
-
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
     private static final Pattern BETA_FROM_RELEASE_TITLE_PATTERN = Pattern.compile("\\(beta\\.(\\d+)\\)");
 
     static ApplicationVersion getLatestVersion(Updater updater) {

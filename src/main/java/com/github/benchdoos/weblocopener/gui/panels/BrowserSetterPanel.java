@@ -20,17 +20,15 @@ import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.gui.Translatable;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
-import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.browser.Browser;
 import com.github.benchdoos.weblocopener.utils.browser.BrowserManager;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import lombok.extern.log4j.Log4j2;
 import net.java.balloontip.BalloonTip;
 import net.java.balloontip.styles.MinimalBalloonStyle;
 import net.java.balloontip.utils.TimingUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,8 +39,9 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+@Log4j2
 public class BrowserSetterPanel extends JPanel implements SettingsPanel, Translatable {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
+
     private boolean onInit = true;
 
     private JPanel contentPane;

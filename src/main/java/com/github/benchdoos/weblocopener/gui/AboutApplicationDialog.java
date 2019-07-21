@@ -29,14 +29,13 @@ import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import lombok.extern.log4j.Log4j2;
 import net.java.balloontip.BalloonTip;
 import net.java.balloontip.positioners.BalloonTipPositioner;
 import net.java.balloontip.positioners.LeftAbovePositioner;
 import net.java.balloontip.styles.BalloonTipStyle;
 import net.java.balloontip.styles.MinimalBalloonStyle;
 import net.java.balloontip.utils.TimingUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,9 +51,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ResourceBundle;
 
-
+@Log4j2
 public class AboutApplicationDialog extends JDialog {
-    private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
+
     private JPanel contentPane;
     private JTextPane descriptionTextPane;
     private JLabel versionLabel;
