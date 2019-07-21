@@ -15,54 +15,24 @@
 
 package com.github.benchdoos.weblocopener.service.gui.darkMode;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class DarkModeValue {
     private TimeRange previous;
     private TimeRange next;
     private Location location;
 
-    public DarkModeValue(double longitude, double latitude) {
-        location = new Location(longitude, latitude);
-    }
-
-    public DarkModeValue(Location location) {
+    DarkModeValue(Location location) {
         this.location = location;
     }
 
     DarkModeValue(TimeRange previous, TimeRange next) {
         this.previous = previous;
         this.next = next;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    public TimeRange getNext() {
-        return next;
-    }
-
-    public void setNext(TimeRange next) {
-        this.next = next;
-    }
-
-    public TimeRange getPrevious() {
-        return previous;
-    }
-
-    public void setPrevious(TimeRange previous) {
-        this.previous = previous;
-    }
-
-    @Override
-    public String toString() {
-        return "DarkModeValue{" +
-                "previous=" + previous +
-                ", next=" + next +
-                ", location=" + location +
-                '}';
     }
 }

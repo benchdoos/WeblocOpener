@@ -273,7 +273,7 @@ public class UpdateDialog extends JFrame implements Translatable {
     public void checkForUpdates() {
         progressBar.setIndeterminate(true);
         updater = UpdaterManager.getUpdaterForCurrentOperatingSystem();
-        System.out.println(updater);
+        log.debug("Provided updater: {}", updater);
         if (updater != null) {
             createDefaultActionListeners();
 

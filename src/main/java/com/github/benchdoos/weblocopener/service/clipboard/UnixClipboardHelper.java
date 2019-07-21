@@ -65,7 +65,6 @@ public class UnixClipboardHelper extends Thread {
 
     @Override
     public void interrupt() {
-        System.out.print('M');
         super.interrupt();
     }
 
