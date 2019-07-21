@@ -16,6 +16,8 @@
 package com.github.benchdoos.weblocopener.update;
 
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopener.update.impl.UnixUpdater;
+import com.github.benchdoos.weblocopener.update.impl.WindowsUpdater;
 import com.github.benchdoos.weblocopener.utils.Internal;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
@@ -36,7 +38,7 @@ public class UpdaterManager {
     private static final String REPOSITORY_NAME = "benchdoos/weblocopener";
     private static final Pattern BETA_FROM_RELEASE_TITLE_PATTERN = Pattern.compile("\\(beta\\.(\\d+)\\)");
 
-    static ApplicationVersion getLatestVersion(Updater updater) {
+    public static ApplicationVersion getLatestVersion(Updater updater) {
         final ApplicationVersion latestReleaseAppVersion = updater.getLatestReleaseAppVersion();
         PreferencesManager.setLatestUpdateCheck(new Date());
 
@@ -54,7 +56,7 @@ public class UpdaterManager {
         return latestReleaseAppVersion;
     }
 
-    static ApplicationVersion getLatestReleaseVersion(String setupName) {
+    public static ApplicationVersion getLatestReleaseVersion(String setupName) {
         try {
             final GitHub github = GitHub.connectAnonymously();
             final GHRepository repository = github.getRepository(REPOSITORY_NAME);
@@ -75,7 +77,7 @@ public class UpdaterManager {
         } else return new UnixUpdater();
     }
 
-    static ApplicationVersion getLatestBetaVersion(String setupName) {
+    public static ApplicationVersion getLatestBetaVersion(String setupName) {
         try {
             final GitHub gitHub = GitHub.connectAnonymously();
             final GHRepository repository = gitHub.getRepository(REPOSITORY_NAME);
@@ -99,7 +101,7 @@ public class UpdaterManager {
     }
 
     private static ApplicationVersion getApplicationVersion(GHRelease latestRelease, String setupName) throws IOException {
-        ApplicationVersion version = new ApplicationVersion();
+        final ApplicationVersion version = new ApplicationVersion();
         version.setUpdateTitle(latestRelease.getName());
         version.setUpdateInfo(latestRelease.getBody());
         version.setVersion(latestRelease.getTagName());
@@ -115,7 +117,7 @@ public class UpdaterManager {
 
     private static Beta tryGetBetaFromName(String updateTitle, Beta beta) {
         try {
-            Matcher matcher = BETA_FROM_RELEASE_TITLE_PATTERN.matcher(updateTitle);
+            final Matcher matcher = BETA_FROM_RELEASE_TITLE_PATTERN.matcher(updateTitle);
             if (matcher.find()) {
                 int betaVersion = Integer.parseInt(matcher.group(1));
                 return new Beta(betaVersion);
