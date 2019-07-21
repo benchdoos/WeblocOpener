@@ -44,9 +44,10 @@ public class Main {
             new Application(args);
         } catch (UnsupportedSystemException e) {
             log.fatal("System not supported", e);
-            NotificationManager.getForcedNotification(null).showErrorNotification(
-                    "System is not supported", e.getMessage()
-            );
+            final String translatedString = Translation.getTranslatedString("CommonsBundle", "systemNotSupported");
+            final String message = translatedString + " " + SystemUtils.getCurrentOS().name();
+
+            NotificationManager.getForcedNotification(null).showErrorNotification(message, message);
         } catch (Exception e) {
             log.fatal("System exited with exception", e);
         }

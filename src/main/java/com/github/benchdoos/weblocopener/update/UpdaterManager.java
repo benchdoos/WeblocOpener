@@ -75,7 +75,7 @@ public class UpdaterManager {
             return new WindowsUpdater();
         } else if (OperatingSystem.isUnix()) {
             return new UnixUpdater();
-        } else return null;
+        } else return new UnixUpdater();
     }
 
     static ApplicationVersion getLatestBetaVersion(String setupName) {

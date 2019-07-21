@@ -20,6 +20,6 @@ package com.github.benchdoos.weblocopener.utils.system;
  */
 public class UnsupportedSystemException extends Exception {
     UnsupportedSystemException() {
-        super("OS is not supported.");
+        super("Current OS is not supported: " + System.getProperty("os.name"));
     }
 }
