@@ -15,42 +15,18 @@
 
 package com.github.benchdoos.weblocopener.service.gui.darkMode;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import java.util.Date;
 
+@AllArgsConstructor
+@Data
 public class TimeRange {
     private Date start;
     private Date end;
 
-    TimeRange(Date start, Date end) {
-        this.start = start;
-        this.end = end;
-    }
-
-    public Date getEnd() {
-        return end;
-    }
-
-    public void setEnd(Date end) {
-        this.end = end;
-    }
-
-    public Date getStart() {
-        return start;
-    }
-
-    public void setStart(Date start) {
-        this.start = start;
-    }
-
     boolean isInRange(Date date) {
         return start.before(date) && end.after(date);
-    }
-
-    @Override
-    public String toString() {
-        return "TimeRange{" +
-                "start=" + start +
-                ", end=" + end +
-                '}';
     }
 }

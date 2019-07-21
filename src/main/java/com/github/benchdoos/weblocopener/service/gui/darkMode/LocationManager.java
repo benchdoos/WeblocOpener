@@ -71,7 +71,7 @@ public class LocationManager {
         final JsonElement longitude = element.get("lon");
         final JsonElement latitude = element.get("lat");
 
-        final Location location = new Location(longitude.getAsDouble(), latitude.getAsDouble());
+        final Location location = new Location(longitude.getAsDouble(), latitude.getAsDouble(), null);
         location.setAddress(displayName.getAsString());
         return location;
     }
