@@ -22,6 +22,8 @@ import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.links.WeblocLink;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Logging;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
@@ -42,7 +44,7 @@ public class Analyzer {
     private String url = "";//todo change into URL
     private File selectedFile = null;
 
-    public Analyzer(String filePath) throws Exception {
+    public Analyzer(final String filePath) throws Exception {
         log.debug("Starting analyze");
         log.debug("Got argument: " + filePath);
 
@@ -65,15 +67,15 @@ public class Analyzer {
      * @param file to get extension.
      * @return String name of file extension
      */
-    public static String getFileExtension(File file) {
+    public static String getFileExtension(final File file) {
         if (file == null) {
             throw new IllegalArgumentException("File can not be null");
         }
         return FilenameUtils.getExtension(file.getName());
     }
 
-    private void analyzeFile(String filePath) throws Exception {
-        File file = new File(filePath);
+    private void analyzeFile(final String filePath) throws Exception {
+        final File file = new File(filePath);
         if (file.exists()) {
             if (getFileExtension(file).equalsIgnoreCase(ApplicationConstants.WEBLOC_FILE_EXTENSION)) {
                 selectedFile = file;
@@ -84,9 +86,9 @@ public class Analyzer {
             File chosen = null;
             if (weblocFiles != null) {
                 if (weblocFiles.size() > 1) {
-                    FileChooser fileChooser;
+                    final FileChooser fileChooser;
                     if (PreferencesManager.isDarkModeEnabledNow()) {
-                        JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
+                        final JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
                         colorful.colorizeGlobal();
                         fileChooser = new FileChooser(weblocFiles);
                         SwingUtilities.invokeLater(() -> colorful.colorize(fileChooser));
@@ -119,16 +121,16 @@ public class Analyzer {
         }
     }
 
-    private int compareFileNames(File fileOriginal, File fileComparing) {
+    private int compareFileNames(final File fileOriginal, final File fileComparing) {
         final String originalFileName = fileOriginal.getName();
         final String comparingFileName = fileComparing.getName();
         return FuzzySearch.ratio(originalFileName, comparingFileName);
     }
 
-    private ArrayList<File> findOpeningFile(File file) {
-        File parent = file.getParentFile();
+    private ArrayList<File> findOpeningFile(final File file) {
+        final File parent = file.getParentFile();
         if (parent.exists() && parent.isDirectory()) {
-            ArrayList<ComparedFile> values = new ArrayList<>();
+            final ArrayList<ComparedFile> values = new ArrayList<>();
 
             final File[] files = parent.listFiles();
             if (files != null) {
@@ -147,7 +149,7 @@ public class Analyzer {
         return null;
     }
 
-    private ArrayList<File> getAllFilesWithMaximumValue(int maximumValue, ArrayList<ComparedFile> values) {
+    private ArrayList<File> getAllFilesWithMaximumValue(final int maximumValue, final ArrayList<ComparedFile> values) {
         ArrayList<File> result = null;
         for (ComparedFile c : values) {
             if (c.getEqualSymbols() == maximumValue) {
@@ -164,7 +166,7 @@ public class Analyzer {
         return selectedFile;
     }
 
-    private int getMaximumValue(ArrayList<ComparedFile> values) {
+    private int getMaximumValue(final ArrayList<ComparedFile> values) {
         int result = 0;
         for (ComparedFile comparedFile : values) {
             if (comparedFile.getEqualSymbols() > result) {
@@ -184,14 +186,14 @@ public class Analyzer {
      * @param arg File path.
      * @return <code>.webloc</code> file.
      */
-    private ArrayList<File> getWeblocFiles(String arg) {
+    private ArrayList<File> getWeblocFiles(final String arg) {
 
-        File currentFile = new File(arg);
+        final File currentFile = new File(arg);
         log.info("File [" + arg + "] exists: " + currentFile.exists() + " file?: " + currentFile.isFile());
         if (currentFile.isFile() && currentFile.exists()) {
             if (FilenameUtils.getExtension(currentFile.getName()).equals(WEBLOC_FILE_EXTENSION)) {
                 log.info("File added to proceed: " + currentFile.getAbsolutePath());
-                ArrayList<File> arrayList = new ArrayList<>();
+                final ArrayList<File> arrayList = new ArrayList<>();
                 arrayList.add(currentFile);
                 return arrayList;
             } else {
@@ -200,36 +202,17 @@ public class Analyzer {
         } else {
             log.warn("Wrong argument. Invalid file path or file not exist: " + currentFile.getAbsolutePath());
             log.info("Trying to guess what file user wants to open");
-            ArrayList<File> files = findOpeningFile(currentFile);
+            final ArrayList<File> files = findOpeningFile(currentFile);
             log.info("Got files, that match: {}", files);
             return files;
         }
-
         return null;
     }
 
+    @AllArgsConstructor
+    @Data
     private class ComparedFile {
         private int equalSymbols;
         private File file;
-
-        ComparedFile(int equalSymbols, File file) {
-            this.equalSymbols = equalSymbols;
-            this.file = file;
-        }
-
-        int getEqualSymbols() {
-            return equalSymbols;
-        }
-
-        public File getFile() {
-            return file;
-        }
-
-        @Override
-        public String toString() {
-            return "ComparedFile{" + "equalSymbols=" + equalSymbols +
-                    ", file=" + file +
-                    '}';
-        }
     }
 }
