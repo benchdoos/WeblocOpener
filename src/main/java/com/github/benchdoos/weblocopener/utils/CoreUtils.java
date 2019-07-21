@@ -15,7 +15,7 @@
 
 package com.github.benchdoos.weblocopener.utils;
 
-import com.github.benchdoos.weblocopener.core.Main;
+import com.github.benchdoos.weblocopener.Main;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import com.github.benchdoos.weblocopener.utils.version.Beta;

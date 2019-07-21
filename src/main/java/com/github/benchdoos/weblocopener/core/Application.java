@@ -16,6 +16,7 @@
 package com.github.benchdoos.weblocopener.core;
 
 import com.github.benchdoos.jcolorful.core.JColorful;
+import com.github.benchdoos.weblocopener.Main;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.gui.*;
@@ -52,7 +53,7 @@ public class Application {
     public static UPDATE_MODE updateMode = UPDATE_MODE.NORMAL;
 
 
-    Application(final String[] args) {
+    public Application(final String[] args) {
         log.info("{} starts in mode: {}", ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, Main.getCurrentMode());
         log.info("{} starts with arguments: {}", ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, Arrays.toString(args));
 

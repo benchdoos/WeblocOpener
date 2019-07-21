@@ -176,7 +176,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.github.benchdoos.weblocopener.core.Main</mainClass>
+                            <mainClass>com.github.benchdoos.weblocopener.Main</mainClass>
                         </manifest>
                         <manifestEntries>
                             <Class-Path>lib/</Class-Path>
@@ -205,7 +205,7 @@
                     <!--<manifest></manifest>-->
                     <icon>${project.basedir}/build/installer/images/balloonIcon256.ico</icon>
                     <classPath>
-                        <mainClass>com.github.benchdoos.weblocopener.core.Main</mainClass>
+                        <mainClass>com.github.benchdoos.weblocopener.Main</mainClass>
                         <addDependencies>true</addDependencies>
                     </classPath>
                     <versionInfo>

@@ -13,8 +13,10 @@
  * Eugene Zrazhevsky <eugene.zrazhevsky@gmail.com>
  */
 
-package com.github.benchdoos.weblocopener.core;
+package com.github.benchdoos.weblocopener;
 
+import com.github.benchdoos.weblocopener.core.Application;
+import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
@@ -70,7 +72,7 @@ public class Main {
         new Main(args);
     }
 
-    static MODE getCurrentMode() {
+    public static MODE getCurrentMode() {
         return currentMode;
     }
 
