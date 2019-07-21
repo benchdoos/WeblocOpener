@@ -60,10 +60,8 @@ public class UpdaterManager {
                     return latestBetaAppVersion;
                 }
             }
-            return latestReleaseAppVersion;
-        } else {
-            return latestReleaseAppVersion;
         }
+        return latestReleaseAppVersion;
     }
 
     private static HttpsURLConnection createConnection(@NotNull String urlString) throws IOException {
