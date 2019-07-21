@@ -21,14 +21,9 @@ import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 import java.io.IOException;
 
 public interface Updater {
-    String LATEST_RELEASE_URL = "https://api.github.com/repos/benchdoos/WeblocOpener/releases/latest";
-    String ALL_RELEASES_URL = "https://api.github.com/repos/benchdoos/WeblocOpener/releases";
-
-
     String WINDOWS_SETUP_DEFAULT_NAME = "WeblocOpenerSetup.exe";
     String DEBIAN_SETUP_DEFAULT_NAME = "WeblocOpener.deb";
     int CONNECTION_TIMEOUT = 5000;
-
 
     /**
      * @return latest {@link ApplicationVersion}, giving Beta if
