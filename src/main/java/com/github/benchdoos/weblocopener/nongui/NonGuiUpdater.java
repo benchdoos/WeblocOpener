@@ -21,6 +21,7 @@ import com.github.benchdoos.weblocopener.nongui.notify.NotifyManager;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.update.UpdaterManager;
+import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.Internal;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
@@ -70,10 +71,12 @@ public class NonGuiUpdater {
                     onNewVersionAvailable();
                     break;
                 case CURRENT_VERSION_IS_NEWER:
-                    log.info("Current version is newer");
+                    log.info("Current version is newer! Current: {}, Server: {}",
+                            CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
                     break;
                 case VERSIONS_ARE_EQUAL:
-                    log.info("There are no updates available");
+                    log.info("There are no updates available. Versions are equal! Current: {}, Server: {}",
+                            CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
                     break;
             }
         } else onNewVersionAvailable();
@@ -81,6 +84,9 @@ public class NonGuiUpdater {
 
     private void onNewVersionAvailable() {
         if (serverApplicationVersion.getDownloadUrl() != null) {
+            log.info("Showing notification: New version is available! Current: {}, Server: {}",
+                    CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
+
             NotifyManager.getNotifierForSystem().notifyUser(serverApplicationVersion);
         } else {
             log.warn("Update is available, but there is no version for current system: {}", serverApplicationVersion);
