@@ -25,12 +25,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class LinkFactory {
-    public Link getLink(File file) {
-        String originalExtension = FilenameUtils.getExtension(file.getName());
+    public Link getLink(final File file) {
+        final String originalExtension = FilenameUtils.getExtension(file.getName());
         return getAbstractLink(originalExtension);
     }
 
-    private Link getAbstractLink(String originalExtension) {
+    private Link getAbstractLink(final String originalExtension) {
         switch (originalExtension) {
             case ApplicationConstants.WEBLOC_FILE_EXTENSION:
                 return new WeblocLink();
@@ -43,7 +43,7 @@ public class LinkFactory {
         }
     }
 
-    public static Link getLinkByName(String name) {
+    public static Link getLinkByName(final String name) {
         switch (LinkType.valueOf(name)) {
             case webloc:
                 return new WeblocLink();
@@ -59,7 +59,7 @@ public class LinkFactory {
     }
 
 
-    public static String getNameByLink(Link link) {
+    public static String getNameByLink(final Link link) {
         final Class<? extends Link> aClass = link.getClass();
         if (aClass == WeblocLink.class) {
             return LinkType.webloc.toString();
@@ -76,7 +76,7 @@ public class LinkFactory {
     }
 
     public static List<Link> getSupportedLinks() {
-        ArrayList<Link> result = new ArrayList<>();
+        final ArrayList<Link> result = new ArrayList<>();
         for (LinkType type : LinkType.values()) {
             final Link linkByName = getLinkByName(type.toString());
             result.add(linkByName);
@@ -84,7 +84,7 @@ public class LinkFactory {
         return result;
     }
 
-    public Link getLink(String extension) {
+    public Link getLink(final String extension) {
         return getAbstractLink(extension);
     }
 

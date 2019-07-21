@@ -26,7 +26,7 @@ public interface Link {
      * @param file where should be {@code url} stored
      * @param url  that should be stored at {@code file}
      */
-    void createLink(File file, URL url) throws IOException;
+    void createLink(final File file, final URL url) throws IOException;
 
     /**
      * Gets lin from the file into URL
@@ -34,7 +34,7 @@ public interface Link {
      * @param file file with link
      * @return url in the file
      */
-    URL getUrl(File file) throws IOException;
+    URL getUrl(final File file) throws IOException;
 
     String getName();
 

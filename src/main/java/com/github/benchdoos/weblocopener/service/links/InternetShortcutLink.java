@@ -31,15 +31,15 @@ public class InternetShortcutLink implements Link {
      * @param url  URL
      * @throws IOException if can not write a file
      */
-    public void createLink(File file, URL url) throws IOException {
-        FileWriter fileWriter = new FileWriter(file);
+    public void createLink(final File file, final URL url) throws IOException {
+        final FileWriter fileWriter = new FileWriter(file);
         fileWriter.write("[InternetShortcut]\n");
         fileWriter.write("URL=" + url.toString() + "\n");
         fileWriter.flush();
         fileWriter.close();
     }
 
-    public URL getUrl(File file) throws IOException {
+    public URL getUrl(final File file) throws IOException {
         return LinkUtils.getUrl(file);
     }
 

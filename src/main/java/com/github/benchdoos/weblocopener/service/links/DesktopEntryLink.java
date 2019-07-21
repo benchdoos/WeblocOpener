@@ -27,8 +27,8 @@ import java.net.URL;
  */
 public class DesktopEntryLink implements Link {
     @Override
-    public void createLink(File file, URL url) throws IOException {
-        FileWriter writer = new FileWriter(file);
+    public void createLink(final File file, final URL url) throws IOException {
+        final FileWriter writer = new FileWriter(file);
         writer.write("[Desktop Entry]\n");
         writer.write("Encoding=" + ApplicationConstants.DEFAULT_APPLICATION_CHARSET + "\n");
         writer.write("Name=" + file.getName() + "\n");
@@ -40,7 +40,7 @@ public class DesktopEntryLink implements Link {
     }
 
     @Override
-    public URL getUrl(File file) throws IOException {
+    public URL getUrl(final File file) throws IOException {
         return LinkUtils.getUrl(file);
     }
 

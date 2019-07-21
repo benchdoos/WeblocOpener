@@ -22,9 +22,9 @@ import java.net.URL;
 import java.util.Scanner;
 
 class LinkUtils {
-    static URL getUrl(File file) throws IOException {
+    static URL getUrl(final File file) throws IOException {
         try (FileReader fileReader = new FileReader(file)) {
-            Scanner scan = new Scanner(fileReader);
+            final Scanner scan = new Scanner(fileReader);
 
             while (scan.hasNext()) {
                 final String next = scan.next();

@@ -29,16 +29,16 @@ import java.text.ParseException;
 
 public class BinaryWeblocLink implements Link {
     @Override
-    public void createLink(File file, URL url) throws IOException {
-        NSDictionary root = new NSDictionary();
+    public void createLink(final File file, final URL url) throws IOException {
+        final NSDictionary root = new NSDictionary();
         root.put("URL", url.toString());
         PropertyListParser.saveAsBinary(root, file);
     }
 
     @Override
-    public URL getUrl(File file) throws IOException {
+    public URL getUrl(final File file) throws IOException {
         try {
-            NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(file);
+            final NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(file);
             return new URL(rootDict.objectForKey("URL").toString());
         } catch (PropertyListFormatException | ParseException | ParserConfigurationException | SAXException e) {
             throw new IOException("Could not parse file: " + file, e);
