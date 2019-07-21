@@ -37,12 +37,12 @@ public class CoreUtils {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
     static String getApplicationVersionFullInformationString() {
-        Properties properties = new Properties();
+        final Properties properties = new Properties();
         try {
             properties.load(Main.class.getResourceAsStream("/application.properties"));
-            String name = properties.getProperty("application.name");
-            String version = properties.getProperty("application.version");
-            String build = properties.getProperty("application.build");
+            final String name = properties.getProperty("application.name");
+            final String version = properties.getProperty("application.version");
+            final String build = properties.getProperty("application.build");
 
             if (version != null && build != null) {
                 return name + " v." + version + "." + build;
@@ -57,11 +57,11 @@ public class CoreUtils {
 
 
     public static String getApplicationVersionString() {
-        Properties properties = new Properties();
+        final Properties properties = new Properties();
         try {
             properties.load(Main.class.getResourceAsStream("/application.properties"));
-            String version = properties.getProperty("application.version");
-            String build = properties.getProperty("application.build");
+            final String version = properties.getProperty("application.version");
+            final String build = properties.getProperty("application.build");
 
             if (version != null && build != null) {
                 return version + "." + build.split(" ")[0];
@@ -124,7 +124,7 @@ public class CoreUtils {
         return fileName;
     }
 
-    public static String getPageTitle(String url) throws IOException {
+    public static String getPageTitle(final String url) throws IOException {
         if (url == null) {
             throw new IllegalArgumentException("URL can not be null");
         }
@@ -133,8 +133,8 @@ public class CoreUtils {
         }
         try (InputStream response = new URL(url).openStream()) {
 
-            Scanner scanner = new Scanner(response, ApplicationConstants.DEFAULT_APPLICATION_CHARSET);
-            String responseBody = scanner.useDelimiter("\\A").next();
+            final Scanner scanner = new Scanner(response, ApplicationConstants.DEFAULT_APPLICATION_CHARSET);
+            final String responseBody = scanner.useDelimiter("\\A").next();
 
             return responseBody.substring(responseBody.indexOf("<title>") + 7, responseBody.indexOf("</title>"));
         } catch (IOException e) {
@@ -142,7 +142,7 @@ public class CoreUtils {
         }
     }
 
-    public static File renameFile(File oldFile, String fileName) throws FileExistsException {
+    public static File renameFile(final File oldFile, String fileName) throws FileExistsException {
 
         if (oldFile == null) {
             throw new IllegalArgumentException("Can not rename file [null]: it is null!");
@@ -160,8 +160,8 @@ public class CoreUtils {
 
         fileName = fixFileName(fileName);
 
-        File folder = oldFile.getParentFile();
-        File file = new File(folder.getAbsolutePath() + File.separator + fileName);
+        final File folder = oldFile.getParentFile();
+        final File file = new File(folder.getAbsolutePath() + File.separator + fileName);
 
         if (file.exists()) {
             throw new FileExistsException("Can not rename file [" + oldFile + "]: file [" + file + "] already exists!");
@@ -179,13 +179,13 @@ public class CoreUtils {
 
     }
 
-    public static BufferedImage resize(Image img, int width, int height) {
+    public static BufferedImage resize(final Image img, final int width, final int height) {
         return resize(toBufferedImage(img), width, height);
     }
 
-    public static BufferedImage resize(BufferedImage img, int widht, int height) {
-        Image tmp = img.getScaledInstance(widht, height, Image.SCALE_SMOOTH);
-        BufferedImage dimg = new BufferedImage(widht, height, BufferedImage.TYPE_INT_ARGB);
+    public static BufferedImage resize(final BufferedImage img, final int width, final int height) {
+        Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
         Graphics2D g2d = dimg.createGraphics();
         g2d.drawImage(tmp, 0, 0, null);
@@ -194,14 +194,14 @@ public class CoreUtils {
         return dimg;
     }
 
-    private static BufferedImage toBufferedImage(Image img) {
+    private static BufferedImage toBufferedImage(final Image img) {
         if (img instanceof BufferedImage) {
             return (BufferedImage) img;
         }
 
-        BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        final BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 
-        Graphics2D bGr = bimage.createGraphics();
+        final Graphics2D bGr = bimage.createGraphics();
         bGr.drawImage(img, 0, 0, null);
         bGr.dispose();
 
@@ -209,7 +209,7 @@ public class CoreUtils {
     }
 
     public static ApplicationVersion getCurrentApplicationVersion() {
-        ApplicationVersion applicationVersion = new ApplicationVersion();
+        final ApplicationVersion applicationVersion = new ApplicationVersion();
         applicationVersion.setVersion(getApplicationVersionString());
         try {
             Properties properties = new Properties();

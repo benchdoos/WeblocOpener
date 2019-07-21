@@ -29,30 +29,30 @@ import java.net.URL;
 public class Converter {
     private static final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
 
-    public static File convert(File originalFile, Link convertedLink) throws Exception {
+    public static File convert(final File originalFile, final Link convertedLink) throws Exception {
         log.debug("Converting file: {} to new extension: {}", originalFile, convertedLink.getExtension());
         validateFile(originalFile, convertedLink);
 
-        Link originalLink = new LinkFactory().getLink(originalFile);
+        final Link originalLink = new LinkFactory().getLink(originalFile);
         final URL originalUrl = originalLink.getUrl(originalFile);
 
-        File file = prepareNewFile(originalFile, convertedLink.getExtension());
+        final File file = prepareNewFile(originalFile, convertedLink.getExtension());
         if (!file.exists()) {
             convertedLink.createLink(file, originalUrl);
             return file;
         } else throw new FileExistsException("File [" + file + "] already exists");
     }
 
-    private static File prepareNewFile(File originalWeblocFile, String urlFileExtension) {
-        String filename = FilenameUtils.removeExtension(originalWeblocFile.getName());
+    private static File prepareNewFile(final File originalWeblocFile, final String urlFileExtension) {
+        final String filename = FilenameUtils.removeExtension(originalWeblocFile.getName());
 
-        String folder = originalWeblocFile.getParentFile().getAbsolutePath();
+        final String folder = originalWeblocFile.getParentFile().getAbsolutePath();
 
         final String filePath = folder + File.separator + filename + "." + urlFileExtension;
         return new File(filePath);
     }
 
-    private static void validateFile(File originalUrlFile, Link link) throws FileNotFoundException {
+    private static void validateFile(final File originalUrlFile, final Link link) throws FileNotFoundException {
         final String extension = link.getExtension();
 
         if (originalUrlFile == null) {
