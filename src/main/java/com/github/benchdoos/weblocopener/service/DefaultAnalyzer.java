@@ -19,7 +19,7 @@ import com.github.benchdoos.jcolorful.core.JColorful;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.gui.FileChooser;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopener.service.links.WeblocLink;
+import com.github.benchdoos.weblocopener.service.links.impl.WeblocLink;
 import com.github.benchdoos.weblocopener.utils.FileUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import lombok.AllArgsConstructor;
@@ -31,6 +31,7 @@ import org.apache.commons.io.FilenameUtils;
 import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOC_FILE_EXTENSION;
@@ -92,7 +93,14 @@ public class DefaultAnalyzer {
         }
 
         if (selectedFile != null) {
-            url = new WeblocLink().getUrl(selectedFile).toString();
+            try {
+                url = new WeblocLink().getUrl(selectedFile).toString();
+            } catch (IOException e) {
+                log.warn("Could not parse Url for selected file: {}", selectedFile, e);
+                log.info("Trying to get url from selected file: {}", selectedFile);
+                url = new WeblocLink().getStringUrl(selectedFile);
+                log.info("Url from file: '{}'", url);
+            }
         } else {
             throw new FileNotFoundException("Can not analyze file: " + filePath);
         }

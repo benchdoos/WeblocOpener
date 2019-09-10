@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Scanner;
 
-class LinkUtils {
-    static URL getUrl(final File file) throws IOException {
+public class LinkUtils {
+    public static URL getUrl(final File file) throws IOException {
         try (FileReader fileReader = new FileReader(file)) {
             final Scanner scan = new Scanner(fileReader);
 

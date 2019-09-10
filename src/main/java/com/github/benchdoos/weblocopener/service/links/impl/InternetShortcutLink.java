@@ -13,53 +13,51 @@
  * Eugene Zrazhevsky <eugene.zrazhevsky@gmail.com>
  */
 
-package com.github.benchdoos.weblocopener.service.links;
+package com.github.benchdoos.weblocopener.service.links.impl;
 
-import com.dd.plist.NSDictionary;
-import com.dd.plist.PropertyListFormatException;
-import com.dd.plist.PropertyListParser;
-import org.xml.sax.SAXException;
+import com.github.benchdoos.weblocopener.service.links.Link;
+import com.github.benchdoos.weblocopener.service.links.LinkUtils;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
-import java.text.ParseException;
 
 /**
- * Link for MacOS {@code .webloc} file
+ * Link for Windows {@code .url} file
  */
-public class WeblocLink implements Link {
-    @Override
+public class InternetShortcutLink implements Link {
+    /**
+     * Create an Internet shortcut
+     *
+     * @param file location of the shortcut
+     * @param url  URL
+     * @throws IOException if can not write a file
+     */
     public void createLink(final File file, final URL url) throws IOException {
-        final NSDictionary root = new NSDictionary();
-        root.put("URL", url.toString());
-        PropertyListParser.saveAsXML(root, file);
+        final FileWriter fileWriter = new FileWriter(file);
+        fileWriter.write("[InternetShortcut]\n");
+        fileWriter.write("URL=" + url.toString() + "\n");
+        fileWriter.flush();
+        fileWriter.close();
     }
 
-    @Override
     public URL getUrl(final File file) throws IOException {
-        try {
-            final NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(file);
-            return new URL(rootDict.objectForKey("URL").toString());
-        } catch (PropertyListFormatException | ParseException | ParserConfigurationException | SAXException e) {
-            throw new IOException("Could not parse file: " + file, e);
-        }
+        return LinkUtils.getUrl(file);
     }
 
     @Override
     public String getName() {
-        return ".webloc";
+        return ".url";
     }
 
     @Override
     public String getExtension() {
-        return "webloc";
+        return "url";
     }
-
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof WeblocLink;
+        return obj instanceof InternetShortcutLink;
     }
 }

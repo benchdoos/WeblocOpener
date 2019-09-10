@@ -13,9 +13,11 @@
  * Eugene Zrazhevsky <eugene.zrazhevsky@gmail.com>
  */
 
-package com.github.benchdoos.weblocopener.service.links;
+package com.github.benchdoos.weblocopener.service.links.impl;
 
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
+import com.github.benchdoos.weblocopener.service.links.Link;
+import com.github.benchdoos.weblocopener.service.links.LinkUtils;
 
 import java.io.File;
 import java.io.FileWriter;

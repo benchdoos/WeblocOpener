@@ -17,6 +17,10 @@ package com.github.benchdoos.weblocopener.service.links;
 
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
+import com.github.benchdoos.weblocopener.service.links.impl.BinaryWeblocLink;
+import com.github.benchdoos.weblocopener.service.links.impl.DesktopEntryLink;
+import com.github.benchdoos.weblocopener.service.links.impl.InternetShortcutLink;
+import com.github.benchdoos.weblocopener.service.links.impl.WeblocLink;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;

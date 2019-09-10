@@ -13,12 +13,12 @@
  * Eugene Zrazhevsky <eugene.zrazhevsky@gmail.com>
  */
 
-package com.github.benchdoos.weblocopener.service.links;
+package com.github.benchdoos.weblocopener.service.links.impl;
 
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListFormatException;
 import com.dd.plist.PropertyListParser;
-import com.github.benchdoos.weblocopener.core.Translation;
+import com.github.benchdoos.weblocopener.service.links.Link;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -27,12 +27,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
 
-public class BinaryWeblocLink implements Link {
+/**
+ * Link for MacOS {@code .webloc} file
+ */
+public class WeblocLink implements Link {
     @Override
     public void createLink(final File file, final URL url) throws IOException {
         final NSDictionary root = new NSDictionary();
         root.put("URL", url.toString());
-        PropertyListParser.saveAsBinary(root, file);
+        PropertyListParser.saveAsXML(root, file);
     }
 
     @Override
@@ -45,9 +48,18 @@ public class BinaryWeblocLink implements Link {
         }
     }
 
+    public String getStringUrl(final File file) throws IOException {
+        try {
+            final NSDictionary rootDict = (NSDictionary) PropertyListParser.parse(file);
+            return rootDict.objectForKey("URL").toString();
+        } catch (PropertyListFormatException | ParseException | ParserConfigurationException | SAXException e) {
+            throw new IOException("Could not parse file: " + file, e);
+        }
+    }
+
     @Override
     public String getName() {
-        return Translation.getTranslatedString("CommonsBundle", "binaryWeblocLinkName");
+        return ".webloc";
     }
 
     @Override
@@ -58,7 +70,6 @@ public class BinaryWeblocLink implements Link {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof BinaryWeblocLink;
+        return obj instanceof WeblocLink;
     }
-
 }
