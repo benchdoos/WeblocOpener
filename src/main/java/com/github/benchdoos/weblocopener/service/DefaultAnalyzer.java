@@ -36,11 +36,11 @@ import java.util.ArrayList;
 import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOC_FILE_EXTENSION;
 
 @Log4j2
-public class Analyzer {
+public class DefaultAnalyzer {
     private String url = "";
     private File selectedFile = null;
 
-    public Analyzer(final String filePath) throws Exception {
+    public DefaultAnalyzer(final String filePath) throws Exception {
         log.debug("Starting analyze");
         log.debug("Got argument: " + filePath);
 

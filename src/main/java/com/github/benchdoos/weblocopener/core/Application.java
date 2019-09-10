@@ -24,7 +24,7 @@ import com.github.benchdoos.weblocopener.gui.unix.ModeSelectorDialog;
 import com.github.benchdoos.weblocopener.gui.wrappers.CreateNewFileFrameWrapper;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopener.service.Analyzer;
+import com.github.benchdoos.weblocopener.service.DefaultAnalyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.service.clipboard.ClipboardManager;
 import com.github.benchdoos.weblocopener.utils.CleanManager;
@@ -161,7 +161,7 @@ public class Application {
 
     private static void runAnalyzer(String arg) {
         try {
-            String url = new Analyzer(arg).getUrl();
+            String url = new DefaultAnalyzer(arg).getUrl();
             if (!url.isEmpty()) {
                 UrlsProceed.openUrl(url);
             } else {
@@ -197,7 +197,7 @@ public class Application {
             final String path = args[1];
             final File file;
             try {
-                file = new Analyzer(path).getFile();
+                file = new DefaultAnalyzer(path).getFile();
                 if (file != null) {
                     runEditDialog(file.getAbsolutePath());
                 }
@@ -220,7 +220,7 @@ public class Application {
     private static void runCopyLink(String path) {
         String url;
         try {
-            url = new Analyzer(path).getUrl();
+            url = new DefaultAnalyzer(path).getUrl();
             ClipboardManager.getClipboardForSystem().copy(url);
             log.info("Successfully copied url to clipboard from: " + path);
 
@@ -241,7 +241,7 @@ public class Application {
             if (args.length > 1) {
                 final String path = args[1];
                 String url;
-                url = new Analyzer(path).getUrl();
+                url = new DefaultAnalyzer(path).getUrl();
                 final BufferedImage image = UrlsProceed.generateQrCode(url);
 
                 ClipboardManager.getClipboardForSystem().copy(image);
@@ -280,7 +280,7 @@ public class Application {
 
     private static void runQrDialog(String arg) {
         try {
-            final File file = new Analyzer(arg).getFile();
+            final File file = new DefaultAnalyzer(arg).getFile();
             ShowQrDialog qrDialog;
             if (PreferencesManager.isDarkModeEnabledNow()) {
                 JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);

@@ -18,7 +18,7 @@ package com.github.benchdoos.weblocopener.gui;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopener.service.Analyzer;
+import com.github.benchdoos.weblocopener.service.DefaultAnalyzer;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.service.clipboard.ClipboardManager;
 import com.github.benchdoos.weblocopener.service.gui.MousePickListener;
@@ -58,7 +58,7 @@ public class ShowQrDialog extends JFrame implements Translatable {
     public ShowQrDialog(File weblocFile) throws Exception {
         this.weblocFile = weblocFile;
 
-        url = new Analyzer(weblocFile.getAbsolutePath()).getUrl();
+        url = new DefaultAnalyzer(weblocFile.getAbsolutePath()).getUrl();
 
         this.qrCodeImage = UrlsProceed.generateQrCode(url);
         $$$setupUI$$$();
