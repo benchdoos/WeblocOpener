@@ -118,12 +118,15 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>bash</executable>
+                            <!--<executable>bash</executable>-->
+                            <executable>wine</executable>
                             <workingDirectory>${project.basedir}/build</workingDirectory>
                             <arguments>
-                                <argument>wine</argument>
-                                <argument>/home/doos/.wine/drive_c/Program Files (x86)/Inno Setup 5/ISCC.exe</argument>
-                                <argument>unix/WeblocOpener.iss</argument>
+                                <!--<argument>wine</argument>-->
+                                <argument>${user.home}/.wine/drive_c/Program Files (x86)/Inno Setup 6/ISCC.exe
+                                </argument>
+                                <!--<argument>${project.basedir}/build/unix/WeblocOpener.iss</argument>-->
+                                <argument>Z:${project.basedir}/build/unix/WeblocOpener.iss</argument>
                             </arguments>
                         </configuration>
                     </execution>
