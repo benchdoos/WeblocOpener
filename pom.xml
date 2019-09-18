@@ -25,8 +25,8 @@
     <packaging>jar</packaging>
 
     <name>WeblocOpener</name>
-    <description>WeblocOpener is a simple way to open, edit, create MacOS Safari .webloc files on Windows and Debian
-        GNU/Linux.
+    <description>
+        WeblocOpener is a simple way to open, edit, create MacOS Safari .webloc files on Windows and Debian GNU/Linux.
     </description>
 
     <properties>
