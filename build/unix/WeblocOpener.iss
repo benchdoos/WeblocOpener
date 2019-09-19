@@ -119,7 +119,7 @@ Name: "Russian"; MessagesFile: "{#MyAppAdditionalPath}\languages\Russian.isl"
 [Files]
 Source: "{#MyAppSourcePath}\build\WeblocOpener.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppSourcePath}\target\lib\*"; DestDir: "{app}\lib"; Flags: ignoreversion recursesubdirs
-Source: "{#MyAppAdditionalPath}\Template.webloc"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppSourcePath}\build\Template.webloc"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#ImagesPath}\icons.icl"; DestDir: "{app}"; Flags: ignoreversion
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files

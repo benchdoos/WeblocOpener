@@ -270,7 +270,7 @@
                                 <data>
                                     <!--Webloc file template-->
                                     <type>file</type>
-                                    <src>${project.basedir}/build/installer/Template.webloc</src>
+                                    <src>${project.basedir}/build/Template.webloc</src>
                                     <dst>/opt/${project.name}/Template.webloc</dst>
                                 </data>
                                 <data>
