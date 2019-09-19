@@ -1,0 +1,17 @@
+name: 'weblocopener'
+summary: WeblocOpener can open, edit, create .webloc files on Debian GNU/Linux.
+description: |
+  WeblocOpener is a simple way to open, edit, create MacOS Safari .webloc files on Windows and Debian GNU/Linux.
+version: '1.12.0'
+
+#todo add here parts, see: https://snapcraft.io/docs/java-applications
+adopt-info: weblocopener
+base: core18
+parts:
+  weblocopener:
+    # See 'snapcraft plugins'
+    plugin: maven
+    source: https://github.com/benchdoos/WeblocOpener.git
+    source-type: git
+    parse-info:
+      - weblocopener.metainfo.xml

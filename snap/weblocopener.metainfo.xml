@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>com.github.benchdoos.weblocopener</id>
+    <summary>Single-line elevator pitch for your amazing application</summary>
+    <description>
+        This is applications's description. A paragraph or two to tell the
+        most important story about it.
+    </description>
+    <icon type="local">./build/unix/installer/icons/WeblocOpener.png</icon>
+<!--    <launchable type="desktop-id">-->
+<!--        com.example.sampleapp.desktop-->
+<!--    </launchable>-->
+</component>
