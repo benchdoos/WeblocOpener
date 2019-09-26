@@ -322,6 +322,12 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.benchdoos</groupId>
+            <artifactId>LinkSupport</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <!--Intellij Forms-->
         <dependency>
             <groupId>com.intellij</groupId>
