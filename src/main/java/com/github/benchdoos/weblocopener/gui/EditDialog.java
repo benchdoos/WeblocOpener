@@ -21,7 +21,6 @@ import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.gui.ClickListener;
 import com.github.benchdoos.weblocopener.service.links.LinkUtilities;
-import com.github.benchdoos.weblocopener.service.links.impl.WeblocLink;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FileUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
@@ -40,17 +39,44 @@ import org.apache.commons.validator.routines.UrlValidator;
 
 import javax.imageio.ImageIO;
 import javax.net.ssl.HttpsURLConnection;
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
+import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -582,9 +608,13 @@ public class EditDialog extends JFrame implements Translatable {
             URL url = new URL(urlText);
             UrlValidator urlValidator = new UrlValidator();
             if (urlValidator.isValid(urlText)) {
-                PreferencesManager.getLink()
+                //todo add some checks and logic to select needed link to process file
+                // * create new file from default link processor
+                // * update existing links by already used processor, like it is now:
+                final File file = new File(pathToEditingFile);
+                Link.getByExtension(FileUtils.getFileExtension(file))
                         .getLinkProcessor()
-                        .createLink(url, new FileOutputStream(new File(pathToEditingFile)));
+                        .createLink(url, new FileOutputStream(file));
 
                 manageFileName();
 
