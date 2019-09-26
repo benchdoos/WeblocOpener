@@ -40,6 +40,7 @@ import lombok.extern.log4j.Log4j2;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -181,7 +182,9 @@ public class Application {
             if (args.length > 3) {
                 log.info("You can create only one link in one file. Creating.");
             }
-            PreferencesManager.getLink().createLink(new File(filePath), new URL(url));
+            PreferencesManager.getLink()
+                    .getLinkProcessor()
+                    .createLink(new URL(url), new FileOutputStream(new File(filePath)));
         } else {
             throw new IllegalArgumentException("Not all arguments (" + CORRECT_CREATION_SYNTAX + "):" + Arrays.toString(args));
         }

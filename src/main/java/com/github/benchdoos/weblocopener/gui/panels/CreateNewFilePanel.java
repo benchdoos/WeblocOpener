@@ -15,12 +15,12 @@
 
 package com.github.benchdoos.weblocopener.gui.panels;
 
+import com.github.benchdoos.linksupport.links.Link;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.gui.PlaceholderTextField;
 import com.github.benchdoos.weblocopener.gui.Translatable;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopener.service.links.Link;
 import com.github.benchdoos.weblocopener.utils.FileUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
@@ -33,6 +33,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -94,7 +95,7 @@ public class CreateNewFilePanel extends JPanel implements Translatable {
                 try {
                     log.debug("Link with url: {} at location: {} will be created as: {}", url, path, link.getClass().getSimpleName());
 
-                    link.createLink(new File(path), url);
+                    link.getLinkProcessor().createLink(url, new FileOutputStream(new File(path)));
 
                     if (PreferencesManager.openFolderForNewFile()) {
                         FileUtils.openFileInFileBrowser(new File(path));

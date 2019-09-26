@@ -15,13 +15,13 @@
 
 package com.github.benchdoos.weblocopener.gui.panels;
 
+import com.github.benchdoos.linksupport.links.Link;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.gui.Translatable;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopener.service.links.Link;
 import com.github.benchdoos.weblocopener.service.links.LinkFactory;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -29,8 +29,20 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import lombok.extern.log4j.Log4j2;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.AbstractButton;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import java.awt.Component;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.StringJoiner;
@@ -84,7 +96,7 @@ public class FileProcessingPanel extends JPanel implements SettingsPanel, Transl
 
     private void fillCreateFileExtensionComboBox() {
         final List<Link> supportedLinks = LinkFactory.getSupportedLinks();
-        DefaultComboBoxModel<Link> model = new DefaultComboBoxModel<>();
+        final DefaultComboBoxModel<Link> model = new DefaultComboBoxModel<>();
         for (Link link : supportedLinks) {
             model.addElement(link);
         }

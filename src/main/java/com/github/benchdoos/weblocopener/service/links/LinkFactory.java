@@ -15,80 +15,45 @@
 
 package com.github.benchdoos.weblocopener.service.links;
 
-import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
+import com.github.benchdoos.linksupport.links.Link;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
-import com.github.benchdoos.weblocopener.service.links.impl.BinaryWeblocLink;
-import com.github.benchdoos.weblocopener.service.links.impl.DesktopEntryLink;
-import com.github.benchdoos.weblocopener.service.links.impl.InternetShortcutLink;
-import com.github.benchdoos.weblocopener.service.links.impl.WeblocLink;
-import org.apache.commons.io.FilenameUtils;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LinkFactory {
     public static Link getLinkByName(final String name) {
         switch (LinkType.valueOf(name)) {
             case webloc:
-                return new WeblocLink();
-            case url:
-                return new InternetShortcutLink();
-            case desktop:
-                return new DesktopEntryLink();
             case binary_webloc:
-                return new BinaryWeblocLink();
+                return com.github.benchdoos.linksupport.links.Link.WEBLOC_LINK;
+            case url:
+                return com.github.benchdoos.linksupport.links.Link.INTERNET_SHORTCUT_LINK;
+            case desktop:
+                return com.github.benchdoos.linksupport.links.Link.DESKTOP_LINK;
             default:
                 return getLinkByName(SettingsConstants.URL_PROCESSOR.toString());
         }
     }
 
     public static String getNameByLink(final Link link) {
-        final Class<? extends Link> aClass = link.getClass();
-        if (aClass == WeblocLink.class) {
-            return LinkType.webloc.toString();
-        } else if (aClass == BinaryWeblocLink.class) {
-            return LinkType.binary_webloc.toString();
-        } else if (aClass == InternetShortcutLink.class) {
-            return LinkType.url.toString();
-        } else if (aClass == DesktopEntryLink.class) {
-            return LinkType.desktop.toString();
-        } else
-            throw new IllegalArgumentException(
-                    "Provided link [" + aClass + "] does not much to supported: " + Arrays.toString(LinkType.values()));
+        switch (link) {
+            case WEBLOC_LINK:
+                return LinkType.binary_webloc.toString();
+            case DESKTOP_LINK:
+                return LinkType.desktop.toString();
+            case INTERNET_SHORTCUT_LINK:
+                return LinkType.url.toString();
+            default:
+                throw new IllegalArgumentException(
+                        "Provided link [" + link + "] does not much to supported: " + Arrays.toString(Link.values()));
 
+        }
     }
 
     public static List<Link> getSupportedLinks() {
-        final ArrayList<Link> result = new ArrayList<>();
-        for (LinkType type : LinkType.values()) {
-            final Link linkByName = getLinkByName(type.toString());
-            result.add(linkByName);
-        }
-        return result;
-    }
-
-    public Link getLink(final File file) {
-        final String originalExtension = FilenameUtils.getExtension(file.getName());
-        return getAbstractLink(originalExtension);
-    }
-
-    private Link getAbstractLink(final String originalExtension) {
-        switch (originalExtension) {
-            case ApplicationConstants.WEBLOC_FILE_EXTENSION:
-                return new WeblocLink();
-            case ApplicationConstants.URL_FILE_EXTENSION:
-                return new InternetShortcutLink();
-            case ApplicationConstants.DESKTOP_FILE_EXTENSION:
-                return new DesktopEntryLink();
-            default:
-                return null;
-        }
-    }
-
-    public Link getLink(final String extension) {
-        return getAbstractLink(extension);
+        return Arrays.stream(Link.values()).collect(Collectors.toList());
     }
 
     public enum LinkType {binary_webloc, webloc, url, desktop}

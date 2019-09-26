@@ -15,11 +15,11 @@
 
 package com.github.benchdoos.weblocopener.preferences;
 
+import com.github.benchdoos.linksupport.links.Link;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.DarkModeAnalyzer;
 import com.github.benchdoos.weblocopener.service.gui.darkMode.SimpleTime;
-import com.github.benchdoos.weblocopener.service.links.Link;
 import com.github.benchdoos.weblocopener.service.links.LinkFactory;
 import lombok.extern.log4j.Log4j2;
 
@@ -30,7 +30,11 @@ import java.util.Locale;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants.*;
+import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants.OPENER_COPY_LINK_ARGUMENT;
+import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants.OPENER_COPY_QR_ARGUMENT;
+import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants.OPENER_EDIT_ARGUMENT;
+import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants.OPENER_OPEN_ARGUMENT;
+import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants.OPENER_QR_ARGUMENT;
 
 /**
  * Created by Eugene Zrazhevsky on 19.11.2016.

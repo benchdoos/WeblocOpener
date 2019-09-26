@@ -16,9 +16,11 @@
 package com.github.benchdoos.weblocopener.service;
 
 import com.github.benchdoos.jcolorful.core.JColorful;
+import com.github.benchdoos.linksupport.links.Link;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.gui.FileChooser;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopener.service.links.LinkUtilities;
 import com.github.benchdoos.weblocopener.service.links.impl.WeblocLink;
 import com.github.benchdoos.weblocopener.utils.FileUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
@@ -28,8 +30,9 @@ import lombok.extern.log4j.Log4j2;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import org.apache.commons.io.FilenameUtils;
 
-import javax.swing.*;
+import javax.swing.SwingUtilities;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -55,7 +58,7 @@ public class DefaultAnalyzer {
     private void analyzeFile(final String filePath) throws Exception {
         final File file = new File(filePath);
         if (file.exists()) {
-            if (FileUtils.getFileExtension(file).equalsIgnoreCase(ApplicationConstants.WEBLOC_FILE_EXTENSION)) {
+            if (LinkUtilities.isFileSupported(FileUtils.getFileExtension(file))) {
                 selectedFile = file;
             }
         } else {
@@ -94,7 +97,9 @@ public class DefaultAnalyzer {
 
         if (selectedFile != null) {
             try {
-                url = new WeblocLink().getUrl(selectedFile).toString();
+                final Link byFilePath = LinkUtilities.getByFilePath(selectedFile.getAbsolutePath());
+                url = byFilePath.getLinkProcessor()
+                        .getUrl(new FileInputStream(selectedFile)).toString();
             } catch (IOException e) {
                 log.warn("Could not parse Url for selected file: {}", selectedFile, e);
                 log.info("Trying to get url from selected file: {}", selectedFile);

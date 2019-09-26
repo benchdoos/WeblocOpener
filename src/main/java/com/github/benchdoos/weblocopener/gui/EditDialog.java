@@ -15,12 +15,15 @@
 
 package com.github.benchdoos.weblocopener.gui;
 
+import com.github.benchdoos.linksupport.links.Link;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.gui.ClickListener;
+import com.github.benchdoos.weblocopener.service.links.LinkUtilities;
 import com.github.benchdoos.weblocopener.service.links.impl.WeblocLink;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
+import com.github.benchdoos.weblocopener.utils.FileUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
@@ -255,7 +258,9 @@ public class EditDialog extends JFrame implements Translatable {
     private void fillTextField(String pathToEditingFile) {
         try {
             log.debug("Filling textfield by file content: " + pathToEditingFile);
-            URL url = new WeblocLink().getUrl(new File(pathToEditingFile));
+            URL url = LinkUtilities.getByFilePath(pathToEditingFile)
+                    .getLinkProcessor()
+                    .getUrl(new FileInputStream(pathToEditingFile));
             textField.setText(url.toString());
             textField.setCaretPosition(textField.getText().length());
             textField.selectAll();
@@ -577,7 +582,9 @@ public class EditDialog extends JFrame implements Translatable {
             URL url = new URL(urlText);
             UrlValidator urlValidator = new UrlValidator();
             if (urlValidator.isValid(urlText)) {
-                PreferencesManager.getLink().createLink(new File(pathToEditingFile), url);
+                PreferencesManager.getLink()
+                        .getLinkProcessor()
+                        .createLink(url, new FileOutputStream(new File(pathToEditingFile)));
 
                 manageFileName();
 

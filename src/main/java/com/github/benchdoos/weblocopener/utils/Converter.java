@@ -15,14 +15,16 @@
 
 package com.github.benchdoos.weblocopener.utils;
 
-import com.github.benchdoos.weblocopener.service.links.Link;
-import com.github.benchdoos.weblocopener.service.links.LinkFactory;
+import com.github.benchdoos.linksupport.links.Link;
+import com.github.benchdoos.weblocopener.service.links.LinkUtilities;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.net.URL;
 
 @Log4j2
@@ -31,12 +33,15 @@ public class Converter {
         log.debug("Converting file: {} to new extension: {}", originalFile, convertedLink.getExtension());
         validateFile(originalFile, convertedLink);
 
-        final Link originalLink = new LinkFactory().getLink(originalFile);
-        final URL originalUrl = originalLink.getUrl(originalFile);
+        final Link originalLink = LinkUtilities.getByFilePath(originalFile.getAbsolutePath());
+        if (originalLink == null) {
+            throw new IllegalArgumentException("Could not get link by extension for file: [" + originalFile + "]");
+        }
+        final URL originalUrl =  originalLink.getLinkProcessor().getUrl(new FileInputStream(originalFile));
 
         final File file = prepareNewFile(originalFile, convertedLink.getExtension());
         if (!file.exists()) {
-            convertedLink.createLink(file, originalUrl);
+            convertedLink.getLinkProcessor().createLink(originalUrl, new FileOutputStream(file));
             return file;
         } else throw new FileExistsException("File [" + file + "] already exists");
     }

@@ -16,6 +16,7 @@
 package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.jcolorful.core.JColorful;
+import com.github.benchdoos.linksupport.links.Link;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.StringConstants;
@@ -251,7 +252,7 @@ public class SettingsDialog extends JFrame implements Translatable {
                             if (fileExtension.equalsIgnoreCase(ApplicationConstants.URL_FILE_EXTENSION)
                                     || fileExtension.equalsIgnoreCase(ApplicationConstants.DESKTOP_FILE_EXTENSION)) {
                                 try {
-                                    files.add(Converter.convert(file, new BinaryWeblocLink()));
+                                    files.add(Converter.convert(file, Link.WEBLOC_LINK));
                                     try {
                                         FileUtils.forceDelete(file);
                                     } catch (IOException e) {
