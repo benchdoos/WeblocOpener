@@ -25,7 +25,6 @@ import com.github.benchdoos.weblocopener.gui.wrappers.CreateNewFileDialogWrapper
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.service.links.LinkFactory;
-import com.github.benchdoos.weblocopener.service.links.impl.BinaryWeblocLink;
 import com.github.benchdoos.weblocopener.utils.Converter;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;

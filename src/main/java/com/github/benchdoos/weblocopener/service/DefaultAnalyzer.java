@@ -21,7 +21,6 @@ import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.gui.FileChooser;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.service.links.LinkUtilities;
-import com.github.benchdoos.weblocopener.service.links.impl.WeblocLink;
 import com.github.benchdoos.weblocopener.utils.FileUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import lombok.AllArgsConstructor;
@@ -30,7 +29,7 @@ import lombok.extern.log4j.Log4j2;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import org.apache.commons.io.FilenameUtils;
 
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -103,8 +102,6 @@ public class DefaultAnalyzer {
             } catch (IOException e) {
                 log.warn("Could not parse Url for selected file: {}", selectedFile, e);
                 log.info("Trying to get url from selected file: {}", selectedFile);
-                url = new WeblocLink().getStringUrl(selectedFile);
-                log.info("Url from file: '{}'", url);
             }
         } else {
             throw new FileNotFoundException("Can not analyze file: " + filePath);
@@ -197,7 +194,7 @@ public class DefaultAnalyzer {
 
     @AllArgsConstructor
     @Data
-    private class ComparedFile {
+    private static class ComparedFile {
         private int equalSymbols;
         private File file;
     }

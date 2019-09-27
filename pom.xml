@@ -325,7 +325,7 @@
         <dependency>
             <groupId>com.github.benchdoos</groupId>
             <artifactId>LinkSupport</artifactId>
-            <version>1.0</version>
+            <version>1.0.0</version>
         </dependency>
 
         <!--Intellij Forms-->
