@@ -29,20 +29,8 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import lombok.extern.log4j.Log4j2;
 
-import javax.swing.AbstractButton;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import java.awt.Component;
-import java.awt.GridLayout;
-import java.awt.Insets;
+import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.StringJoiner;
@@ -82,12 +70,19 @@ public class FileProcessingPanel extends JPanel implements SettingsPanel, Transl
 
     private void initCreateFileExtensionComboBox() {
         createFileExtensionComboBox.setRenderer(new DefaultListCellRenderer() {
+            final String linkName = Translation.getTranslatedString("CommonsBundle", "linkName");
+
             @Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 if (value instanceof Link) {
                     final Link link = (Link) value;
 
-                    return super.getListCellRendererComponent(list, link.getName(), index, isSelected, cellHasFocus);
+                    return super.getListCellRendererComponent(
+                            list,
+                            String.format(linkName, link.getExtension()),
+                            index,
+                            isSelected,
+                            cellHasFocus);
                 }
                 return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             }
