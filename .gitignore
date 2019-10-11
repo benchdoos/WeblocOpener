@@ -23,7 +23,6 @@ buildNumber.properties
 .idea/vcs.xml
 desktop.ini
 hidden
-build/installer
 build/sources
 build/WeblocOpener.exe
 build/WeblocOpener.xml
