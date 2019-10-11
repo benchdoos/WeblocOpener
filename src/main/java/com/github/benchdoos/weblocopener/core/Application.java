@@ -62,15 +62,35 @@ public class Application {
 
         CoreUtils.enableLookAndFeel();
 
-        if (args.length > 1) {
-            manageArguments(args);
-        } else if (args.length == 1) {
-            manageSoloArgument(args);
-        } else {
-            checkIfUpdatesAvailable();
-            runSettingsDialog();
-        }
+        manageArgumentsForNew(args);
+//
+//
+//        if (args.length > 1) {
+//            manageArguments(args);
+//        } else if (args.length == 1) {
+//            manageSoloArgument(args);
+//        } else {
+//            checkIfUpdatesAvailable();
+//            runSettingsDialog();
+//        }
 
+    }
+
+    private void manageArgumentsForNew(String[] args) {
+        if (args.length == 0) {
+            checkIfUpdatesAvailable();
+            com.github.benchdoos.weblocopenercore.core.Application.runSettingsDialog();
+        } else {
+            final String argument = args[0];
+            switch (argument) {
+                case OPENER_UPDATE_ARGUMENT:
+                case UPDATE_SILENT_ARGUMENT:
+                    checkIfUpdatesAvailable();
+                    break;
+                default:
+                    com.github.benchdoos.weblocopenercore.core.Application.manageArguments(args);
+            }
+        }
     }
 
     private static String helpText() {
