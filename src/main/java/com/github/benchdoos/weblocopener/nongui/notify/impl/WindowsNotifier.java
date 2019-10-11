@@ -100,7 +100,7 @@ public class WindowsNotifier implements Notifier {
         MenuItem settings = new MenuItem(
                 Translation.getTranslatedString("NonGuiUpdaterBundle", "settingsButton"));
         settings.addActionListener(e -> {
-            Application.runSettingsDialog();
+            com.github.benchdoos.weblocopenercore.core.Application.runSettingsDialog();
             tray.remove(trayIcon);
         });
         return settings;

@@ -19,11 +19,17 @@ import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
 import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
 import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 /**
@@ -45,8 +51,9 @@ public class BrowserManager {
         Gson gson = builder.create();
         final String browserListJsonPath = getBrowserListJson();
         try {
-            String content = IOUtils.toString(BrowserManager.class.getResourceAsStream(browserListJsonPath),
-                    "UTF-8");
+            String content = IOUtils.toString(
+                    BrowserManager.class.getResourceAsStream(browserListJsonPath),
+                    StandardCharsets.UTF_8);
             JsonElement element = new JsonParser().parse(content);
             final JsonObject asJsonObject = element.getAsJsonObject();
             final JsonArray browsers = asJsonObject.getAsJsonArray("browsers");

@@ -18,39 +18,21 @@ package com.github.benchdoos.weblocopener.core;
 import com.github.benchdoos.jcolorful.core.JColorful;
 import com.github.benchdoos.weblocopener.Main;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
-import com.github.benchdoos.weblocopener.core.constants.SettingsConstants;
-import com.github.benchdoos.weblocopener.gui.*;
-import com.github.benchdoos.weblocopener.gui.unix.ModeSelectorDialog;
-import com.github.benchdoos.weblocopener.gui.wrappers.CreateNewFileFrameWrapper;
+import com.github.benchdoos.weblocopener.gui.UpdateDialog;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopener.service.DefaultAnalyzer;
-import com.github.benchdoos.weblocopener.service.UrlsProceed;
-import com.github.benchdoos.weblocopener.service.clipboard.ClipboardManager;
-import com.github.benchdoos.weblocopener.utils.CleanManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
-import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.Internal;
 import com.github.benchdoos.weblocopener.utils.browser.BrowserManager;
-import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
-import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
-import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
 import lombok.extern.log4j.Log4j2;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.net.URL;
 import java.util.Arrays;
 
-import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants.*;
-import static java.awt.Frame.MAXIMIZED_HORIZ;
+import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants.OPENER_UPDATE_ARGUMENT;
+import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants.UPDATE_SILENT_ARGUMENT;
 
 @Log4j2
 public class Application {
-    private static final String CORRECT_CREATION_SYNTAX = "-create <file path> <url>";
-
     public static UPDATE_MODE updateMode = UPDATE_MODE.NORMAL;
 
 
@@ -63,17 +45,6 @@ public class Application {
         CoreUtils.enableLookAndFeel();
 
         manageArgumentsForNew(args);
-//
-//
-//        if (args.length > 1) {
-//            manageArguments(args);
-//        } else if (args.length == 1) {
-//            manageSoloArgument(args);
-//        } else {
-//            checkIfUpdatesAvailable();
-//            runSettingsDialog();
-//        }
-
     }
 
     private void manageArgumentsForNew(String[] args) {
@@ -84,6 +55,8 @@ public class Application {
             final String argument = args[0];
             switch (argument) {
                 case OPENER_UPDATE_ARGUMENT:
+                    runUpdateDialog();
+                    break;
                 case UPDATE_SILENT_ARGUMENT:
                     checkIfUpdatesAvailable();
                     break;
@@ -91,249 +64,6 @@ public class Application {
                     com.github.benchdoos.weblocopenercore.core.Application.manageArguments(args);
             }
         }
-    }
-
-    private static String helpText() {
-        return OPENER_CREATE_ARGUMENT + "\t[filepath] [link] \tCreates a new .webloc file on [filepath]. " +
-                "[filepath] should end with [\\filename.webloc]\n" +
-                OPENER_EDIT_ARGUMENT + "\t[filepath] \t\t\tCalls Edit window to edit given .webloc file.\n" +
-                OPENER_SETTINGS_ARGUMENT + "\t\t\t\t\tCalls Settings window of WeblocOpener.\n" +
-                OPENER_UPDATE_ARGUMENT + "\t\t\t\t\t\tCalls update-tool for WeblocOpener.";
-    }
-
-    /**
-     * Manages incoming arguments
-     *
-     * @param args App start arguments
-     */
-    public static void manageArguments(String[] args) {
-        log.debug("Managing arguments: " + Arrays.toString(args));
-        if (args.length > 0) {
-            log.info("Got args: " + Arrays.toString(args));
-            if (!args[0].isEmpty()) {
-                switch (args[0]) {
-                    case OPENER_OPEN_ARGUMENT:
-                        checkIfUpdatesAvailable();
-                        runAnalyzer(args[1]);
-                        break;
-                    case OPENER_EDIT_ARGUMENT:
-                        checkIfUpdatesAvailable();
-                        manageEditArgument(args);
-                        break;
-                    case OPENER_SETTINGS_ARGUMENT:
-                        checkIfUpdatesAvailable();
-                        runSettingsDialog();
-                        break;
-
-                    case OPENER_ABOUT_ARGUMENT:
-                        new AboutApplicationDialog().setVisible(true);
-                        break;
-
-                    case OPENER_CREATE_ARGUMENT:
-                        try {
-                            manageCreateArgument(args);
-                        } catch (Exception e) {
-                            log.warn("Can not create .webloc file (" + CORRECT_CREATION_SYNTAX + "): "
-                                    + Arrays.toString(args), e);
-                        }
-                        break;
-
-                    case OPENER_UPDATE_ARGUMENT:
-                        runUpdateDialog();
-                        break;
-                    case OPENER_HELP_ARGUMENT_HYPHEN: {
-                        System.out.println(helpText());
-                        break;
-                    }
-                    case OPENER_QR_ARGUMENT:
-                        checkIfUpdatesAvailable();
-                        if (args.length > 1) {
-                            runQrDialog(args[1]);
-                        }
-                        break;
-                    case OPENER_COPY_LINK_ARGUMENT:
-                        checkIfUpdatesAvailable();
-                        if (args.length > 1) {
-                            runCopyLink(args[1]);
-                        }
-                        break;
-
-                    case OPENER_COPY_QR_ARGUMENT:
-                        checkIfUpdatesAvailable();
-                        runCopyQrCode(args);
-                        break;
-
-                    case UPDATE_SILENT_ARGUMENT:
-                        runUpdateSilent();
-                        break;
-                    default:
-                        checkIfUpdatesAvailable();
-                        runAnalyzer(args[0]);
-                        break;
-                }
-            } else {
-                log.warn("Illegal argument at index 0 : Argument is empty!");
-            }
-        } else {
-            log.debug("No arguments found, launching settings");
-            runSettingsDialog();
-        }
-    }
-
-    private static void runAnalyzer(String arg) {
-        try {
-            String url = new DefaultAnalyzer(arg).getUrl();
-            if (!url.isEmpty()) {
-                UrlsProceed.openUrl(url);
-            } else {
-                runEditDialog(arg);
-            }
-        } catch (Exception e) {
-            log.warn("Could not open file: {}", arg, e);
-        }
-    }
-
-    private static void manageCreateArgument(String[] args) throws Exception {
-        String filePath;
-        String url;
-        if (args.length > 2) {
-            filePath = args[1];
-            url = args[2];
-            if (args.length > 3) {
-                log.info("You can create only one link in one file. Creating.");
-            }
-            PreferencesManager.getLink()
-                    .getLinkProcessor()
-                    .createLink(new URL(url), new FileOutputStream(new File(filePath)));
-        } else {
-            throw new IllegalArgumentException("Not all arguments (" + CORRECT_CREATION_SYNTAX + "):" + Arrays.toString(args));
-        }
-    }
-
-    /**
-     * Manages edit argument, runs edit-updateMode to file in second argument
-     *
-     * @param args main args
-     */
-    private static void manageEditArgument(String[] args) {
-        if (args.length > 1) {
-            final String path = args[1];
-            final File file;
-            try {
-                file = new DefaultAnalyzer(path).getFile();
-                if (file != null) {
-                    runEditDialog(file.getAbsolutePath());
-                }
-            } catch (Exception e) {
-                log.warn("Could not edit file: {}", path, e);
-            }
-        } else {
-            showIncorrectArgumentMessage(OPENER_EDIT_ARGUMENT);
-        }
-    }
-
-    private static void showIncorrectArgumentMessage(String argument) {
-        Translation translation = new Translation("CommonsBundle");
-        final String message = translation.getTranslatedString("incorrectArgument").replace("{}", argument);
-        NotificationManager.getForcedNotification(null).showErrorNotification(
-                translation.getTranslatedString("errorTitle"),
-                message);
-    }
-
-    private static void runCopyLink(String path) {
-        String url;
-        try {
-            url = new DefaultAnalyzer(path).getUrl();
-            ClipboardManager.getClipboardForSystem().copy(url);
-            log.info("Successfully copied url to clipboard from: " + path);
-
-            try {
-                NotificationManager.getNotificationForCurrentOS().showInfoNotification(
-                        ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
-                        Translation.getTranslatedString("CommonsBundle", "linkCopied"));
-            } catch (Exception e) {
-                log.warn("Could not show message for user", e);
-            }
-        } catch (Exception e) {
-            log.warn("Could not copy url from file: {}", path, e);
-        }
-    }
-
-    private static void runCopyQrCode(String[] args) {
-        try {
-            if (args.length > 1) {
-                final String path = args[1];
-                String url;
-                url = new DefaultAnalyzer(path).getUrl();
-                final BufferedImage image = UrlsProceed.generateQrCode(url);
-
-                ClipboardManager.getClipboardForSystem().copy(image);
-
-                NotificationManager.getNotificationForCurrentOS().showInfoNotification(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
-                        Translation.getTranslatedString("ShowQrDialogBundle", "successCopyImage"));
-            }
-        } catch (Exception e) {
-            log.warn("Could not copy qr code for {}", args[1], e);
-            NotificationManager.getNotificationForCurrentOS().showErrorNotification(ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME,
-                    Translation.getTranslatedString("ShowQrDialogBundle", "errorCopyImage"));
-        }
-    }
-
-    /**
-     * Runs EditDialog
-     *
-     * @param filepath file path
-     */
-    private static void runEditDialog(String filepath) {
-        EditDialog dialog;
-        if (PreferencesManager.isDarkModeEnabledNow()) {
-            JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
-            colorful.colorizeGlobal();
-            dialog = new EditDialog(filepath);
-            colorful.colorize(dialog);
-            dialog.updateTextFont();
-        } else {
-            dialog = new EditDialog(filepath);
-        }
-
-        dialog.setVisible(true);
-        dialog.setMaximumSize(new Dimension(MAXIMIZED_HORIZ, dialog.getHeight()));
-        dialog.setLocationRelativeTo(null);
-    }
-
-    private static void runQrDialog(String arg) {
-        try {
-            final File file = new DefaultAnalyzer(arg).getFile();
-            ShowQrDialog qrDialog;
-            if (PreferencesManager.isDarkModeEnabledNow()) {
-                JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
-                colorful.colorizeGlobal();
-                qrDialog = new ShowQrDialog(file);
-                colorful.colorize(qrDialog);
-            } else {
-                qrDialog = new ShowQrDialog(file);
-            }
-            qrDialog.setVisible(true);
-        } catch (Exception e) {
-            log.warn("Can not create a qr-code from url: [" + arg + "]", e);
-        }
-    }
-
-    public static void runSettingsDialog() {
-        CleanManager.clean();
-
-        SettingsDialog settingsDialog;
-        if (PreferencesManager.isDarkModeEnabledNow()) {
-            JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
-            colorful.colorizeGlobal();
-
-            settingsDialog = new SettingsDialog();
-
-            colorful.colorize(settingsDialog);
-        } else {
-            settingsDialog = new SettingsDialog();
-        }
-        settingsDialog.setVisible(true);
     }
 
     public static void runUpdateDialog() {
@@ -371,80 +101,6 @@ public class Application {
         } else {
             log.info("Updates were checked less then 24h ago");
         }
-    }
-
-    private void manageSoloArgument(String[] args) {
-        if (OperatingSystem.isWindows()) {
-            manageArguments(args);
-        } else if (OperatingSystem.isUnix()) {
-            final String arg = args[0];
-            switch (arg) {
-                case OPENER_CREATE_NEW_ARGUMENT:
-                    runCreateNewFileWindow();
-                    break;
-                case OPENER_SETTINGS_ARGUMENT:
-                    checkIfUpdatesAvailable();
-                    runSettingsDialog();
-                    break;
-                case OPENER_ABOUT_ARGUMENT:
-                    new AboutApplicationDialog().setVisible(true);
-                    break;
-                case OPENER_UPDATE_ARGUMENT:
-                    runUpdateDialog();
-                    break;
-                case UPDATE_SILENT_ARGUMENT:
-                    runUpdateSilent();
-                    break;
-                case OPENER_HELP_ARGUMENT_HYPHEN: {
-                    System.out.println(helpText());
-                    break;
-                }
-                case OPENER_EDIT_ARGUMENT:
-                    manageEditArgument(args);
-                    break;
-                case OPENER_OPEN_ARGUMENT:
-                    showIncorrectArgumentMessage(OPENER_OPEN_ARGUMENT);
-                    break;
-                default:
-                    manageArgumentsOnUnix(args);
-                    break;
-            }
-        } else {
-            log.warn("System is not supported yet: {}", SystemUtils.getCurrentOS());
-        }
-    }
-
-    private void runCreateNewFileWindow() {
-        CreateNewFileFrameWrapper createNewFileFrameWrapper;
-        if (PreferencesManager.isDarkModeEnabledNow()) {
-            JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
-            colorful.colorizeGlobal();
-            createNewFileFrameWrapper = new CreateNewFileFrameWrapper();
-
-            colorful.colorize(createNewFileFrameWrapper);
-        } else {
-            createNewFileFrameWrapper = new CreateNewFileFrameWrapper();
-        }
-        createNewFileFrameWrapper.setLocation(FrameUtils.getFrameOnCenterLocationPoint(createNewFileFrameWrapper));
-        createNewFileFrameWrapper.setVisible(true);
-    }
-
-    private void manageArgumentsOnUnix(String[] args) {
-        final String unixOpeningMode = PreferencesManager.getUnixOpeningMode();
-        log.info("Unix: opening mode is: {}", unixOpeningMode);
-        if (unixOpeningMode.equalsIgnoreCase(SettingsConstants.OPENER_UNIX_DEFAULT_SELECTOR_MODE)) {
-            checkIfUpdatesAvailable();
-            runModeSelectorWindow(args);
-        } else {
-            String[] unixArgs = new String[]{unixOpeningMode, args[0]};
-            manageArguments(unixArgs);
-        }
-    }
-
-    private void runModeSelectorWindow(String[] args) {
-        String filePath = args[0];
-        ModeSelectorDialog modeSelectorDialog = new ModeSelectorDialog(new File(filePath));
-        modeSelectorDialog.setVisible(true);
     }
 
     public enum UPDATE_MODE {NORMAL, SILENT}
