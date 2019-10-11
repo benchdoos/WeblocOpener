@@ -18,17 +18,13 @@ package com.github.benchdoos.weblocopener.core.constants;
 import com.github.benchdoos.jcolorful.beans.Theme;
 import com.github.benchdoos.jcolorful.core.JColorful;
 
+import java.nio.charset.StandardCharsets;
+
 public interface ApplicationConstants {
     String WEBLOCOPENER_APPLICATION_NAME = "WeblocOpener";
     String UPDATER_APPLICATION_NAME = "WindowsUpdater";
 
-    String WEBLOC_FILE_EXTENSION = "webloc";
-
-    String URL_FILE_EXTENSION = "url";
-
-    String DESKTOP_FILE_EXTENSION = "desktop";
-
-    String DEFAULT_APPLICATION_CHARSET = "UTF-8";
+    String DEFAULT_APPLICATION_CHARSET = StandardCharsets.UTF_8.name();
 
     Theme DARK_MODE_THEME = JColorful.EXTREMELY_BLACK;
 }

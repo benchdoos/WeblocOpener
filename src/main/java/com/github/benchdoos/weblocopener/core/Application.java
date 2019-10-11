@@ -25,8 +25,11 @@ import com.github.benchdoos.weblocopener.utils.Internal;
 import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
 import lombok.extern.log4j.Log4j2;
 
+import java.io.File;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 
+import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants.OPENER_SETTINGS_ARGUMENT;
 import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants.OPENER_UPDATE_ARGUMENT;
 import static com.github.benchdoos.weblocopener.core.constants.ArgumentConstants.UPDATE_SILENT_ARGUMENT;
 
@@ -44,13 +47,26 @@ public class Application {
         manageArgumentsForNew(args);
     }
 
+    public static String getApplicationPath() {
+        String canonicalPath = null;
+        try {
+            canonicalPath = new File(Application.class.getProtectionDomain().getCodeSource().getLocation()
+                    .toURI()).getPath();
+        } catch (URISyntaxException e) {
+            log.debug("Can not get canonical path for settings", e);
+        }
+        return canonicalPath;
+    }
+
     private void manageArgumentsForNew(String[] args) {
         if (args.length == 0) {
-            checkIfUpdatesAvailable();
-            com.github.benchdoos.weblocopenercore.core.Application.runSettingsDialog();
+            startSettingsWithUpdate();
         } else {
             final String argument = args[0];
             switch (argument) {
+                case OPENER_SETTINGS_ARGUMENT:
+                    startSettingsWithUpdate();
+                    break;
                 case OPENER_UPDATE_ARGUMENT:
                     runUpdateDialog();
                     break;
@@ -61,6 +77,12 @@ public class Application {
                     com.github.benchdoos.weblocopenercore.core.Application.manageArguments(args);
             }
         }
+    }
+
+    private void startSettingsWithUpdate() {
+        String canonicalPath = getApplicationPath();
+        checkIfUpdatesAvailable();
+        com.github.benchdoos.weblocopenercore.core.Application.runSettingsDialog(canonicalPath);
     }
 
     public static void runUpdateDialog() {

@@ -16,18 +16,8 @@
 package com.github.benchdoos.weblocopener.core.constants;
 
 public interface ArgumentConstants {
-    String OPENER_OPEN_ARGUMENT = "-open"; //don't use it, this is for unix
-
-    String OPENER_CREATE_ARGUMENT = "-create";
-    String OPENER_CREATE_NEW_ARGUMENT = "-create-new";
-    String OPENER_EDIT_ARGUMENT = "-edit";
     String OPENER_SETTINGS_ARGUMENT = "-settings";
     String OPENER_UPDATE_ARGUMENT = "-update";
-    String OPENER_ABOUT_ARGUMENT = "-about";
-    String OPENER_HELP_ARGUMENT_HYPHEN = "-help";
-    String OPENER_QR_ARGUMENT = "-qr";
-    String OPENER_COPY_LINK_ARGUMENT = "-copy";
-    String OPENER_COPY_QR_ARGUMENT = "-copy-qr";
 
     String UPDATE_SILENT_ARGUMENT = "-update-silent";
 
