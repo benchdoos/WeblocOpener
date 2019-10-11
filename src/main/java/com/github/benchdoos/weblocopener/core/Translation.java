@@ -15,7 +15,7 @@
 
 package com.github.benchdoos.weblocopener.core;
 
-import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.Locale;

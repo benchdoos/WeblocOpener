@@ -15,7 +15,7 @@
 
 package com.github.benchdoos.weblocopener.update;
 
-import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
 
 import java.io.IOException;

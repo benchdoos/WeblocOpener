@@ -16,7 +16,7 @@
 package com.github.benchdoos.weblocopener.gui.buttons;
 
 import com.github.benchdoos.weblocopener.core.constants.StringConstants;
-import com.github.benchdoos.weblocopener.service.UrlsProceed;
+import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;

@@ -18,9 +18,9 @@ package com.github.benchdoos.weblocopener.utils.notification.impl;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.core.constants.StringConstants;
-import com.github.benchdoos.weblocopener.service.UrlsProceed;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.notification.Notification;
+import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
