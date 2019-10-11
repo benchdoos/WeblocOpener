@@ -25,7 +25,9 @@
     <packaging>jar</packaging>
 
     <name>WeblocOpener</name>
-    <description>Open MacOS .webloc links on Windows.</description>
+    <description>
+        WeblocOpener is a simple way to open, edit, create MacOS Safari .webloc files on Windows and Debian GNU/Linux.
+    </description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -268,7 +270,7 @@
                                 <data>
                                     <!--Webloc file template-->
                                     <type>file</type>
-                                    <src>${project.basedir}/build/installer/Template.webloc</src>
+                                    <src>${project.basedir}/build/Template.webloc</src>
                                     <dst>/opt/${project.name}/Template.webloc</dst>
                                 </data>
                                 <data>
