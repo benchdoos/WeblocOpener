@@ -20,6 +20,7 @@ import com.github.benchdoos.weblocopener.Main;
 import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.gui.UpdateDialog;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
+import com.github.benchdoos.weblocopener.utils.CleanManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.Internal;
 import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
@@ -68,6 +69,7 @@ public class Application {
             final String argument = args[0];
             switch (argument) {
                 case OPENER_SETTINGS_ARGUMENT:
+                    CleanManager.clean();
                     startSettingsWithUpdate();
                     break;
                 case OPENER_UPDATE_ARGUMENT:
@@ -77,6 +79,8 @@ public class Application {
                     checkIfUpdatesAvailable();
                     break;
                 default:
+                    CleanManager.clean();
+
                     com.github.benchdoos.weblocopenercore.core.Application.manageArguments(args);
             }
         }
