@@ -60,7 +60,5 @@ public class Logging {
         System.setProperty(WEBLOC_OPENER_LOG_APP_PROPERTY, path);
         final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
         log.info("Logging successfully started. Welcome to {}", CoreUtils.getApplicationVersionFullInformationString());
-
     }
-
 }
