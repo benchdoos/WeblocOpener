@@ -21,9 +21,9 @@ import com.github.benchdoos.weblocopener.nongui.notify.NotifyManager;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.update.UpdaterManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
-import com.github.benchdoos.weblocopener.utils.Internal;
+import com.github.benchdoos.weblocopenercore.utils.Internal;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
-import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
+import com.github.benchdoos.weblocopenercore.utils.version.ApplicationVersion;
 import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
 import lombok.extern.log4j.Log4j2;
 

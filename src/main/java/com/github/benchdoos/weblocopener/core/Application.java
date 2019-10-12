@@ -17,12 +17,12 @@ package com.github.benchdoos.weblocopener.core;
 
 import com.github.benchdoos.jcolorful.core.JColorful;
 import com.github.benchdoos.weblocopener.Main;
-import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopener.gui.UpdateDialog;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.utils.CleanManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
-import com.github.benchdoos.weblocopener.utils.Internal;
+import com.github.benchdoos.weblocopenercore.core.constants.ApplicationConstants;
+import com.github.benchdoos.weblocopenercore.utils.Internal;
 import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopenercore.utils.browser.BrowserManager;
 import lombok.extern.log4j.Log4j2;

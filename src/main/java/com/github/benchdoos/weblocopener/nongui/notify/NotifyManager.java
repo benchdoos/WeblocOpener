@@ -17,7 +17,7 @@ package com.github.benchdoos.weblocopener.nongui.notify;
 
 import com.github.benchdoos.weblocopener.nongui.notify.impl.UnixNotifier;
 import com.github.benchdoos.weblocopener.nongui.notify.impl.WindowsNotifier;
-import com.github.benchdoos.weblocopener.utils.system.OperatingSystem;
+import com.github.benchdoos.weblocopenercore.utils.system.OperatingSystem;
 
 public class NotifyManager {
     private static final Notifier DEFAULT_NOTIFIER = new WindowsNotifier();

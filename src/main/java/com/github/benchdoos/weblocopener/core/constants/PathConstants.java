@@ -17,7 +17,7 @@ package com.github.benchdoos.weblocopener.core.constants;
 
 import java.io.File;
 
-import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
+import static com.github.benchdoos.weblocopenercore.core.constants.ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
 
 public interface PathConstants {
     String APP_LOG_FOLDER_PATH = System

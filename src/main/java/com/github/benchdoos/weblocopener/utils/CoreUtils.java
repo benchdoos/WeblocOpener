@@ -16,16 +16,11 @@
 package com.github.benchdoos.weblocopener.utils;
 
 import com.github.benchdoos.weblocopener.Main;
-import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
-import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
-import com.github.benchdoos.weblocopener.utils.version.Beta;
+import com.github.benchdoos.weblocopenercore.core.constants.ApplicationConstants;
+import com.github.benchdoos.weblocopenercore.utils.version.ApplicationVersion;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.io.FileExistsException;
 
 import javax.swing.UIManager;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -141,87 +136,7 @@ public class CoreUtils {
         }
     }
 
-    public static File renameFile(final File oldFile, String fileName) throws FileExistsException {
-
-        if (oldFile == null) {
-            throw new IllegalArgumentException("Can not rename file [null]: it is null!");
-        }
-        if (!oldFile.exists()) {
-            throw new IllegalArgumentException("Can not rename file [" + oldFile + "]: does not exist!");
-        }
-        if (fileName == null) {
-            throw new IllegalArgumentException("Can not rename file [" + oldFile + "]: new filename can not be null");
-        }
-        if (fileName.isEmpty()) {
-            throw new IllegalArgumentException("Can not rename file [" + oldFile + "]: new filename can not be empty");
-        }
-
-
-        fileName = fixFileName(fileName);
-
-        final File folder = oldFile.getParentFile();
-        final File file = new File(folder.getAbsolutePath() + File.separator + fileName);
-
-        if (file.exists()) {
-            throw new FileExistsException("Can not rename file [" + oldFile + "]: file [" + file + "] already exists!");
-        }
-
-
-        log.debug("Renaming file {} to {}", oldFile, fileName);
-
-        final boolean b = oldFile.renameTo(file);
-        if (b) {
-            return file;
-        } else {
-            throw new RuntimeException("Can not rename file for some reason: " + oldFile + " to " + file);
-        }
-
-    }
-
-    public static BufferedImage resize(final Image img, final int width, final int height) {
-        return resize(toBufferedImage(img), width, height);
-    }
-
-    public static BufferedImage resize(final BufferedImage img, final int width, final int height) {
-        Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        BufferedImage dimg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-
-        Graphics2D g2d = dimg.createGraphics();
-        g2d.drawImage(tmp, 0, 0, null);
-        g2d.dispose();
-
-        return dimg;
-    }
-
-    private static BufferedImage toBufferedImage(final Image img) {
-        if (img instanceof BufferedImage) {
-            return (BufferedImage) img;
-        }
-
-        final BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-
-        final Graphics2D bGr = bimage.createGraphics();
-        bGr.drawImage(img, 0, 0, null);
-        bGr.dispose();
-
-        return bimage;
-    }
-
     public static ApplicationVersion getCurrentApplicationVersion() {
-        final ApplicationVersion applicationVersion = new ApplicationVersion();
-        applicationVersion.setVersion(getApplicationVersionString());
-        try {
-            Properties properties = new Properties();
-            properties.load(Main.class.getResourceAsStream("/application.properties"));
-            String betaString = properties.getProperty("application.beta", "0");
-            final int i = Integer.parseInt(betaString);
-
-            applicationVersion.setBeta(new Beta(i));
-
-            return applicationVersion;
-        } catch (Exception e) {
-            log.warn("Could not load application ApplicationVersion info", e);
-            return applicationVersion;
-        }
+        return com.github.benchdoos.weblocopenercore.utils.CoreUtils.getCurrentApplicationVersion();
     }
 }
