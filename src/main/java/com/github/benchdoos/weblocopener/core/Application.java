@@ -23,6 +23,7 @@ import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.Internal;
 import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopenercore.utils.browser.BrowserManager;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
@@ -41,6 +42,8 @@ public class Application {
     public Application(final String[] args) {
         log.info("{} starts in mode: {}", ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, Main.getCurrentMode());
         log.info("{} starts with arguments: {}", ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, Arrays.toString(args));
+
+        BrowserManager.loadBrowserList();
 
         CoreUtils.enableLookAndFeel();
 

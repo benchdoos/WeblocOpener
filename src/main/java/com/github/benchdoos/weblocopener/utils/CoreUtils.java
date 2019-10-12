@@ -22,8 +22,9 @@ import com.github.benchdoos.weblocopener.utils.version.Beta;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileExistsException;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.UIManager;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
