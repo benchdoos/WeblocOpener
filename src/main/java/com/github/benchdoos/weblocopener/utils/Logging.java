@@ -25,6 +25,7 @@ import java.io.File;
  * Created by Eugene Zrazhevsky on 30.10.2016.
  */
 public class Logging {
+    private static final String WEBLOC_OPENER_LOG_APP_PROPERTY = "com.github.benchdoos.weblocopener.log.folder";
     private final String collingApp;
     public static final File LOG_FOLDER = new File(PathConstants.APP_LOG_FOLDER_PATH);
 
@@ -56,7 +57,7 @@ public class Logging {
         final String path = PathConstants.APP_LOG_FOLDER_PATH + File.separator + collingApp + File.separator;
         System.setProperty("log4j.configurationFile", "log4j2.xml");
         System.out.println("Logging starts at: " + path);
-        System.setProperty(PathConstants.APP_LOG_PROPERTY, path);
+        System.setProperty(WEBLOC_OPENER_LOG_APP_PROPERTY, path);
         final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
         log.info("Logging successfully started. Welcome to {}", CoreUtils.getApplicationVersionFullInformationString());
 
