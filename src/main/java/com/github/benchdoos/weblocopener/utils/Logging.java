@@ -15,7 +15,7 @@
 
 package com.github.benchdoos.weblocopener.utils;
 
-import com.github.benchdoos.weblocopener.core.constants.PathConstants;
+import com.github.benchdoos.weblocopenercore.core.constants.PathConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

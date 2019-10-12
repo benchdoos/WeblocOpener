@@ -16,15 +16,17 @@
 package com.github.benchdoos.weblocopener.utils.notification.impl;
 
 import com.github.benchdoos.weblocopener.core.Translation;
-import com.github.benchdoos.weblocopener.core.constants.ApplicationConstants;
-import com.github.benchdoos.weblocopener.core.constants.StringConstants;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.notification.Notification;
+import com.github.benchdoos.weblocopenercore.core.constants.ApplicationConstants;
+import com.github.benchdoos.weblocopenercore.core.constants.StringConstants;
 import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
 
-import javax.swing.*;
+import javax.swing.JEditorPane;
+import javax.swing.JOptionPane;
 import javax.swing.event.HyperlinkEvent;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
 
 public class ForcedNotification implements Notification {
     private static final int MAXIMUM_MESSAGE_SIZE = 150;

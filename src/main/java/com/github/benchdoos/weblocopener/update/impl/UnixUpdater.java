@@ -15,16 +15,17 @@
 
 package com.github.benchdoos.weblocopener.update.impl;
 
-import com.github.benchdoos.weblocopener.core.constants.PathConstants;
 import com.github.benchdoos.weblocopener.gui.UpdateDialog;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.update.UpdaterManager;
-import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
+import com.github.benchdoos.weblocopenercore.core.constants.PathConstants;
+import com.github.benchdoos.weblocopenercore.utils.version.ApplicationVersion;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JProgressBar;
+import javax.swing.Timer;
+import java.awt.Desktop;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;

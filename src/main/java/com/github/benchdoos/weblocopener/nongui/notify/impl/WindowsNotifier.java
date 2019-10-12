@@ -19,7 +19,7 @@ import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.nongui.notify.Notifier;
-import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
+import com.github.benchdoos.weblocopenercore.utils.version.ApplicationVersion;
 import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
 import lombok.extern.log4j.Log4j2;
 
@@ -27,7 +27,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import static com.github.benchdoos.weblocopener.utils.system.SystemUtils.IS_WINDOWS_XP;
+import static com.github.benchdoos.weblocopenercore.utils.system.SystemUtils.IS_WINDOWS_XP;
 
 @Log4j2
 public class WindowsNotifier implements Notifier {

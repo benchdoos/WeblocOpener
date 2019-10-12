@@ -17,7 +17,7 @@ package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
-import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
+import com.github.benchdoos.weblocopenercore.utils.version.ApplicationVersion;
 import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -34,7 +34,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static com.github.benchdoos.weblocopener.utils.system.SystemUtils.IS_WINDOWS_XP;
+import static com.github.benchdoos.weblocopenercore.utils.system.SystemUtils.IS_WINDOWS_XP;
 
 @Log4j2
 class UpdateInfoDialog extends JDialog {

@@ -16,12 +16,12 @@
 package com.github.benchdoos.weblocopener.update.impl;
 
 
-import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
-import com.github.benchdoos.weblocopener.core.constants.PathConstants;
 import com.github.benchdoos.weblocopener.gui.UpdateDialog;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.update.UpdaterManager;
-import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
+import com.github.benchdoos.weblocopenercore.core.constants.ArgumentConstants;
+import com.github.benchdoos.weblocopenercore.core.constants.PathConstants;
+import com.github.benchdoos.weblocopenercore.utils.version.ApplicationVersion;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
 import org.bridj.Pointer;
@@ -30,7 +30,8 @@ import org.bridj.cpp.com.COMRuntime;
 import org.bridj.cpp.com.shell.ITaskbarList3;
 import org.bridj.jawt.JAWTUtils;
 
-import javax.swing.*;
+import javax.swing.JProgressBar;
+import javax.swing.Timer;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;

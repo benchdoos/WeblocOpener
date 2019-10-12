@@ -17,18 +17,18 @@ package com.github.benchdoos.weblocopener;
 
 import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.core.Translation;
-import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
+import com.github.benchdoos.weblocopenercore.core.constants.ArgumentConstants;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
-import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
-import com.github.benchdoos.weblocopener.utils.system.UnsupportedSystemException;
+import com.github.benchdoos.weblocopenercore.utils.system.SystemUtils;
+import com.github.benchdoos.weblocopenercore.utils.system.UnsupportedSystemException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 
-import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.UPDATER_APPLICATION_NAME;
-import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
+import static com.github.benchdoos.weblocopenercore.core.constants.ApplicationConstants.UPDATER_APPLICATION_NAME;
+import static com.github.benchdoos.weblocopenercore.core.constants.ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
 
 public class Main {
     private static MODE currentMode;
