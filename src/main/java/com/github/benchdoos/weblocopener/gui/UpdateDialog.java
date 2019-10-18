@@ -464,7 +464,7 @@ public class UpdateDialog extends JFrame implements Translatable {
     }
 
     private void initCurrentVersionInfo() {
-        final com.github.benchdoos.weblocopenercore.utils.version.ApplicationVersion currentApplicationVersion = CoreUtils.getCurrentApplicationVersion();
+        final ApplicationVersion currentApplicationVersion = CoreUtils.getCurrentApplicationVersion();
 
         currentVersionLabel.setText(currentApplicationVersion.getVersion());
 
