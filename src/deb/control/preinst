@@ -1,2 +1,4 @@
 #!/bin/sh
 mkdir -p /opt/WeblocOpener/
+
+rm -rf /tmp/WeblocOpener/Log/*
