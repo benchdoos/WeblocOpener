@@ -30,44 +30,6 @@ import java.util.Scanner;
 
 @Log4j2
 public class CoreUtils {
-    static String getApplicationVersionFullInformationString() {
-        final Properties properties = new Properties();
-        try {
-            properties.load(Main.class.getResourceAsStream("/application.properties"));
-            final String name = properties.getProperty("application.name");
-            final String version = properties.getProperty("application.version");
-            final String build = properties.getProperty("application.build");
-
-            if (version != null && build != null) {
-                return name + " v." + version + "." + build;
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            log.warn("Could not load application version info", e);
-            return null;
-        }
-    }
-
-
-    public static String getApplicationVersionString() {
-        final Properties properties = new Properties();
-        try {
-            properties.load(Main.class.getResourceAsStream("/application.properties"));
-            final String version = properties.getProperty("application.version");
-            final String build = properties.getProperty("application.build");
-
-            if (version != null && build != null) {
-                return version + "." + build.split(" ")[0];
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            log.warn("Could not load application version info", e);
-            return null;
-        }
-    }
-
     /**
      * Enables LookAndFeel for current OS.
      *
@@ -79,60 +41,6 @@ public class CoreUtils {
             log.debug("Look and Feel enabled");
         } catch (Exception e) {
             log.warn("Could not enable look and feel", e);
-        }
-    }
-
-    /**
-     * @param file to get it's name
-     * @return filename for file without extension
-     */
-    public static String getFileName(File file) {
-        if (file == null) {
-            throw new IllegalArgumentException("File can not be null");
-        }
-        final int index = file.getName().lastIndexOf(".");
-
-        if (index > 0) {
-            char[] chars = new char[index];
-
-            file.getName().getChars(0, index, chars, 0);
-
-            return new String(chars);
-        } else {
-            return file.getName();
-        }
-    }
-
-    public static String fixFileName(String fileName) {
-        if (fileName != null) {
-            fileName = fileName.replaceAll("#", "")
-                    .replaceAll("/", "")
-                    .replaceAll("\\\\", "")
-                    .replaceAll("/", "")
-                    .replaceAll(":", "")
-                    .replaceAll("\"", "")
-                    .replaceAll("<", "")
-                    .replaceAll(">", "")
-                    .replaceAll("\\|", "");
-        }
-        return fileName;
-    }
-
-    public static String getPageTitle(final String url) throws IOException {
-        if (url == null) {
-            throw new IllegalArgumentException("URL can not be null");
-        }
-        if (url.isEmpty()) {
-            throw new IllegalArgumentException("URL can not be empty");
-        }
-        try (InputStream response = new URL(url).openStream()) {
-
-            final Scanner scanner = new Scanner(response, ApplicationConstants.DEFAULT_APPLICATION_CHARSET);
-            final String responseBody = scanner.useDelimiter("\\A").next();
-
-            return responseBody.substring(responseBody.indexOf("<title>") + 7, responseBody.indexOf("</title>"));
-        } catch (IOException e) {
-            throw new IOException("Can not load page title", e);
         }
     }
 

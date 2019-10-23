@@ -16,6 +16,7 @@
 package com.github.benchdoos.weblocopener.utils;
 
 import com.github.benchdoos.weblocopenercore.core.constants.PathConstants;
+import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,7 +28,6 @@ import java.io.File;
 public class Logging {
     private static final String WEBLOC_OPENER_LOG_APP_PROPERTY = "com.github.benchdoos.weblocopener.log.folder";
     private final String collingApp;
-    public static final File LOG_FOLDER = new File(PathConstants.APP_LOG_FOLDER_PATH);
 
 
     public Logging(String collingAppName) {
