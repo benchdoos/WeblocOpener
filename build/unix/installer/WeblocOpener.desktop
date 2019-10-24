@@ -2,33 +2,33 @@
 Version=1.0
 Type=Application
 Name=WeblocOpener
-Comment=Open MacOs .webloc files on Unix.
-Comment[de]=Öffne MacOs .webloc-Dateien unter Unix.
-Comment[fr]=Ouvrez les fichiers .webloc de MacO sous Unix.
-Comment[it]=Apri i file .webloc di MacO su Unix.
-Comment[ru]=Открыть MacOs .webloc файлы на Unix.
+Comment=Open MacOs .webloc, Windows .url, Unix .desktop files on Unix.
+Comment[de]=Öffne MacOs .webloc, Windows .url, Unix .desktop-Dateien unter Unix.
+Comment[fr]=Ouvrez les fichiers MacOs .webloc, Windows .url, Unix .desktop sous Unix.
+Comment[it]=Apri i file .webloc di MacOs , .url di Windows, .desktop di Unix su Unix.
+Comment[ru]=Открыть MacOs .webloc, Windows .url, Unix .desktop файлы на Unix.
 GenericName=WeblocOpener
 X-GNOME-FullName=WeblocOpener
 
 Exec=java -jar "/opt/WeblocOpener/WeblocOpener.jar" %U
 Icon=/opt/WeblocOpener/icons/WeblocOpener.png
 
-MimeType=application/webloc;application/xml;
+MimeType=application/webloc;application/xml;wwwserver/redirection;application/internet-shortcut;application/x-mswinurl;application/x-url;message/external-body;text/url;text/x-url;application/x-desktop;
 
 Terminal=false
 Categories=Library;
-Keywords=Link;Ссылки;webloc;
+Keywords=Link;Ссылки;webloc;url;desktop;
 StartupNotify=true
 X-Ubuntu-Gettext-Domain=weblocopener
 
 Actions=NewFile;CheckUpdates;
 
 [Desktop Action NewFile]
-Name=Create new .webloc file
-Name[de]=Neue .webloc-Datei erstellen
-Name[fr]=Créer un nouveau fichier .webloc
-Name[it]=Crea un nuovo file .webloc
-Name[ru]=Создать новый файл .webloc
+Name=Create new link
+Name[de]=Neuen Link erstellen
+Name[fr]=Créer un nouveau lien
+Name[it]=Crea un nuovo link
+Name[ru]=Создать новую ссылку
 Exec=java -jar "/opt/WeblocOpener/WeblocOpener.jar" -create-new
 
 [Desktop Action CheckUpdates]
