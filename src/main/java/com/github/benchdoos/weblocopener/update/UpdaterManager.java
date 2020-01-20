@@ -15,11 +15,11 @@
 
 package com.github.benchdoos.weblocopener.update;
 
-import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.update.impl.UnixUpdater;
 import com.github.benchdoos.weblocopener.update.impl.WindowsUpdater;
+import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopenercore.utils.Internal;
-import com.github.benchdoos.weblocopenercore.utils.system.OperatingSystem;
+import com.github.benchdoos.weblocopenercore.utils.system.OS;
 import com.github.benchdoos.weblocopenercore.utils.version.ApplicationVersion;
 import com.github.benchdoos.weblocopenercore.utils.version.Beta;
 import lombok.extern.log4j.Log4j2;
@@ -70,9 +70,9 @@ public class UpdaterManager {
     }
 
     public static Updater getUpdaterForCurrentOperatingSystem() {
-        if (OperatingSystem.isWindows()) {
+        if (OS.isWindows()) {
             return new WindowsUpdater();
-        } else if (OperatingSystem.isUnix()) {
+        } else if (OS.isUnix()) {
             return new UnixUpdater();
         } else return new UnixUpdater();
     }

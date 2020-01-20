@@ -20,7 +20,8 @@ import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
 
-import static com.github.benchdoos.weblocopenercore.core.constants.PathConstants.UPDATE_PATH_FILE;
+import static com.github.benchdoos.weblocopener.core.ApplicationConstants.UPDATE_PATH_FILE;
+
 
 @Log4j2
 public class CleanManager {

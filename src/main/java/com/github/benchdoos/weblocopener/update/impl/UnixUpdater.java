@@ -15,6 +15,7 @@
 
 package com.github.benchdoos.weblocopener.update.impl;
 
+import com.github.benchdoos.weblocopener.core.ApplicationConstants;
 import com.github.benchdoos.weblocopener.gui.UpdateDialog;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.update.UpdaterManager;
@@ -59,7 +60,7 @@ public class UnixUpdater implements Updater {
     public void startUpdate(ApplicationVersion applicationVersion) throws IOException {
         log.info("Starting update for {}", applicationVersion.getVersion());
         File installerFile = new File(
-                PathConstants.UPDATE_PATH_FILE + DEBIAN_SETUP_DEFAULT_NAME);
+                ApplicationConstants.UPDATE_PATH_FILE + DEBIAN_SETUP_DEFAULT_NAME);
         if (!installerFile.exists()) {
             updateAndInstall(applicationVersion, installerFile);
         } else {

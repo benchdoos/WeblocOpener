@@ -16,10 +16,10 @@
 package com.github.benchdoos.weblocopener.update.impl;
 
 
+import com.github.benchdoos.weblocopener.core.ApplicationConstants;
 import com.github.benchdoos.weblocopener.gui.UpdateDialog;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.update.UpdaterManager;
-import com.github.benchdoos.weblocopenercore.core.constants.ArgumentConstants;
 import com.github.benchdoos.weblocopenercore.core.constants.PathConstants;
 import com.github.benchdoos.weblocopenercore.utils.version.ApplicationVersion;
 import lombok.extern.log4j.Log4j2;
@@ -44,7 +44,7 @@ public class WindowsUpdater implements Updater {
 
     private static void update(File file) throws IOException {
         Runtime runtime = Runtime.getRuntime();
-        runtime.exec(file.getAbsolutePath() + ArgumentConstants.INSTALLER_SILENT_KEY);
+        runtime.exec(file.getAbsolutePath() + ApplicationConstants.INSTALLER_SILENT_KEY);
         System.exit(0);
     }
 
@@ -70,7 +70,7 @@ public class WindowsUpdater implements Updater {
     public void startUpdate(ApplicationVersion applicationVersion) throws IOException {
         log.info("Starting update for {}", applicationVersion.getVersion());
         File installerFile = new File(
-                PathConstants.UPDATE_PATH_FILE + DEBIAN_SETUP_DEFAULT_NAME);
+                ApplicationConstants.UPDATE_PATH_FILE + DEBIAN_SETUP_DEFAULT_NAME);
         updateProgressBar(applicationVersion, installerFile);
 
         try {

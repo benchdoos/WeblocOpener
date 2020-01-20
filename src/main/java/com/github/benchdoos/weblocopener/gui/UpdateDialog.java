@@ -63,6 +63,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static com.github.benchdoos.weblocopener.core.ApplicationConstants.*;
 import static com.github.benchdoos.weblocopenercore.utils.system.SystemUtils.IS_WINDOWS_XP;
 
 @SuppressWarnings({"ALL", "ResultOfMethodCallIgnored"})
@@ -551,7 +552,7 @@ public class UpdateDialog extends JFrame implements Translatable {
     }
 
     private void runCleanInstallerFile() {
-        final String installerFilePath = PathConstants.UPDATE_PATH_FILE + StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME
+        final String installerFilePath = UPDATE_PATH_FILE + StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME
                 + serverApplicationVersion.getVersion() + ".exe";
         log.info("Deleting file: " + installerFilePath);
         File installer = new File(installerFilePath);

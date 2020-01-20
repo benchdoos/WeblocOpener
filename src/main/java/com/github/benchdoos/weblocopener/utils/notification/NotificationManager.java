@@ -18,7 +18,7 @@ package com.github.benchdoos.weblocopener.utils.notification;
 import com.github.benchdoos.weblocopener.utils.notification.impl.ForcedNotification;
 import com.github.benchdoos.weblocopener.utils.notification.impl.UnixNotification;
 import com.github.benchdoos.weblocopener.utils.notification.impl.WindowsNotification;
-import com.github.benchdoos.weblocopenercore.utils.system.OperatingSystem;
+import com.github.benchdoos.weblocopenercore.utils.system.OS;
 
 import java.awt.*;
 
@@ -26,9 +26,9 @@ public class NotificationManager {
     private static final Notification DEFAULT_NOTIFICATION = new WindowsNotification();
 
     public static Notification getNotificationForCurrentOS() {
-        if (OperatingSystem.isWindows()) {
+        if (OS.isWindows()) {
             return new WindowsNotification();
-        } else if (OperatingSystem.isUnix()) {
+        } else if (OS.isUnix()) {
             return new UnixNotification();
         } else return DEFAULT_NOTIFICATION;
     }

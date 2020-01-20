@@ -17,9 +17,10 @@ package com.github.benchdoos.weblocopener;
 
 import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.core.Translation;
-import com.github.benchdoos.weblocopenercore.core.constants.ArgumentConstants;
 import com.github.benchdoos.weblocopener.utils.Logging;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
+import com.github.benchdoos.weblocopenercore.core.constants.ApplicationArgument;
+import com.github.benchdoos.weblocopenercore.utils.system.OS;
 import com.github.benchdoos.weblocopenercore.utils.system.SystemUtils;
 import com.github.benchdoos.weblocopenercore.utils.system.UnsupportedSystemException;
 import org.apache.logging.log4j.LogManager;
@@ -47,7 +48,7 @@ public class Main {
         } catch (UnsupportedSystemException e) {
             log.fatal("System not supported", e);
             final String translatedString = Translation.getTranslatedString("CommonsBundle", "systemNotSupported");
-            final String message = translatedString + " " + SystemUtils.getCurrentOS().name();
+            final String message = translatedString + " " + OS.getCurrentOS().name();
 
             NotificationManager.getForcedNotification(null).showErrorNotification(message, message);
         } catch (Exception e) {
@@ -78,7 +79,10 @@ public class Main {
 
     private MODE manageMode(String[] args) {
         if (args.length > 0) {
-            if (args[0].equalsIgnoreCase(ArgumentConstants.OPENER_UPDATE_ARGUMENT)) {
+            final String arg = args[0];
+
+            final boolean updateArg = ApplicationArgument.getByArgument(arg).equals(ApplicationArgument.OPENER_UPDATE_ARGUMENT);
+            if (updateArg) {
                 return MODE.UPDATE;
             }
         }

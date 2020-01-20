@@ -21,6 +21,7 @@ import com.github.benchdoos.weblocopener.gui.UpdateDialog;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.utils.CleanManager;
 import com.github.benchdoos.weblocopener.utils.CoreUtils;
+import com.github.benchdoos.weblocopenercore.core.constants.ApplicationArgument;
 import com.github.benchdoos.weblocopenercore.core.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopenercore.utils.Internal;
@@ -30,10 +31,6 @@ import lombok.extern.log4j.Log4j2;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.Arrays;
-
-import static com.github.benchdoos.weblocopenercore.core.constants.ArgumentConstants.OPENER_SETTINGS_ARGUMENT;
-import static com.github.benchdoos.weblocopenercore.core.constants.ArgumentConstants.OPENER_UPDATE_ARGUMENT;
-import static com.github.benchdoos.weblocopenercore.core.constants.ArgumentConstants.UPDATE_SILENT_ARGUMENT;
 
 @Log4j2
 public class Application {
@@ -67,7 +64,9 @@ public class Application {
             startSettingsWithUpdate();
         } else {
             final String argument = args[0];
-            switch (argument) {
+
+            final ApplicationArgument applicationArgument = ApplicationArgument.getByArgument(argument);
+            switch (applicationArgument) {
                 case OPENER_SETTINGS_ARGUMENT:
                     CleanManager.clean();
                     startSettingsWithUpdate();
