@@ -81,7 +81,7 @@ public class Main {
         if (args.length > 0) {
             final String arg = args[0];
 
-            final boolean updateArg = ApplicationArgument.getByArgument(arg).equals(ApplicationArgument.OPENER_UPDATE_ARGUMENT);
+            final boolean updateArg = ApplicationArgument.OPENER_UPDATE_ARGUMENT.equals(ApplicationArgument.getByArgument(arg));
             if (updateArg) {
                 return MODE.UPDATE;
             }

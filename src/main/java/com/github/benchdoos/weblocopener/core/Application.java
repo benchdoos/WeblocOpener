@@ -66,23 +66,31 @@ public class Application {
             final String argument = args[0];
 
             final ApplicationArgument applicationArgument = ApplicationArgument.getByArgument(argument);
-            switch (applicationArgument) {
-                case OPENER_SETTINGS_ARGUMENT:
-                    CleanManager.clean();
-                    startSettingsWithUpdate();
-                    break;
-                case OPENER_UPDATE_ARGUMENT:
-                    runUpdateDialog();
-                    break;
-                case UPDATE_SILENT_ARGUMENT:
-                    checkIfUpdatesAvailable();
-                    break;
-                default:
-                    CleanManager.clean();
-
-                    com.github.benchdoos.weblocopenercore.core.Application.manageArguments(args);
+            if (applicationArgument != null) {
+                switch (applicationArgument) {
+                    case OPENER_SETTINGS_ARGUMENT:
+                        CleanManager.clean();
+                        startSettingsWithUpdate();
+                        break;
+                    case OPENER_UPDATE_ARGUMENT:
+                        runUpdateDialog();
+                        break;
+                    case UPDATE_SILENT_ARGUMENT:
+                        checkIfUpdatesAvailable();
+                        break;
+                    default:
+                        cleanAndLoadCore(args);
+                }
+            } else {
+                cleanAndLoadCore(args);
             }
         }
+    }
+
+    private void cleanAndLoadCore(String[] args) {
+        CleanManager.clean();
+
+        com.github.benchdoos.weblocopenercore.core.Application.manageArguments(args);
     }
 
     private void startSettingsWithUpdate() {
