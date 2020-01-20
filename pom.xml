@@ -327,12 +327,6 @@
     <dependencies>
         <dependency>
             <groupId>com.github.benchdoos</groupId>
-            <artifactId>LinkSupport</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.benchdoos</groupId>
             <artifactId>WeblocOpenerCore</artifactId>
             <version>${weblocopener.core.version}</version>
         </dependency>

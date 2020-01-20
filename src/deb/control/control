@@ -5,6 +5,6 @@ Priority: optional
 Architecture: all
 Depends: jdk (>= 1.8)
 Maintainer: Eugene Zrazhevsky <weblocopener@gmail.com>
-Description: Open MacOS .webloc links on unix.
+Description: Open, edit and create MacOS .webloc, Windows .url and Unix .desktop links on unix.
 Distribution: development
 Depends: default-jre | java8-runtime
