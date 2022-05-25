@@ -47,6 +47,8 @@ import javax.swing.JProgressBar;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.WindowConstants;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -59,8 +61,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import static com.github.benchdoos.weblocopenercore.utils.system.SystemUtils.IS_WINDOWS_XP;
@@ -131,15 +135,15 @@ public class UpdateDialog extends JFrame implements Translatable {
         panel2.setLayout(new GridLayoutManager(2, 3, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         buttonOK = new JButton();
-        buttonOK.setActionCommand(ResourceBundle.getBundle("translations/UpdateDialogBundle_en_EN").getString("buttonOk"));
+        buttonOK.setActionCommand(this.$$$getMessageFromBundle$$$("translations/UpdateDialogBundle_en_EN", "buttonOk"));
         buttonOK.setEnabled(false);
         Font buttonOKFont = this.$$$getFont$$$(null, Font.BOLD, -1, buttonOK.getFont());
         if (buttonOKFont != null) buttonOK.setFont(buttonOKFont);
-        this.$$$loadButtonText$$$(buttonOK, ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("buttonOk"));
+        this.$$$loadButtonText$$$(buttonOK, this.$$$getMessageFromBundle$$$("translations/UpdateDialogBundle", "buttonOk"));
         panel2.add(buttonOK, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         buttonCancel = new JButton();
-        buttonCancel.setActionCommand(ResourceBundle.getBundle("translations/UpdateDialogBundle_en_EN").getString("buttonCancel"));
-        this.$$$loadButtonText$$$(buttonCancel, ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("buttonCancel"));
+        buttonCancel.setActionCommand(this.$$$getMessageFromBundle$$$("translations/UpdateDialogBundle_en_EN", "buttonCancel"));
+        this.$$$loadButtonText$$$(buttonCancel, this.$$$getMessageFromBundle$$$("translations/UpdateDialogBundle", "buttonCancel"));
         panel2.add(buttonCancel, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         manualDownloadButton = new JButton();
         manualDownloadButton.setIcon(new ImageIcon(getClass().getResource("/images/downloadsIcon16.png")));
@@ -147,8 +151,8 @@ public class UpdateDialog extends JFrame implements Translatable {
         manualDownloadButton.setMargin(new Insets(2, 2, 2, 8));
         manualDownloadButton.setOpaque(true);
         manualDownloadButton.setRequestFocusEnabled(false);
-        this.$$$loadButtonText$$$(manualDownloadButton, ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("manualDownloadButtonText"));
-        manualDownloadButton.setToolTipText(ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("manualDownloadButtonToolTip"));
+        this.$$$loadButtonText$$$(manualDownloadButton, this.$$$getMessageFromBundle$$$("translations/UpdateDialogBundle", "manualDownloadButtonText"));
+        manualDownloadButton.setToolTipText(this.$$$getMessageFromBundle$$$("translations/UpdateDialogBundle", "manualDownloadButtonToolTip"));
         panel2.add(manualDownloadButton, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         panel2.add(spacer1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
@@ -161,7 +165,7 @@ public class UpdateDialog extends JFrame implements Translatable {
         progressBar.setStringPainted(false);
         panel3.add(progressBar, new GridConstraints(2, 0, 1, 7, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         currentVersionStringLabel = new JLabel();
-        this.$$$loadLabelText$$$(currentVersionStringLabel, ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("currentVersionStringLabel"));
+        this.$$$loadLabelText$$$(currentVersionStringLabel, this.$$$getMessageFromBundle$$$("translations/UpdateDialogBundle", "currentVersionStringLabel"));
         panel3.add(currentVersionStringLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         currentVersionLabel = new JLabel();
         Font currentVersionLabelFont = this.$$$getFont$$$(null, Font.BOLD, -1, currentVersionLabel.getFont());
@@ -169,7 +173,7 @@ public class UpdateDialog extends JFrame implements Translatable {
         currentVersionLabel.setText("");
         panel3.add(currentVersionLabel, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         availableVersionStringLabel = new JLabel();
-        this.$$$loadLabelText$$$(availableVersionStringLabel, ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("availableVersionStringLabel"));
+        this.$$$loadLabelText$$$(availableVersionStringLabel, this.$$$getMessageFromBundle$$$("translations/UpdateDialogBundle", "availableVersionStringLabel"));
         panel3.add(availableVersionStringLabel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         availableVersionLabel = new JLabel();
         Font availableVersionLabelFont = this.$$$getFont$$$(null, Font.BOLD, -1, availableVersionLabel.getFont());
@@ -195,7 +199,7 @@ public class UpdateDialog extends JFrame implements Translatable {
         updateInfoButton.setOpaque(false);
         updateInfoButton.setRequestFocusEnabled(false);
         updateInfoButton.setText("");
-        updateInfoButton.setToolTipText(ResourceBundle.getBundle("translations/UpdateDialogBundle").getString("infoAboutUpdate"));
+        updateInfoButton.setToolTipText(this.$$$getMessageFromBundle$$$("translations/UpdateDialogBundle", "infoAboutUpdate"));
         panel3.add(updateInfoButton, new GridConstraints(1, 6, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         serverBetaLabel = new JLabel();
         serverBetaLabel.setText("(beta)");
@@ -221,7 +225,27 @@ public class UpdateDialog extends JFrame implements Translatable {
                 resultName = currentFont.getName();
             }
         }
-        return new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
+        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+        return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
+    }
+
+    private static Method $$$cachedGetBundleMethod$$$ = null;
+
+    private String $$$getMessageFromBundle$$$(String path, String key) {
+        ResourceBundle bundle;
+        try {
+            Class<?> thisClass = this.getClass();
+            if ($$$cachedGetBundleMethod$$$ == null) {
+                Class<?> dynamicBundleClass = thisClass.getClassLoader().loadClass("com.intellij.DynamicBundle");
+                $$$cachedGetBundleMethod$$$ = dynamicBundleClass.getMethod("getBundle", String.class, Class.class);
+            }
+            bundle = (ResourceBundle) $$$cachedGetBundleMethod$$$.invoke(null, path, thisClass);
+        } catch (Exception e) {
+            bundle = ResourceBundle.getBundle(path);
+        }
+        return bundle.getString(key);
     }
 
     /**

@@ -21,7 +21,7 @@
 
     <groupId>com.github.benchdoos</groupId>
     <artifactId>WeblocOpener</artifactId>
-    <version>2.0.0</version>
+    <version>1.11.2</version>
     <packaging>jar</packaging>
 
     <name>WeblocOpener</name>
@@ -333,7 +333,7 @@
         <dependency>
             <groupId>com.github.benchdoos</groupId>
             <artifactId>WeblocOpenerCore</artifactId>
-            <version>2.0.0</version>
+            <version>1.11.2</version>
         </dependency>
 
         <!--Intellij Forms-->
