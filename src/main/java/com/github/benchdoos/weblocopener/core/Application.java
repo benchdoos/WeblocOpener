@@ -15,22 +15,25 @@
 
 package com.github.benchdoos.weblocopener.core;
 
-import com.github.benchdoos.jcolorful.core.JColorful;
 import com.github.benchdoos.weblocopener.Main;
 import com.github.benchdoos.weblocopener.gui.UpdateDialog;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.utils.CleanManager;
-import com.github.benchdoos.weblocopener.utils.CoreUtils;
-import com.github.benchdoos.weblocopenercore.core.constants.ApplicationArgument;
-import com.github.benchdoos.weblocopenercore.core.constants.ApplicationConstants;
-import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopenercore.utils.Internal;
-import com.github.benchdoos.weblocopenercore.utils.browser.BrowserManager;
+import com.github.benchdoos.weblocopenercore.constants.ApplicationArgument;
+import com.github.benchdoos.weblocopenercore.constants.ApplicationConstants;
+import com.github.benchdoos.weblocopenercore.service.WindowLauncher;
+import com.github.benchdoos.weblocopenercore.service.settings.impl.AutoUpdateSettings;
+import com.github.benchdoos.weblocopenercore.service.settings.impl.LatestUpdateCheckSettings;
+import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Date;
 
 @Log4j2
 public class Application {
@@ -40,8 +43,6 @@ public class Application {
     public Application(final String[] args) {
         log.info("{} starts in mode: {}", ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, Main.getCurrentMode());
         log.info("{} starts with arguments: {}", ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, Arrays.toString(args));
-
-        BrowserManager.loadBrowserList();
 
         CoreUtils.enableLookAndFeel();
 
@@ -100,16 +101,12 @@ public class Application {
     }
 
     public static void runUpdateDialog() {
-        final UpdateDialog updateDialog;
-
-        if (PreferencesManager.isDarkModeEnabledNow()) {
-            JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
-            colorful.colorizeGlobal();
-            updateDialog = UpdateDialog.getInstance();
-            colorful.colorize(updateDialog);
-        } else {
-            updateDialog = UpdateDialog.getInstance();
-        }
+        final UpdateDialog updateDialog = new WindowLauncher<UpdateDialog>() {
+            @Override
+            public UpdateDialog initWindow() {
+                return UpdateDialog.getInstance();
+            }
+        }.getWindow();
 
         updateDialog.setVisible(true);
         new Thread(updateDialog::checkForUpdates).start();
@@ -117,9 +114,9 @@ public class Application {
 
     private static void runUpdateSilent() {
         updateMode = UPDATE_MODE.SILENT;
-        boolean isAutoUpdate = PreferencesManager.isAutoUpdateActive();
+        boolean isAutoUpdate = new AutoUpdateSettings().getValue();
 
-        log.debug(PreferencesManager.KEY_AUTO_UPDATE + " : " + isAutoUpdate);
+        log.debug("Auto update enabled: {}", isAutoUpdate);
         if (isAutoUpdate) {
             new NonGuiUpdater();
         }
@@ -127,13 +124,21 @@ public class Application {
 
     private static void checkIfUpdatesAvailable() {
         log.debug("Checking if updates available");
-        if (Internal.isCurrentTimeOlder(PreferencesManager.getLatestUpdateCheck(), 24)) {
-            log.info("Checking if updates are available now, last check was at: {}", PreferencesManager.getLatestUpdateCheck());
+        final Date latestUpdateCheckDate = new LatestUpdateCheckSettings().getValue();
+
+        if (lastCheckWasLaterThenADay(latestUpdateCheckDate)) {
+            log.info("Checking if updates are available now, last check was at: {}", latestUpdateCheckDate);
             Thread checker = new Thread(Application::runUpdateSilent);
             checker.start();
         } else {
             log.info("Updates were checked less then 24h ago");
         }
+    }
+
+    private static boolean lastCheckWasLaterThenADay(final Date latestUpdateCheckDate) {
+        final LocalDateTime updateDate = LocalDateTime.ofInstant(latestUpdateCheckDate.toInstant(),
+                ZoneId.systemDefault());
+        return updateDate.plus(1, ChronoUnit.DAYS).isBefore(LocalDateTime.now());
     }
 
     public enum UPDATE_MODE {NORMAL, SILENT}

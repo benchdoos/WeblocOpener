@@ -15,18 +15,9 @@
 
 package com.github.benchdoos.weblocopener.utils;
 
-import com.github.benchdoos.weblocopener.Main;
-import com.github.benchdoos.weblocopenercore.core.constants.ApplicationConstants;
-import com.github.benchdoos.weblocopenercore.utils.version.ApplicationVersion;
 import lombok.extern.log4j.Log4j2;
 
-import javax.swing.UIManager;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Properties;
-import java.util.Scanner;
+import javax.swing.*;
 
 @Log4j2
 public class CoreUtils {
@@ -44,7 +35,4 @@ public class CoreUtils {
         }
     }
 
-    public static ApplicationVersion getCurrentApplicationVersion() {
-        return com.github.benchdoos.weblocopenercore.utils.CoreUtils.getCurrentApplicationVersion();
-    }
 }

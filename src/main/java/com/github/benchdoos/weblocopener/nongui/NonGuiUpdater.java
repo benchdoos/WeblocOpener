@@ -20,12 +20,13 @@ import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.nongui.notify.NotifyManager;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.update.UpdaterManager;
-import com.github.benchdoos.weblocopener.utils.CoreUtils;
-import com.github.benchdoos.weblocopenercore.utils.Internal;
+import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
+import com.github.benchdoos.weblocopenercore.service.settings.impl.DevModeSettings;
+import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
-import com.github.benchdoos.weblocopenercore.utils.version.ApplicationVersion;
-import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopenercore.utils.VersionUtils;
 import lombok.extern.log4j.Log4j2;
+
 
 /**
  * Created by Eugene Zrazhevsky on 04.11.2016.
@@ -57,8 +58,8 @@ public class NonGuiUpdater {
 
     private void compareVersions() {
 
-        if (!PreferencesManager.isDevMode()) {
-            switch (Internal.versionCompare(serverApplicationVersion)) {
+        if (!new DevModeSettings().getValue()) {
+            switch (VersionUtils.versionCompare(serverApplicationVersion)) {
                 case SERVER_VERSION_IS_NEWER:
                     onNewVersionAvailable();
                     break;

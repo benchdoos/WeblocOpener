@@ -17,9 +17,9 @@ package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
-import com.github.benchdoos.weblocopenercore.utils.version.ApplicationVersion;
-import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
 import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
+import com.github.benchdoos.weblocopenercore.service.settings.impl.DarkModeActiveSettings;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -33,8 +33,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import static com.github.benchdoos.weblocopenercore.utils.system.SystemUtils.IS_WINDOWS_XP;
 
 @Log4j2
 class UpdateInfoDialog extends JDialog {
@@ -123,11 +121,8 @@ class UpdateInfoDialog extends JDialog {
 
     private void createGUI() {
         setTitle(Translation.getTranslatedString("UpdateDialogBundle", "infoAboutUpdate") + " — " + applicationVersion.getVersion());
-        if (IS_WINDOWS_XP) {
-            setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateInfoDialog.class.getResource("/images/infoIcon16_white.png")));
-        } else {
-            setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateInfoDialog.class.getResource("/images/infoIcon16.png")));
-        }
+        setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateInfoDialog.class.getResource("/images/infoIcon16.png")));
+
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setContentPane(contentPane);
@@ -185,7 +180,7 @@ class UpdateInfoDialog extends JDialog {
         String title = "<center style=\"font-size:14px; color:#4f7ece; padding-bottom:10px;\">" + updateTitle + "</center>";
         String defaultFooter = "</body></html>";
         updateInfo = updateInfo.replaceAll("\n", "<br>");
-        final String customTextColor = PreferencesManager.isDarkModeEnabledNow() ? "color: white;" : "";
+        final String customTextColor = new DarkModeActiveSettings().getValue() ? "color: white;" : "";
         updateInfo = "<p style=\"font-family:'Open Sans'; font-size:12px; padding:0; margin:0; " + customTextColor + " \">" + updateInfo + "</p>";
 
         return defaultHead + title + updateInfo + defaultFooter;

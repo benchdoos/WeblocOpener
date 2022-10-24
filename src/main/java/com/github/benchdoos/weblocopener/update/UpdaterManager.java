@@ -17,11 +17,12 @@ package com.github.benchdoos.weblocopener.update;
 
 import com.github.benchdoos.weblocopener.update.impl.UnixUpdater;
 import com.github.benchdoos.weblocopener.update.impl.WindowsUpdater;
-import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopenercore.utils.Internal;
+import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
+import com.github.benchdoos.weblocopenercore.domain.version.Beta;
+import com.github.benchdoos.weblocopenercore.service.settings.impl.InstallBetaUpdateSettings;
+import com.github.benchdoos.weblocopenercore.service.settings.impl.LatestUpdateCheckSettings;
+import com.github.benchdoos.weblocopenercore.utils.VersionUtils;
 import com.github.benchdoos.weblocopenercore.utils.system.OS;
-import com.github.benchdoos.weblocopenercore.utils.version.ApplicationVersion;
-import com.github.benchdoos.weblocopenercore.utils.version.Beta;
 import lombok.extern.log4j.Log4j2;
 import org.kohsuke.github.GHRelease;
 import org.kohsuke.github.GHRepository;
@@ -40,15 +41,16 @@ public class UpdaterManager {
 
     public static ApplicationVersion getLatestVersion(Updater updater) {
         final ApplicationVersion latestReleaseAppVersion = updater.getLatestReleaseAppVersion();
-        PreferencesManager.setLatestUpdateCheck(new Date());
 
-        if (PreferencesManager.isBetaUpdateInstalling()) {
+        new LatestUpdateCheckSettings().save(new Date());
+
+        if (new InstallBetaUpdateSettings().getValue()) {
             final ApplicationVersion latestBetaAppVersion = updater.getLatestBetaAppVersion();
 
             if (latestBetaAppVersion != null) {
                 log.debug("Comparing latest beta version: {} and latest release version: {}", latestBetaAppVersion, latestReleaseAppVersion);
-                if (Internal.versionCompare(latestBetaAppVersion, latestReleaseAppVersion)
-                        == Internal.VersionCompare.SERVER_VERSION_IS_NEWER) {
+                if (VersionUtils.versionCompare(latestBetaAppVersion, latestReleaseAppVersion)
+                        == VersionUtils.VersionCompare.SERVER_VERSION_IS_NEWER) {
                     return latestBetaAppVersion;
                 }
             }

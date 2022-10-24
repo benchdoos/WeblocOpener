@@ -15,7 +15,8 @@
 
 package com.github.benchdoos.weblocopener.nongui.notify;
 
-import com.github.benchdoos.weblocopenercore.utils.version.ApplicationVersion;
+
+import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
 
 public interface Notifier {
     void notifyUser(ApplicationVersion serverVersion);

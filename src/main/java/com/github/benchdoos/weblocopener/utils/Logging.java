@@ -15,7 +15,7 @@
 
 package com.github.benchdoos.weblocopener.utils;
 
-import com.github.benchdoos.weblocopenercore.core.constants.PathConstants;
+import com.github.benchdoos.weblocopenercore.constants.PathConstants;
 import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -59,6 +59,6 @@ public class Logging {
         System.out.println("Logging starts at: " + path);
         System.setProperty(WEBLOC_OPENER_LOG_APP_PROPERTY, path);
         final Logger log = LogManager.getLogger(Logging.getCurrentClassName());
-        log.info("Logging successfully started. Welcome to {}", CoreUtils.getApplicationVersionFullInformationString());
+        log.info("Logging successfully started. Welcome to WeblocOpener {}", CoreUtils.getCurrentApplicationVersion().getVersion());
     }
 }

@@ -15,7 +15,7 @@
 
 package com.github.benchdoos.weblocopener.core;
 
-import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopenercore.service.settings.impl.LocaleSettings;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.Locale;
@@ -24,10 +24,6 @@ import java.util.ResourceBundle;
 
 @Log4j2
 public class Translation {
-    public static final Locale[] SUPPORTED_LOCALES = {
-            new Locale("en", "EN"), new Locale("de", "DE"),
-            new Locale("fr", "FR"), new Locale("it", "IT"),
-            new Locale("ru", "RU")};
 
     private static volatile Locale locale;
     private final ResourceBundle messages;
@@ -35,7 +31,7 @@ public class Translation {
     private final String bundleName;
 
     public Translation(String bundleName) {
-        locale = PreferencesManager.getLocale();
+        locale = new LocaleSettings().getValue();
 
         this.bundleName = bundleName;
         this.bundlePath = "translations/" + bundleName;
@@ -45,7 +41,7 @@ public class Translation {
     public static String getTranslatedString(String stringBundleName, String message) {
         try {
             final String bundlePath = "translations/" + stringBundleName;
-            locale = PreferencesManager.getLocale();
+            locale = new LocaleSettings().getValue();
 
 
             log.debug("[TRANSLATION] Locale: {} {}; Bundle: {}:[{}]", locale.getCountry(),
@@ -62,7 +58,7 @@ public class Translation {
             log.info("For old locale: {} was found locale: {}", locale, supportedLocale);
             log.info("APPLYING new locale: {}", supportedLocale);
             locale = supportedLocale;
-            PreferencesManager.setLocale(supportedLocale);
+            new LocaleSettings().save(supportedLocale);
             return getTranslatedString(stringBundleName, message);
         } catch (Exception e) {
             log.warn("Could not translate string: {}:[{}] for locale: {}", stringBundleName, message, locale, e);
@@ -73,7 +69,7 @@ public class Translation {
     private static Locale getSupportedLocale(Locale locale) {
         log.info("Trying to get current locale for {}", locale);
 
-        for (Locale currentLocale : SUPPORTED_LOCALES) {
+        for (Locale currentLocale : com.github.benchdoos.weblocopenercore.service.translation.Translation.getSupportedLocales()) {
             try {
                 if (locale.getLanguage().equalsIgnoreCase(currentLocale.getLanguage())) {
                     return locale;

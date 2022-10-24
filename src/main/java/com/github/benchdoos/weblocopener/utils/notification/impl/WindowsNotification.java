@@ -16,8 +16,8 @@
 package com.github.benchdoos.weblocopener.utils.notification.impl;
 
 import com.github.benchdoos.weblocopener.core.Translation;
-import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.utils.notification.Notification;
+import com.github.benchdoos.weblocopenercore.service.settings.impl.ShowNotificationSettings;
 import lombok.extern.log4j.Log4j2;
 
 import javax.swing.*;
@@ -42,7 +42,7 @@ public class WindowsNotification implements Notification {
     }
 
     private void showNotification(String title, String message, TrayIcon.MessageType messageType) {
-        if (PreferencesManager.isNotificationsShown()) {
+        if (new ShowNotificationSettings().getValue()) {
             createTrayMessage(title, message, messageType);
         }
     }

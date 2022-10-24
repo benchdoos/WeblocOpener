@@ -15,56 +15,35 @@
 
 package com.github.benchdoos.weblocopener.gui;
 
-import com.github.benchdoos.jcolorful.core.JColorful;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.update.UpdaterManager;
-import com.github.benchdoos.weblocopener.utils.CoreUtils;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
-import com.github.benchdoos.weblocopenercore.core.constants.ApplicationConstants;
-import com.github.benchdoos.weblocopenercore.core.constants.PathConstants;
-import com.github.benchdoos.weblocopenercore.core.constants.StringConstants;
-import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopenercore.constants.StringConstants;
+import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
+import com.github.benchdoos.weblocopenercore.domain.version.Beta;
 import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
-import com.github.benchdoos.weblocopenercore.utils.Internal;
-import com.github.benchdoos.weblocopenercore.utils.version.ApplicationVersion;
-import com.github.benchdoos.weblocopenercore.utils.version.Beta;
+import com.github.benchdoos.weblocopenercore.service.WindowLauncher;
+import com.github.benchdoos.weblocopenercore.service.settings.impl.DevModeSettings;
+import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
+import com.github.benchdoos.weblocopenercore.utils.VersionUtils;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.validator.routines.UrlValidator;
 
-import javax.swing.AbstractButton;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.KeyStroke;
-import javax.swing.Timer;
-import javax.swing.WindowConstants;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Insets;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static com.github.benchdoos.weblocopener.core.ApplicationConstants.*;
-import static com.github.benchdoos.weblocopenercore.utils.system.SystemUtils.IS_WINDOWS_XP;
+import static com.github.benchdoos.weblocopener.core.ApplicationConstants.UPDATE_PATH_FILE;
 
 @SuppressWarnings({"ALL", "ResultOfMethodCallIgnored"})
 @Log4j2
@@ -325,14 +304,14 @@ public class UpdateDialog extends JFrame implements Translatable {
     }
 
     private void compareVersions() {
-        switch (Internal.versionCompare(serverApplicationVersion)) {
+        switch (VersionUtils.versionCompare(serverApplicationVersion)) {
             case SERVER_VERSION_IS_NEWER:
                 buttonOK.setEnabled(true);
                 buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOk"));
                 break;
             case CURRENT_VERSION_IS_NEWER:
                 buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkDev"));
-                buttonOK.setEnabled(PreferencesManager.isDevMode());
+                buttonOK.setEnabled(new DevModeSettings().getValue());
                 break;
             case VERSIONS_ARE_EQUAL:
                 buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkUp2Date"));
@@ -373,12 +352,7 @@ public class UpdateDialog extends JFrame implements Translatable {
         setTitle(Translation.getTranslatedString("UpdateDialogBundle", "windowTitle"));
         setContentPane(contentPane);
         getRootPane().setDefaultButton(buttonOK);
-        if (IS_WINDOWS_XP) {
-            setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/images/updateIconWhite256.png")));
-        } else {
-            setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/images/updateIconBlue256.png")));
-
-        }
+        setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/images/updateIconBlue256.png")));
 
         serverBetaLabel.setVisible(false);
 
@@ -529,16 +503,12 @@ public class UpdateDialog extends JFrame implements Translatable {
     private void onUpdateInfoButton() {
         if (serverApplicationVersion != null) {
             if (!serverApplicationVersion.getUpdateInfo().isEmpty()) {
-                UpdateInfoDialog dialog;
-                if (PreferencesManager.isDarkModeEnabledNow()) {
-                    JColorful colorful = new JColorful(ApplicationConstants.DARK_MODE_THEME);
-                    colorful.colorizeGlobal();
-                    dialog = new UpdateInfoDialog(serverApplicationVersion);
-                    colorful.colorize(dialog);
-                } else {
-                    dialog = new UpdateInfoDialog(serverApplicationVersion);
-                }
-                dialog.setVisible(true);
+                new WindowLauncher<UpdateInfoDialog>() {
+                    @Override
+                    public UpdateInfoDialog initWindow() {
+                        return new UpdateInfoDialog(serverApplicationVersion);
+                    }
+                }.getWindow().setVisible(true);
             }
         }
     }

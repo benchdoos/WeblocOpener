@@ -19,15 +19,14 @@ import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.nongui.notify.Notifier;
-import com.github.benchdoos.weblocopenercore.utils.version.ApplicationVersion;
-import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
+import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
+import com.github.benchdoos.weblocopenercore.service.settings.impl.AutoUpdateSettings;
 import lombok.extern.log4j.Log4j2;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import static com.github.benchdoos.weblocopenercore.utils.system.SystemUtils.IS_WINDOWS_XP;
 
 @Log4j2
 public class WindowsNotifier implements Notifier {
@@ -79,13 +78,8 @@ public class WindowsNotifier implements Notifier {
     }
 
     private void initGui() {
-        if (IS_WINDOWS_XP) {
-            trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(
-                    NonGuiUpdater.class.getResource("/images/updateIconWhite256.png")));
-        } else {
-            trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(
-                    NonGuiUpdater.class.getResource("/images/updateIconBlue256.png")));
-        }
+        trayIcon = new TrayIcon(Toolkit.getDefaultToolkit().getImage(
+                NonGuiUpdater.class.getResource("/images/updateIconBlue256.png")));
     }
 
     private MenuItem createExitItem() {
@@ -118,11 +112,12 @@ public class WindowsNotifier implements Notifier {
         final CheckboxMenuItem autoUpdateCheckBox = new CheckboxMenuItem(
                 Translation.getTranslatedString("NonGuiUpdaterBundle", "autoUpdateCheckBox"));
 
-        log.debug(PreferencesManager.KEY_AUTO_UPDATE + ": " + PreferencesManager.isAutoUpdateActive());
-        autoUpdateCheckBox.setState(PreferencesManager.isAutoUpdateActive());
+        Boolean isAutoUpdateEnabled = new AutoUpdateSettings().getValue();
+        log.debug("Auto update enabled: {}", isAutoUpdateEnabled);
+        autoUpdateCheckBox.setState(isAutoUpdateEnabled);
         autoUpdateCheckBox.addItemListener(e -> {
-            log.debug(PreferencesManager.KEY_AUTO_UPDATE + ": " + autoUpdateCheckBox.getState());
-            PreferencesManager.setAutoUpdateActive(autoUpdateCheckBox.getState());
+            log.debug("Auto update checkbox selected: " + autoUpdateCheckBox.getState());
+            new AutoUpdateSettings().save(autoUpdateCheckBox.getState());
         });
         return autoUpdateCheckBox;
     }

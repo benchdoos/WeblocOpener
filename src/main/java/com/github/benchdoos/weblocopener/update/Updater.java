@@ -15,8 +15,7 @@
 
 package com.github.benchdoos.weblocopener.update;
 
-import com.github.benchdoos.weblocopenercore.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopenercore.utils.version.ApplicationVersion;
+import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
 
 import java.io.IOException;
 
@@ -27,7 +26,7 @@ public interface Updater {
 
     /**
      * @return latest {@link ApplicationVersion}, giving Beta if
-     * {@link PreferencesManager#isBetaUpdateInstalling()} is {@code true}
+     * {@link com.github.benchdoos.weblocopenercore.service.settings.impl.InstallBetaUpdateSettings} is {@code true}
      * and Release is older then Beta version,
      * otherwise  will return Release version.
      */

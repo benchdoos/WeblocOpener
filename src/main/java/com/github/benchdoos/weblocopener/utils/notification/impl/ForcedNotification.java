@@ -18,8 +18,8 @@ package com.github.benchdoos.weblocopener.utils.notification.impl;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.notification.Notification;
-import com.github.benchdoos.weblocopenercore.core.constants.ApplicationConstants;
-import com.github.benchdoos.weblocopenercore.core.constants.StringConstants;
+import com.github.benchdoos.weblocopenercore.constants.ApplicationConstants;
+import com.github.benchdoos.weblocopenercore.constants.StringConstants;
 import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
 
 import javax.swing.JEditorPane;

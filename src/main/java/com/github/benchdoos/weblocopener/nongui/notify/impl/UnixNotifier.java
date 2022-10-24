@@ -18,7 +18,7 @@ package com.github.benchdoos.weblocopener.nongui.notify.impl;
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.nongui.notify.Notifier;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
-import com.github.benchdoos.weblocopenercore.utils.version.ApplicationVersion;
+import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
 
 public class UnixNotifier implements Notifier {
     @Override
