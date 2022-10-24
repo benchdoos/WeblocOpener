@@ -6,11 +6,11 @@
 #define MyAppURL "https://benchdoos.github.io/"
 #define MyAppExeName "WeblocOpener.exe"
 #define MyAppIconsFile "icons.icl"
-#define MyAppSourcePath "F:\Developer\JAVA\WeblocOpener"
-#define MyAppAdditionalPath "F:\Developer\JAVA\WeblocOpener\build\installer"
-#define ImagesPath "F:\Developer\JAVA\WeblocOpener\build\installer\images"
-#define ApplicationVersion GetFileVersion('F:\Developer\JAVA\WeblocOpener\build\WeblocOpener.exe')
-#define ApplicationCopyright GetFileCopyright('F:\Developer\JAVA\WeblocOpener\build\WeblocOpener.exe')
+#define MyAppSourcePath "Z:\work"
+#define MyAppAdditionalPath "Z:\work\build\installer"
+#define ImagesPath "Z:\work\build\installer\images"
+#define ApplicationVersion GetFileVersion('Z:\work\build\WeblocOpener.exe')
+#define ApplicationCopyright GetFileCopyright('Z:\work\build\WeblocOpener.exe')
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
