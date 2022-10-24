@@ -197,7 +197,7 @@
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
-                <version>1.7.24</version>
+                <version>2.1.2</version>
                 <configuration>
                     <dontWrapJar>false</dontWrapJar>
                     <headerType>gui</headerType>
@@ -218,12 +218,12 @@
                         <addDependencies>true</addDependencies>
                     </classPath>
                     <versionInfo>
-                        <fileVersion>${project.version}.${buildNumber}</fileVersion>
+                        <fileVersion>${project.version}.0</fileVersion>
                         <txtFileVersion>${project.version}.${buildNumber}</txtFileVersion>
                         <fileDescription>WeblocOpener</fileDescription>
                         <copyright>${copyright}</copyright>
-                        <productVersion>${project.version}.${buildNumber}</productVersion>
-                        <txtProductVersion>${project.version}.${buildNumber}</txtProductVersion>
+                        <productVersion>${project.version}.0</productVersion>
+                        <txtProductVersion>${project.version}.0</txtProductVersion>
                         <productName>WeblocOpener</productName>
                         <companyName>Eugene Zrazhevsky</companyName>
                         <internalName>WeblocOpener</internalName>
