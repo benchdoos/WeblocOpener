@@ -73,7 +73,7 @@ public class WindowsUpdater implements Updater {
         updateProgressBar(applicationVersion, installerFile);
 
         try {
-            FileUtils.copyURLToFile(new URL(applicationVersion.getDownloadUrl()), installerFile, Updater.CONNECTION_TIMEOUT, Updater.CONNECTION_TIMEOUT);
+            FileUtils.copyURLToFile(new URL(applicationVersion.getDownloadUrl()), installerFile);
 
             update(installerFile);
         } catch (IOException e) {

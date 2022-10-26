@@ -169,7 +169,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.0.2</version>
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
@@ -178,7 +177,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <outputDirectory>${project.build.directory}/classes/lib</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
@@ -186,7 +185,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -321,8 +319,8 @@
                                     </paths>
                                     <dst>/opt/${project.name}/icons</dst>
                                 </data>
-                                <data>
-                                    <!--Libraries (dependencies)-->
+                                <!--<data>
+                                    &lt;!&ndash;Libraries (dependencies)&ndash;&gt;
                                     <src>${project.build.directory}/lib</src>
                                     <type>directory</type>
                                     <mapper>
@@ -331,7 +329,7 @@
                                         <user>loader</user>
                                         <group>loader</group>
                                     </mapper>
-                                </data>
+                                </data>-->
                             </dataSet>
                         </configuration>
                     </execution>
@@ -408,6 +406,11 @@
             <artifactId>lombok</artifactId>
             <version>1.18.24</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>1.6</version>
         </dependency>
     </dependencies>
 
