@@ -38,31 +38,32 @@ public class Translation {
         this.messages = getTranslation();
     }
 
-    public static String getTranslatedString(String stringBundleName, String message) {
+    public static String getTranslatedString(String bundleName, String message) {
         try {
-            final String bundlePath = "translations/" + stringBundleName;
+            final String bundlePath = "translations/" + bundleName;
             locale = new LocaleSettings().getValue();
 
 
             log.debug("[TRANSLATION] Locale: {} {}; Bundle: {}:[{}]", locale.getCountry(),
-                    locale.getLanguage(), stringBundleName, message);
+                    locale.getLanguage(), bundleName, message);
 
             final ResourceBundle bundle = ResourceBundle.getBundle(bundlePath, locale);
 
             return bundle.getString(message);
         } catch (MissingResourceException e) {
             log.warn("Could not find bundle {}:[{}] for locale: {}, trying to get necessary locale",
-                    stringBundleName, message, locale);
+                    bundleName, message, locale);
             final Locale supportedLocale = getSupportedLocale(locale);
 
             log.info("For old locale: {} was found locale: {}", locale, supportedLocale);
             log.info("APPLYING new locale: {}", supportedLocale);
             locale = supportedLocale;
             new LocaleSettings().save(supportedLocale);
-            return getTranslatedString(stringBundleName, message);
+            return getTranslatedString(bundleName, message);
         } catch (Exception e) {
-            log.warn("Could not translate string: {}:[{}] for locale: {}", stringBundleName, message, locale, e);
-            throw new RuntimeException("Could not localize string: " + stringBundleName + ":[" + message + "]", e);
+            log.warn("[TRANSLATION] Could not translate string: {}:[{}] for locale: {}", bundleName,
+                    message, locale, e);
+            return message;
         }
     }
 
