@@ -555,11 +555,15 @@ public class UpdateDialog extends JFrame implements Translatable {
     }
 
     private void runCleanInstallerFile() {
-        final String installerFilePath = UPDATE_PATH_FILE + StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME
-                + serverApplicationVersion.getVersion() + ".exe";
-        log.info("Deleting file: " + installerFilePath);
-        File installer = new File(installerFilePath);
-        installer.deleteOnExit();
+        if (serverApplicationVersion != null) {
+            final String installerFilePath = UPDATE_PATH_FILE + StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME
+                    + serverApplicationVersion.getVersion() + ".exe";
+            log.info("Deleting file: " + installerFilePath);
+            File installer = new File(installerFilePath);
+            installer.deleteOnExit();
+        } else {
+            log.debug("No file to cleanup, serverApplicationVersion is null");
+        }
     }
 
 
