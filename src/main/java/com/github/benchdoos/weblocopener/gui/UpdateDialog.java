@@ -21,10 +21,12 @@ import com.github.benchdoos.weblocopener.update.UpdaterManager;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopenercore.constants.StringConstants;
+import com.github.benchdoos.weblocopenercore.domain.preferences.DevModeFeatureType;
 import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
 import com.github.benchdoos.weblocopenercore.domain.version.Beta;
 import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
 import com.github.benchdoos.weblocopenercore.service.WindowLauncher;
+import com.github.benchdoos.weblocopenercore.service.settings.impl.DevModeFeatureCheck;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DevModeSettings;
 import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
 import com.github.benchdoos.weblocopenercore.utils.VersionUtils;
@@ -310,8 +312,12 @@ public class UpdateDialog extends JFrame implements Translatable {
                 buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOk"));
                 break;
             case CURRENT_VERSION_IS_NEWER:
-                buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkDev"));
-                buttonOK.setEnabled(new DevModeSettings().getValue());
+                if (new DevModeFeatureCheck().isActive(DevModeFeatureType.UI_UPDATER_ENABLE_DEV_OPTIONS)) {
+                    buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkDev"));
+                    buttonOK.setEnabled(true);
+                } else {
+                    buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkUp2Date"));
+                }
                 break;
             case VERSIONS_ARE_EQUAL:
                 buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkUp2Date"));
