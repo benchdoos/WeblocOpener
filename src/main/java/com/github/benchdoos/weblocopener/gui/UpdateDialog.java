@@ -25,11 +25,11 @@ import com.github.benchdoos.weblocopenercore.domain.preferences.DevModeFeatureTy
 import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
 import com.github.benchdoos.weblocopenercore.domain.version.Beta;
 import com.github.benchdoos.weblocopenercore.gui.ImagePanel;
+import com.github.benchdoos.weblocopenercore.gui.Translatable;
 import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
 import com.github.benchdoos.weblocopenercore.service.WindowLauncher;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DarkModeActiveSettings;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DevModeFeatureCheck;
-import com.github.benchdoos.weblocopenercore.service.settings.impl.DevModeSettings;
 import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
 import com.github.benchdoos.weblocopenercore.utils.VersionUtils;
 import com.intellij.uiDesigner.core.GridConstraints;
