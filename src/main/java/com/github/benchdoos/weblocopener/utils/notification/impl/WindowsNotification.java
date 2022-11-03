@@ -16,7 +16,6 @@
 package com.github.benchdoos.weblocopener.utils.notification.impl;
 
 import com.github.benchdoos.weblocopener.core.Translation;
-import com.github.benchdoos.weblocopener.utils.notification.Notification;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.ShowNotificationSettings;
 import lombok.extern.log4j.Log4j2;
 
@@ -24,24 +23,10 @@ import javax.swing.*;
 import java.awt.*;
 
 @Log4j2
-public class WindowsNotification implements Notification {
-    @Override
-    public void showInfoNotification(String title, String message) {
-        showNotification(title, message, TrayIcon.MessageType.INFO);
-    }
+public class WindowsNotification extends AbstractNotification {
 
     @Override
-    public void showWarningNotification(String title, String message) {
-        showNotification(title, message, TrayIcon.MessageType.WARNING);
-
-    }
-
-    @Override
-    public void showErrorNotification(String title, String message) {
-        showNotification(title, message, TrayIcon.MessageType.ERROR);
-    }
-
-    private void showNotification(String title, String message, TrayIcon.MessageType messageType) {
+    public void showNotification(String title, String message, TrayIcon.MessageType messageType) {
         if (new ShowNotificationSettings().getValue()) {
             createTrayMessage(title, message, messageType);
         }

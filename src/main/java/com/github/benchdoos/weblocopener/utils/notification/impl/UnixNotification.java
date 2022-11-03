@@ -15,46 +15,36 @@
 
 package com.github.benchdoos.weblocopener.utils.notification.impl;
 
-import com.github.benchdoos.weblocopener.utils.notification.Notification;
+import io.jsonwebtoken.lang.Objects;
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
 import java.io.IOException;
 
 @Log4j2
-public class UnixNotification implements Notification {
+public class UnixNotification extends AbstractNotification {
     private static final int TIME_NOTIFICATION_DELAY = 50_000; //5 secs
 
-    private static void createNotification(String title, String message, TrayIcon.MessageType messageType) {
-
-        title = prepareString(title);
-        message = prepareString(message);
-
-
-        showNotification(title, message, getMessageType(messageType));
-    }
-
-    private static String prepareString(String string) {
-        return string == null ? "" : string;
-    }
-
     private static String getMessageType(TrayIcon.MessageType messageType) {
+        var result = "dialog-information";
         switch (messageType) {
-            case WARNING: {
-                return "dialog-warning";
-            }
-            case ERROR: {
-                return "dialog-error";
-            }
-            default: {
-                return "dialog-information";
-            }
+            case WARNING -> result = "dialog-warning";
+            case ERROR -> result = "dialog-error";
         }
+        return result;
     }
 
-    private static void showNotification(String title, String message, String type) {
+    @Override
+    public void showNotification(String title, String message, TrayIcon.MessageType messageType) {
+
+        String preparedTitle = Objects.nullSafeToString(title);
+        String preparedMessage = Objects.nullSafeToString(message);
+        String stringType = getMessageType(messageType);
+
+        showNotificationWindow(preparedTitle, preparedMessage, stringType);
+    }
+
+    private static void showNotificationWindow(String title, String message, String type) {
         try {
             Runtime runtime = Runtime.getRuntime();
 
@@ -68,20 +58,5 @@ public class UnixNotification implements Notification {
         } catch (IOException e) {
             log.warn("Can not create notification", e);
         }
-    }
-
-    @Override
-    public void showInfoNotification(String title, String message) {
-        createNotification(title, message, TrayIcon.MessageType.INFO);
-    }
-
-    @Override
-    public void showWarningNotification(String title, String message) {
-        createNotification(title, message, TrayIcon.MessageType.WARNING);
-    }
-
-    @Override
-    public void showErrorNotification(String title, String message) {
-        createNotification(title, message, TrayIcon.MessageType.ERROR);
     }
 }

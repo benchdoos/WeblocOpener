@@ -17,7 +17,6 @@ package com.github.benchdoos.weblocopener.utils.notification.impl;
 
 import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
-import com.github.benchdoos.weblocopener.utils.notification.Notification;
 import com.github.benchdoos.weblocopenercore.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopenercore.constants.StringConstants;
 import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
@@ -25,10 +24,9 @@ import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
 import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.event.HyperlinkEvent;
-import java.awt.Color;
-import java.awt.Component;
+import java.awt.*;
 
-public class ForcedNotification implements Notification {
+public class ForcedNotification extends AbstractNotification {
     private static final int MAXIMUM_MESSAGE_SIZE = 150;
 
     private final Component component;
@@ -37,7 +35,8 @@ public class ForcedNotification implements Notification {
         this.component = component;
     }
 
-    private void showDefaultSystemErrorMessage(Component parentComponent, String title, String message, int messageLevel) {
+    private void showDefaultSystemErrorMessage(Component parentComponent, String title, String message,
+                                               TrayIcon.MessageType messageType) {
         JEditorPane jEditorPane = new JEditorPane();
         jEditorPane.setContentType("text/html");
         jEditorPane.setEditable(false);
@@ -52,13 +51,11 @@ public class ForcedNotification implements Notification {
 
         });
         jEditorPane.setText(message);
-        int messageType = JOptionPane.ERROR_MESSAGE;
-        if ((messageLevel == JOptionPane.PLAIN_MESSAGE) || (messageLevel == JOptionPane.INFORMATION_MESSAGE)) {
-            messageType = JOptionPane.INFORMATION_MESSAGE;
-        } else {
-            if (messageLevel == JOptionPane.WARNING_MESSAGE) {
-                messageType = JOptionPane.WARNING_MESSAGE;
-            }
+
+        int optionPaneType = JOptionPane.ERROR_MESSAGE;
+        switch (messageType) {
+            case NONE, INFO -> optionPaneType = JOptionPane.INFORMATION_MESSAGE;
+            case WARNING -> optionPaneType = JOptionPane.WARNING_MESSAGE;
         }
 
         if (title == null) {
@@ -67,40 +64,36 @@ public class ForcedNotification implements Notification {
 
         JOptionPane.showMessageDialog(parentComponent,
                 jEditorPane,
-                "[" + ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME + "] " + title, messageType);
+                "[" + ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME + "] " + title, optionPaneType);
     }
 
-    private void showMessage(String title, String message, int messageLevel) {
+    @Override
+    public void showNotification(String title, String message, TrayIcon.MessageType messageType) {
         if (message.length() > MAXIMUM_MESSAGE_SIZE) {
-            message = message.substring(0, Math.min(message.length(), MAXIMUM_MESSAGE_SIZE)) + "...";
+            message = message.substring(0, MAXIMUM_MESSAGE_SIZE) + "...";
         }
 
         String msg;
-        if (messageLevel == JOptionPane.ERROR_MESSAGE) {
+        if (messageType == TrayIcon.MessageType.ERROR) {
 
             msg = "<HTML><BODY><P>" + message + "<br>" + Translation.getTranslatedString("CommonsBundle", "pleaseVisitMessage") + " " +
                     "<a href=\"" + StringConstants.UPDATE_WEB_URL + "\">" + StringConstants.UPDATE_WEB_URL + "</P></BODY></HTML>";
         } else {
             msg = message;
         }
-        showDefaultSystemErrorMessage(component, title, msg, messageLevel);
-    }
-
-    @Override
-    public void showInfoNotification(String title, String message) {
-        showMessage(title, message, JOptionPane.INFORMATION_MESSAGE);
+        showDefaultSystemErrorMessage(component, title, msg, messageType);
     }
 
     @Override
     public void showWarningNotification(String title, String message) {
         FrameUtils.shakeFrame(component);
-        showMessage(title, message, JOptionPane.WARNING_MESSAGE);
+        showNotification(title, message, TrayIcon.MessageType.WARNING);
     }
 
     @Override
     public void showErrorNotification(String title, String message) {
         FrameUtils.shakeFrame(component);
-        showMessage(title, message, JOptionPane.ERROR_MESSAGE);
+        showNotification(title, message, TrayIcon.MessageType.ERROR);
     }
 
 }
