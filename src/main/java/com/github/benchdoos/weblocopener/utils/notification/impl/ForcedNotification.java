@@ -15,14 +15,13 @@
 
 package com.github.benchdoos.weblocopener.utils.notification.impl;
 
-import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopenercore.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopenercore.constants.StringConstants;
 import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
+import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 import com.github.benchdoos.weblocopenercore.utils.FrameUtils;
 
-import javax.swing.JEditorPane;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import java.awt.*;
 
@@ -76,7 +75,7 @@ public class ForcedNotification extends AbstractNotification {
         String msg;
         if (messageType == TrayIcon.MessageType.ERROR) {
 
-            msg = "<HTML><BODY><P>" + message + "<br>" + Translation.getTranslatedString("CommonsBundle", "pleaseVisitMessage") + " " +
+            msg = "<HTML><BODY><P>" + message + "<br>" + Translation.get("CommonsBundle", "pleaseVisitMessage") + " " +
                     "<a href=\"" + StringConstants.UPDATE_WEB_URL + "\">" + StringConstants.UPDATE_WEB_URL + "</P></BODY></HTML>";
         } else {
             msg = message;

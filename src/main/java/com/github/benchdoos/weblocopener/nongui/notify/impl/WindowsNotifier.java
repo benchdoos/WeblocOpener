@@ -16,11 +16,11 @@
 package com.github.benchdoos.weblocopener.nongui.notify.impl;
 
 import com.github.benchdoos.weblocopener.core.Application;
-import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.nongui.notify.Notifier;
 import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.AutoUpdateSettings;
+import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 import lombok.extern.log4j.Log4j2;
 
 import java.awt.*;
@@ -69,7 +69,7 @@ public class WindowsNotifier implements Notifier {
             }
         });
 
-        trayIcon.setToolTip(Translation.getTranslatedString("UpdateDialogBundle", "windowTitle"));
+        trayIcon.setToolTip(Translation.get("UpdateDialogBundle", "windowTitle"));
         try {
             tray.add(trayIcon);
         } catch (AWTException e) {
@@ -84,7 +84,7 @@ public class WindowsNotifier implements Notifier {
 
     private MenuItem createExitItem() {
         MenuItem exit = new MenuItem(
-                Translation.getTranslatedString("NonGuiUpdaterBundle", "exitButton"));
+                Translation.get("NonGuiUpdaterBundle", "exitButton"));
 
         exit.addActionListener(e -> tray.remove(trayIcon));
         return exit;
@@ -92,7 +92,7 @@ public class WindowsNotifier implements Notifier {
 
     private MenuItem createSettingsItem() {
         MenuItem settings = new MenuItem(
-                Translation.getTranslatedString("NonGuiUpdaterBundle", "settingsButton"));
+                Translation.get("NonGuiUpdaterBundle", "settingsButton"));
         settings.addActionListener(e -> {
             com.github.benchdoos.weblocopenercore.core.Application.runSettingsDialog(Application.getApplicationPath());
             tray.remove(trayIcon);
@@ -102,15 +102,15 @@ public class WindowsNotifier implements Notifier {
 
     private void showUpdateAvailableTrayIconMessage(ApplicationVersion serverApplicationVersion) {
         Translation translation = new Translation("UpdateDialogBundle");
-        final String windowTitle = translation.getTranslatedString("windowTitle");
-        final String windowMessage = translation.getTranslatedString("newVersionAvailableTrayNotification")
+        final String windowTitle = translation.get("windowTitle");
+        final String windowMessage = translation.get("newVersionAvailableTrayNotification")
                 + ": " + serverApplicationVersion.getVersion();
         trayIcon.displayMessage(windowTitle, windowMessage, TrayIcon.MessageType.INFO);
     }
 
     private CheckboxMenuItem createCheckBoxItem() {
         final CheckboxMenuItem autoUpdateCheckBox = new CheckboxMenuItem(
-                Translation.getTranslatedString("NonGuiUpdaterBundle", "autoUpdateCheckBox"));
+                Translation.get("NonGuiUpdaterBundle", "autoUpdateCheckBox"));
 
         Boolean isAutoUpdateEnabled = new AutoUpdateSettings().getValue();
         log.debug("Auto update enabled: {}", isAutoUpdateEnabled);

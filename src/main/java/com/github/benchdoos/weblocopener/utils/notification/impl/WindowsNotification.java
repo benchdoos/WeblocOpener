@@ -15,8 +15,8 @@
 
 package com.github.benchdoos.weblocopener.utils.notification.impl;
 
-import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.ShowNotificationSettings;
+import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 import lombok.extern.log4j.Log4j2;
 
 import javax.swing.*;
@@ -45,7 +45,7 @@ public class WindowsNotification extends AbstractNotification {
 
             PopupMenu menu = new PopupMenu();
 
-            MenuItem close = new MenuItem(Translation.getTranslatedString("CommonsBundle", "closeButton"));
+            MenuItem close = new MenuItem(Translation.get("CommonsBundle", "closeButton"));
             close.addActionListener(e -> tray.remove(trayIcon));
 
             menu.add(close);

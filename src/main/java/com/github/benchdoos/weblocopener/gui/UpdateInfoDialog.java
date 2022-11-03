@@ -15,11 +15,11 @@
 
 package com.github.benchdoos.weblocopener.gui;
 
-import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
 import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DarkModeActiveSettings;
+import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -138,7 +138,7 @@ class UpdateInfoDialog extends JDialog {
     }
 
     private void createGUI() {
-        setTitle(Translation.getTranslatedString("UpdateDialogBundle", "infoAboutUpdate") + " — " + applicationVersion.getVersion());
+        setTitle(Translation.get("UpdateDialogBundle", "infoAboutUpdate") + " — " + applicationVersion.getVersion());
         setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateInfoDialog.class.getResource("/images/infoIcon16.png")));
 
 

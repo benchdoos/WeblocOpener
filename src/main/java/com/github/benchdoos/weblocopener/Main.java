@@ -16,12 +16,12 @@
 package com.github.benchdoos.weblocopener;
 
 import com.github.benchdoos.weblocopener.core.Application;
-import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopenercore.constants.ApplicationArgument;
 import com.github.benchdoos.weblocopenercore.constants.PathConstants;
 import com.github.benchdoos.weblocopenercore.exceptions.UnsupportedSystemException;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DevModeSettings;
+import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 import com.github.benchdoos.weblocopenercore.utils.system.OS;
 import com.github.benchdoos.weblocopenercore.utils.system.SystemUtils;
 import lombok.extern.log4j.Log4j2;
@@ -47,7 +47,7 @@ public class Main {
             new Application(args);
         } catch (UnsupportedSystemException e) {
             log.fatal("System not supported", e);
-            final String translatedString = Translation.getTranslatedString("CommonsBundle", "systemNotSupported");
+            final String translatedString = Translation.get("CommonsBundle", "systemNotSupported");
             final String message = translatedString + " " + OS.getCurrentOS().name();
 
             NotificationManager.getForcedNotification(null).showErrorNotification(message, message);
