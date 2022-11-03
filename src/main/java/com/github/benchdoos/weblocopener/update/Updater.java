@@ -20,14 +20,11 @@ import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
 import java.io.IOException;
 
 public interface Updater {
-    String WINDOWS_SETUP_DEFAULT_NAME = "WeblocOpenerSetup.exe";
-    String DEBIAN_SETUP_DEFAULT_NAME = "WeblocOpener.deb";
-    int CONNECTION_TIMEOUT = 5000;
 
     /**
      * @return latest {@link ApplicationVersion}, giving Beta if
      * {@link com.github.benchdoos.weblocopenercore.service.settings.impl.InstallBetaUpdateSettings} is {@code true}
-     * and Release is older then Beta version,
+     * and Release is older than Beta version,
      * otherwise  will return Release version.
      */
     ApplicationVersion getLatestAppVersion();
