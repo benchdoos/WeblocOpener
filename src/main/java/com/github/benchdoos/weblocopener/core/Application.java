@@ -24,7 +24,6 @@ import com.github.benchdoos.weblocopenercore.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopenercore.service.WindowLauncher;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.AutoUpdateSettings;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.LatestUpdateCheckSettings;
-import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
@@ -43,8 +42,6 @@ public class Application {
     public Application(final String[] args) {
         log.info("{} starts in mode: {}", ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, Main.getCurrentMode());
         log.info("{} starts with arguments: {}", ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME, Arrays.toString(args));
-
-        CoreUtils.enableLookAndFeel();
 
         manageArgumentsForNew(args);
     }

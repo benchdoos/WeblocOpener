@@ -22,6 +22,7 @@ import com.github.benchdoos.weblocopenercore.exceptions.UnsupportedSystemExcepti
 import com.github.benchdoos.weblocopenercore.service.notification.NotificationManager;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DevModeSettings;
 import com.github.benchdoos.weblocopenercore.service.translation.Translation;
+import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
 import com.github.benchdoos.weblocopenercore.utils.system.OS;
 import com.github.benchdoos.weblocopenercore.utils.system.SystemUtils;
 import lombok.extern.log4j.Log4j2;
@@ -41,6 +42,8 @@ public class Main {
         currentMode = manageMode(args);
         try {
             log.info("Logging to: {}", PathConstants.APP_LOG_FOLDER_PATH);
+            CoreUtils.enableLookAndFeel();
+
             log.info("Current mode: {}", currentMode);
             SystemUtils.checkIfSystemIsSupported();
 
@@ -55,6 +58,10 @@ public class Main {
                     .showErrorNotification(message, message);
         } catch (Exception e) {
             log.fatal("System exited with exception", e);
+            String message = Translation.get("WeblocOpenerCommonsBundle", "unexpectedException");
+            NotificationManager.getForcedNotification(null)
+                    .setThrowable(e)
+                    .showErrorNotification(message, message);
         }
     }
 
