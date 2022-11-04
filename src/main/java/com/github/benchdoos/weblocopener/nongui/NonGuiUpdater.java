@@ -19,8 +19,8 @@ import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.nongui.notify.NotifyManager;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.update.UpdaterManager;
-import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
+import com.github.benchdoos.weblocopenercore.service.notification.NotificationManager;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DevModeSettings;
 import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
@@ -49,7 +49,8 @@ public class NonGuiUpdater {
             log.warn("Can not get server version");
             if (Application.updateMode != Application.UPDATE_MODE.SILENT) {
                 Translation translation = new Translation("UpdaterBundle");
-                NotificationManager.getForcedNotification(null).showErrorNotification(
+                NotificationManager.getForcedNotification(null)
+                        .showErrorNotification(
                         translation.get("canNotUpdateTitle"),
                         translation.get("canNotUpdateMessage"));
             }
