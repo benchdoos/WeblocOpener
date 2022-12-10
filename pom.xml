@@ -223,7 +223,7 @@
                     <stayAlive>false</stayAlive>
                     <restartOnCrash>false</restartOnCrash>
                     <!--<manifest></manifest>-->
-                    <icon>${project.basedir}/build/installer/images/balloonIcon256.ico</icon>
+                    <icon>${project.basedir}/build/installer/images/balloonIcon512.ico</icon>
                     <classPath>
                         <mainClass>com.github.benchdoos.weblocopener.Main</mainClass>
                         <addDependencies>true</addDependencies>
@@ -393,12 +393,6 @@
             <artifactId>annotations</artifactId>
             <version>17.0.0</version>
             <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.kohsuke</groupId>
-            <artifactId>github-api</artifactId>
-            <version>1.95</version>
         </dependency>
 
         <dependency>

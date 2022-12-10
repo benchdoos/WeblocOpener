@@ -16,57 +16,53 @@
 package com.github.benchdoos.weblocopener;
 
 import com.github.benchdoos.weblocopener.core.Application;
-import com.github.benchdoos.weblocopener.core.Translation;
-import com.github.benchdoos.weblocopener.utils.Logging;
-import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopenercore.constants.ApplicationArgument;
+import com.github.benchdoos.weblocopenercore.constants.PathConstants;
 import com.github.benchdoos.weblocopenercore.exceptions.UnsupportedSystemException;
+import com.github.benchdoos.weblocopenercore.service.notification.NotificationManager;
+import com.github.benchdoos.weblocopenercore.service.settings.impl.DevModeSettings;
+import com.github.benchdoos.weblocopenercore.service.translation.Translation;
+import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
 import com.github.benchdoos.weblocopenercore.utils.system.OS;
 import com.github.benchdoos.weblocopenercore.utils.system.SystemUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.Arrays;
 
-import static com.github.benchdoos.weblocopener.core.ApplicationConstants.UPDATER_APPLICATION_NAME;
 import static com.github.benchdoos.weblocopenercore.constants.ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
 
+@Log4j2
 public class Main {
     private static MODE currentMode;
-    private static Logger log;
-
 
     public Main(String[] args) {
-        System.out.println("WeblocOpener starting with args: " + Arrays.toString(args));
+        log.info(WEBLOCOPENER_APPLICATION_NAME + " starting with args: " + Arrays.toString(args));
+        log.debug("Dev mode: {}", new DevModeSettings().getValue());
 
         currentMode = manageMode(args);
-        initLogging(currentMode);
         try {
+            log.info("Logging to: {}", PathConstants.APP_LOG_FOLDER_PATH);
+            CoreUtils.enableLookAndFeel();
+
+            log.info("Current mode: {}", currentMode);
             SystemUtils.checkIfSystemIsSupported();
 
             new Application(args);
         } catch (UnsupportedSystemException e) {
             log.fatal("System not supported", e);
-            final String translatedString = Translation.getTranslatedString("CommonsBundle", "systemNotSupported");
+            final String translatedString = Translation.get("CommonsBundle", "systemNotSupported");
             final String message = translatedString + " " + OS.getCurrentOS().name();
 
-            NotificationManager.getForcedNotification(null).showErrorNotification(message, message);
+            NotificationManager.getForcedNotification(null)
+                    .setThrowable(e)
+                    .showErrorNotification(message, message);
         } catch (Exception e) {
             log.fatal("System exited with exception", e);
+            String message = Translation.get("WeblocOpenerCommonsBundle", "unexpectedException");
+            NotificationManager.getForcedNotification(null)
+                    .setThrowable(e)
+                    .showErrorNotification(message, message);
         }
-    }
-
-
-    private static void initLogging(MODE mode) {
-        switch (mode) {
-            case WEBLOCOPENER:
-                new Logging(WEBLOCOPENER_APPLICATION_NAME);
-                break;
-            case UPDATE:
-                new Logging(UPDATER_APPLICATION_NAME);
-                break;
-        }
-        log = LogManager.getLogger(Logging.getCurrentClassName());
     }
 
     public static void main(String[] args) {

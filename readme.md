@@ -1,4 +1,4 @@
-[<img src="/img/new_header.png" align="right" width="888" />](https://vk.cc/6wK76Z)
+[<img src="/img/header.png" align="right" width="888" />](https://vk.cc/6wK76Z)
 
 # WeblocOpener
 

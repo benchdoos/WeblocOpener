@@ -15,7 +15,7 @@
 
 package com.github.benchdoos.weblocopener.utils;
 
-import com.github.benchdoos.weblocopener.update.Updater;
+import com.github.benchdoos.weblocopener.core.ApplicationConstants;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
@@ -32,8 +32,8 @@ public class CleanManager {
             final File[] files = folder.listFiles();
             if (files != null) {
                 for (File file : files) {
-                    final boolean windows = file.getName().contains(Updater.WINDOWS_SETUP_DEFAULT_NAME);
-                    final boolean debian = file.getName().contains(Updater.DEBIAN_SETUP_DEFAULT_NAME);
+                    final boolean windows = file.getName().contains(ApplicationConstants.WINDOWS_SETUP_DEFAULT_NAME);
+                    final boolean debian = file.getName().contains(ApplicationConstants.DEBIAN_SETUP_DEFAULT_NAME);
                     if (windows || debian) {
                         final boolean delete = file.delete();
                         log.info("Setup file was deleted ({}): {}", file, delete);

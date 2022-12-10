@@ -45,21 +45,21 @@ public class UnixUpdater implements Updater {
     public ApplicationVersion getLatestReleaseAppVersion() {
         if (latestReleaseVersion != null) return latestReleaseVersion;
 
-        return latestReleaseVersion = UpdaterManager.getLatestReleaseVersion(Updater.DEBIAN_SETUP_DEFAULT_NAME);
+        return latestReleaseVersion = UpdaterManager.getLatestReleaseVersion(ApplicationConstants.DEBIAN_SETUP_DEFAULT_NAME);
     }
 
     @Override
     public ApplicationVersion getLatestBetaAppVersion() {
         if (latestBetaVersion != null) return latestBetaVersion;
 
-        return latestBetaVersion = UpdaterManager.getLatestBetaVersion(Updater.DEBIAN_SETUP_DEFAULT_NAME);
+        return latestBetaVersion = UpdaterManager.getLatestBetaVersion(ApplicationConstants.DEBIAN_SETUP_DEFAULT_NAME);
     }
 
     @Override
     public void startUpdate(ApplicationVersion applicationVersion) throws IOException {
         log.info("Starting update for {}", applicationVersion.getVersion());
         File installerFile = new File(
-                ApplicationConstants.UPDATE_PATH_FILE + DEBIAN_SETUP_DEFAULT_NAME);
+                ApplicationConstants.UPDATE_PATH_FILE + ApplicationConstants.DEBIAN_SETUP_DEFAULT_NAME);
         if (!installerFile.exists()) {
             updateAndInstall(applicationVersion, installerFile);
         } else {
@@ -77,7 +77,7 @@ public class UnixUpdater implements Updater {
         updateProgressBar(applicationVersion, installerFile);
 
         try {
-            FileUtils.copyURLToFile(new URL(applicationVersion.getDownloadUrl()), installerFile);
+            FileUtils.copyURLToFile(new URL(applicationVersion.getDownloadUrl()), installerFile, ApplicationConstants.CONNECTION_TIMEOUT, ApplicationConstants.CONNECTION_TIMEOUT);
 
             update(installerFile);
         } catch (IOException e) {
@@ -118,7 +118,7 @@ public class UnixUpdater implements Updater {
     @Override
     public String toString() {
         return "UnixUpdater [" +
-                "installerFile = " + DEBIAN_SETUP_DEFAULT_NAME +
+                "installerFile = " + ApplicationConstants.DEBIAN_SETUP_DEFAULT_NAME +
                 "]";
     }
 
