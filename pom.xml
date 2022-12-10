@@ -212,7 +212,7 @@
                     <stayAlive>false</stayAlive>
                     <restartOnCrash>false</restartOnCrash>
                     <!--<manifest></manifest>-->
-                    <icon>${project.basedir}/build/installer/images/balloonIcon256.ico</icon>
+                    <icon>${project.basedir}/build/installer/images/balloonIcon512.ico</icon>
                     <classPath>
                         <mainClass>com.github.benchdoos.weblocopener.Main</mainClass>
                         <addDependencies>true</addDependencies>
