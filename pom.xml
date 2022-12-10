@@ -208,7 +208,7 @@
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
-                <version>2.1.2</version>
+                <version>2.2.0</version>
                 <configuration>
                     <dontWrapJar>false</dontWrapJar>
                     <headerType>gui</headerType>
@@ -218,7 +218,7 @@
                     <!--<cmdLine></cmdLine>-->
                     <chdir>.</chdir>
                     <priority>normal</priority>
-                    <downloadUrl>http://java.com/download</downloadUrl>
+                    <downloadUrl>https://adoptium.net/temurin/releases/</downloadUrl>
                     <supportUrl>https://github.com/benchdoos/WeblocOpener/issues</supportUrl>
                     <stayAlive>false</stayAlive>
                     <restartOnCrash>false</restartOnCrash>
@@ -243,13 +243,12 @@
                         <language>ENGLISH_US</language>
                     </versionInfo>
                     <jre>
-                        <!--<path></path>-->
-                        <bundledJre64Bit>false</bundledJre64Bit>
-                        <bundledJreAsFallback>false</bundledJreAsFallback>
-                        <minVersion>1.8.0</minVersion>
-                        <!--<maxVersion></maxVersion>-->
-                        <jdkPreference>preferJre</jdkPreference>
-                        <runtimeBits>64/32</runtimeBits>
+                        <path>%JAVA_HOME%;%PATH%</path>
+<!--                        <bundledJre64Bit>false</bundledJre64Bit>-->
+<!--                        <bundledJreAsFallback>false</bundledJreAsFallback>-->
+                        <minVersion>1.17.0</minVersion>
+<!--                        <jdkPreference>preferJre</jdkPreference>-->
+<!--                        <runtimeBits>64/32</runtimeBits>-->
                     </jre>
                 </configuration>
                 <executions>
