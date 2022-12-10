@@ -15,21 +15,21 @@
 
 package com.github.benchdoos.weblocopener.gui;
 
-import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.update.UpdaterManager;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
-import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
 import com.github.benchdoos.weblocopenercore.constants.StringConstants;
 import com.github.benchdoos.weblocopenercore.domain.preferences.DevModeFeatureType;
 import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
 import com.github.benchdoos.weblocopenercore.domain.version.Beta;
 import com.github.benchdoos.weblocopenercore.gui.ImagePanel;
+import com.github.benchdoos.weblocopenercore.gui.Translatable;
 import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
 import com.github.benchdoos.weblocopenercore.service.WindowLauncher;
+import com.github.benchdoos.weblocopenercore.service.notification.NotificationManager;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DarkModeActiveSettings;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DevModeFeatureCheck;
-import com.github.benchdoos.weblocopenercore.service.settings.impl.DevModeSettings;
+import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
 import com.github.benchdoos.weblocopenercore.utils.VersionUtils;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -318,7 +318,7 @@ public class UpdateDialog extends JFrame implements Translatable {
 
             progressBar.setIndeterminate(false);
             buttonOK.setEnabled(true);
-            buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "retryButton"));
+            buttonOK.setText(Translation.get("UpdateDialogBundle", "retryButton"));
             buttonOK.addActionListener(e1 -> {
                 progressBar.setIndeterminate(true);
                 checkForUpdates();
@@ -336,18 +336,18 @@ public class UpdateDialog extends JFrame implements Translatable {
         switch (VersionUtils.versionCompare(serverApplicationVersion)) {
             case SERVER_VERSION_IS_NEWER:
                 buttonOK.setEnabled(true);
-                buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOk"));
+                buttonOK.setText(Translation.get("UpdateDialogBundle", "buttonOk"));
                 break;
             case CURRENT_VERSION_IS_NEWER:
                 if (new DevModeFeatureCheck().isActive(DevModeFeatureType.UI_UPDATER_ENABLE_DEV_OPTIONS)) {
-                    buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkDev"));
+                    buttonOK.setText(Translation.get("UpdateDialogBundle", "buttonOkDev"));
                     buttonOK.setEnabled(true);
                 } else {
-                    buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkUp2Date"));
+                    buttonOK.setText(Translation.get("UpdateDialogBundle", "buttonOkUp2Date"));
                 }
                 break;
             case VERSIONS_ARE_EQUAL:
-                buttonOK.setText(Translation.getTranslatedString("UpdateDialogBundle", "buttonOkUp2Date"));
+                buttonOK.setText(Translation.get("UpdateDialogBundle", "buttonOkUp2Date"));
                 break;
         }
     }
@@ -382,7 +382,7 @@ public class UpdateDialog extends JFrame implements Translatable {
     }
 
     private void iniGui() {
-        setTitle(Translation.getTranslatedString("UpdateDialogBundle", "windowTitle"));
+        setTitle(Translation.get("UpdateDialogBundle", "windowTitle"));
         setContentPane(contentPane);
         getRootPane().setDefaultButton(buttonOK);
         setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/images/updateIconBlue256.png")));
@@ -468,7 +468,7 @@ public class UpdateDialog extends JFrame implements Translatable {
         initCurrentVersionInfo();
 
         availableVersionLabel.setText(
-                Translation.getTranslatedString("UpdateDialogBundle", "availableVersionLabelUnknown"));
+                Translation.get("UpdateDialogBundle", "availableVersionLabelUnknown"));
     }
 
     private void initCurrentVersionInfo() {
@@ -513,14 +513,14 @@ public class UpdateDialog extends JFrame implements Translatable {
                     Translation translation = new Translation("UpdateDialogBundle");
 
                     NotificationManager.getForcedNotification(this).showErrorNotification(
-                            translation.getTranslatedString("unableToUpdateTitle"),
-                            translation.getTranslatedString("lostConnectionMessage"));
+                            translation.get("unableToUpdateTitle"),
+                            translation.get("lostConnectionMessage"));
                 } else {
                     log.warn("Could not start update, there is no available version for this system", e);
                     Translation translation = new Translation("UpdateDialogBundle");
                     NotificationManager.getForcedNotification(this).showErrorNotification(
-                            translation.getTranslatedString("unableToUpdateTitle"),
-                            translation.getTranslatedString("noAvailableVersion"));
+                            translation.get("unableToUpdateTitle"),
+                            translation.get("noAvailableVersion"));
                 }
             }
             if (!Thread.currentThread().isInterrupted()) {
@@ -584,13 +584,13 @@ public class UpdateDialog extends JFrame implements Translatable {
     @Override
     public void translate() {
         Translation translation = new Translation("UpdateDialogBundle");
-        currentVersionStringLabel.setText(translation.getTranslatedString("currentVersionStringLabel"));
-        availableVersionStringLabel.setText(translation.getTranslatedString("availableVersionStringLabel"));
-        updateInfoButton.setToolTipText(translation.getTranslatedString("infoAboutUpdate"));
-        buttonOK.setText(translation.getTranslatedString("buttonOk"));
-        manualDownloadButton.setText(translation.getTranslatedString("manualDownloadButtonText"));
-        manualDownloadButton.setToolTipText(translation.getTranslatedString("manualDownloadButtonToolTip"));
-        buttonCancel.setText(translation.getTranslatedString("buttonCancel"));
+        currentVersionStringLabel.setText(translation.get("currentVersionStringLabel"));
+        availableVersionStringLabel.setText(translation.get("availableVersionStringLabel"));
+        updateInfoButton.setToolTipText(translation.get("infoAboutUpdate"));
+        buttonOK.setText(translation.get("buttonOk"));
+        manualDownloadButton.setText(translation.get("manualDownloadButtonText"));
+        manualDownloadButton.setToolTipText(translation.get("manualDownloadButtonToolTip"));
+        buttonCancel.setText(translation.get("buttonCancel"));
     }
 
     private void createUIComponents() {
