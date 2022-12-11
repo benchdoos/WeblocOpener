@@ -8,6 +8,7 @@ import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
@@ -17,6 +18,7 @@ import java.awt.*;
 import java.util.Locale;
 import java.util.Map;
 
+@Log4j2
 public class UpdateInfoRecord extends JPanel implements Translatable {
     private JLabel typeLabel;
     private JTextArea descriptionLabel;
