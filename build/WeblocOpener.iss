@@ -6,11 +6,11 @@
 #define MyAppURL "https://benchdoos.github.io/"
 #define MyAppExeName "WeblocOpener.exe"
 #define MyAppIconsFile "icons.icl"
-#define MyAppSourcePath "F:\Developer\JAVA\WeblocOpener"
-#define MyAppAdditionalPath "F:\Developer\JAVA\WeblocOpener\build\installer"
-#define ImagesPath "F:\Developer\JAVA\WeblocOpener\build\installer\images"
-#define ApplicationVersion GetFileVersion('F:\Developer\JAVA\WeblocOpener\build\WeblocOpener.exe')
-#define ApplicationCopyright GetFileCopyright('F:\Developer\JAVA\WeblocOpener\build\WeblocOpener.exe')
+#define MyAppSourcePath "Z:\work"
+#define MyAppAdditionalPath "Z:\work\build\installer"
+#define ImagesPath "Z:\work\build\installer\images"
+#define ApplicationVersion GetVersionNumbersString('Z:\work\build\WeblocOpener.exe')
+#define ApplicationCopyright GetFileCopyright('Z:\work\build\WeblocOpener.exe')
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -26,7 +26,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={pf}\{#MyAppName}
+DefaultDirName={commonpf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 OutputDir={#MyAppSourcePath}\target
 OutputBaseFilename=WeblocOpenerSetup
@@ -130,7 +130,7 @@ Type: files; Name: "{group}\{#MyAppName} {cm:Update}.lnk";
 Type: files; Name: "{commonprograms}\{#MyAppName} {cm:Update}.lnk"
 Type: files; Name: "{app}\Updater.jar"
 Type: files; Name: "{app}\readme.rtf"
-Type: filesandordirs; Name: "{app}\lib"
+;Type: filesandordirs; Name: "{app}\lib"
 
 Type: filesandordirs; Name: "{%TEMP}\{#MyAppName}\Log\{#MyAppName}\DEBUG"
 Type: filesandordirs; Name: "{%TEMP}\{#MyAppName}\Log\{#MyAppName}\INFO"

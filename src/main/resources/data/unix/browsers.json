@@ -1,39 +1,32 @@
-{
-  "browsers": [
-    {
-      "browser": {
-        "name": "Chromium",
-        "call": "chromium %site",
-        "incognito": "chromium %site --incognito"
-      }
-    },
-    {
-      "browser": {
-        "name": "Google Chrome",
-        "call": "google-chrome %site",
-        "incognito": "google-chrome %site --incognito"
-      }
-    },
-    {
-      "browser": {
-        "name": "Firefox",
-        "call": "firefox %site",
-        "incognito": "firefox --private-window %site"
-      }
-    },
-    {
-      "browser": {
-        "name": "Opera",
-        "call": "opera %site",
-        "incognito": "opera --private %site"
-      }
-    },
-    {
-      "browser": {
-        "name": "Yandex",
-        "call": "yandex-browser %site",
-        "incognito": "yandex-browser -incognito %site"
-      }
-    }
-  ]
-}
+[
+  {
+    "name": "Chromium",
+    "call": "chromium %site",
+    "file_call": "chromium %file",
+    "incognito": "chromium %site --incognito"
+  },
+  {
+    "name": "Google Chrome",
+    "call": "google-chrome %site",
+    "file_call": "google-chrome %file",
+    "incognito": "google-chrome %site --incognito"
+  },
+  {
+    "name": "Firefox",
+    "call": "firefox %site",
+    "file_call": "firefox %file",
+    "incognito": "firefox --private-window %site"
+  },
+  {
+    "name": "Opera",
+    "call": "opera %site",
+    "file_call": "opera %file",
+    "incognito": "opera --private %site"
+  },
+  {
+    "name": "Yandex",
+    "call": "yandex-browser %site",
+    "file_call": "yandex-browser %file",
+    "incognito": "yandex-browser -incognito %site"
+  }
+]
