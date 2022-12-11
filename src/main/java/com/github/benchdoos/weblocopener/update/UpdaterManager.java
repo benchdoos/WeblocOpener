@@ -25,6 +25,8 @@ import com.github.benchdoos.weblocopenercore.service.settings.impl.InstallBetaUp
 import com.github.benchdoos.weblocopenercore.service.settings.impl.LatestUpdateCheckSettings;
 import com.github.benchdoos.weblocopenercore.utils.VersionUtils;
 import com.github.benchdoos.weblocopenercore.utils.system.OS;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.GHRelease;
@@ -39,6 +41,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Log4j2
 public class UpdaterManager {
     private static final String REPOSITORY_NAME = "benchdoos/weblocopener";
@@ -133,7 +136,7 @@ public class UpdaterManager {
     }
 
     public static UpdateInfo getUpdateInfoFromUrl(final URL url) throws IOException {
-        final String jsonSrc = IOUtils.toString(url, StandardCharsets.UTF_8.name());
+        final String jsonSrc = IOUtils.toString(url, StandardCharsets.UTF_8);
         final ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(jsonSrc, UpdateInfo.class);
     }
