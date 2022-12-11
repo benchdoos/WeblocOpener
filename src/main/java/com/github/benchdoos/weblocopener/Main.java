@@ -47,6 +47,8 @@ public class Main {
             log.info("Current mode: {}", currentMode);
             SystemUtils.checkIfSystemIsSupported();
 
+            CoreUtils.initBrowserList();
+
             new Application(args);
         } catch (UnsupportedSystemException e) {
             log.fatal("System not supported", e);

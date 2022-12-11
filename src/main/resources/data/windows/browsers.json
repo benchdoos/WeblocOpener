@@ -1,52 +1,44 @@
-{
-  "browsers": [
-    {
-      "browser": {
-        "name": "Google Chrome",
-        "call": "start chrome \"%site\"",
-        "incognito": "start chrome \"%site\" --incognito"
-      }
-    },
-    {
-      "browser": {
-        "name": "Firefox",
-        "call": "start firefox \"%site\"",
-        "incognito": "start firefox -private-window \"%site\""
-      }
-    },
-    {
-      "browser": {
-        "name": "Microsoft Edge",
-        "call": "start microsoft-edge:\"%site\""
-      }
-    },
-    {
-      "browser": {
-        "name": "Internet Explorer",
-        "call": "start iexplore \"%site\"",
-        "incognito": "start iexplore \"%site\" -private"
-      }
-    },
-    {
-      "browser": {
-        "name": "Opera",
-        "call": "start opera \"%site\"",
-        "incognito": "start opera --private \"%site\""
-      }
-    },
-    {
-      "browser": {
-        "name": "Yandex Browser",
-        "call": "start browser \"%site\"",
-        "incognito": "start browser -incognito \"%site\""
-      }
-    },
-    {
-      "browser": {
-        "name": "Vivaldi",
-        "call": "start vivaldi \"%site\"",
-        "incognito": "start vivaldi -incognito \"%site\""
-      }
-    }
-  ]
-}
+[
+  {
+    "name": "Google Chrome",
+    "call": "start chrome \"%site\"",
+    "file_call": "start chrome \"%file\"",
+    "incognito": "start chrome \"%site\" --incognito"
+  },
+  {
+    "name": "Firefox",
+    "call": "start firefox \"%site\"",
+    "file_call": "start firefox \"%file\"",
+    "incognito": "start firefox -private-window \"%site\""
+  },
+  {
+    "name": "Microsoft Edge",
+    "file_call": "start msedge \"%file\"",
+    "call": "start msedge \"%site\"",
+    "incognito": "start msedge -inprivate \"%site\""
+  },
+  {
+    "name": "Internet Explorer",
+    "call": "start iexplore \"%site\"",
+    "file_call": "start iexplore \"%file\"",
+    "incognito": "start iexplore \"%site\" -private"
+  },
+  {
+    "name": "Opera",
+    "call": "start opera \"%site\"",
+    "file_call": "start opera \"%file\"",
+    "incognito": "start opera --private \"%site\""
+  },
+  {
+    "name": "Yandex Browser",
+    "call": "start browser \"%site\"",
+    "file_call": "start browser \"%file\"",
+    "incognito": "start browser -incognito \"%site\""
+  },
+  {
+    "name": "Vivaldi",
+    "call": "start vivaldi \"%site\"",
+    "file_call": "start vivaldi \"%file\"",
+    "incognito": "start vivaldi -incognito \"%site\""
+  }
+]
