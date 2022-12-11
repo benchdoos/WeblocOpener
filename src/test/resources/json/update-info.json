@@ -1,0 +1,44 @@
+{
+  "features": [
+    {
+      "description": {
+        "ru": "Новая функциональность",
+        "en": "New feature"
+      }
+    },
+    {
+      "description": {
+        "ru": "Новая функциональность2",
+        "en": "New feature2"
+      }
+    }
+  ],
+  "improvements": [
+    {
+      "description": {
+        "ru": "Улучшили старое",
+        "en": "Improved olds"
+      }
+    }
+  ],
+  "fixes": [
+    {
+      "description": {
+        "ru": "Исправили баг",
+        "en": "Fixed bug"
+      }
+    },
+    {
+      "description": {
+        "ru": "Исправили баг2",
+        "en": "Fixed bug2"
+      }
+    },
+    {
+      "description": {
+        "ru": "Исправили баг3",
+        "en": "Fixed bug3"
+      }
+    }
+  ]
+}

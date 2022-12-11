@@ -15,21 +15,26 @@
 
 package com.github.benchdoos.weblocopener.update;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.benchdoos.weblocopener.update.impl.UnixUpdater;
 import com.github.benchdoos.weblocopener.update.impl.WindowsUpdater;
 import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
 import com.github.benchdoos.weblocopenercore.domain.version.Beta;
+import com.github.benchdoos.weblocopenercore.domain.version.UpdateInfo;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.InstallBetaUpdateSettings;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.LatestUpdateCheckSettings;
 import com.github.benchdoos.weblocopenercore.utils.VersionUtils;
 import com.github.benchdoos.weblocopenercore.utils.system.OS;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.GHRelease;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.PagedIterable;
 
 import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,13 +49,14 @@ public class UpdaterManager {
 
         new LatestUpdateCheckSettings().save(new Date());
 
-        if (new InstallBetaUpdateSettings().getValue()) {
+        if (Boolean.TRUE.equals(new InstallBetaUpdateSettings().getValue())) {
             final ApplicationVersion latestBetaAppVersion = updater.getLatestBetaAppVersion();
 
             if (latestBetaAppVersion != null) {
-                log.debug("Comparing latest beta version: {} and latest release version: {}", latestBetaAppVersion, latestReleaseAppVersion);
+                log.debug("Comparing latest beta version: {} and latest release version: {}", latestBetaAppVersion,
+                    latestReleaseAppVersion);
                 if (VersionUtils.versionCompare(latestBetaAppVersion, latestReleaseAppVersion)
-                        == VersionUtils.VersionCompare.SERVER_VERSION_IS_NEWER) {
+                    == VersionUtils.VersionCompare.SERVER_VERSION_IS_NEWER) {
                     return latestBetaAppVersion;
                 }
             }
@@ -105,16 +111,31 @@ public class UpdaterManager {
     private static ApplicationVersion getApplicationVersion(GHRelease latestRelease, String setupName) throws IOException {
         final ApplicationVersion version = new ApplicationVersion();
         version.setUpdateTitle(latestRelease.getName());
-        version.setUpdateInfo(latestRelease.getBody());
+        version.setLegacyUpdateInfo(latestRelease.getBody());
         version.setVersion(latestRelease.getTagName());
         version.setBeta(tryGetBetaFromName(version.getUpdateTitle(), new Beta(latestRelease.isPrerelease() ? 1 : 0)));
-        latestRelease.getAssets().forEach(asset -> {
+        latestRelease.listAssets().forEach(asset -> {
             if (asset.getName().equalsIgnoreCase(setupName)) {
                 version.setDownloadUrl(asset.getBrowserDownloadUrl());
                 version.setSize(asset.getSize());
             }
+            if (asset.getName().equalsIgnoreCase("update-info.json")) {
+                try {
+                    final String updateInfoJsonUrl = asset.getBrowserDownloadUrl();
+                    final UpdateInfo updateInfoFromUrl = getUpdateInfoFromUrl(new URL(updateInfoJsonUrl));
+                    version.setVersionInfo(updateInfoFromUrl);
+                } catch (final Exception e) {
+                    log.error("Could not get update info", e);
+                }
+            }
         });
         return version;
+    }
+
+    public static UpdateInfo getUpdateInfoFromUrl(final URL url) throws IOException {
+        final String jsonSrc = IOUtils.toString(url, StandardCharsets.UTF_8.name());
+        final ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(jsonSrc, UpdateInfo.class);
     }
 
     private static Beta tryGetBetaFromName(String updateTitle, Beta beta) {

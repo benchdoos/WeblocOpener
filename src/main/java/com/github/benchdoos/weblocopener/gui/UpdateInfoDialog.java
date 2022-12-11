@@ -151,7 +151,7 @@ class UpdateInfoDialog extends JDialog {
                 JComponent.WHEN_IN_FOCUSED_WINDOW);
 
 
-        textPane.setText(generatePageForDisplay(applicationVersion.getUpdateTitle(), applicationVersion.getUpdateInfo()));
+        textPane.setText(generatePageForDisplay(applicationVersion.getUpdateTitle(), applicationVersion.getLegacyUpdateInfo()));
 
         textPane.registerKeyboardAction(e -> onOK(), KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
                 JComponent.WHEN_FOCUSED);

@@ -535,7 +535,7 @@ public class UpdateDialog extends JFrame implements Translatable {
 
     private void onUpdateInfoButton() {
         if (serverApplicationVersion != null) {
-            if (!serverApplicationVersion.getUpdateInfo().isEmpty()) {
+            if (!serverApplicationVersion.getLegacyUpdateInfo().isEmpty()) {
                 new WindowLauncher<UpdateInfoDialog>() {
                     @Override
                     public UpdateInfoDialog initWindow() {
