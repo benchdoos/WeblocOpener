@@ -69,6 +69,7 @@ public class UpdaterManager {
 
     public static ApplicationVersion getLatestReleaseVersion(String setupName) {
         try {
+            log.debug("Requesting new application version from github");
             final GitHub github = GitHub.connectAnonymously();
             final GHRepository repository = github.getRepository(REPOSITORY_NAME);
             final GHRelease latestRelease = repository.getLatestRelease();
@@ -122,8 +123,10 @@ public class UpdaterManager {
                 version.setDownloadUrl(asset.getBrowserDownloadUrl());
                 version.setSize(asset.getSize());
             }
-            if (asset.getName().equalsIgnoreCase("update-info.json")) {
+            String updateInfoName = "update-info.json";
+            if (asset.getName().equalsIgnoreCase(updateInfoName)) {
                 try {
+                    log.debug("Getting update info: {}", updateInfoName);
                     final String updateInfoJsonUrl = asset.getBrowserDownloadUrl();
                     final UpdateInfo updateInfoFromUrl = getUpdateInfoFromUrl(new URL(updateInfoJsonUrl));
                     version.setVersionInfo(updateInfoFromUrl);
