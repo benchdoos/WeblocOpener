@@ -213,7 +213,7 @@
                     <dontWrapJar>false</dontWrapJar>
                     <headerType>gui</headerType>
                     <jar>${project.build.directory}/${project.name}.jar</jar>
-                    <outfile>${project.basedir}/build/${project.name}.exe</outfile>
+                    <outfile>${project.build.directory}/${project.name}.exe</outfile>
                     <!--<errTitle></errTitle>-->
                     <!--<cmdLine></cmdLine>-->
                     <chdir>.</chdir>

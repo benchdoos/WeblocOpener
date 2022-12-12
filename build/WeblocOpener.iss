@@ -9,8 +9,8 @@
 #define MyAppSourcePath "Z:\work"
 #define MyAppAdditionalPath "Z:\work\build\installer"
 #define ImagesPath "Z:\work\build\installer\images"
-#define ApplicationVersion GetVersionNumbersString('Z:\work\build\WeblocOpener.exe')
-#define ApplicationCopyright GetFileCopyright('Z:\work\build\WeblocOpener.exe')
+#define ApplicationVersion GetVersionNumbersString('Z:\work\target\WeblocOpener.exe')
+#define ApplicationCopyright GetFileCopyright('Z:\work\target\WeblocOpener.exe')
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -117,7 +117,7 @@ Name: "Russian"; MessagesFile: "{#MyAppAdditionalPath}\languages\Russian.isl"
 
 
 [Files]
-Source: "{#MyAppSourcePath}\build\WeblocOpener.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppSourcePath}\target\WeblocOpener.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppSourcePath}\target\lib\*"; DestDir: "{app}\lib"; Flags: ignoreversion recursesubdirs
 Source: "{#MyAppSourcePath}\build\Template.webloc"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#ImagesPath}\icons.icl"; DestDir: "{app}"; Flags: ignoreversion
