@@ -16,21 +16,35 @@
 package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.domain.ExtendedModificationInfo;
-import com.github.benchdoos.weblocopener.gui.panels.UpdateInfoRecord;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
 import com.github.benchdoos.weblocopenercore.domain.version.UpdateInfo;
 import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DarkModeActiveSettings;
+import com.github.benchdoos.weblocopenercore.service.settings.impl.LocaleSettings;
 import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import j2html.tags.specialized.HtmlTag;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JEditorPane;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.event.HyperlinkEvent;
-import java.awt.*;
+import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -38,7 +52,17 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
+
+import static j2html.TagCreator.body;
+import static j2html.TagCreator.each;
+import static j2html.TagCreator.html;
+import static j2html.TagCreator.span;
+import static j2html.TagCreator.table;
+import static j2html.TagCreator.td;
+import static j2html.TagCreator.tr;
 
 @Log4j2
 class UpdateInfoDialog extends JDialog {
@@ -51,6 +75,7 @@ class UpdateInfoDialog extends JDialog {
     private JPanel legacyPanel;
     private JPanel updateInfoPanel;
     private JList<ExtendedModificationInfo> updateInfoJList;
+    private JEditorPane updateInfoEditorPane;
 
     UpdateInfoDialog(ApplicationVersion applicationVersion) {
         this.applicationVersion = applicationVersion;
@@ -118,17 +143,20 @@ class UpdateInfoDialog extends JDialog {
         contentPane.add(updateInfoPanel,
             new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                 GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0,
-                false));
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null,
+                new Dimension(600, -1),
+                null, 0, false));
         final JScrollPane scrollPane2 = new JScrollPane();
-        scrollPane2.setHorizontalScrollBarPolicy(31);
         updateInfoPanel.add(scrollPane2,
             new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
                 GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
                 GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0,
                 false));
-        updateInfoJList = new JList();
-        scrollPane2.setViewportView(updateInfoJList);
+        updateInfoEditorPane = new JEditorPane();
+        updateInfoEditorPane.setContentType("text/html");
+        updateInfoEditorPane.setEditable(false);
+        updateInfoEditorPane.setText("");
+        scrollPane2.setViewportView(updateInfoEditorPane);
         final Spacer spacer2 = new Spacer();
         contentPane.add(spacer2,
             new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1,
@@ -184,9 +212,7 @@ class UpdateInfoDialog extends JDialog {
     /**
      * @noinspection ALL
      */
-    public JComponent $$$getRootComponent$$$() {
-        return contentPane;
-    }
+    public JComponent $$$getRootComponent$$$() {return contentPane;}
 
     private void createGUI() {
         setTitle(Translation.get("UpdateDialogBundle", "infoAboutUpdate") + " — " + applicationVersion.getVersion());
@@ -203,9 +229,6 @@ class UpdateInfoDialog extends JDialog {
 
         buttonOK.addActionListener(e -> onOK());
 
-        if (applicationVersion.getVersionInfo() != null) {
-            initUpdateInfoPanel();
-        }
 
         setMinimumSize(new Dimension(550, 300));
         setSize(550, 300);
@@ -216,9 +239,6 @@ class UpdateInfoDialog extends JDialog {
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
     }
 
-    private void initUpdateInfoPanel() {
-        updateInfoJList.setCellRenderer((list, value, index, isSelected, cellHasFocus) -> new UpdateInfoRecord(value));
-    }
 
     private void fillData() {
         UpdateInfo updateInfo = applicationVersion.getVersionInfo();
@@ -241,11 +261,53 @@ class UpdateInfoDialog extends JDialog {
 
             log.debug("Formed modification list: {}", modifications);
 
+            final HtmlTag html = html(
+                body(
+                    table(
+                        each(modifications, value -> {
+                            final ExtendedModificationInfo.ModificationType modificationType = value.type();
+                            final Locale locale = new LocaleSettings().getValue();
 
-            DefaultListModel<ExtendedModificationInfo> model = new DefaultListModel<>() {
-            };
-            modifications.forEach(model::addElement);
-            updateInfoJList.setModel(model);
+                            final Map<String, String> description = value.modification().description();
+                            final String srcMessage = description.get(locale.getLanguage().toLowerCase());
+                            final String message;
+                            if (StringUtils.isNotBlank(srcMessage)) {
+                                message = srcMessage;
+                            } else {
+                                message =
+                                    description.get(LocaleSettings.getDefaultLocale().getLanguage().toLowerCase());
+                            }
+                            final String tdStyle =
+                                "border-radius: 5px; padding: 5px 10px 5px 5px; width: 120px; color: white; " +
+                                    "font-weight: bold; text-align:right;";
+                            final String typeValue;
+                            final String backgroundColor;
+                            final String bundle = "UpdateDialog";
+                            switch (modificationType) {
+                                case IMPROVEMENT -> {
+                                    typeValue = Translation.get(bundle, "improvementType");
+                                    backgroundColor = "background-color:#4f73a5;";
+                                }
+                                case BUGFIX -> {
+                                    typeValue = Translation.get(bundle, "fixType");
+                                    backgroundColor = "background-color:#d36767;";
+                                }
+                                default -> {
+                                    typeValue = Translation.get(bundle, "featureType");
+                                    backgroundColor = "background-color:#439443;";
+                                }
+                            }
+                            return tr(
+                                td(
+                                    span(typeValue)).withStyle(tdStyle + backgroundColor),
+                                td(message));
+                        })
+                    )
+                ));
+
+            final String render = html.render();
+            log.trace("Update page rendered: {}", render);
+            updateInfoEditorPane.setText(render);
         }
     }
 
