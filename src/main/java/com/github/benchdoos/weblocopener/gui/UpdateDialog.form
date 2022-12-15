@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.github.benchdoos.weblocopener.gui.UpdateDialog">
   <grid id="cbd77" binding="contentPane" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
-      <xy x="48" y="54" width="433" height="195"/>
+      <xy x="48" y="54" width="465" height="220"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -76,7 +76,7 @@
               </grid>
             </children>
           </grid>
-          <grid id="e3588" layout-manager="GridLayoutManager" row-count="4" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="e3588" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="10" left="10" bottom="0" right="10"/>
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -88,114 +88,176 @@
             <children>
               <vspacer id="ac291">
                 <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                 </constraints>
               </vspacer>
-              <component id="c7e6c" class="javax.swing.JProgressBar" binding="progressBar">
+              <grid id="7a38b" layout-manager="GridLayoutManager" row-count="3" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="7" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <stringPainted value="false"/>
-                </properties>
-              </component>
-              <component id="2a0b3" class="javax.swing.JLabel" binding="currentVersionStringLabel">
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <foreground color="-460552"/>
-                  <text resource-bundle="translations/UpdateDialogBundle" key="currentVersionStringLabel"/>
-                </properties>
-              </component>
-              <component id="1a063" class="javax.swing.JLabel" binding="currentVersionLabel">
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <font style="1"/>
-                  <foreground color="-460552"/>
-                  <text value=""/>
-                </properties>
-              </component>
-              <component id="40545" class="javax.swing.JLabel" binding="availableVersionStringLabel">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <foreground color="-460552"/>
-                  <text resource-bundle="translations/UpdateDialogBundle" key="availableVersionStringLabel"/>
-                </properties>
-              </component>
-              <component id="59d90" class="javax.swing.JLabel" binding="availableVersionLabel">
-                <constraints>
-                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <font style="1"/>
-                  <foreground color="-460552"/>
-                  <text value=""/>
-                </properties>
-              </component>
-              <hspacer id="28a0c">
-                <constraints>
-                  <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </hspacer>
-              <component id="f770b" class="javax.swing.JLabel" binding="newVersionSizeLabel">
-                <constraints>
-                  <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <foreground color="-460552"/>
-                  <text value=""/>
-                </properties>
-              </component>
-              <component id="2442" class="javax.swing.JLabel" binding="unitLabel">
-                <constraints>
-                  <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <foreground color="-460552"/>
-                  <text value=""/>
-                </properties>
-              </component>
-              <component id="8da8b" class="javax.swing.JButton" binding="updateInfoButton">
-                <constraints>
-                  <grid row="1" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <borderPainted value="false"/>
-                  <contentAreaFilled value="false"/>
-                  <defaultCapable value="true"/>
-                  <doubleBuffered value="false"/>
-                  <enabled value="false"/>
-                  <icon value="images/infoIcon16.png"/>
-                  <margin top="2" left="2" bottom="2" right="2"/>
                   <opaque value="false"/>
-                  <requestFocusEnabled value="false"/>
-                  <text value=""/>
-                  <toolTipText resource-bundle="translations/UpdateDialogBundle" key="infoAboutUpdate"/>
                 </properties>
-              </component>
-              <component id="70f70" class="javax.swing.JLabel" binding="serverBetaLabel">
-                <constraints>
-                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <foreground color="-460552"/>
-                  <text value="(beta)" noi18n="true"/>
-                </properties>
-              </component>
-              <component id="37bae" class="javax.swing.JLabel" binding="currentBetaLabel">
-                <constraints>
-                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <foreground color="-460552"/>
-                  <text value="(beta)" noi18n="true"/>
-                </properties>
-              </component>
+                <border type="none"/>
+                <children>
+                  <component id="c7e6c" class="javax.swing.JProgressBar" binding="progressBar">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <stringPainted value="false"/>
+                    </properties>
+                  </component>
+                  <component id="2a0b3" class="javax.swing.JLabel" binding="currentVersionStringLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <foreground color="-460552"/>
+                      <text resource-bundle="translations/UpdateDialogBundle" key="currentVersionStringLabel"/>
+                    </properties>
+                  </component>
+                  <component id="40545" class="javax.swing.JLabel" binding="availableVersionStringLabel">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <foreground color="-460552"/>
+                      <text resource-bundle="translations/UpdateDialogBundle" key="availableVersionStringLabel"/>
+                    </properties>
+                  </component>
+                  <grid id="62aa4" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <opaque value="false"/>
+                    </properties>
+                    <border type="none"/>
+                    <children>
+                      <component id="1a063" class="javax.swing.JLabel" binding="currentVersionLabel">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <font style="1"/>
+                          <foreground color="-460552"/>
+                          <text value="1.0.0"/>
+                        </properties>
+                      </component>
+                      <component id="37bae" class="javax.swing.JLabel" binding="currentBetaLabel">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <foreground color="-460552"/>
+                          <text value="(beta)" noi18n="true"/>
+                        </properties>
+                      </component>
+                      <hspacer id="c4517">
+                        <constraints>
+                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </hspacer>
+                    </children>
+                  </grid>
+                  <grid id="9af58" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <opaque value="false"/>
+                    </properties>
+                    <border type="none"/>
+                    <children>
+                      <hspacer id="28a0c">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </hspacer>
+                      <component id="8da8b" class="javax.swing.JButton" binding="updateInfoButton">
+                        <constraints>
+                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                            <minimum-size width="18" height="18"/>
+                            <preferred-size width="18" height="18"/>
+                            <maximum-size width="18" height="18"/>
+                          </grid>
+                        </constraints>
+                        <properties>
+                          <borderPainted value="false"/>
+                          <contentAreaFilled value="false"/>
+                          <defaultCapable value="true"/>
+                          <doubleBuffered value="false"/>
+                          <enabled value="false"/>
+                          <icon value="images/infoIcon16.png"/>
+                          <margin top="2" left="2" bottom="2" right="2"/>
+                          <opaque value="false"/>
+                          <requestFocusEnabled value="false"/>
+                          <text value=""/>
+                          <toolTipText resource-bundle="translations/UpdateDialogBundle" key="infoAboutUpdate"/>
+                        </properties>
+                      </component>
+                      <grid id="7545" layout-manager="GridLayoutManager" row-count="1" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                        <properties>
+                          <opaque value="false"/>
+                        </properties>
+                        <border type="none"/>
+                        <children>
+                          <component id="59d90" class="javax.swing.JLabel" binding="availableVersionLabel">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <font style="1"/>
+                              <foreground color="-460552"/>
+                              <text value="1.0.0"/>
+                            </properties>
+                          </component>
+                          <hspacer id="99e83">
+                            <constraints>
+                              <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                          </hspacer>
+                          <component id="70f70" class="javax.swing.JLabel" binding="serverBetaLabel">
+                            <constraints>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <foreground color="-460552"/>
+                              <text value="(beta)" noi18n="true"/>
+                            </properties>
+                          </component>
+                          <component id="f770b" class="javax.swing.JLabel" binding="newVersionSizeLabel">
+                            <constraints>
+                              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <foreground color="-460552"/>
+                              <text value="10"/>
+                            </properties>
+                          </component>
+                          <component id="2442" class="javax.swing.JLabel" binding="unitLabel">
+                            <constraints>
+                              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <foreground color="-460552"/>
+                              <text value="MB"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                    </children>
+                  </grid>
+                </children>
+              </grid>
             </children>
           </grid>
         </children>
