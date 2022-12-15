@@ -15,25 +15,54 @@
 
 package com.github.benchdoos.weblocopener.gui;
 
+import com.github.benchdoos.weblocopener.domain.ExtendedModificationInfo;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
+import com.github.benchdoos.weblocopenercore.domain.version.UpdateInfo;
 import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DarkModeActiveSettings;
+import com.github.benchdoos.weblocopenercore.service.settings.impl.LocaleSettings;
 import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import j2html.tags.specialized.HtmlTag;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JEditorPane;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.event.HyperlinkEvent;
-import java.awt.*;
+import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
+
+import static j2html.TagCreator.body;
+import static j2html.TagCreator.each;
+import static j2html.TagCreator.html;
+import static j2html.TagCreator.span;
+import static j2html.TagCreator.table;
+import static j2html.TagCreator.td;
+import static j2html.TagCreator.tr;
 
 @Log4j2
 class UpdateInfoDialog extends JDialog {
@@ -41,6 +70,12 @@ class UpdateInfoDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JTextPane textPane;
+
+    @Deprecated(since = "2.0.1", forRemoval = true)
+    private JPanel legacyPanel;
+    private JPanel updateInfoPanel;
+    private JList<ExtendedModificationInfo> updateInfoJList;
+    private JEditorPane updateInfoEditorPane;
 
     UpdateInfoDialog(ApplicationVersion applicationVersion) {
         this.applicationVersion = applicationVersion;
@@ -63,27 +98,69 @@ class UpdateInfoDialog extends JDialog {
      */
     private void $$$setupUI$$$() {
         contentPane = new JPanel();
-        contentPane.setLayout(new GridLayoutManager(2, 1, new Insets(10, 10, 10, 10), -1, -1));
+        contentPane.setLayout(new GridLayoutManager(3, 2, new Insets(10, 10, 10, 10), -1, -1));
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
-        contentPane.add(panel1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
+        contentPane.add(panel1,
+            new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0,
+                false));
         final Spacer spacer1 = new Spacer();
-        panel1.add(spacer1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        panel1.add(spacer1,
+            new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
+                GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        panel1.add(panel2, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel1.add(panel2, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+            GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+            GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         buttonOK = new JButton();
         this.$$$loadButtonText$$$(buttonOK, this.$$$getMessageFromBundle$$$("spelling", "buttonOk"));
-        panel2.add(buttonOK, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        contentPane.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel2.add(buttonOK,
+            new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                GridConstraints.SIZEPOLICY_FIXED,
+                null, null, null, 0, false));
+        legacyPanel = new JPanel();
+        legacyPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        contentPane.add(legacyPanel,
+            new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0,
+                false));
         final JScrollPane scrollPane1 = new JScrollPane();
-        panel3.add(scrollPane1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        legacyPanel.add(scrollPane1,
+            new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0,
+                false));
         textPane = new JTextPane();
         textPane.setContentType(this.$$$getMessageFromBundle$$$("spelling", "text.html"));
         textPane.setEditable(false);
         scrollPane1.setViewportView(textPane);
+        updateInfoPanel = new JPanel();
+        updateInfoPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        contentPane.add(updateInfoPanel,
+            new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null,
+                new Dimension(600, -1),
+                null, 0, false));
+        final JScrollPane scrollPane2 = new JScrollPane();
+        updateInfoPanel.add(scrollPane2,
+            new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW,
+                GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0,
+                false));
+        updateInfoEditorPane = new JEditorPane();
+        updateInfoEditorPane.setContentType("text/html");
+        updateInfoEditorPane.setEditable(false);
+        updateInfoEditorPane.setText("");
+        scrollPane2.setViewportView(updateInfoEditorPane);
+        final Spacer spacer2 = new Spacer();
+        contentPane.add(spacer2,
+            new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1,
+                GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
     }
 
     private static Method $$$cachedGetBundleMethod$$$ = null;
@@ -114,7 +191,9 @@ class UpdateInfoDialog extends JDialog {
         for (int i = 0; i < text.length(); i++) {
             if (text.charAt(i) == '&') {
                 i++;
-                if (i == text.length()) break;
+                if (i == text.length()) {
+                    break;
+                }
                 if (!haveMnemonic && text.charAt(i) != '&') {
                     haveMnemonic = true;
                     mnemonic = text.charAt(i);
@@ -133,9 +212,7 @@ class UpdateInfoDialog extends JDialog {
     /**
      * @noinspection ALL
      */
-    public JComponent $$$getRootComponent$$$() {
-        return contentPane;
-    }
+    public JComponent $$$getRootComponent$$$() {return contentPane;}
 
     private void createGUI() {
         setTitle(Translation.get("UpdateDialogBundle", "infoAboutUpdate") + " — " + applicationVersion.getVersion());
@@ -148,22 +225,101 @@ class UpdateInfoDialog extends JDialog {
         getRootPane().setDefaultButton(buttonOK);
 
         getRootPane().registerKeyboardAction(e -> onOK(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                JComponent.WHEN_IN_FOCUSED_WINDOW);
-
-
-        textPane.setText(generatePageForDisplay(applicationVersion.getUpdateTitle(), applicationVersion.getUpdateInfo()));
-
-        textPane.registerKeyboardAction(e -> onOK(), KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
-                JComponent.WHEN_FOCUSED);
-        textPane.addHyperlinkListener(this::onHyperlinkClick);
+            JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         buttonOK.addActionListener(e -> onOK());
 
+
         setMinimumSize(new Dimension(550, 300));
         setSize(550, 300);
+        pack();
 
-        textPane.setCaretPosition(0);
+        fillData();
+
         setLocation(FrameUtils.getFrameOnCenterLocationPoint(this));
+    }
+
+
+    private void fillData() {
+        UpdateInfo updateInfo = applicationVersion.getVersionInfo();
+        if (updateInfo == null) {
+            legacyPanel.setVisible(true);
+            updateInfoPanel.setVisible(false);
+            fillLegacyTextPane();
+        } else {
+            legacyPanel.setVisible(false);
+            updateInfoPanel.setVisible(true);
+
+            final List<ExtendedModificationInfo> modifications = new ArrayList<>();
+
+            updateInfo.features().forEach(i -> modifications.add(
+                new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.FEATURE, i)));
+            updateInfo.improvements().forEach(i -> modifications.add(
+                new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.IMPROVEMENT, i)));
+            updateInfo.fixes().forEach(i -> modifications.add(
+                new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.BUGFIX, i)));
+
+            log.debug("Formed modification list: {}", modifications);
+
+            final HtmlTag html = html(
+                body(
+                    table(
+                        each(modifications, value -> {
+                            final ExtendedModificationInfo.ModificationType modificationType = value.type();
+                            final Locale locale = new LocaleSettings().getValue();
+
+                            final Map<String, String> description = value.modification().description();
+                            final String srcMessage = description.get(locale.getLanguage().toLowerCase());
+                            final String message;
+                            if (StringUtils.isNotBlank(srcMessage)) {
+                                message = srcMessage;
+                            } else {
+                                message =
+                                    description.get(LocaleSettings.getDefaultLocale().getLanguage().toLowerCase());
+                            }
+                            final String tdStyle =
+                                "border-radius: 5px; padding: 5px 10px 5px 5px; width: 120px; color: white; " +
+                                    "font-weight: bold; text-align:right;";
+                            final String typeValue;
+                            final String backgroundColor;
+                            final String bundle = "UpdateDialog";
+                            switch (modificationType) {
+                                case IMPROVEMENT -> {
+                                    typeValue = Translation.get(bundle, "improvementType");
+                                    backgroundColor = "background-color:#4f73a5;";
+                                }
+                                case BUGFIX -> {
+                                    typeValue = Translation.get(bundle, "fixType");
+                                    backgroundColor = "background-color:#d36767;";
+                                }
+                                default -> {
+                                    typeValue = Translation.get(bundle, "featureType");
+                                    backgroundColor = "background-color:#439443;";
+                                }
+                            }
+                            return tr(
+                                td(
+                                    span(typeValue)).withStyle(tdStyle + backgroundColor),
+                                td(message));
+                        })
+                    )
+                ));
+
+            final String render = html.render();
+            log.trace("Update page rendered: {}", render);
+            updateInfoEditorPane.setText(render);
+            updateInfoEditorPane.setCaretPosition(0);
+        }
+    }
+
+    private void fillLegacyTextPane() {
+        textPane.setText(
+            generatePageForDisplay(applicationVersion.getUpdateTitle(), applicationVersion.getLegacyUpdateInfo()));
+
+        textPane.registerKeyboardAction(e -> onOK(), KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
+            JComponent.WHEN_FOCUSED);
+        textPane.addHyperlinkListener(this::onHyperlinkClick);
+        textPane.setCaretPosition(0);
     }
 
     private void onHyperlinkClick(HyperlinkEvent e) {
@@ -183,23 +339,25 @@ class UpdateInfoDialog extends JDialog {
 
     private String generatePageForDisplay(String updateTitle, String updateInfo) {
         String style = "<style>" +
-                "code {" +
-                "    padding: 0;" +
-                "    padding-top: 0.2em;" +
-                "    padding-bottom: 0.2em;" +
-                "    margin: 0;" +
-                "    font-size: 85%;" +
-                "    background-color: #f3f3f3;" +
-                "    border-radius: 3px;" +
-                "}" +
-                "</style>";
+            "code {" +
+            "    padding: 0;" +
+            "    padding-top: 0.2em;" +
+            "    padding-bottom: 0.2em;" +
+            "    margin: 0;" +
+            "    font-size: 85%;" +
+            "    background-color: #f3f3f3;" +
+            "    border-radius: 3px;" +
+            "}" +
+            "</style>";
         String defaultHead = "<html><head>" + style + "</head><body>";
 
         String title = "<center style=\"font-size:14px; color:#4f7ece; padding-bottom:10px;\">" + updateTitle + "</center>";
         String defaultFooter = "</body></html>";
         updateInfo = updateInfo.replaceAll("\n", "<br>");
         final String customTextColor = new DarkModeActiveSettings().getValue() ? "color: white;" : "";
-        updateInfo = "<p style=\"font-family:'Open Sans'; font-size:12px; padding:0; margin:0; " + customTextColor + " \">" + updateInfo + "</p>";
+        updateInfo =
+            "<p style=\"font-family:'Open Sans'; font-size:12px; padding:0; margin:0; " + customTextColor + " \">" +
+                updateInfo + "</p>";
 
         return defaultHead + title + updateInfo + defaultFooter;
     }
