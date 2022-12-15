@@ -308,6 +308,7 @@ class UpdateInfoDialog extends JDialog {
             final String render = html.render();
             log.trace("Update page rendered: {}", render);
             updateInfoEditorPane.setText(render);
+            updateInfoEditorPane.setCaretPosition(0);
         }
     }
 
