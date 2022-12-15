@@ -34,7 +34,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>
         <weblocopener.core.version>2.0.0</weblocopener.core.version>
-        <copyright>Copyright © 2016-2019 Eugene Zrazhevsky</copyright>
+        <copyright>Copyright © 2016-2023 Eugene Zrazhevsky</copyright>
 
         <disable.dev_mode>true</disable.dev_mode>
         <ultimate_build>false</ultimate_build>
