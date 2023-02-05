@@ -403,7 +403,7 @@
         <dependency>
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
-            <version>1.6</version>
+            <version>1.7</version>
         </dependency>
 
         <dependency>
@@ -411,12 +411,6 @@
             <artifactId>j2html</artifactId>
             <version>1.6.0</version>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>com.google.guava</groupId>-->
-<!--            <artifactId>guava</artifactId>-->
-<!--            <version>31.1-jre</version>-->
-<!--        </dependency>-->
 
         <!--Tests-->
         <dependency>
