@@ -328,3 +328,4 @@ Update=Обновить
 CopyMenu=Скопировать ссылку
 CopyQRMenu=Скопировать QR-Код
 WeblocLink=Ссылка .webloc
+Webarchive=Веб-архив

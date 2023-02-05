@@ -49,11 +49,17 @@ ShowLanguageDialog=auto
 DisableProgramGroupPage=yes
 
 [Registry]
-; File association
+; File association .webloc
 Root: HKCR; Subkey: ".webloc"; ValueType: string; ValueName: ""; ValueData: "Webloc"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc"; ValueType: string; ValueName: ""; ValueData: {cm:WeblocLink}; Flags: uninsdeletekey
 Root: HKCR; Subkey: "Webloc\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppIconsFile},3"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
+
+; File association .webrachive
+Root: HKCR; Subkey: ".webarchive"; ValueType: string; ValueName: ""; ValueData: "Webarchive"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Webarchive"; ValueType: string; ValueName: ""; ValueData: {cm:Webarchive}; Flags: uninsdeletekey
+Root: HKCR; Subkey: "Webarchive\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppIconsFile},8"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Webarchive\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
 
 ; Add new file .webloc
 Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "ItemName"; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue

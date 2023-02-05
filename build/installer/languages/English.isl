@@ -340,3 +340,4 @@ Update=Update
 CopyMenu=Copy link
 CopyQRMenu=Copy QR-Code
 WeblocLink=.webloc link
+Webarchive=Web archive
