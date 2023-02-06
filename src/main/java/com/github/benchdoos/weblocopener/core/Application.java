@@ -33,6 +33,7 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Log4j2
 public class Application {
@@ -64,20 +65,18 @@ public class Application {
             final String argument = args[0];
 
             final ApplicationArgument applicationArgument = ApplicationArgument.getByArgument(argument);
+
+            log.info("Argument found: {}", applicationArgument);
+
             if (applicationArgument != null) {
                 switch (applicationArgument) {
-                    case OPENER_SETTINGS_ARGUMENT:
+                    case OPENER_SETTINGS_ARGUMENT -> {
                         CleanManager.clean();
                         startSettingsWithUpdate();
-                        break;
-                    case OPENER_UPDATE_ARGUMENT:
-                        runUpdateDialog();
-                        break;
-                    case UPDATE_SILENT_ARGUMENT:
-                        checkIfUpdatesAvailable();
-                        break;
-                    default:
-                        cleanAndLoadCore(args);
+                    }
+                    case OPENER_UPDATE_ARGUMENT -> runUpdateDialog();
+                    case UPDATE_SILENT_ARGUMENT -> checkIfUpdatesAvailable();
+                    default -> cleanAndLoadCore(args);
                 }
             } else {
                 cleanAndLoadCore(args);
@@ -88,7 +87,9 @@ public class Application {
     private void cleanAndLoadCore(String[] args) {
         CleanManager.clean();
 
-        com.github.benchdoos.weblocopenercore.core.Application.manageArguments(args);
+        log.debug("Starting managing arguments via args: {}", Arrays.toString(args));
+        final List<String> arguments = com.github.benchdoos.weblocopenercore.core.Application.prepareArguments(args);
+        com.github.benchdoos.weblocopenercore.core.Application.manageArguments(arguments.toArray(new String[]{}));
     }
 
     private void startSettingsWithUpdate() {
