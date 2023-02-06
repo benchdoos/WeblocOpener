@@ -61,6 +61,12 @@ Root: HKCR; Subkey: "Webarchive"; ValueType: string; ValueName: ""; ValueData: {
 Root: HKCR; Subkey: "Webarchive\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppIconsFile},8"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webarchive\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
 
+; File association .desktop
+Root: HKCR; Subkey: ".desktop"; ValueType: string; ValueName: ""; ValueData: "Desktop"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Desktop"; ValueType: string; ValueName: ""; ValueData: {cm:Webarchive}; Flags: uninsdeletekey
+Root: HKCR; Subkey: "Desktop\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppIconsFile},9"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Desktop\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
+
 ; Add new file .webloc
 Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "ItemName"; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
 Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "FileName"; ValueData: "{app}\Template.webloc"; Flags: uninsdeletevalue
