@@ -28,6 +28,11 @@
     <description>
         WeblocOpener is a simple way to open, edit, create MacOS Safari .webloc files on Windows and Debian GNU/Linux.
     </description>
+    <organization>
+        <name>Eugene Zrazhevsky</name>
+        <url>https://github.com/benchdoos/WeblocOpener</url>
+    </organization>
+    <inceptionYear>2016</inceptionYear>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -208,7 +213,7 @@
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
-                <version>2.2.0</version>
+                <version>2.3.2</version>
                 <configuration>
                     <dontWrapJar>false</dontWrapJar>
                     <headerType>gui</headerType>
