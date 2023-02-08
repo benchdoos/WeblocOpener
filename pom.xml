@@ -52,8 +52,7 @@
     <scm>
         <connection>scm:git:https://github.com/benchdoos/WeblocOpener.git
         </connection>
-        <developerConnection>scm:git:https://github.com/benchdoos/WeblocOpener.git
-        </developerConnection>
+        <developerConnection>scm:git:https://github.com/benchdoos/WeblocOpener.git</developerConnection>
         <tag>HEAD</tag>
         <url>https://github.com/benchdoos/WeblocOpener.git
         </url>
@@ -215,9 +214,9 @@
                 <artifactId>launch4j-maven-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <dontWrapJar>false</dontWrapJar>
+                    <jar>${project.name}.jar</jar>
+                    <dontWrapJar>true</dontWrapJar>
                     <headerType>gui</headerType>
-                    <jar>${project.build.directory}/${project.name}.jar</jar>
                     <outfile>${project.build.directory}/${project.name}.exe</outfile>
                     <!--<errTitle></errTitle>-->
                     <!--<cmdLine></cmdLine>-->

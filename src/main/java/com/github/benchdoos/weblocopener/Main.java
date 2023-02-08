@@ -49,7 +49,7 @@ public class Main {
 
             CoreUtils.initBrowserList();
 
-            new Application(args);
+            new Application(com.github.benchdoos.weblocopenercore.core.Application.prepareArguments(args).toArray(new String[]{}));
         } catch (UnsupportedSystemException e) {
             log.fatal("System not supported", e);
             final String translatedString = Translation.get("CommonsBundle", "systemNotSupported");

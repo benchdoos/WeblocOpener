@@ -5,6 +5,7 @@
 #define MyAppPublisher "Eugene Zrazhevsky"
 #define MyAppURL "https://benchdoos.github.io/"
 #define MyAppExeName "WeblocOpener.exe"
+#define MyAppJarName "WeblocOpener.jar"
 #define MyAppIconsFile "icons.icl"
 #define MyAppSourcePath "Z:\work"
 #define MyAppAdditionalPath "Z:\work\build\installer"
@@ -49,23 +50,25 @@ ShowLanguageDialog=auto
 DisableProgramGroupPage=yes
 
 [Registry]
+; cmd /c start /min  java -jar Z:\IdeaProjects\my\WeblocOpener\target\WeblocOpener.jar "%1"
+; powershell -window minimized -command java -jar "C:\Program Files\WeblocOpener\WeblocOpener.jar" "-edit" "%1"
 ; File association .webloc
 Root: HKCR; Subkey: ".webloc"; ValueType: string; ValueName: ""; ValueData: "Webloc"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc"; ValueType: string; ValueName: ""; ValueData: {cm:WeblocLink}; Flags: uninsdeletekey
 Root: HKCR; Subkey: "Webloc\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppIconsFile},3"; Flags: uninsdeletevalue
-Root: HKCR; Subkey: "Webloc\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Webloc\shell\open\command"; ValueType: string; ValueName: ""; ValueData: "cmd /c start /min java -jar ""{app}\{#MyAppJarName}"" ""%1"""; Flags: uninsdeletevalue
 
 ; File association .webrachive
 Root: HKCR; Subkey: ".webarchive"; ValueType: string; ValueName: ""; ValueData: "Webarchive"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webarchive"; ValueType: string; ValueName: ""; ValueData: {cm:Webarchive}; Flags: uninsdeletekey
 Root: HKCR; Subkey: "Webarchive\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppIconsFile},8"; Flags: uninsdeletevalue
-Root: HKCR; Subkey: "Webarchive\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Webarchive\shell\open\command"; ValueType: string; ValueName: ""; ValueData: "cmd /c start /min java -jar ""{app}\{#MyAppJarName}"" ""%1"""; Flags: uninsdeletevalue
 
 ; File association .desktop
 Root: HKCR; Subkey: ".desktop"; ValueType: string; ValueName: ""; ValueData: "Desktop"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Desktop"; ValueType: string; ValueName: ""; ValueData: {cm:Webarchive}; Flags: uninsdeletekey
 Root: HKCR; Subkey: "Desktop\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppIconsFile},9"; Flags: uninsdeletevalue
-Root: HKCR; Subkey: "Desktop\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Desktop\shell\open\command"; ValueType: string; ValueName: ""; ValueData: "cmd /c start /min java -jar ""{app}\{#MyAppJarName}"" ""%1"""; Flags: uninsdeletevalue
 
 ; Add new file .webloc
 Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "ItemName"; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
@@ -74,22 +77,22 @@ Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "NullFile"
 
 ; Add edit file menu
 Root: HKCR; Subkey: "Webloc\shell\edit"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",7"; Flags: uninsdeletevalue
-Root: HKCR; Subkey: "Webloc\shell\edit\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-edit"" ""%1"" "; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Webloc\shell\edit\command"; ValueType: string; ValueName: ""; ValueData: "cmd /c start /min java -jar ""{app}\{#MyAppJarName}"" ""-edit"" ""%1"" "; Flags: uninsdeletevalue
 
 ; Add qr file menu
 Root: HKCR; Subkey: "Webloc\shell\GenerateQRCode"; ValueType: string; ValueName: ""; ValueData: {cm:GenerateQrCode}; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc\shell\GenerateQRCode"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",5"; Flags: uninsdeletevalue
-Root: HKCR; Subkey: "Webloc\shell\GenerateQRCode\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-qr"" ""%1"" "; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Webloc\shell\GenerateQRCode\command"; ValueType: string; ValueName: ""; ValueData: "cmd /c start /min java -jar ""{app}\{#MyAppJarName}"" ""-qr"" ""%1"" "; Flags: uninsdeletevalue
 
 ; Add copy qr file menu
 Root: HKCR; Subkey: "Webloc\shell\CopyQRCode"; ValueType: string; ValueName: ""; ValueData: {cm:CopyQRMenu}; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc\shell\CopyQRCode"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",5"; Flags: uninsdeletevalue
-Root: HKCR; Subkey: "Webloc\shell\CopyQRCode\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-copy-qr"" ""%1"" "; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Webloc\shell\CopyQRCode\command"; ValueType: string; ValueName: ""; ValueData: "cmd /c start /min java -jar ""{app}\{#MyAppJarName}"" ""-copy-qr"" ""%1"" "; Flags: uninsdeletevalue
 
 ; Add copy file menu
 Root: HKCR; Subkey: "Webloc\shell\Copy"; ValueType: string; ValueName: ""; ValueData: {cm:CopyMenu}; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc\shell\Copy"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",6"; Flags: uninsdeletevalue
-Root: HKCR; Subkey: "Webloc\shell\Copy\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-copy"" ""%1"" "; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Webloc\shell\Copy\command"; ValueType: string; ValueName: ""; ValueData: "cmd /c start /min java -jar ""{app}\{#MyAppJarName}"" ""-copy"" ""%1"" "; Flags: uninsdeletevalue
 
 ; Add updater autorun
 Root: HKCU; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "Update"; ValueData: """start weblocopener -update-silent"""; Flags: uninsdeletevalue
@@ -130,6 +133,7 @@ Name: "Russian"; MessagesFile: "{#MyAppAdditionalPath}\languages\Russian.isl"
 
 [Files]
 Source: "{#MyAppSourcePath}\target\WeblocOpener.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppSourcePath}\target\{#MyAppJarName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppSourcePath}\target\lib\*"; DestDir: "{app}\lib"; Flags: ignoreversion recursesubdirs
 Source: "{#MyAppSourcePath}\build\Template.webloc"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#ImagesPath}\icons.icl"; DestDir: "{app}"; Flags: ignoreversion
@@ -142,6 +146,7 @@ Type: files; Name: "{group}\{#MyAppName} {cm:Update}.lnk";
 Type: files; Name: "{commonprograms}\{#MyAppName} {cm:Update}.lnk"
 Type: files; Name: "{app}\Updater.jar"
 Type: files; Name: "{app}\readme.rtf"
+Type: files; Name: "{app}\{#MyAppJarName}"
 ;Type: filesandordirs; Name: "{app}\lib"
 
 Type: filesandordirs; Name: "{%TEMP}\{#MyAppName}\Log\{#MyAppName}\DEBUG"
