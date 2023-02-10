@@ -49,6 +49,20 @@ ShowLanguageDialog=auto
 DisableProgramGroupPage=yes
 DisableDirPage=no
 
+;https://github.com/HeliumProject/InnoSetup/blob/master/Examples/CodeExample1.iss
+[Code]
+var
+  FinishedInstall: Boolean;
+
+function InitializeSetup(): Boolean;
+begin
+  Log('InitializeSetup called');
+  Result := MsgBox(ExpandConstant('{cm:Warning}' #13#13 '{cm:Java17InstallWarning}'), mbConfirmation, MB_YESNO) = idYes;
+  if Result = False then
+    FinishedInstall := True;
+end;
+
+
 [Registry]
 ; File association .webloc
 Root: HKCR; Subkey: ".webloc"; ValueType: string; ValueName: ""; ValueData: "Webloc"; Flags: uninsdeletevalue

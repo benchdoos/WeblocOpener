@@ -329,3 +329,5 @@ CopyMenu=Скопировать ссылку
 CopyQRMenu=Скопировать QR-Код
 WeblocLink=Ссылка .webloc
 Webarchive=Веб-архив
+Warning=Предупреждение!
+Java17InstallWarning=Для этой версии WeblocOpener требуется Java 17! Устанавливайте, только если ваша ОС поддерживает Java 17.
