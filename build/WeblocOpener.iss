@@ -47,6 +47,7 @@ PrivilegesRequired=admin
 
 ShowLanguageDialog=auto
 DisableProgramGroupPage=yes
+DisableDirPage=no
 
 [Registry]
 ; File association .webloc
