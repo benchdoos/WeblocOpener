@@ -161,6 +161,10 @@ Root: HKCR; Subkey: "Webloc\shell\OpenInBrowserMenu"; ValueType: string; ValueNa
 Root: HKCR; Subkey: "Webloc\shell\OpenInBrowserMenu"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",2"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc\shell\OpenInBrowserMenu"; ValueType: string; ValueName: "SubCommands"; ValueData: "wo.OpenInChrome;wo.OpenInFireFox;wo.OpenInEdge;wo.OpenInIE;wo.OpenInOpera;wo.OpenInYandex;wo.OpenInVivaldi"; Flags: uninsdeletevalue
 
+Root: HKCR; Subkey: "Webarchive\shell\OpenInBrowserMenu"; ValueType: string; ValueName: "MUIVerb"; ValueData: "{cm:OpenInBrowserMenu}"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Webarchive\shell\OpenInBrowserMenu"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",2"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Webarchive\shell\OpenInBrowserMenu"; ValueType: string; ValueName: "SubCommands"; ValueData: "wo.OpenInChrome;wo.OpenInFireFox;wo.OpenInEdge;wo.OpenInIE;wo.OpenInOpera;wo.OpenInYandex;wo.OpenInVivaldi"; Flags: uninsdeletevalue
+
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInChrome"; ValueType: string; ValueName: ""; ValueData: "Google Chrome"; Flags: uninsdeletevalue
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInChrome\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-open-browser"" ""chrome"" ""%1"" "; Flags: uninsdeletevalue
 
