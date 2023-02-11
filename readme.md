@@ -63,6 +63,8 @@ You can use any custom browser by your own with custom call, using syntax: `<fil
 
 [<img src="https://benchdoos.github.io/img/faq/faq_conversion.png"  width="888" />](#what-can-weblocopener-do)
 
+[<img src="https://benchdoos.github.io/img/faq/faq_webarchive.png"  width="888" />](#what-can-weblocopener-do)
+
 [<img src="https://benchdoos.github.io/img/faq/faq_qr_code.png"  width="888" />](#what-can-weblocopener-do)
 
 [<img src="https://benchdoos.github.io/img/faq/faq_update.png"  width="888" />](#what-can-weblocopener-do)
