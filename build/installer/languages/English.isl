@@ -342,4 +342,4 @@ CopyQRMenu=Copy QR-Code
 WeblocLink=.webloc link
 Webarchive=Web archive
 Warning=Warning!
-Java17InstallWarning=For this WeblocOpener version Java 17 required! Install only if your OS supports Java 17.
+Java17InstallWarning=This version of WeblocOpener requires Java 17! Would you like to pre-install Java 17 from adoptium.net?
