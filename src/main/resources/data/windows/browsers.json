@@ -1,5 +1,12 @@
 [
   {
+    "name": "Microsoft Edge",
+    "internalName": "edge",
+    "file_call": "start msedge \"%file\"",
+    "call": "start msedge \"%site\"",
+    "incognito": "start msedge -inprivate \"%site\""
+  },
+  {
     "name": "Google Chrome",
     "internalName": "chrome",
     "call": "start chrome \"%site\"",
@@ -12,20 +19,6 @@
     "call": "start firefox \"%site\"",
     "file_call": "start firefox \"%file\"",
     "incognito": "start firefox -private-window \"%site\""
-  },
-  {
-    "name": "Microsoft Edge",
-    "internalName": "edge",
-    "file_call": "start msedge \"%file\"",
-    "call": "start msedge \"%site\"",
-    "incognito": "start msedge -inprivate \"%site\""
-  },
-  {
-    "name": "Internet Explorer",
-    "internalName": "ie",
-    "call": "start iexplore \"%site\"",
-    "file_call": "start iexplore \"%file\"",
-    "incognito": "start iexplore \"%site\" -private"
   },
   {
     "name": "Opera",
