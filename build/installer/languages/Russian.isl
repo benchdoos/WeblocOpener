@@ -330,5 +330,6 @@ CopyQRMenu=Скопировать QR-Код
 OpenInBrowserMenu=Открыть в браузере
 WeblocLink=Ссылка .webloc
 Webarchive=Веб-архив
+Desktop=Ссылка .desktop
 Warning=Предупреждение!
 Java17InstallWarning=Для этой версии WeblocOpener требуется Java 17! Желаете предварительно установить Java 17 с сайта adoptium.net?

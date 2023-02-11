@@ -128,7 +128,7 @@ Root: HKCR; Subkey: "Webarchive\shell\open\command"; ValueType: string; ValueNam
 
 ; File association .desktop
 Root: HKCR; Subkey: ".desktop"; ValueType: string; ValueName: ""; ValueData: "Desktop"; Flags: uninsdeletevalue
-Root: HKCR; Subkey: "Desktop"; ValueType: string; ValueName: ""; ValueData: {cm:Webarchive}; Flags: uninsdeletekey
+Root: HKCR; Subkey: "Desktop"; ValueType: string; ValueName: ""; ValueData: {cm:Desktop}; Flags: uninsdeletekey
 Root: HKCR; Subkey: "Desktop\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppIconsFile},9"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Desktop\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
 
