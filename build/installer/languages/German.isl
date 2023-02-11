@@ -350,3 +350,5 @@ CopyMenu=Link kopieren
 CopyQRMenu=QR-Code kopieren
 WeblocLink=.webloc link
 Webarchive=Webarchiv
+Warning=Warnung!
+Java17InstallWarning=Diese Version von WeblocOpener benötigt Java 17! Möchten Sie Java 17 von adoptium.net vorinstallieren?

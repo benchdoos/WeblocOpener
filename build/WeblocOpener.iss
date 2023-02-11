@@ -47,6 +47,71 @@ PrivilegesRequired=admin
 
 ShowLanguageDialog=auto
 DisableProgramGroupPage=yes
+DisableDirPage=no
+
+;https://github.com/HeliumProject/InnoSetup/blob/master/Examples/CodeExample1.iss
+[Code]
+function GetJavaMajorVersion(): integer;
+var
+  TempFile: string;
+  ResultCode: Integer;
+  S: AnsiString;
+  P: Integer;
+begin
+  Result := 0;
+
+  { execute java -version and redirect output to a temp file }
+  TempFile := ExpandConstant('{tmp}\javaversion.txt');
+  if (not ExecAsOriginalUser(ExpandConstant('{cmd}'), '/c java -version 2> "' + TempFile + '"', '',SW_HIDE, ewWaitUntilTerminated, ResultCode))
+    or (ResultCode <> 0) then
+  begin
+    Log('Failed to execute java -version');
+    exit;
+  end;
+
+  { read file into variable S }
+  LoadStringFromFile(TempFile, S)
+  DeleteFile(TempFile);
+  Log(Format('java -version output: ' + #13#10 + '%s', [S]));
+
+  { extract version (between quotes) }
+  P := Pos('"', S);
+  Delete(S, 1, P);
+  P := Pos('"', S);
+  SetLength(S, P - 1);
+  Log(Format('Extracted version: %s', [S]));
+
+  { extract major }
+  if Copy(S, 1, 2) = '1.' then
+  begin
+    Delete(S, 1, 2)
+  end;
+  P := Pos('.', S);
+  SetLength(S, P - 1);
+  Log(Format('Major version: %s', [S]));
+
+  Result := StrToIntDef(S, 0);
+end;
+
+function InitializeSetup(): boolean;
+var
+  ResultCode: Integer;
+begin
+  Log('InitializeSetup called');
+  if GetJavaMajorVersion < 17 then
+    begin
+      if MsgBox(ExpandConstant('{cm:Warning}' #13#13 '{cm:Java17InstallWarning}'), mbConfirmation, MB_YESNO) = idYes then
+        begin
+          Result := false;
+          ShellExec('open', 'https://adoptium.net', '', '', SW_SHOWNORMAL, ewNoWait, ResultCode);
+        end;
+    end
+  else
+    begin
+      Result := true;
+    end;
+end;
+
 
 [Registry]
 ; File association .webloc
