@@ -174,7 +174,7 @@ Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandS
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInEdge"; ValueType: string; ValueName: ""; ValueData: "Microsoft Edge"; Flags: uninsdeletevalue
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInEdge\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-open-browser"" ""edge"" ""%1"" "; Flags: uninsdeletevalue
 
-Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInIE"; ValueType: string; ValueName: ""; ValueData: "Internet Explore"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInIE"; ValueType: string; ValueName: ""; ValueData: "Internet Explorer"; Flags: uninsdeletevalue
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInIE\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-open-browser"" ""ie"" ""%1"" "; Flags: uninsdeletevalue
 
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInOpera"; ValueType: string; ValueName: ""; ValueData: "Opera"; Flags: uninsdeletevalue
@@ -196,7 +196,7 @@ Root: HKCU; Subkey: "SOFTWARE\JavaSoft\Prefs\{#MyAppName}"; ValueType: string; V
 Root: HKCU; Subkey: "SOFTWARE\JavaSoft\Prefs\{#MyAppName}"; ValueType: string; ValueName: "open_folder_for_qr"; ValueData: "true"; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "SOFTWARE\JavaSoft\Prefs\{#MyAppName}"; ValueType: string; ValueName: "notifications"; ValueData: "true"; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "SOFTWARE\JavaSoft\Prefs\{#MyAppName}"; ValueType: string; ValueName: "converter_export_extension"; ValueData: "url"; Flags: uninsdeletevalue createvalueifdoesntexist
-Root: HKCU; Subkey: "SOFTWARE\JavaSoft\Prefs\{#MyAppName}"; ValueType: string; ValueName: "dark_mode"; ValueData: "21:0;7:0"; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "SOFTWARE\JavaSoft\Prefs\{#MyAppName}"; ValueType: string; ValueName: "dark_mode"; ValueData: "{{""type"":""SYSTEM""}}"; Flags: uninsdeletevalue createvalueifdoesntexist
 Root: HKCU; Subkey: "SOFTWARE\JavaSoft\Prefs\{#MyAppName}"; ValueType: string; ValueName: "locale"; ValueData: "default"; Flags: uninsdeletevalue createvalueifdoesntexist
 
 Root: HKCU; Subkey: "SOFTWARE\{#MyAppName}\Capabilities"; ValueType: string; ValueName: "ApplicationDescription"; ValueData: "Open, edit and create .webloc links on Windows"; Flags: uninsdeletevalue
