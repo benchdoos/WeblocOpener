@@ -7,7 +7,7 @@
     "incognito": "start chrome \"%site\" --incognito"
   },
   {
-    "name": "Firefox",
+    "name": "Mozilla Firefox",
     "internalName": "firefox",
     "call": "start firefox \"%site\"",
     "file_call": "start firefox \"%file\"",

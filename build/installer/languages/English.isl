@@ -339,6 +339,7 @@ Settings=Settings
 Update=Update
 CopyMenu=Copy link
 CopyQRMenu=Copy QR-Code
+OpenInBrowserMenu=Open in browser
 WeblocLink=.webloc link
 Webarchive=Web archive
 Warning=Warning!

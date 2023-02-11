@@ -327,6 +327,7 @@ Settings=Настройки
 Update=Обновить
 CopyMenu=Скопировать ссылку
 CopyQRMenu=Скопировать QR-Код
+OpenInBrowserMenu=Открыть в браузере
 WeblocLink=Ссылка .webloc
 Webarchive=Веб-архив
 Warning=Предупреждение!

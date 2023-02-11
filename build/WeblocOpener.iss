@@ -156,6 +156,32 @@ Root: HKCR; Subkey: "Webloc\shell\Copy"; ValueType: string; ValueName: ""; Value
 Root: HKCR; Subkey: "Webloc\shell\Copy"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",6"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc\shell\Copy\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-copy"" ""%1"" "; Flags: uninsdeletevalue
 
+; Add open in browser submenu
+Root: HKCR; Subkey: "Webloc\shell\OpenInBrowserMenu"; ValueType: string; ValueName: "MUIVerb"; ValueData: "{cm:OpenInBrowserMenu}"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Webloc\shell\OpenInBrowserMenu"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",2"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Webloc\shell\OpenInBrowserMenu"; ValueType: string; ValueName: "SubCommands"; ValueData: "wo.OpenInChrome;wo.OpenInFireFox;wo.OpenInEdge;wo.OpenInIE;wo.OpenInOpera;wo.OpenInYandex;wo.OpenInVivaldi"; Flags: uninsdeletevalue
+
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInChrome"; ValueType: string; ValueName: ""; ValueData: "Google Chrome"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInChrome\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-open-browser"" ""chrome"" ""%1"" "; Flags: uninsdeletevalue
+
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInFireFox"; ValueType: string; ValueName: ""; ValueData: "Mozilla Firefox"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInFireFox\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-open-browser"" ""firefox"" ""%1"" "; Flags: uninsdeletevalue
+
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInEdge"; ValueType: string; ValueName: ""; ValueData: "Microsoft Edge"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInEdge\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-open-browser"" ""edge"" ""%1"" "; Flags: uninsdeletevalue
+
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInIE"; ValueType: string; ValueName: ""; ValueData: "Internet Explore"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInIE\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-open-browser"" ""ie"" ""%1"" "; Flags: uninsdeletevalue
+
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInOpera"; ValueType: string; ValueName: ""; ValueData: "Opera"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInOpera\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-open-browser"" ""opera"" ""%1"" "; Flags: uninsdeletevalue
+
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInYandex"; ValueType: string; ValueName: ""; ValueData: "Yandex browser"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInYandex\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-open-browser"" ""yandex"" ""%1"" "; Flags: uninsdeletevalue
+
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInVivaldi"; ValueType: string; ValueName: ""; ValueData: "Vivaldi"; Flags: uninsdeletevalue
+Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInVivaldi\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-open-browser"" ""vivaldi"" ""%1"" "; Flags: uninsdeletevalue
+
 ; Add updater autorun
 Root: HKCU; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "Update"; ValueData: """start weblocopener -update-silent"""; Flags: uninsdeletevalue
 

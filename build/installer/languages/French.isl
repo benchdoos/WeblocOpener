@@ -357,6 +357,7 @@ Settings=Parametres
 Update=Mettre a jour
 CopyMenu=Copier le lien
 CopyQRMenu=Copier le code QR
+OpenInBrowserMenu=Ouvrir dans le navigateur
 WeblocLink=.webloc lien
 Webarchive=Archives Web
 Warning=Avertissement!
