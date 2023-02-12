@@ -323,8 +323,8 @@
                                     </paths>
                                     <dst>/opt/${project.name}/icons</dst>
                                 </data>
-                                <!--<data>
-                                    &lt;!&ndash;Libraries (dependencies)&ndash;&gt;
+                                <data>
+                                    <!--Libraries (dependencies)-->
                                     <src>${project.build.directory}/lib</src>
                                     <type>directory</type>
                                     <mapper>
@@ -333,7 +333,7 @@
                                         <user>loader</user>
                                         <group>loader</group>
                                     </mapper>
-                                </data>-->
+                                </data>
                             </dataSet>
                         </configuration>
                     </execution>
