@@ -1,4 +1,4 @@
-[<img src="/img/header.png" align="right" width="888" />](https://vk.cc/6wK76Z)
+[<img src="./img/header.png" align="right" width="888" />](https://vk.cc/6wK76Z)
 
 # WeblocOpener
 
@@ -31,51 +31,43 @@ So that's why this application was created - for these users.
 ## What can WeblocOpener do?
 
 
-- **WeblocOpener gives full MacOs `.webloc` files support on Windows and Debian GNU/Linux.**
-[<img src="https://benchdoos.github.io/img/faq/faq_support.png"  width="888" />](#what-can-weblocopener-do)
+**WeblocOpener gives full MacOs `.webloc` files support on Windows and Debian GNU/Linux.**
+[<img src="./img/faq/faq_support.png"  width="888" />](#what-can-weblocopener-do)
 
-- **Open `.webloc`, `.desktop`, `.url`, `.webarchive` files.** 
-[<img src="https://benchdoos.github.io/img/faq/faq_open.png"  width="888" />](#what-can-weblocopener-do)
+**Open `.webloc`, `.desktop`, `.url`, `.webarchive` files.** 
+[<img src="./img/faq/faq_open.png"  width="888" />](#what-can-weblocopener-do)
 
-- **Choose not default browser to open URL. Open in browser from preset or use custom. 
-Browsers in preset: Google Chrome (Chromium project), Opera, Edge, Mozilla Firefox, Internet Explorer and more...  or you can use your custom browser. 
-You can use any custom browser by your own with custom call, using syntax: `<file_path> %site.`** 
-[<img src="https://benchdoos.github.io/img/faq/faq_select_browser.png"  width="888" />](#what-can-weblocopener-do)
+**Choose whatever browser you want. Open in browser from preset or use custom. 
+Browsers in preset: Google Chrome (Chromium project), Opera, Microsoft Edge, Mozilla Firefox and more...  or you can use your custom browser.**
+[<img src="./img/faq/faq_select_browser.png"  width="888" />](#what-can-weblocopener-do)
 
-- **Convert `.webloc` to `.url` to `.desktop` and backward by using drag and drop on settings window. 
-  Also, you can convert `.webarchive` files into `.html` webpages.** 
-[<img src="https://benchdoos.github.io/img/faq/faq_convert_files.png"  width="888" />](#what-can-weblocopener-do)
+**WeblocOpener provides multiple abilities to operate with supported formats.**
+[<img src="./img/faq/faq_multiple_file_features.png"  width="888" />](#what-can-weblocopener-do)
 
-- **Create new `.webloc` files. Created files are fully supported by Safari on MacOS and WeblocOpener on Windows or Unix.** 
-[<img src="https://benchdoos.github.io/img/faq/faq_create.png"  width="888" />](#what-can-weblocopener-do)
+**Convert `.webloc` to `.url` to `.desktop` and backward by using drag and drop on settings window. 
+Also, you can convert `.webarchive` files into `.html` webpages.** 
+[<img src="./img/faq/faq_convert_files.png"  width="888" />](#what-can-weblocopener-do)
 
-- **Edit created files. Unlike `.webloc` files on MacOS that can not be edited by default (except for text editors), WeblocOpener provides the ability to edit `.webloc` files on Windows.** 
-[<img src="https://benchdoos.github.io/img/faq/faq_edit.png"  width="888" />](#what-can-weblocopener-do)
+**Create new `.webloc` files. Created files are fully supported by Safari on MacOS and WeblocOpener on Windows or Unix.** 
+[<img src="./img/faq/faq_create.png"  width="888" />](#what-can-weblocopener-do)
 
-- **WeblocOpener will try to get the title of page from inserted url and will give you an option to rename it by this title. Now there is no need to name files by yourself.** 
-[<img src="https://benchdoos.github.io/img/faq/faq_auto_rename.png"  width="888" />](#what-can-weblocopener-do)
- 
-[<img src="https://benchdoos.github.io/img/faq/faq_edit_link.png"  width="888" />](#what-can-weblocopener-do)
+**Edit existed files. Change links when you need it.**
+[<img src="./img/faq/faq_edit.png"  width="888" />](#what-can-weblocopener-do)
 
-- **Dark mode will protect your eyes at night. It turns on automatically scheduled or by your location. Check out in settings how to customize it for yourself.** 
-[<img src="https://benchdoos.github.io/img/faq/faq_dark_mode.png"  width="888" />](#what-can-weblocopener-do)
- 
-[<img src="https://benchdoos.github.io/img/faq/faq_settings.png"  width="888" />](#what-can-weblocopener-do)
+**Dark mode will protect your eyes at night. It turns on automatically scheduled or by your location. Check out in settings how to customize it for yourself.** 
+[<img src="./img/faq/faq_dark_mode.png"  width="888" />](#what-can-weblocopener-do)
 
-[<img src="https://benchdoos.github.io/img/faq/faq_conversion.png"  width="888" />](#what-can-weblocopener-do)
+**Settings window can not only change settings of application, but also convert files.** 
+[<img src="./img/faq/faq_settings.png"  width="888" />](#what-can-weblocopener-do)
 
-- **WeblocOpener provides multiple abilities to operate with supported formats**
-[<img src="https://benchdoos.github.io/img/faq/faq_multiple_file_features.png"  width="888" />](#what-can-weblocopener-do)
+**WeblocOpener can open and convert `.webarchive` files.**
+[<img src="./img/faq/faq_webarchive.png"  width="888" />](#what-can-weblocopener-do)
 
-[<img src="https://benchdoos.github.io/img/faq/faq_webarchive.png"  width="888" />](#what-can-weblocopener-do)
+**You can generate QR-Code for stored link to open in on your smartphone.**
+[<img src="./img/faq/faq_qr_code.png"  width="888" />](#what-can-weblocopener-do)
 
-[<img src="https://benchdoos.github.io/img/faq/faq_qr_code.png"  width="888" />](#what-can-weblocopener-do)
-
-[<img src="https://benchdoos.github.io/img/faq/faq_update.png"  width="888" />](#what-can-weblocopener-do)
-
-- **Find out, what's new in new update. Use info icon on Updater to check it out.** 
-[<img src="https://benchdoos.github.io/img/faq/faq_update_info.png"  width="888" />](#what-can-weblocopener-do)
-
+**When there will appear new features - auto-updater tool can notify you.**
+[<img src="./img/faq/faq_update.png"  width="888" />](#what-can-weblocopener-do)
 
 ## Supported features
 
@@ -94,20 +86,16 @@ You can use any custom browser by your own with custom call, using syntax: `<fil
 
 ## Have questions? 
 **Watch the youtube video, with new abilities of version 1.4:**
-[<img src="/img/youtube_preview.png"  width="888" />](https://vk.cc/73qFIF)
+[<img src="./img/youtube_preview.png"  width="888" />](https://vk.cc/73qFIF)
 
 
 ## System Requirements
 <ul class="SystemRequirements">
     <b>Operating system:</b>
-    <li>Windows XP, Vista, 7, 8, 10 / Debian GNU/Linux (Ubuntu, etc...)</li>
-    <b>CPU:</b>
-    <li>Pentium 2 266MHz or better</li>
-    <b>Memory:</b>
-    <li>128 MB RAM</li>
+    <li>7, 8, 10, 11 / Debian GNU/Linux (Ubuntu, etc...)</li>
     <b>Hard drive:</b>
     <li>25 MB free hard disk space</li>
     <br>
     <b>Additional software:</b>
-<li>Java 8 required - <a href="https://java.com/download/">Download</a></li>
+<li>Java 17 required - <a href="https://adoptium.net/marketplace/">Download</a></li>
 </ul>
