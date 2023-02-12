@@ -71,17 +71,17 @@ Also, you can convert `.webarchive` files into `.html` webpages.**
 
 ## Supported features
 
-| Feature                                            | Windows | Unix |   MacOS    |
-|----------------------------------------------------|:-------:|-----:|:----------:|
-| Open                                               |   Yes   |  Yes |    Yes     |
-| Edit                                               |   Yes   |  Yes |     No     |
-| Create new                                         |   Yes   |  Yes |  Default   |
-| Generate QR-Code                                   |   Yes   |  Yes |     No     |
-| URL auto-paste                                     |   Yes   |  Yes | WO feature |
-| Instant URL, QR-Code copy                          |   Yes   |  Yes |     No     |
-| Converter .webloc to .url to .desktop and backward |   Yes   |  Yes |     No     |
-| Auto-update                                        |   Yes   |  Yes | WO feature |
-| Open in not default browser                        |   Yes   |  Yes |    Not     |
+| Feature                                              | Windows | Unix |    MacOS    |
+|------------------------------------------------------|:-------:|-----:|:-----------:|
+| Open                                                 |   Yes   |  Yes | Coming soon |
+| Edit                                                 |   Yes   |  Yes | Coming soon |
+| Create new                                           |   Yes   |  Yes | Coming soon |
+| Generate QR-Code                                     |   Yes   |  Yes | Coming soon |
+| Instant URL, QR-Code copy                            |   Yes   |  Yes | Coming soon |
+| Convert `.webloc`, `.url`, `.desktop`, `.webarchive` |   Yes   |  Yes | Coming soon |
+| Auto-update                                          |   Yes   |  Yes | Coming soon |
+| Open in not default browser                          |   Yes   |  Yes | Coming soon |
+| Switch browser to open for each file                 |   Yes   |   No | Coming soon |
 
 
 ## Have questions? 
