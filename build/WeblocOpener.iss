@@ -132,11 +132,17 @@ Root: HKCR; Subkey: "Desktop\DefaultIcon"; ValueType: string; ValueName: ""; Val
 Root: HKCR; Subkey: "Desktop\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
 ;---/File association---------
 
-;----Add new file .webloc-----
+;----Create new file----------
+;webloc
 Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "ItemName"; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
 Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "FileName"; ValueData: "{app}\Template.webloc"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "NullFile"; ValueData: ""; Flags: uninsdeletevalue
-;---/Add new file .webloc-----
+
+;desktop
+Root: HKCR; Subkey: ".desktop\ShellNew"; ValueType: string; ValueName: "ItemName"; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
+Root: HKCR; Subkey: ".desktop\ShellNew"; ValueType: string; ValueName: "FileName"; ValueData: "{app}\Template.desktop"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: ".desktop\ShellNew"; ValueType: string; ValueName: "NullFile"; ValueData: ""; Flags: uninsdeletevalue
+;---/Create new file----------
 
 ;----Add edit file menu-------
 ; webloc
@@ -255,6 +261,7 @@ Name: "Russian"; MessagesFile: "{#MyAppAdditionalPath}\languages\Russian.isl"
 Source: "{#MyAppSourcePath}\target\WeblocOpener.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppSourcePath}\target\lib\*"; DestDir: "{app}\lib"; Flags: ignoreversion recursesubdirs
 Source: "{#MyAppSourcePath}\build\Template.webloc"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#MyAppSourcePath}\build\Template.desktop"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#ImagesPath}\icons.icl"; DestDir: "{app}"; Flags: ignoreversion
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
