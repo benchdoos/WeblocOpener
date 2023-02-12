@@ -43,7 +43,7 @@ You can use any custom browser by your own with custom call, using syntax: `<fil
 [<img src="https://benchdoos.github.io/img/faq/faq_select_browser.png"  width="888" />](#what-can-weblocopener-do)
 
 - **Convert `.webloc` to `.url` to `.desktop` and backward by using drag and drop on settings window. 
-  Also you can convert `.webarchive` files into `.html` webpages.** 
+  Also, you can convert `.webarchive` files into `.html` webpages.** 
 [<img src="https://benchdoos.github.io/img/faq/faq_convert_files.png"  width="888" />](#what-can-weblocopener-do)
 
 - **Create new `.webloc` files. Created files are fully supported by Safari on MacOS and WeblocOpener on Windows or Unix.** 
