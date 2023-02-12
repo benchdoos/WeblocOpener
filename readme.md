@@ -34,7 +34,7 @@ So that's why this application was created - for these users.
 - **WeblocOpener gives full MacOs `.webloc` files support on Windows and Debian GNU/Linux.**
 [<img src="https://benchdoos.github.io/img/faq/faq_support.png"  width="888" />](#what-can-weblocopener-do)
 
-- **Open `.webloc` files.** 
+- **Open `.webloc`, `.desktop`, `.url`, `.webarchive` files.** 
 [<img src="https://benchdoos.github.io/img/faq/faq_open.png"  width="888" />](#what-can-weblocopener-do)
 
 - **Choose not default browser to open URL. Open in browser from preset or use custom. 
@@ -42,7 +42,8 @@ Browsers in preset: Google Chrome (Chromium project), Opera, Edge, Mozilla Firef
 You can use any custom browser by your own with custom call, using syntax: `<file_path> %site.`** 
 [<img src="https://benchdoos.github.io/img/faq/faq_select_browser.png"  width="888" />](#what-can-weblocopener-do)
 
-- **Convert `.webloc` to `.url` and backward by using drag and drop on settings window** 
+- **Convert `.webloc` to `.url` to `.desktop` and backward by using drag and drop on settings window. 
+  Also you can convert `.webarchive` files into `.html` webpages.** 
 [<img src="https://benchdoos.github.io/img/faq/faq_convert_files.png"  width="888" />](#what-can-weblocopener-do)
 
 - **Create new `.webloc` files. Created files are fully supported by Safari on MacOS and WeblocOpener on Windows or Unix.** 
@@ -62,6 +63,9 @@ You can use any custom browser by your own with custom call, using syntax: `<fil
 [<img src="https://benchdoos.github.io/img/faq/faq_settings.png"  width="888" />](#what-can-weblocopener-do)
 
 [<img src="https://benchdoos.github.io/img/faq/faq_conversion.png"  width="888" />](#what-can-weblocopener-do)
+
+- **WeblocOpener provides multiple abilities to operate with supported formats**
+[<img src="https://benchdoos.github.io/img/faq/faq_multiple_file_features.png"  width="888" />](#what-can-weblocopener-do)
 
 [<img src="https://benchdoos.github.io/img/faq/faq_webarchive.png"  width="888" />](#what-can-weblocopener-do)
 
