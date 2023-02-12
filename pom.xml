@@ -28,6 +28,11 @@
     <description>
         WeblocOpener is a simple way to open, edit, create MacOS Safari .webloc files on Windows and Debian GNU/Linux.
     </description>
+    <organization>
+        <name>Eugene Zrazhevsky</name>
+        <url>https://github.com/benchdoos/WeblocOpener</url>
+    </organization>
+    <inceptionYear>2016</inceptionYear>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -39,7 +44,7 @@
         <disable.dev_mode>true</disable.dev_mode>
         <ultimate_build>false</ultimate_build>
 
-        <application.version.beta.version>0</application.version.beta.version>
+        <application.version.beta.version>1</application.version.beta.version>
 
         <buildnumber-maven-plugin.version>1.4</buildnumber-maven-plugin.version>
     </properties>
@@ -208,7 +213,7 @@
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
-                <version>2.2.0</version>
+                <version>2.3.2</version>
                 <configuration>
                     <dontWrapJar>false</dontWrapJar>
                     <headerType>gui</headerType>
@@ -229,12 +234,12 @@
                         <addDependencies>true</addDependencies>
                     </classPath>
                     <versionInfo>
-                        <fileVersion>${project.version}.0</fileVersion>
+                        <fileVersion>${project.version}.${application.version.beta.version}</fileVersion>
                         <txtFileVersion>${project.version}.${buildNumber}</txtFileVersion>
                         <fileDescription>WeblocOpener</fileDescription>
                         <copyright>${copyright}</copyright>
-                        <productVersion>${project.version}.0</productVersion>
-                        <txtProductVersion>${project.version}.0</txtProductVersion>
+                        <productVersion>${project.version}.${application.version.beta.version}</productVersion>
+                        <txtProductVersion>${project.version}.${application.version.beta.version}</txtProductVersion>
                         <productName>WeblocOpener</productName>
                         <companyName>Eugene Zrazhevsky</companyName>
                         <internalName>WeblocOpener</internalName>
@@ -318,8 +323,8 @@
                                     </paths>
                                     <dst>/opt/${project.name}/icons</dst>
                                 </data>
-                                <!--<data>
-                                    &lt;!&ndash;Libraries (dependencies)&ndash;&gt;
+                                <data>
+                                    <!--Libraries (dependencies)-->
                                     <src>${project.build.directory}/lib</src>
                                     <type>directory</type>
                                     <mapper>
@@ -328,7 +333,7 @@
                                         <user>loader</user>
                                         <group>loader</group>
                                     </mapper>
-                                </data>-->
+                                </data>
                             </dataSet>
                         </configuration>
                     </execution>
@@ -416,7 +421,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>RELEASE</version>
+            <version>5.9.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

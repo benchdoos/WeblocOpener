@@ -1,19 +1,5 @@
 [
   {
-    "name": "Google Chrome",
-    "internalName": "chrome",
-    "call": "start chrome \"%site\"",
-    "file_call": "start chrome \"%file\"",
-    "incognito": "start chrome \"%site\" --incognito"
-  },
-  {
-    "name": "Firefox",
-    "internalName": "firefox",
-    "call": "start firefox \"%site\"",
-    "file_call": "start firefox \"%file\"",
-    "incognito": "start firefox -private-window \"%site\""
-  },
-  {
     "name": "Microsoft Edge",
     "internalName": "edge",
     "file_call": "start msedge \"%file\"",
@@ -21,11 +7,18 @@
     "incognito": "start msedge -inprivate \"%site\""
   },
   {
-    "name": "Internet Explorer",
-    "internalName": "ie",
-    "call": "start iexplore \"%site\"",
-    "file_call": "start iexplore \"%file\"",
-    "incognito": "start iexplore \"%site\" -private"
+    "name": "Google Chrome",
+    "internalName": "chrome",
+    "call": "start chrome \"%site\"",
+    "file_call": "start chrome \"%file\"",
+    "incognito": "start chrome \"%site\" --incognito"
+  },
+  {
+    "name": "Mozilla Firefox",
+    "internalName": "firefox",
+    "call": "start firefox \"%site\"",
+    "file_call": "start firefox \"%file\"",
+    "incognito": "start firefox -private-window \"%site\""
   },
   {
     "name": "Opera",

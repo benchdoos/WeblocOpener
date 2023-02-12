@@ -56,14 +56,23 @@ public class Main {
             final String message = translatedString + " " + OS.getCurrentOS().name();
 
             NotificationManager.getForcedNotification(null)
-                    .setThrowable(e)
-                    .showErrorNotification(message, message);
+                .setThrowable(e)
+                .showErrorNotification(message, message);
+
+        } catch (com.github.benchdoos.weblocopenercore.exceptions.FileDoesNotExistException e) {
+            log.fatal("File not found for arguments: {}", Arrays.toString(args));
+            final Translation translation = new Translation("WeblocOpenerCommonsBundle");
+            String title = translation.get("unexpectedException");
+            String message = translation.get("fileNotFoundException");
+            NotificationManager.getForcedNotification(null)
+                .setThrowable(e)
+                .showErrorNotification(title, message);
         } catch (Exception e) {
             log.fatal("System exited with exception", e);
             String message = Translation.get("WeblocOpenerCommonsBundle", "unexpectedException");
             NotificationManager.getForcedNotification(null)
-                    .setThrowable(e)
-                    .showErrorNotification(message, message);
+                .setThrowable(e)
+                .showErrorNotification(message, message);
         }
     }
 

@@ -3,8 +3,8 @@ Version: [[version]].[[buildNumber]]
 Section: misc
 Priority: optional
 Architecture: all
-Depends: jdk (>= 1.8)
+Depends: jdk (>= 1.17)
 Maintainer: Eugene Zrazhevsky <weblocopener@gmail.com>
 Description: Open, edit and create MacOS .webloc, Windows .url and Unix .desktop links on unix.
 Distribution: development
-Depends: default-jre | java8-runtime
+Depends: default-jre | java17-runtime
