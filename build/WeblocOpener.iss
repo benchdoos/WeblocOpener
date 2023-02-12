@@ -114,49 +114,76 @@ end;
 
 
 [Registry]
-; File association .webloc
+;----File association---------
+;.webloc
 Root: HKCR; Subkey: ".webloc"; ValueType: string; ValueName: ""; ValueData: "Webloc"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc"; ValueType: string; ValueName: ""; ValueData: {cm:WeblocLink}; Flags: uninsdeletekey
 Root: HKCR; Subkey: "Webloc\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppIconsFile},3"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
-
-; File association .webrachive
+;.webrachive
 Root: HKCR; Subkey: ".webarchive"; ValueType: string; ValueName: ""; ValueData: "Webarchive"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webarchive"; ValueType: string; ValueName: ""; ValueData: {cm:Webarchive}; Flags: uninsdeletekey
 Root: HKCR; Subkey: "Webarchive\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppIconsFile},8"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webarchive\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
-
-; File association .desktop
+;.desktop
 Root: HKCR; Subkey: ".desktop"; ValueType: string; ValueName: ""; ValueData: "Desktop"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Desktop"; ValueType: string; ValueName: ""; ValueData: {cm:Desktop}; Flags: uninsdeletekey
 Root: HKCR; Subkey: "Desktop\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\{#MyAppIconsFile},9"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Desktop\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
+;---/File association---------
 
-; Add new file .webloc
+;----Add new file .webloc-----
 Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "ItemName"; ValueData: """{app}\{#MyAppExeName}"" ""%1"""; Flags: uninsdeletevalue
 Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "FileName"; ValueData: "{app}\Template.webloc"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: ".webloc\ShellNew"; ValueType: string; ValueName: "NullFile"; ValueData: ""; Flags: uninsdeletevalue
+;---/Add new file .webloc-----
 
-; Add edit file menu
-Root: HKCR; Subkey: "Webloc\shell\edit"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",7"; Flags: uninsdeletevalue
+;----Add edit file menu-------
+; webloc
+Root: HKCR; Subkey: "Webloc\shell\edit"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",2"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc\shell\edit\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-edit"" ""%1"" "; Flags: uninsdeletevalue
+; desktop
+Root: HKCR; Subkey: "Desktop\shell\edit"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",2"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Desktop\shell\edit\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-edit"" ""%1"" "; Flags: uninsdeletevalue
+; url - not working: permission denied
+;Root: HKCR; Subkey: "InternetShortcut\shell\edit"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",2"; Flags: uninsdeletevalue
+;Root: HKCR; Subkey: "InternetShortcut\shell\edit\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-edit"" ""%1"" "; Flags: uninsdeletevalue
+;---/Add edit file menu-------
 
-; Add qr file menu
+;----Add qr file menu---------
+; webloc
 Root: HKCR; Subkey: "Webloc\shell\GenerateQRCode"; ValueType: string; ValueName: ""; ValueData: {cm:GenerateQrCode}; Flags: uninsdeletevalue
-Root: HKCR; Subkey: "Webloc\shell\GenerateQRCode"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",5"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Webloc\shell\GenerateQRCode"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",2"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc\shell\GenerateQRCode\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-qr"" ""%1"" "; Flags: uninsdeletevalue
+; desktop
+Root: HKCR; Subkey: "Desktop\shell\GenerateQRCode"; ValueType: string; ValueName: ""; ValueData: {cm:GenerateQrCode}; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Desktop\shell\GenerateQRCode"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",2"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Desktop\shell\GenerateQRCode\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-qr"" ""%1"" "; Flags: uninsdeletevalue
+;---/Add qr file menu---------
 
-; Add copy qr file menu
+;----Add copy qr file menu-------
+;webloc
 Root: HKCR; Subkey: "Webloc\shell\CopyQRCode"; ValueType: string; ValueName: ""; ValueData: {cm:CopyQRMenu}; Flags: uninsdeletevalue
-Root: HKCR; Subkey: "Webloc\shell\CopyQRCode"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",5"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Webloc\shell\CopyQRCode"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",2"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc\shell\CopyQRCode\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-copy-qr"" ""%1"" "; Flags: uninsdeletevalue
+;desktop
+Root: HKCR; Subkey: "Desktop\shell\CopyQRCode"; ValueType: string; ValueName: ""; ValueData: {cm:CopyQRMenu}; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Desktop\shell\CopyQRCode"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",2"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Desktop\shell\CopyQRCode\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-copy-qr"" ""%1"" "; Flags: uninsdeletevalue
+;---/Add copy qr file menu-------
 
-; Add copy file menu
+;----Add copy file menu----------
+;webloc
 Root: HKCR; Subkey: "Webloc\shell\Copy"; ValueType: string; ValueName: ""; ValueData: {cm:CopyMenu}; Flags: uninsdeletevalue
-Root: HKCR; Subkey: "Webloc\shell\Copy"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",6"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Webloc\shell\Copy"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",2"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc\shell\Copy\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-copy"" ""%1"" "; Flags: uninsdeletevalue
+;desktop
+Root: HKCR; Subkey: "Desktop\shell\Copy"; ValueType: string; ValueName: ""; ValueData: {cm:CopyMenu}; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Desktop\shell\Copy"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",2"; Flags: uninsdeletevalue
+Root: HKCR; Subkey: "Desktop\shell\Copy\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-copy"" ""%1"" "; Flags: uninsdeletevalue
+;----Add copy file menu----------
 
-; Add open in browser submenu
+;----Add open in browser submenu---
 Root: HKCR; Subkey: "Webloc\shell\OpenInBrowserMenu"; ValueType: string; ValueName: "MUIVerb"; ValueData: "{cm:OpenInBrowserMenu}"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc\shell\OpenInBrowserMenu"; ValueType: string; ValueName: "icon"; ValueData: """{app}\{#MyAppIconsFile}"",2"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Webloc\shell\OpenInBrowserMenu"; ValueType: string; ValueName: "SubCommands"; ValueData: "wo.OpenInChrome;wo.OpenInFireFox;wo.OpenInEdge;wo.OpenInIE;wo.OpenInOpera;wo.OpenInYandex;wo.OpenInVivaldi"; Flags: uninsdeletevalue
@@ -186,7 +213,7 @@ Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandS
 
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInVivaldi"; ValueType: string; ValueName: ""; ValueData: "Vivaldi"; Flags: uninsdeletevalue
 Root: HKLM; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\CommandStore\shell\wo.OpenInVivaldi\command"; ValueType: string; ValueName: ""; ValueData: """{app}\{#MyAppExeName}"" ""-open-browser"" ""vivaldi"" ""%1"" "; Flags: uninsdeletevalue
-
+;---/Add open in browser submenu---
 ; Add updater autorun
 Root: HKCU; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "Update"; ValueData: """start weblocopener -update-silent"""; Flags: uninsdeletevalue
 

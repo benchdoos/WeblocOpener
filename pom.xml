@@ -234,12 +234,12 @@
                         <addDependencies>true</addDependencies>
                     </classPath>
                     <versionInfo>
-                        <fileVersion>${project.version}.0</fileVersion>
+                        <fileVersion>${project.version}.${application.version.beta.version}</fileVersion>
                         <txtFileVersion>${project.version}.${buildNumber}</txtFileVersion>
                         <fileDescription>WeblocOpener</fileDescription>
                         <copyright>${copyright}</copyright>
-                        <productVersion>${project.version}.0</productVersion>
-                        <txtProductVersion>${project.version}.0</txtProductVersion>
+                        <productVersion>${project.version}.${application.version.beta.version}</productVersion>
+                        <txtProductVersion>${project.version}.${application.version.beta.version}</txtProductVersion>
                         <productName>WeblocOpener</productName>
                         <companyName>Eugene Zrazhevsky</companyName>
                         <internalName>WeblocOpener</internalName>
