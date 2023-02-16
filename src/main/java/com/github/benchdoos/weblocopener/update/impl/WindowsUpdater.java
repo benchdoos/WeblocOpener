@@ -69,7 +69,7 @@ public class WindowsUpdater implements Updater {
     public void startUpdate(ApplicationVersion applicationVersion) throws IOException {
         log.info("Starting update for {}", applicationVersion.getVersion());
         File installerFile = new File(
-                ApplicationConstants.UPDATE_PATH_FILE + ApplicationConstants.DEBIAN_SETUP_DEFAULT_NAME);
+            ApplicationConstants.UPDATE_PATH_FILE + ApplicationConstants.WINDOWS_SETUP_DEFAULT_NAME);
         updateProgressBar(applicationVersion, installerFile);
 
         try {
