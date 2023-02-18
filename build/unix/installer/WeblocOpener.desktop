@@ -1,7 +1,11 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=WeblocOpener
+Name=WeblocOpener Settings
+Name[de]=WeblocOpener-Einstellungen
+Name[fr]=Paramètres WeblocOpener
+Name[it]=Impostazioni WeblocOpener
+Name[ru]=Настройки WeblocOpener
 Comment=Open MacOs .webloc, Windows .url, Unix .desktop files on Unix.
 Comment[de]=Öffne MacOs .webloc, Windows .url, Unix .desktop-Dateien unter Unix.
 Comment[fr]=Ouvrez les fichiers MacOs .webloc, Windows .url, Unix .desktop sous Unix.
@@ -10,10 +14,8 @@ Comment[ru]=Открыть MacOs .webloc, Windows .url, Unix .desktop файлы
 GenericName=WeblocOpener
 X-GNOME-FullName=WeblocOpener
 
-Exec=java -jar "/opt/WeblocOpener/WeblocOpener.jar" %U
+Exec=java -jar "/opt/WeblocOpener/WeblocOpener.jar"
 Icon=/opt/WeblocOpener/icons/WeblocOpener.png
-
-MimeType=application/webloc;application/xml;wwwserver/redirection;application/internet-shortcut;application/x-mswinurl;application/x-url;message/external-body;text/url;text/x-url;application/x-desktop;
 
 Terminal=false
 Categories=Library;

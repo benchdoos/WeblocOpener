@@ -269,7 +269,7 @@
             <plugin>
                 <groupId>org.vafer</groupId>
                 <artifactId>jdeb</artifactId>
-                <version>1.7</version>
+                <version>1.10</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -297,6 +297,12 @@
                                     <type>file</type>
                                     <src>${project.basedir}/build/unix/installer/WeblocOpener.desktop</src>
                                     <dst>/usr/share/applications/WeblocOpener.desktop</dst>
+                                </data>
+                                <data>
+                                    <!--WeblocOpenerHelper link-->
+                                    <type>file</type>
+                                    <src>${project.basedir}/build/unix/installer/WeblocOpenerHelper.desktop</src>
+                                    <dst>/usr/share/applications/WeblocOpenerHelper.desktop</dst>
                                 </data>
                                 <data>
                                     <!--Mime type-->
