@@ -1,5 +1,5 @@
 Package: [[name]]
-Version: [[version]].[[buildNumber]]
+Version: [[version]].[[application.version.beta.version]]
 Section: misc
 Priority: optional
 Architecture: all
