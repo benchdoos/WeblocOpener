@@ -20,7 +20,7 @@ Download [Latest version](https://vk.cc/7Flxoe)
 WeblocOpener is a simple way to open, edit, create MacOS Safari `.webloc` files on Windows and Debian GNU/Linux.
 
 ## What is `.webloc` file?
-<img style="float: left;" src="./img/weblocIcon.png"  width="256"  alt="image of webloc file icon"/> `.webloc` extension is usually means that in front of you is a MacOS Safari web-url. 
+<img style="float: right;" src="./img/weblocIcon.png"  width="256"  alt="image of webloc file icon"/> `.webloc` extension is usually means that in front of you is a MacOS Safari web-url. 
 Actually it is a text document, formatted to property list - PLIST 1.0 
 ([see](https://developer.apple.com/library/content/documentation/General/Reference/InfoPlistKeyReference/Articles/AboutInformationPropertyListFiles.html)).
 You can open it with any text-editor (like notepad on Windows or gedit on Ubuntu) to find out the url, saved in `.webloc` file.
