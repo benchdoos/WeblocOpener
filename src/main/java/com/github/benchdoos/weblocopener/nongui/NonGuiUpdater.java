@@ -18,7 +18,7 @@ package com.github.benchdoos.weblocopener.nongui;
 import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.nongui.notify.NotifyManager;
 import com.github.benchdoos.weblocopener.update.Updater;
-import com.github.benchdoos.weblocopener.update.UpdaterManager;
+import com.github.benchdoos.weblocopener.update.UpdaterHelper;
 import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
 import com.github.benchdoos.weblocopenercore.service.notification.NotificationManager;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DevModeSettings;
@@ -38,8 +38,7 @@ public class NonGuiUpdater {
 
     public NonGuiUpdater() {
 
-        Updater updater;
-        updater = UpdaterManager.getUpdaterForCurrentOperatingSystem();
+        Updater updater = UpdaterHelper.getUpdaterForCurrentOperatingSystem();
 
         final ApplicationVersion latestApplicationVersion = updater.getLatestAppVersion();
         if (latestApplicationVersion != null) {

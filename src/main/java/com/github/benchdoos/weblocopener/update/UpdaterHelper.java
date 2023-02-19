@@ -25,8 +25,6 @@ import com.github.benchdoos.weblocopenercore.service.settings.impl.InstallBetaUp
 import com.github.benchdoos.weblocopenercore.service.settings.impl.LatestUpdateCheckSettings;
 import com.github.benchdoos.weblocopenercore.utils.VersionUtils;
 import com.github.benchdoos.weblocopenercore.utils.system.OS;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.GHRelease;
@@ -41,13 +39,12 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Log4j2
-public class UpdaterManager {
+public class UpdaterHelper {
     private static final String REPOSITORY_NAME = "benchdoos/weblocopener";
     private static final Pattern BETA_FROM_RELEASE_TITLE_PATTERN = Pattern.compile("\\(beta\\.(\\d+)\\)");
 
-    public static ApplicationVersion getLatestVersion(Updater updater) {
+    public ApplicationVersion getLatestVersion(Updater updater) {
         final ApplicationVersion latestReleaseAppVersion = updater.getLatestReleaseAppVersion();
 
         new LatestUpdateCheckSettings().save(new Date());
@@ -69,7 +66,7 @@ public class UpdaterManager {
         return latestReleaseAppVersion;
     }
 
-    public static ApplicationVersion getLatestReleaseVersion(String setupName) {
+    public ApplicationVersion getLatestReleaseVersion(String setupName) {
         try {
             log.debug("Requesting new application version from github");
             final GitHub github = GitHub.connectAnonymously();
@@ -91,7 +88,7 @@ public class UpdaterManager {
         } else return new UnixUpdater();
     }
 
-    public static ApplicationVersion getLatestBetaVersion(String setupName) {
+    public ApplicationVersion getLatestBetaVersion(String setupName) {
         try {
             final GitHub gitHub = GitHub.connectAnonymously();
             final GHRepository repository = gitHub.getRepository(REPOSITORY_NAME);
@@ -103,7 +100,7 @@ public class UpdaterManager {
         }
     }
 
-    private static ApplicationVersion getLatestBetaAppVersion(PagedIterable<GHRelease> releases, String setupName) throws IOException {
+    private ApplicationVersion getLatestBetaAppVersion(PagedIterable<GHRelease> releases, String setupName) throws IOException {
         ApplicationVersion latestBeta = null;
         for (GHRelease release : releases) {
             if (release.isPrerelease()) {
@@ -114,7 +111,7 @@ public class UpdaterManager {
         return latestBeta;
     }
 
-    private static ApplicationVersion getApplicationVersion(GHRelease latestRelease, String setupName) throws IOException {
+    private ApplicationVersion getApplicationVersion(GHRelease latestRelease, String setupName) throws IOException {
         final ApplicationVersion version = new ApplicationVersion();
         version.setUpdateTitle(latestRelease.getName());
         version.setLegacyUpdateInfo(latestRelease.getBody());
@@ -140,13 +137,13 @@ public class UpdaterManager {
         return version;
     }
 
-    public static UpdateInfo getUpdateInfoFromUrl(final URL url) throws IOException {
+    public UpdateInfo getUpdateInfoFromUrl(final URL url) throws IOException {
         final String jsonSrc = IOUtils.toString(url, StandardCharsets.UTF_8);
         final ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(jsonSrc, UpdateInfo.class);
     }
 
-    private static Beta tryGetBetaFromName(String updateTitle, Beta beta) {
+    private Beta tryGetBetaFromName(String updateTitle, Beta beta) {
         try {
             final Matcher matcher = BETA_FROM_RELEASE_TITLE_PATTERN.matcher(updateTitle);
             if (matcher.find()) {

@@ -13,14 +13,14 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UpdaterManagerTest extends BaseUnitTest {
+class UpdaterHelperTest extends BaseUnitTest {
 
   @Test
   void getUpdateInfoFromUrl() throws MalformedURLException {
 
     final URL url = getClass().getResource("/json/update-info.json");
 
-    final UpdateInfo updateInfo = assertDoesNotThrow(() -> UpdaterManager.getUpdateInfoFromUrl(url));
+    final UpdateInfo updateInfo = assertDoesNotThrow(() -> new UpdaterHelper().getUpdateInfoFromUrl(url));
     assertNotNull(updateInfo);
     assertNotNull(updateInfo.features());
     assertTrue(CollectionUtils.isNotEmpty(updateInfo.features()));

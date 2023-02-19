@@ -16,7 +16,8 @@
 package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.update.Updater;
-import com.github.benchdoos.weblocopener.update.UpdaterManager;
+import com.github.benchdoos.weblocopener.update.UpdaterHelper;
+import com.github.benchdoos.weblocopener.update.impl.UnixUpdater;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopenercore.constants.StringConstants;
 import com.github.benchdoos.weblocopenercore.domain.preferences.DevModeFeatureType;
@@ -389,7 +390,7 @@ public class UpdateDialog extends JFrame implements Translatable {
 
   public void checkForUpdates() {
     progressBar.setIndeterminate(true);
-    updater = UpdaterManager.getUpdaterForCurrentOperatingSystem();
+    updater = UpdaterHelper.getUpdaterForCurrentOperatingSystem();
     log.debug("Provided updater: {}", updater);
     if (updater != null) {
       createDefaultActionListeners();
@@ -456,7 +457,7 @@ public class UpdateDialog extends JFrame implements Translatable {
     }
 
     buttonOK.addActionListener(e -> {
-      updateThread = new Thread(() -> onOK());
+      updateThread = new Thread(this::onOK);
       updateThread.start();
     });
 
@@ -506,6 +507,7 @@ public class UpdateDialog extends JFrame implements Translatable {
 
   private void initWindowListeners() {
     addWindowListener(new WindowAdapter() {
+      @Override
       public void windowClosing(WindowEvent e) {
         onCancel();
       }
