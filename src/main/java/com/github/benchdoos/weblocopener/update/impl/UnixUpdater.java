@@ -18,7 +18,7 @@ package com.github.benchdoos.weblocopener.update.impl;
 import com.github.benchdoos.weblocopener.core.ApplicationConstants;
 import com.github.benchdoos.weblocopener.gui.UpdateDialog;
 import com.github.benchdoos.weblocopener.update.Updater;
-import com.github.benchdoos.weblocopener.update.UpdaterManager;
+import com.github.benchdoos.weblocopener.update.UpdaterHelper;
 import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
@@ -31,29 +31,55 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Log4j2
 public class UnixUpdater implements Updater {
-    private static ApplicationVersion latestReleaseVersion = null;
-    private static ApplicationVersion latestBetaVersion = null;
+    private static AtomicReference<ApplicationVersion> latestReleaseVersion = null;
+    private static AtomicReference<ApplicationVersion> latestBetaVersion = null;
+
+    private static final Object RELEASE_MUTEX = new Object();
+    private static final Object BETA_MUTEX = new Object();
+
+    private final UpdaterHelper updaterHelper;
+
+    public UnixUpdater() {
+        updaterHelper = new UpdaterHelper();
+    }
 
     @Override
     public ApplicationVersion getLatestAppVersion() {
-        return UpdaterManager.getLatestVersion(this);
+        return updaterHelper.getLatestVersion(this);
     }
 
     @Override
     public ApplicationVersion getLatestReleaseAppVersion() {
-        if (latestReleaseVersion != null) return latestReleaseVersion;
+        if (latestReleaseVersion != null) {
+            return latestReleaseVersion.get();
+        }
 
-        return latestReleaseVersion = UpdaterManager.getLatestReleaseVersion(ApplicationConstants.DEBIAN_SETUP_DEFAULT_NAME);
+        synchronized (RELEASE_MUTEX) {
+            final ApplicationVersion version =
+                updaterHelper.getLatestReleaseVersion(ApplicationConstants.DEBIAN_SETUP_DEFAULT_NAME);
+            latestReleaseVersion = new AtomicReference<>(version);
+
+            return latestReleaseVersion.get();
+        }
     }
 
     @Override
     public ApplicationVersion getLatestBetaAppVersion() {
-        if (latestBetaVersion != null) return latestBetaVersion;
+        if (latestBetaVersion != null) {
+            return latestBetaVersion.get();
+        }
 
-        return latestBetaVersion = UpdaterManager.getLatestBetaVersion(ApplicationConstants.DEBIAN_SETUP_DEFAULT_NAME);
+        synchronized (BETA_MUTEX) {
+            final ApplicationVersion version =
+                updaterHelper.getLatestBetaVersion(ApplicationConstants.DEBIAN_SETUP_DEFAULT_NAME);
+            latestBetaVersion = new AtomicReference<>(version);
+
+            return latestBetaVersion.get();
+        }
     }
 
     @Override
