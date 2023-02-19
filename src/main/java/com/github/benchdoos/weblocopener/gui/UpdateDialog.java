@@ -32,6 +32,7 @@ import com.github.benchdoos.weblocopenercore.service.settings.impl.DarkModeActiv
 import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
 import com.github.benchdoos.weblocopenercore.utils.VersionUtils;
+import com.github.benchdoos.weblocopenercore.utils.version.Version;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -398,7 +399,8 @@ public class UpdateDialog extends JFrame implements Translatable {
       initBetaLabel();
 
       progressBar.setIndeterminate(false);
-      availableVersionLabel.setText(serverApplicationVersion.getVersion());
+      final Version version = new Version(serverApplicationVersion);
+      availableVersionLabel.setText(version.getMajor() + "." + version.getMinor() + "." + version.getPatch());
       setNewVersionSizeInfo();
 
       updateInfoButton.setEnabled(true);

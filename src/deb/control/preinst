@@ -2,3 +2,12 @@
 mkdir -p /opt/WeblocOpener/
 
 rm -rf /tmp/WeblocOpener/Log/*
+
+#TODO: does not work
+#---Get current java version-----
+JAVA_VER=$(java -version 2>&1 | sed -n ';s/.* version "\(.*\)\.\(.*\)\..*".*/\1\2/p;')
+echo "$JAVA_VER";
+[ "$JAVA_VER" -ge 170 ] &&
+echo "Java 17 installed" ||
+firefox https://adoptium.net/marketplace/ &
+#--/Get current java version-----
