@@ -59,19 +59,14 @@ public class NonGuiUpdater {
 
     private void compareVersions() {
 
-        if (!new DevModeSettings().getValue()) {
+        if (Boolean.FALSE.equals(new DevModeSettings().getValue())) {
             switch (VersionUtils.versionCompare(serverApplicationVersion)) {
-                case SERVER_VERSION_IS_NEWER:
-                    onNewVersionAvailable();
-                    break;
-                case CURRENT_VERSION_IS_NEWER:
-                    log.info("Current version is newer! Current: {}, Server: {}",
-                            CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
-                    break;
-                case VERSIONS_ARE_EQUAL:
+                case FIRST_VERSION_IS_NEWER -> onNewVersionAvailable();
+                case SECOND_VERSION_IS_NEWER -> log.info("Current version is newer! Current: {}, Server: {}",
+                    CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
+                case VERSIONS_ARE_EQUAL ->
                     log.info("There are no updates available. Versions are equal! Current: {}, Server: {}",
-                            CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
-                    break;
+                        CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
             }
         } else onNewVersionAvailable();
     }
