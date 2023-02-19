@@ -52,8 +52,9 @@ public class Application {
     public static String getApplicationPath() {
         String canonicalPath = null;
         try {
-            canonicalPath = new File(Application.class.getProtectionDomain().getCodeSource().getLocation()
-                    .toURI()).getPath();
+            canonicalPath = new File(Application.class.getProtectionDomain().getCodeSource().getLocation().toURI())
+                .getPath();
+            log.debug("Application path: {}", canonicalPath);
         } catch (URISyntaxException e) {
             log.debug("Can not get canonical path for settings", e);
         }
