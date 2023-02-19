@@ -22,6 +22,7 @@ import com.github.benchdoos.weblocopener.update.UpdaterManager;
 import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
+import org.assertj.core.util.Files;
 
 import javax.swing.JProgressBar;
 import javax.swing.Timer;
@@ -67,7 +68,7 @@ public class UnixUpdater implements Updater {
                 updateProgressBar(applicationVersion, installerFile);
                 update(installerFile);
             } else {
-                final boolean ignore = installerFile.delete();
+                Files.delete(installerFile);
                 updateAndInstall(applicationVersion, installerFile);
             }
         }
