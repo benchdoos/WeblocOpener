@@ -43,7 +43,7 @@ public class WindowsUpdater implements Updater {
 
     private static void update(File file) throws IOException {
         Runtime runtime = Runtime.getRuntime();
-        runtime.exec(file.getAbsolutePath() + ApplicationConstants.INSTALLER_SILENT_KEY);
+        runtime.exec(file.getAbsolutePath() + " " + ApplicationConstants.INSTALLER_SILENT_KEY);
         System.exit(0);
     }
 
