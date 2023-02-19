@@ -21,7 +21,9 @@ import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.utils.CleanManager;
 import com.github.benchdoos.weblocopenercore.constants.ApplicationArgument;
 import com.github.benchdoos.weblocopenercore.constants.ApplicationConstants;
+import com.github.benchdoos.weblocopenercore.domain.preferences.DevModeFeatureType;
 import com.github.benchdoos.weblocopenercore.service.WindowLauncher;
+import com.github.benchdoos.weblocopenercore.service.settings.dev_mode.DevModeFeatureCheck;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.AutoUpdateSettings;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.LatestUpdateCheckSettings;
 import lombok.extern.log4j.Log4j2;
@@ -124,7 +126,14 @@ public class Application {
         log.debug("Checking if updates available");
         final Date latestUpdateCheckDate = new LatestUpdateCheckSettings().getValue();
 
-        if (lastCheckWasLaterThenADay(latestUpdateCheckDate)) {
+
+        final boolean mockedUpdateCheck =
+            new DevModeFeatureCheck().isActive(DevModeFeatureType.UPDATER_LAST_CHECK_MOCK);
+        if (mockedUpdateCheck) {
+            log.warn("Last update check mocked! Ignoring current value: {}", latestUpdateCheckDate);
+        }
+
+        if (mockedUpdateCheck || lastCheckWasLaterThenADay(latestUpdateCheckDate)) {
             log.info("Checking if updates are available now, last check was at: {}", latestUpdateCheckDate);
             Thread checker = new Thread(Application::runUpdateSilent);
             checker.start();
