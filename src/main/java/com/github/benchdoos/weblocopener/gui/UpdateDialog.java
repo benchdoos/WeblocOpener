@@ -428,11 +428,11 @@ public class UpdateDialog extends JFrame implements Translatable {
 
   private void compareVersions() {
     switch (VersionUtils.versionCompare(serverApplicationVersion)) {
-      case SERVER_VERSION_IS_NEWER:
+      case FIRST_VERSION_IS_NEWER:
         buttonOK.setEnabled(true);
         buttonOK.setText(Translation.get("UpdateDialogBundle", "buttonOk"));
         break;
-      case CURRENT_VERSION_IS_NEWER:
+      case SECOND_VERSION_IS_NEWER:
         if (new DevModeFeatureCheck().isActive(DevModeFeatureType.UI_UPDATER_ENABLE_DEV_OPTIONS)) {
           buttonOK.setText(Translation.get("UpdateDialogBundle", "buttonOkDev"));
           buttonOK.setEnabled(true);

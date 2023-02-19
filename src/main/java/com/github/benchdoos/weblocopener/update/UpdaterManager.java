@@ -56,10 +56,12 @@ public class UpdaterManager {
             final ApplicationVersion latestBetaAppVersion = updater.getLatestBetaAppVersion();
 
             if (latestBetaAppVersion != null) {
-                log.debug("Comparing latest beta version: {} and latest release version: {}", latestBetaAppVersion,
-                    latestReleaseAppVersion);
+                log.debug("Comparing latest beta version: {} and latest release version: {}",
+                    latestBetaAppVersion.getVersion(),
+                    latestReleaseAppVersion.getVersion());
                 if (VersionUtils.versionCompare(latestBetaAppVersion, latestReleaseAppVersion)
-                    == VersionUtils.VersionCompare.SERVER_VERSION_IS_NEWER) {
+                    == VersionUtils.VersionCompare.FIRST_VERSION_IS_NEWER) {
+                    log.debug("Beta version is newer");
                     return latestBetaAppVersion;
                 }
             }
