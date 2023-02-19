@@ -23,11 +23,13 @@ import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DarkModeActiveSettings;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.LocaleSettings;
 import com.github.benchdoos.weblocopenercore.service.translation.Translation;
+import com.github.benchdoos.weblocopenercore.utils.version.Version;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import j2html.tags.specialized.HtmlTag;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.AbstractButton;
@@ -56,13 +58,18 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import static j2html.TagCreator.attrs;
 import static j2html.TagCreator.body;
+import static j2html.TagCreator.br;
 import static j2html.TagCreator.each;
 import static j2html.TagCreator.html;
+import static j2html.TagCreator.iff;
+import static j2html.TagCreator.iframe;
 import static j2html.TagCreator.span;
 import static j2html.TagCreator.table;
 import static j2html.TagCreator.td;
 import static j2html.TagCreator.tr;
+import static j2html.TagCreator.u;
 
 @Log4j2
 class UpdateInfoDialog extends JDialog {
@@ -71,7 +78,7 @@ class UpdateInfoDialog extends JDialog {
   private JButton buttonOK;
   private JTextPane textPane;
 
-  @Deprecated(since = "2.0.1", forRemoval = true)
+  @Deprecated(since = "2.1.0", forRemoval = true)
   private JPanel legacyPanel;
   private JPanel updateInfoPanel;
   private JList<ExtendedModificationInfo> updateInfoJList;
@@ -206,7 +213,8 @@ class UpdateInfoDialog extends JDialog {
   public JComponent $$$getRootComponent$$$() {return contentPane;}
 
   private void createGUI() {
-    setTitle(Translation.get("UpdateDialogBundle", "infoAboutUpdate") + " — " + applicationVersion.getVersion());
+    setTitle(Translation.get("UpdateDialogBundle", "infoAboutUpdate") + " — " +
+        new Version(applicationVersion).getBeautifulVersionString());
     setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateInfoDialog.class.getResource("/images/infoIcon16.png")));
 
 
@@ -243,12 +251,26 @@ class UpdateInfoDialog extends JDialog {
 
       final List<ExtendedModificationInfo> modifications = new ArrayList<>();
 
-      updateInfo.features().forEach(i -> modifications.add(
-          new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.FEATURE, i)));
-      updateInfo.improvements().forEach(i -> modifications.add(
-          new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.IMPROVEMENT, i)));
-      updateInfo.fixes().forEach(i -> modifications.add(
-          new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.BUGFIX, i)));
+      if (CollectionUtils.isNotEmpty(updateInfo.warnings())) {
+        updateInfo.warnings().forEach(i -> modifications.add(
+            new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.WARNING, i)));
+      }
+
+
+      if (CollectionUtils.isNotEmpty(updateInfo.features())) {
+        updateInfo.features().forEach(i -> modifications.add(
+            new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.FEATURE, i)));
+      }
+
+      if (CollectionUtils.isNotEmpty(updateInfo.improvements())) {
+        updateInfo.improvements().forEach(i -> modifications.add(
+            new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.IMPROVEMENT, i)));
+      }
+
+      if (CollectionUtils.isNotEmpty(updateInfo.fixes())) {
+        updateInfo.fixes().forEach(i -> modifications.add(
+            new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.BUGFIX, i)));
+      }
 
       log.debug("Formed modification list: {}", modifications);
 
@@ -275,6 +297,10 @@ class UpdateInfoDialog extends JDialog {
                     final String backgroundColor;
                     final String bundle = "UpdateDialog";
                     switch (modificationType) {
+                      case WARNING -> {
+                        typeValue = Translation.get(bundle, "warningType");
+                        backgroundColor = "background-color:#b56219;";
+                      }
                       case IMPROVEMENT -> {
                         typeValue = Translation.get(bundle, "improvementType");
                         backgroundColor = "background-color:#4f73a5;";
@@ -294,10 +320,10 @@ class UpdateInfoDialog extends JDialog {
                         td(message));
                   })
               )
-          ));
+          )).attr("lang", Translation.getSelectedLocale().getLanguage());
 
       final String render = html.render();
-      log.trace("Update page rendered: {}", render);
+      log.debug("Update page rendered: {}", render);
       updateInfoEditorPane.setText(render);
       updateInfoEditorPane.setCaretPosition(0);
     }
@@ -345,7 +371,7 @@ class UpdateInfoDialog extends JDialog {
     String title = "<center style=\"font-size:14px; color:#4f7ece; padding-bottom:10px;\">" + updateTitle + "</center>";
     String defaultFooter = "</body></html>";
     updateInfo = updateInfo.replaceAll("\n", "<br>");
-    final String customTextColor = new DarkModeActiveSettings().getValue() ? "color: white;" : "";
+    final String customTextColor = Boolean.TRUE.equals(new DarkModeActiveSettings().getValue()) ? "color: white;" : "";
     updateInfo =
         "<p style=\"font-family:'Open Sans'; font-size:12px; padding:0; margin:0; " + customTextColor + " \">" +
             updateInfo + "</p>";
