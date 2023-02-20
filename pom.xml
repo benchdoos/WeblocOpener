@@ -49,6 +49,7 @@
         <buildnumber-maven-plugin.version>1.4</buildnumber-maven-plugin.version>
 
         <application.mainClass>com.github.benchdoos.weblocopener.Main</application.mainClass>
+        <log4j.version>2.12.4</log4j.version>
     </properties>
 
     <scm>
@@ -356,14 +357,14 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>2.11.0</version>
+            <version>${log4j.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.11.0</version>
+            <version>${log4j.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.nativelibs4java/bridj -->
