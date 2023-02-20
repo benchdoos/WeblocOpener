@@ -320,15 +320,15 @@
                                     <versionInfo>
                                         <fileVersion>${project.version}.${application.version.beta.version}</fileVersion>
                                         <txtFileVersion>${project.version}.${buildNumber}</txtFileVersion>
-                                        <fileDescription>${name}</fileDescription>
+                                        <fileDescription>${project.name}</fileDescription>
                                         <copyright>${copyright}</copyright>
                                         <productVersion>${project.version}.${application.version.beta.version}</productVersion>
                                         <txtProductVersion>${project.version}.${application.version.beta.version}</txtProductVersion>
-                                        <productName>${name}</productName>
-                                        <companyName>${organization.name}</companyName>
-                                        <internalName>${name}</internalName>
-                                        <originalFilename>${name}.exe</originalFilename>
-                                        <trademarks>${organization.name}</trademarks>
+                                        <productName>${project.name}</productName>
+                                        <companyName>${project.organization.name}</companyName>
+                                        <internalName>${project.name}</internalName>
+                                        <originalFilename>${project.name}.exe</originalFilename>
+                                        <trademarks>${project.organization.name}</trademarks>
                                         <language>ENGLISH_US</language>
                                     </versionInfo>
                                     <jre>
