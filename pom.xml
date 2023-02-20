@@ -61,15 +61,6 @@
         </url>
     </scm>
 
-    <!--
-    Build JAR:
-    clean compile package
-    Build JAR+EXE:
-    clean compile package launch4j:launch4j -X
-    Build JAR+EXE+SETUP:
-    clean compile package launch4j:launch4j exec:exec@unix
-    clean compile package launch4j:launch4j exec:exec@windows
-    -->
     <build>
         <resources>
             <resource>
@@ -280,15 +271,12 @@
                                     <headerType>gui</headerType>
                                     <jar>${project.build.directory}/${project.name}.jar</jar>
                                     <outfile>${project.build.directory}/${project.name}.exe</outfile>
-                                    <!--<errTitle></errTitle>-->
-                                    <!--<cmdLine></cmdLine>-->
                                     <chdir>.</chdir>
                                     <priority>normal</priority>
                                     <downloadUrl>https://adoptium.net/temurin/releases/</downloadUrl>
                                     <supportUrl>https://github.com/benchdoos/WeblocOpener/issues</supportUrl>
                                     <stayAlive>false</stayAlive>
                                     <restartOnCrash>false</restartOnCrash>
-                                    <!--<manifest></manifest>-->
                                     <icon>${project.basedir}/build/installer/images/balloonIcon512.ico</icon>
                                     <classPath>
                                         <mainClass>${application.mainClass}</mainClass>
@@ -310,11 +298,7 @@
                                     </versionInfo>
                                     <jre>
                                         <path>%JAVA_HOME%;%PATH%</path>
-                                        <!--                        <bundledJre64Bit>false</bundledJre64Bit>-->
-                                        <!--                        <bundledJreAsFallback>false</bundledJreAsFallback>-->
                                         <minVersion>1.17.0</minVersion>
-                                        <!--                        <jdkPreference>preferJre</jdkPreference>-->
-                                        <!--                        <runtimeBits>64/32</runtimeBits>-->
                                     </jre>
                                 </configuration>
                             </execution>
