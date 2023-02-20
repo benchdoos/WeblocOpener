@@ -65,8 +65,8 @@
     Build JAR+EXE:
     clean compile package launch4j:launch4j -X
     Build JAR+EXE+SETUP:
-    clean compile package launch4j:launch4j exec:exec@unix
     clean compile package launch4j:launch4j exec:exec@windows
+    clean compile package launch4j:launch4j exec:exec@not-windows
     -->
     <build>
         <resources>
@@ -124,24 +124,6 @@
                 <version>1.6.0</version>
                 <executions>
                     <execution>
-                        <id>unix</id>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <!--<executable>bash</executable>-->
-                            <executable>wine</executable>
-                            <workingDirectory>${project.basedir}/build</workingDirectory>
-                            <arguments>
-                                <!--<argument>wine</argument>-->
-                                <argument>${user.home}/.wine/drive_c/Program Files (x86)/Inno Setup 6/ISCC.exe
-                                </argument>
-                                <!--<argument>${project.basedir}/build/unix/WeblocOpener.iss</argument>-->
-                                <argument>Z:${project.basedir}/build/unix/WeblocOpener.iss</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>windows</id>
                         <goals>
                             <goal>exec</goal>
@@ -155,7 +137,7 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>macos</id>
+                        <id>not-windows</id>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -168,7 +150,6 @@
                         </configuration>
                     </execution>
                 </executions>
-
             </plugin>
 
             <plugin>
@@ -361,6 +342,9 @@
                 <ultimate_build>true</ultimate_build>
             </properties>
         </profile>
+        <profile>
+            <id>buildExe</id>
+        </profile>
     </profiles>
 
     <dependencies>
@@ -388,7 +372,7 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.11.0</version>
+            <version>2.12.4</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.nativelibs4java/bridj -->
