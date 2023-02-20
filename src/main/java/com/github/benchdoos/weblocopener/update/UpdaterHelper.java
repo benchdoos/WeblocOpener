@@ -25,6 +25,7 @@ import com.github.benchdoos.weblocopenercore.service.settings.impl.InstallBetaUp
 import com.github.benchdoos.weblocopenercore.service.settings.impl.LatestUpdateCheckSettings;
 import com.github.benchdoos.weblocopenercore.utils.VersionUtils;
 import com.github.benchdoos.weblocopenercore.utils.system.OS;
+import com.github.benchdoos.weblocopenercore.utils.version.Version;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
 import org.kohsuke.github.GHRelease;
@@ -36,13 +37,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Log4j2
 public class UpdaterHelper {
     private static final String REPOSITORY_NAME = "benchdoos/weblocopener";
-    private static final Pattern BETA_FROM_RELEASE_TITLE_PATTERN = Pattern.compile("\\(beta\\.(\\d+)\\)");
 
     public ApplicationVersion getLatestVersion(Updater updater) {
         final ApplicationVersion latestReleaseAppVersion = updater.getLatestReleaseAppVersion();
@@ -69,8 +67,7 @@ public class UpdaterHelper {
     public ApplicationVersion getLatestReleaseVersion(String setupName) {
         try {
             log.debug("Requesting new application version from github");
-            final GitHub github = GitHub.connectAnonymously();
-            final GHRepository repository = github.getRepository(REPOSITORY_NAME);
+            final GHRepository repository = getRepository();
             final GHRelease latestRelease = repository.getLatestRelease();
             return getApplicationVersion(latestRelease, setupName);
 
@@ -80,18 +77,24 @@ public class UpdaterHelper {
         }
     }
 
+    private static GHRepository getRepository() throws IOException {
+        final GitHub github = GitHub.connectAnonymously();
+        return github.getRepository(REPOSITORY_NAME);
+    }
+
     public static Updater getUpdaterForCurrentOperatingSystem() {
         if (OS.isWindows()) {
             return new WindowsUpdater();
         } else if (OS.isUnix()) {
             return new UnixUpdater();
-        } else return new UnixUpdater();
+        } else {
+            return new UnixUpdater();
+        }
     }
 
     public ApplicationVersion getLatestBetaVersion(String setupName) {
         try {
-            final GitHub gitHub = GitHub.connectAnonymously();
-            final GHRepository repository = gitHub.getRepository(REPOSITORY_NAME);
+            final GHRepository repository = getRepository();
             final PagedIterable<GHRelease> ghReleases = repository.listReleases();
             return getLatestBetaAppVersion(ghReleases, setupName);
         } catch (IOException e) {
@@ -116,7 +119,8 @@ public class UpdaterHelper {
         version.setUpdateTitle(latestRelease.getName());
         version.setLegacyUpdateInfo(latestRelease.getBody());
         version.setVersion(latestRelease.getTagName());
-        version.setBeta(tryGetBetaFromName(version.getUpdateTitle(), new Beta(latestRelease.isPrerelease() ? 1 : 0)));
+        final int beta = new Version(version).getBeta();
+        version.setBeta(beta != 0 ? new Beta(beta) : null);
         latestRelease.listAssets().forEach(asset -> {
             if (asset.getName().equalsIgnoreCase(setupName)) {
                 version.setDownloadUrl(asset.getBrowserDownloadUrl());
@@ -141,18 +145,5 @@ public class UpdaterHelper {
         final String jsonSrc = IOUtils.toString(url, StandardCharsets.UTF_8);
         final ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(jsonSrc, UpdateInfo.class);
-    }
-
-    private Beta tryGetBetaFromName(String updateTitle, Beta beta) {
-        try {
-            final Matcher matcher = BETA_FROM_RELEASE_TITLE_PATTERN.matcher(updateTitle);
-            if (matcher.find()) {
-                int betaVersion = Integer.parseInt(matcher.group(1));
-                return new Beta(betaVersion);
-            }
-
-        } catch (Exception ignore) {
-        }
-        return beta;
     }
 }
