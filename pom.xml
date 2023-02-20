@@ -247,85 +247,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.vafer</groupId>
-                <artifactId>jdeb</artifactId>
-                <version>1.10</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jdeb</goal>
-                        </goals>
-                        <configuration>
-                            <deb>${project.build.directory}/${project.name}.deb</deb>
-
-                            <dataSet>
-                                <data>
-                                    <!--jar file-->
-                                    <type>file</type>
-                                    <src>${project.build.directory}/${project.name}.jar</src>
-                                    <dst>/opt/${project.name}/${project.name}.jar</dst>
-                                </data>
-                                <data>
-                                    <!--Webloc file template-->
-                                    <type>file</type>
-                                    <src>${project.basedir}/build/Template.webloc</src>
-                                    <dst>/opt/${project.name}/Template.webloc</dst>
-                                </data>
-                                <data>
-                                    <!--WeblocOpener link-->
-                                    <type>file</type>
-                                    <src>${project.basedir}/build/unix/installer/WeblocOpener.desktop</src>
-                                    <dst>/usr/share/applications/WeblocOpener.desktop</dst>
-                                </data>
-                                <data>
-                                    <!--WeblocOpenerHelper link-->
-                                    <type>file</type>
-                                    <src>${project.basedir}/build/unix/installer/WeblocOpenerHelper.desktop</src>
-                                    <dst>/usr/share/applications/WeblocOpenerHelper.desktop</dst>
-                                </data>
-                                <data>
-                                    <!--Mime type-->
-                                    <type>file</type>
-                                    <src>${project.basedir}/build/unix/installer/webloc.xml</src>
-                                    <dst>/usr/share/mime/packages/webloc.xml</dst>
-                                </data>
-                                <data>
-                                    <!--Mime type icons-->
-                                    <type>directory</type>
-                                    <src>${project.basedir}/build/unix/installer/icons/hicolor/</src>
-                                    <mapper>
-                                        <type>perm</type>
-                                        <prefix>/usr/share/icons/hicolor/</prefix>
-                                        <user>loader</user>
-                                        <group>loader</group>
-                                    </mapper>
-                                </data>
-                                <data>
-                                    <!--Icons needed-->
-                                    <type>files</type>
-                                    <paths>
-                                        <path>${project.basedir}/build/unix/installer/icons/WeblocOpener.png</path>
-                                    </paths>
-                                    <dst>/opt/${project.name}/icons</dst>
-                                </data>
-                                <data>
-                                    <!--Libraries (dependencies)-->
-                                    <src>${project.build.directory}/lib</src>
-                                    <type>directory</type>
-                                    <mapper>
-                                        <type>perm</type>
-                                        <prefix>/opt/${project.name}/lib</prefix>
-                                        <user>loader</user>
-                                        <group>loader</group>
-                                    </mapper>
-                                </data>
-                            </dataSet>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
@@ -342,8 +263,93 @@
                 <ultimate_build>true</ultimate_build>
             </properties>
         </profile>
+
         <profile>
-            <id>buildExe</id>
+            <!--Build deb installer for unix-->
+            <id>build-deb</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.vafer</groupId>
+                        <artifactId>jdeb</artifactId>
+                        <version>1.10</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jdeb</goal>
+                                </goals>
+                                <configuration>
+                                    <deb>${project.build.directory}/${project.name}.deb</deb>
+
+                                    <dataSet>
+                                        <data>
+                                            <!--jar file-->
+                                            <type>file</type>
+                                            <src>${project.build.directory}/${project.name}.jar</src>
+                                            <dst>/opt/${project.name}/${project.name}.jar</dst>
+                                        </data>
+                                        <data>
+                                            <!--Webloc file template-->
+                                            <type>file</type>
+                                            <src>${project.basedir}/build/Template.webloc</src>
+                                            <dst>/opt/${project.name}/Template.webloc</dst>
+                                        </data>
+                                        <data>
+                                            <!--WeblocOpener link-->
+                                            <type>file</type>
+                                            <src>${project.basedir}/build/unix/installer/WeblocOpener.desktop</src>
+                                            <dst>/usr/share/applications/WeblocOpener.desktop</dst>
+                                        </data>
+                                        <data>
+                                            <!--WeblocOpenerHelper link-->
+                                            <type>file</type>
+                                            <src>${project.basedir}/build/unix/installer/WeblocOpenerHelper.desktop</src>
+                                            <dst>/usr/share/applications/WeblocOpenerHelper.desktop</dst>
+                                        </data>
+                                        <data>
+                                            <!--Mime type-->
+                                            <type>file</type>
+                                            <src>${project.basedir}/build/unix/installer/webloc.xml</src>
+                                            <dst>/usr/share/mime/packages/webloc.xml</dst>
+                                        </data>
+                                        <data>
+                                            <!--Mime type icons-->
+                                            <type>directory</type>
+                                            <src>${project.basedir}/build/unix/installer/icons/hicolor/</src>
+                                            <mapper>
+                                                <type>perm</type>
+                                                <prefix>/usr/share/icons/hicolor/</prefix>
+                                                <user>loader</user>
+                                                <group>loader</group>
+                                            </mapper>
+                                        </data>
+                                        <data>
+                                            <!--Icons needed-->
+                                            <type>files</type>
+                                            <paths>
+                                                <path>${project.basedir}/build/unix/installer/icons/WeblocOpener.png</path>
+                                            </paths>
+                                            <dst>/opt/${project.name}/icons</dst>
+                                        </data>
+                                        <data>
+                                            <!--Libraries (dependencies)-->
+                                            <src>${project.build.directory}/lib</src>
+                                            <type>directory</type>
+                                            <mapper>
+                                                <type>perm</type>
+                                                <prefix>/opt/${project.name}/lib</prefix>
+                                                <user>loader</user>
+                                                <group>loader</group>
+                                            </mapper>
+                                        </data>
+                                    </dataSet>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
