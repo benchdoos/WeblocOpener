@@ -47,6 +47,8 @@
         <application.version.beta.version>4</application.version.beta.version>
 
         <buildnumber-maven-plugin.version>1.4</buildnumber-maven-plugin.version>
+
+        <application.mainClass>com.github.benchdoos.weblocopener.Main</application.mainClass>
     </properties>
 
     <scm>
@@ -170,70 +172,13 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.github.benchdoos.weblocopener.Main</mainClass>
+                            <mainClass>${application.mainClass}</mainClass>
                         </manifest>
                         <manifestEntries>
                             <Class-Path>lib/</Class-Path>
                         </manifestEntries>
                     </archive>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>com.akathist.maven.plugins.launch4j</groupId>
-                <artifactId>launch4j-maven-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <dontWrapJar>false</dontWrapJar>
-                    <headerType>gui</headerType>
-                    <jar>${project.build.directory}/${project.name}.jar</jar>
-                    <outfile>${project.build.directory}/${project.name}.exe</outfile>
-                    <!--<errTitle></errTitle>-->
-                    <!--<cmdLine></cmdLine>-->
-                    <chdir>.</chdir>
-                    <priority>normal</priority>
-                    <downloadUrl>https://adoptium.net/temurin/releases/</downloadUrl>
-                    <supportUrl>https://github.com/benchdoos/WeblocOpener/issues</supportUrl>
-                    <stayAlive>false</stayAlive>
-                    <restartOnCrash>false</restartOnCrash>
-                    <!--<manifest></manifest>-->
-                    <icon>${project.basedir}/build/installer/images/balloonIcon512.ico</icon>
-                    <classPath>
-                        <mainClass>com.github.benchdoos.weblocopener.Main</mainClass>
-                        <addDependencies>true</addDependencies>
-                    </classPath>
-                    <versionInfo>
-                        <fileVersion>${project.version}.${application.version.beta.version}</fileVersion>
-                        <txtFileVersion>${project.version}.${buildNumber}</txtFileVersion>
-                        <fileDescription>WeblocOpener</fileDescription>
-                        <copyright>${copyright}</copyright>
-                        <productVersion>${project.version}.${application.version.beta.version}</productVersion>
-                        <txtProductVersion>${project.version}.${application.version.beta.version}</txtProductVersion>
-                        <productName>WeblocOpener</productName>
-                        <companyName>Eugene Zrazhevsky</companyName>
-                        <internalName>WeblocOpener</internalName>
-                        <originalFilename>WeblocOpener.exe</originalFilename>
-                        <trademarks>Eugene Zrazhevsky</trademarks>
-                        <language>ENGLISH_US</language>
-                    </versionInfo>
-                    <jre>
-                        <path>%JAVA_HOME%;%PATH%</path>
-<!--                        <bundledJre64Bit>false</bundledJre64Bit>-->
-<!--                        <bundledJreAsFallback>false</bundledJreAsFallback>-->
-                        <minVersion>1.17.0</minVersion>
-<!--                        <jdkPreference>preferJre</jdkPreference>-->
-<!--                        <runtimeBits>64/32</runtimeBits>-->
-                    </jre>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>l4j-clui</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>launch4j</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
@@ -251,6 +196,7 @@
                 <ultimate_build>true</ultimate_build>
             </properties>
         </profile>
+
         <profile>
             <id>build-deb</id>
             <build>
@@ -330,6 +276,69 @@
                                             </mapper>
                                         </data>
                                     </dataSet>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>build-exe</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                        <artifactId>launch4j-maven-plugin</artifactId>
+                        <version>2.3.2</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>launch4j</goal>
+                                </goals>
+                                <configuration>
+                                    <dontWrapJar>false</dontWrapJar>
+                                    <headerType>gui</headerType>
+                                    <jar>${project.build.directory}/${project.name}.jar</jar>
+                                    <outfile>${project.build.directory}/${project.name}.exe</outfile>
+                                    <!--<errTitle></errTitle>-->
+                                    <!--<cmdLine></cmdLine>-->
+                                    <chdir>.</chdir>
+                                    <priority>normal</priority>
+                                    <downloadUrl>https://adoptium.net/temurin/releases/</downloadUrl>
+                                    <supportUrl>https://github.com/benchdoos/WeblocOpener/issues</supportUrl>
+                                    <stayAlive>false</stayAlive>
+                                    <restartOnCrash>false</restartOnCrash>
+                                    <!--<manifest></manifest>-->
+                                    <icon>${project.basedir}/build/installer/images/balloonIcon512.ico</icon>
+                                    <classPath>
+                                        <mainClass>${application.mainClass}</mainClass>
+                                        <addDependencies>true</addDependencies>
+                                    </classPath>
+                                    <versionInfo>
+                                        <fileVersion>${project.version}.${application.version.beta.version}</fileVersion>
+                                        <txtFileVersion>${project.version}.${buildNumber}</txtFileVersion>
+                                        <fileDescription>${name}</fileDescription>
+                                        <copyright>${copyright}</copyright>
+                                        <productVersion>${project.version}.${application.version.beta.version}</productVersion>
+                                        <txtProductVersion>${project.version}.${application.version.beta.version}</txtProductVersion>
+                                        <productName>${name}</productName>
+                                        <companyName>${organization.name}</companyName>
+                                        <internalName>${name}</internalName>
+                                        <originalFilename>${name}.exe</originalFilename>
+                                        <trademarks>${organization.name}</trademarks>
+                                        <language>ENGLISH_US</language>
+                                    </versionInfo>
+                                    <jre>
+                                        <path>%JAVA_HOME%;%PATH%</path>
+                                        <!--                        <bundledJre64Bit>false</bundledJre64Bit>-->
+                                        <!--                        <bundledJreAsFallback>false</bundledJreAsFallback>-->
+                                        <minVersion>1.17.0</minVersion>
+                                        <!--                        <jdkPreference>preferJre</jdkPreference>-->
+                                        <!--                        <runtimeBits>64/32</runtimeBits>-->
+                                    </jre>
                                 </configuration>
                             </execution>
                         </executions>
