@@ -37,7 +37,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.regex.Pattern;
 
 @Log4j2
 public class UpdaterHelper {
@@ -68,8 +67,7 @@ public class UpdaterHelper {
     public ApplicationVersion getLatestReleaseVersion(String setupName) {
         try {
             log.debug("Requesting new application version from github");
-            final GitHub github = GitHub.connectAnonymously();
-            final GHRepository repository = github.getRepository(REPOSITORY_NAME);
+            final GHRepository repository = getRepository();
             final GHRelease latestRelease = repository.getLatestRelease();
             return getApplicationVersion(latestRelease, setupName);
 
@@ -79,18 +77,24 @@ public class UpdaterHelper {
         }
     }
 
+    private static GHRepository getRepository() throws IOException {
+        final GitHub github = GitHub.connectAnonymously();
+        return github.getRepository(REPOSITORY_NAME);
+    }
+
     public static Updater getUpdaterForCurrentOperatingSystem() {
         if (OS.isWindows()) {
             return new WindowsUpdater();
         } else if (OS.isUnix()) {
             return new UnixUpdater();
-        } else return new UnixUpdater();
+        } else {
+            return new UnixUpdater();
+        }
     }
 
     public ApplicationVersion getLatestBetaVersion(String setupName) {
         try {
-            final GitHub gitHub = GitHub.connectAnonymously();
-            final GHRepository repository = gitHub.getRepository(REPOSITORY_NAME);
+            final GHRepository repository = getRepository();
             final PagedIterable<GHRelease> ghReleases = repository.listReleases();
             return getLatestBetaAppVersion(ghReleases, setupName);
         } catch (IOException e) {
