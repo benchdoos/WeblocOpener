@@ -42,6 +42,10 @@ public class WindowsNotifier implements Notifier {
 
         PopupMenu trayMenu = new PopupMenu();
 
+        MenuItem update = createUpdateItem();
+        trayMenu.add(update);
+        trayMenu.addSeparator();
+
         MenuItem settings = createSettingsItem();
         trayMenu.add(settings);
         trayMenu.addSeparator();
@@ -82,12 +86,14 @@ public class WindowsNotifier implements Notifier {
                 NonGuiUpdater.class.getResource("/images/updateIconBlue256.png")));
     }
 
-    private MenuItem createExitItem() {
-        MenuItem exit = new MenuItem(
-                Translation.get("NonGuiUpdaterBundle", "exitButton"));
-
-        exit.addActionListener(e -> tray.remove(trayIcon));
-        return exit;
+    private MenuItem createUpdateItem() {
+        MenuItem update = new MenuItem(
+            Translation.get("NonGuiUpdaterBundle", "openUpdaterButton"));
+        update.addActionListener(e -> {
+            com.github.benchdoos.weblocopener.core.Application.runUpdateDialog();
+            tray.remove(trayIcon);
+        });
+        return update;
     }
 
     private MenuItem createSettingsItem() {
@@ -98,6 +104,14 @@ public class WindowsNotifier implements Notifier {
             tray.remove(trayIcon);
         });
         return settings;
+    }
+
+    private MenuItem createExitItem() {
+        MenuItem exit = new MenuItem(
+            Translation.get("NonGuiUpdaterBundle", "exitButton"));
+
+        exit.addActionListener(e -> tray.remove(trayIcon));
+        return exit;
     }
 
     private void showUpdateAvailableTrayIconMessage(ApplicationVersion serverApplicationVersion) {

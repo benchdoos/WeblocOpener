@@ -44,9 +44,12 @@
         <disable.dev_mode>true</disable.dev_mode>
         <ultimate_build>false</ultimate_build>
 
-        <application.version.beta.version>3</application.version.beta.version>
+        <application.version.beta.version>4</application.version.beta.version>
 
         <buildnumber-maven-plugin.version>1.4</buildnumber-maven-plugin.version>
+
+        <application.mainClass>com.github.benchdoos.weblocopener.Main</application.mainClass>
+        <log4j.version>2.12.4</log4j.version>
     </properties>
 
     <scm>
@@ -59,15 +62,6 @@
         </url>
     </scm>
 
-    <!--
-    Build JAR:
-    clean compile package
-    Build JAR+EXE:
-    clean compile package launch4j:launch4j -X
-    Build JAR+EXE+SETUP:
-    clean compile package launch4j:launch4j exec:exec@unix
-    clean compile package launch4j:launch4j exec:exec@windows
-    -->
     <build>
         <resources>
             <resource>
@@ -117,60 +111,6 @@
                     </items>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <executions>
-                    <execution>
-                        <id>unix</id>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <!--<executable>bash</executable>-->
-                            <executable>wine</executable>
-                            <workingDirectory>${project.basedir}/build</workingDirectory>
-                            <arguments>
-                                <!--<argument>wine</argument>-->
-                                <argument>${user.home}/.wine/drive_c/Program Files (x86)/Inno Setup 6/ISCC.exe
-                                </argument>
-                                <!--<argument>${project.basedir}/build/unix/WeblocOpener.iss</argument>-->
-                                <argument>Z:${project.basedir}/build/unix/WeblocOpener.iss</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>windows</id>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>C:\Program Files (x86)\Inno Setup 5\ISCC.exe</executable>
-                            <workingDirectory>${project.basedir}\build</workingDirectory>
-                            <arguments>
-                                <argument>WeblocOpener.iss</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>macos</id>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>bash</executable>
-                            <workingDirectory>${project.basedir}\build</workingDirectory>
-                            <arguments>
-                                <argument>buildInstaller.sh</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -201,149 +141,13 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.github.benchdoos.weblocopener.Main</mainClass>
+                            <mainClass>${application.mainClass}</mainClass>
                         </manifest>
                         <manifestEntries>
                             <Class-Path>lib/</Class-Path>
                         </manifestEntries>
                     </archive>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>com.akathist.maven.plugins.launch4j</groupId>
-                <artifactId>launch4j-maven-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <dontWrapJar>false</dontWrapJar>
-                    <headerType>gui</headerType>
-                    <jar>${project.build.directory}/${project.name}.jar</jar>
-                    <outfile>${project.build.directory}/${project.name}.exe</outfile>
-                    <!--<errTitle></errTitle>-->
-                    <!--<cmdLine></cmdLine>-->
-                    <chdir>.</chdir>
-                    <priority>normal</priority>
-                    <downloadUrl>https://adoptium.net/temurin/releases/</downloadUrl>
-                    <supportUrl>https://github.com/benchdoos/WeblocOpener/issues</supportUrl>
-                    <stayAlive>false</stayAlive>
-                    <restartOnCrash>false</restartOnCrash>
-                    <!--<manifest></manifest>-->
-                    <icon>${project.basedir}/build/installer/images/balloonIcon512.ico</icon>
-                    <classPath>
-                        <mainClass>com.github.benchdoos.weblocopener.Main</mainClass>
-                        <addDependencies>true</addDependencies>
-                    </classPath>
-                    <versionInfo>
-                        <fileVersion>${project.version}.${application.version.beta.version}</fileVersion>
-                        <txtFileVersion>${project.version}.${buildNumber}</txtFileVersion>
-                        <fileDescription>WeblocOpener</fileDescription>
-                        <copyright>${copyright}</copyright>
-                        <productVersion>${project.version}.${application.version.beta.version}</productVersion>
-                        <txtProductVersion>${project.version}.${application.version.beta.version}</txtProductVersion>
-                        <productName>WeblocOpener</productName>
-                        <companyName>Eugene Zrazhevsky</companyName>
-                        <internalName>WeblocOpener</internalName>
-                        <originalFilename>WeblocOpener.exe</originalFilename>
-                        <trademarks>Eugene Zrazhevsky</trademarks>
-                        <language>ENGLISH_US</language>
-                    </versionInfo>
-                    <jre>
-                        <path>%JAVA_HOME%;%PATH%</path>
-<!--                        <bundledJre64Bit>false</bundledJre64Bit>-->
-<!--                        <bundledJreAsFallback>false</bundledJreAsFallback>-->
-                        <minVersion>1.17.0</minVersion>
-<!--                        <jdkPreference>preferJre</jdkPreference>-->
-<!--                        <runtimeBits>64/32</runtimeBits>-->
-                    </jre>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>l4j-clui</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>launch4j</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.vafer</groupId>
-                <artifactId>jdeb</artifactId>
-                <version>1.10</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jdeb</goal>
-                        </goals>
-                        <configuration>
-                            <deb>${project.build.directory}/${project.name}.deb</deb>
-
-                            <dataSet>
-                                <data>
-                                    <!--jar file-->
-                                    <type>file</type>
-                                    <src>${project.build.directory}/${project.name}.jar</src>
-                                    <dst>/opt/${project.name}/${project.name}.jar</dst>
-                                </data>
-                                <data>
-                                    <!--Webloc file template-->
-                                    <type>file</type>
-                                    <src>${project.basedir}/build/Template.webloc</src>
-                                    <dst>/opt/${project.name}/Template.webloc</dst>
-                                </data>
-                                <data>
-                                    <!--WeblocOpener link-->
-                                    <type>file</type>
-                                    <src>${project.basedir}/build/unix/installer/WeblocOpener.desktop</src>
-                                    <dst>/usr/share/applications/WeblocOpener.desktop</dst>
-                                </data>
-                                <data>
-                                    <!--WeblocOpenerHelper link-->
-                                    <type>file</type>
-                                    <src>${project.basedir}/build/unix/installer/WeblocOpenerHelper.desktop</src>
-                                    <dst>/usr/share/applications/WeblocOpenerHelper.desktop</dst>
-                                </data>
-                                <data>
-                                    <!--Mime type-->
-                                    <type>file</type>
-                                    <src>${project.basedir}/build/unix/installer/webloc.xml</src>
-                                    <dst>/usr/share/mime/packages/webloc.xml</dst>
-                                </data>
-                                <data>
-                                    <!--Mime type icons-->
-                                    <type>directory</type>
-                                    <src>${project.basedir}/build/unix/installer/icons/hicolor/</src>
-                                    <mapper>
-                                        <type>perm</type>
-                                        <prefix>/usr/share/icons/hicolor/</prefix>
-                                        <user>loader</user>
-                                        <group>loader</group>
-                                    </mapper>
-                                </data>
-                                <data>
-                                    <!--Icons needed-->
-                                    <type>files</type>
-                                    <paths>
-                                        <path>${project.basedir}/build/unix/installer/icons/WeblocOpener.png</path>
-                                    </paths>
-                                    <dst>/opt/${project.name}/icons</dst>
-                                </data>
-                                <data>
-                                    <!--Libraries (dependencies)-->
-                                    <src>${project.build.directory}/lib</src>
-                                    <type>directory</type>
-                                    <mapper>
-                                        <type>perm</type>
-                                        <prefix>/opt/${project.name}/lib</prefix>
-                                        <user>loader</user>
-                                        <group>loader</group>
-                                    </mapper>
-                                </data>
-                            </dataSet>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
@@ -360,6 +164,184 @@
             <properties>
                 <ultimate_build>true</ultimate_build>
             </properties>
+        </profile>
+
+        <profile>
+            <id>build-deb</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.vafer</groupId>
+                        <artifactId>jdeb</artifactId>
+                        <version>1.10</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jdeb</goal>
+                                </goals>
+                                <configuration>
+                                    <deb>${project.build.directory}/${project.name}.deb</deb>
+
+                                    <dataSet>
+                                        <data>
+                                            <!--jar file-->
+                                            <type>file</type>
+                                            <src>${project.build.directory}/${project.name}.jar</src>
+                                            <dst>/opt/${project.name}/${project.name}.jar</dst>
+                                        </data>
+                                        <data>
+                                            <!--Webloc file template-->
+                                            <type>file</type>
+                                            <src>${project.basedir}/build/Template.webloc</src>
+                                            <dst>/opt/${project.name}/Template.webloc</dst>
+                                        </data>
+                                        <data>
+                                            <!--WeblocOpener link-->
+                                            <type>file</type>
+                                            <src>${project.basedir}/build/unix/installer/WeblocOpener.desktop</src>
+                                            <dst>/usr/share/applications/WeblocOpener.desktop</dst>
+                                        </data>
+                                        <data>
+                                            <!--WeblocOpenerHelper link-->
+                                            <type>file</type>
+                                            <src>${project.basedir}/build/unix/installer/WeblocOpenerHelper.desktop</src>
+                                            <dst>/usr/share/applications/WeblocOpenerHelper.desktop</dst>
+                                        </data>
+                                        <data>
+                                            <!--Mime type webloc-->
+                                            <type>file</type>
+                                            <src>${project.basedir}/build/unix/installer/webloc.xml</src>
+                                            <dst>/usr/share/mime/packages/webloc.xml</dst>
+                                        </data>
+                                        <data>
+                                            <!--Mime type webarchive-->
+                                            <type>file</type>
+                                            <src>${project.basedir}/build/unix/installer/webarchive.xml</src>
+                                            <dst>/usr/share/mime/packages/webarchive.xml</dst>
+                                        </data>
+                                        <data>
+                                            <!--Mime type icons-->
+                                            <type>directory</type>
+                                            <src>${project.basedir}/build/unix/installer/icons/hicolor/</src>
+                                            <mapper>
+                                                <type>perm</type>
+                                                <prefix>/usr/share/icons/hicolor/</prefix>
+                                                <user>loader</user>
+                                                <group>loader</group>
+                                            </mapper>
+                                        </data>
+                                        <data>
+                                            <!--Icons needed-->
+                                            <type>files</type>
+                                            <paths>
+                                                <path>${project.basedir}/build/unix/installer/icons/WeblocOpener.png</path>
+                                            </paths>
+                                            <dst>/opt/${project.name}/icons</dst>
+                                        </data>
+                                        <data>
+                                            <!--Libraries (dependencies)-->
+                                            <src>${project.build.directory}/lib</src>
+                                            <type>directory</type>
+                                            <mapper>
+                                                <type>perm</type>
+                                                <prefix>/opt/${project.name}/lib</prefix>
+                                                <user>loader</user>
+                                                <group>loader</group>
+                                            </mapper>
+                                        </data>
+                                    </dataSet>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>build-exe</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                        <artifactId>launch4j-maven-plugin</artifactId>
+                        <version>2.3.2</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>launch4j</goal>
+                                </goals>
+                                <configuration>
+                                    <dontWrapJar>false</dontWrapJar>
+                                    <headerType>gui</headerType>
+                                    <jar>${project.build.directory}/${project.name}.jar</jar>
+                                    <outfile>${project.build.directory}/${project.name}.exe</outfile>
+                                    <chdir>.</chdir>
+                                    <priority>normal</priority>
+                                    <downloadUrl>https://adoptium.net/temurin/releases/</downloadUrl>
+                                    <supportUrl>https://github.com/benchdoos/WeblocOpener/issues</supportUrl>
+                                    <stayAlive>false</stayAlive>
+                                    <restartOnCrash>false</restartOnCrash>
+                                    <icon>${project.basedir}/build/installer/images/balloonIcon512.ico</icon>
+                                    <classPath>
+                                        <mainClass>${application.mainClass}</mainClass>
+                                        <addDependencies>true</addDependencies>
+                                    </classPath>
+                                    <versionInfo>
+                                        <fileVersion>${project.version}.${application.version.beta.version}</fileVersion>
+                                        <txtFileVersion>${project.version}.${buildNumber}</txtFileVersion>
+                                        <fileDescription>${project.name}</fileDescription>
+                                        <copyright>${copyright}</copyright>
+                                        <productVersion>${project.version}.${application.version.beta.version}</productVersion>
+                                        <txtProductVersion>${project.version}.${application.version.beta.version}</txtProductVersion>
+                                        <productName>${project.name}</productName>
+                                        <companyName>${project.organization.name}</companyName>
+                                        <internalName>${project.name}</internalName>
+                                        <originalFilename>${project.name}.exe</originalFilename>
+                                        <trademarks>${project.organization.name}</trademarks>
+                                        <language>ENGLISH_US</language>
+                                    </versionInfo>
+                                    <jre>
+                                        <path>%JAVA_HOME%;%PATH%</path>
+                                        <minVersion>1.17.0</minVersion>
+                                    </jre>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>build-setup</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.6.0</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <id>docker</id>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>bash</executable>
+                                    <workingDirectory>${project.basedir}\build</workingDirectory>
+                                    <arguments>
+                                        <argument>buildInstaller.sh</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
@@ -381,14 +363,14 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>2.11.0</version>
+            <version>${log4j.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.11.0</version>
+            <version>${log4j.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.nativelibs4java/bridj -->

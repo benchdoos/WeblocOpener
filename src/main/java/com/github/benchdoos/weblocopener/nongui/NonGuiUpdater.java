@@ -18,7 +18,7 @@ package com.github.benchdoos.weblocopener.nongui;
 import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.nongui.notify.NotifyManager;
 import com.github.benchdoos.weblocopener.update.Updater;
-import com.github.benchdoos.weblocopener.update.UpdaterManager;
+import com.github.benchdoos.weblocopener.update.UpdaterHelper;
 import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
 import com.github.benchdoos.weblocopenercore.service.notification.NotificationManager;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DevModeSettings;
@@ -38,8 +38,7 @@ public class NonGuiUpdater {
 
     public NonGuiUpdater() {
 
-        Updater updater;
-        updater = UpdaterManager.getUpdaterForCurrentOperatingSystem();
+        Updater updater = UpdaterHelper.getUpdaterForCurrentOperatingSystem();
 
         final ApplicationVersion latestApplicationVersion = updater.getLatestAppVersion();
         if (latestApplicationVersion != null) {
@@ -59,19 +58,14 @@ public class NonGuiUpdater {
 
     private void compareVersions() {
 
-        if (!new DevModeSettings().getValue()) {
+        if (Boolean.FALSE.equals(new DevModeSettings().getValue())) {
             switch (VersionUtils.versionCompare(serverApplicationVersion)) {
-                case SERVER_VERSION_IS_NEWER:
-                    onNewVersionAvailable();
-                    break;
-                case CURRENT_VERSION_IS_NEWER:
-                    log.info("Current version is newer! Current: {}, Server: {}",
-                            CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
-                    break;
-                case VERSIONS_ARE_EQUAL:
+                case FIRST_VERSION_IS_NEWER -> onNewVersionAvailable();
+                case SECOND_VERSION_IS_NEWER -> log.info("Current version is newer! Current: {}, Server: {}",
+                    CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
+                case VERSIONS_ARE_EQUAL ->
                     log.info("There are no updates available. Versions are equal! Current: {}, Server: {}",
-                            CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
-                    break;
+                        CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
             }
         } else onNewVersionAvailable();
     }
