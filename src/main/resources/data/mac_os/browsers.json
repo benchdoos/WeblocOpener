@@ -10,6 +10,7 @@
     "internalName": "chrome",
     "call": "open, -na, Google Chrome, %site",
     "file_call": "open, -na, Google Chrome, %file",
+    "fileIncognitoCall": "open, -na, Google Chrome, --args, --incognito, %file",
     "incognito": "open, -na, Google Chrome, --args, --incognito, %site"
   }
 ]

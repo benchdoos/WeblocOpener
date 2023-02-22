@@ -3,6 +3,7 @@
     "name": "Microsoft Edge",
     "internalName": "edge",
     "file_call": "start msedge \"%file\"",
+    "fileIncognitoCall": "start msedge -inprivate \"%file\"",
     "call": "start msedge \"%site\"",
     "incognito": "start msedge -inprivate \"%site\""
   },
@@ -11,13 +12,15 @@
     "internalName": "chrome",
     "call": "start chrome \"%site\"",
     "file_call": "start chrome \"%file\"",
+    "fileIncognitoCall": "start chrome \"%file\" --incognito",
     "incognito": "start chrome \"%site\" --incognito"
   },
   {
-    "name": "Mozilla Firefox",
+    "name": "Firefox",
     "internalName": "firefox",
     "call": "start firefox \"%site\"",
     "file_call": "start firefox \"%file\"",
+    "fileIncognitoCall": "start firefox -private-window \"%file\"",
     "incognito": "start firefox -private-window \"%site\""
   },
   {
@@ -25,6 +28,7 @@
     "internalName": "opera",
     "call": "start opera \"%site\"",
     "file_call": "start opera \"%file\"",
+    "fileIncognitoCall": "start opera --private \"%file\"",
     "incognito": "start opera --private \"%site\""
   },
   {
@@ -32,6 +36,7 @@
     "internalName": "yandex",
     "call": "start browser \"%site\"",
     "file_call": "start browser \"%file\"",
+    "fileIncognitoCall": "start browser -incognito \"%file\"",
     "incognito": "start browser -incognito \"%site\""
   },
   {
@@ -39,6 +44,7 @@
     "internalName": "vivaldi",
     "call": "start vivaldi \"%site\"",
     "file_call": "start vivaldi \"%file\"",
+    "fileIncognitoCall": "start vivaldi -incognito \"%file\"",
     "incognito": "start vivaldi -incognito \"%site\""
   }
 ]
