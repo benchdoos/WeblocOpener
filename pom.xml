@@ -209,10 +209,16 @@
                                             <dst>/usr/share/applications/WeblocOpenerHelper.desktop</dst>
                                         </data>
                                         <data>
-                                            <!--Mime type-->
+                                            <!--Mime type webloc-->
                                             <type>file</type>
                                             <src>${project.basedir}/build/unix/installer/webloc.xml</src>
                                             <dst>/usr/share/mime/packages/webloc.xml</dst>
+                                        </data>
+                                        <data>
+                                            <!--Mime type webarchive-->
+                                            <type>file</type>
+                                            <src>${project.basedir}/build/unix/installer/webarchive.xml</src>
+                                            <dst>/usr/share/mime/packages/webarchive.xml</dst>
                                         </data>
                                         <data>
                                             <!--Mime type icons-->
