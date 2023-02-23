@@ -16,12 +16,13 @@
 package com.github.benchdoos.weblocopener.gui;
 
 import com.github.benchdoos.weblocopener.domain.ExtendedModificationInfo;
+import com.github.benchdoos.weblocopener.service.DefaultHtmlService;
+import com.github.benchdoos.weblocopener.service.HtmlService;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
 import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
 import com.github.benchdoos.weblocopenercore.domain.version.UpdateInfo;
 import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DarkModeActiveSettings;
-import com.github.benchdoos.weblocopenercore.service.settings.impl.LocaleSettings;
 import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 import com.github.benchdoos.weblocopenercore.utils.version.Version;
 import com.intellij.uiDesigner.core.GridConstraints;
@@ -30,7 +31,6 @@ import com.intellij.uiDesigner.core.Spacer;
 import j2html.tags.specialized.HtmlTag;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -54,11 +54,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.ResourceBundle;
 
-import static j2html.TagCreator.attrs;
 import static j2html.TagCreator.body;
 import static j2html.TagCreator.br;
 import static j2html.TagCreator.each;
@@ -81,11 +78,13 @@ class UpdateInfoDialog extends JDialog {
   @Deprecated(since = "2.1.0", forRemoval = true)
   private JPanel legacyPanel;
   private JPanel updateInfoPanel;
-  private JList<ExtendedModificationInfo> updateInfoJList;
   private JEditorPane updateInfoEditorPane;
+  private HtmlService htmlService;
 
   UpdateInfoDialog(ApplicationVersion applicationVersion) {
     this.applicationVersion = applicationVersion;
+    htmlService = new DefaultHtmlService();
+
     createGUI();
   }
 
@@ -274,53 +273,7 @@ class UpdateInfoDialog extends JDialog {
 
       log.debug("Formed modification list: {}", modifications);
 
-      final HtmlTag html = html(
-          body(
-              table(
-                  each(modifications, value -> {
-                    final ExtendedModificationInfo.ModificationType modificationType = value.type();
-                    final Locale locale = new LocaleSettings().getValue();
-
-                    final Map<String, String> description = value.modification().description();
-                    final String srcMessage = description.get(locale.getLanguage().toLowerCase());
-                    final String message;
-                    if (StringUtils.isNotBlank(srcMessage)) {
-                      message = srcMessage;
-                    } else {
-                      message =
-                          description.get(LocaleSettings.getDefaultLocale().getLanguage().toLowerCase());
-                    }
-                    final String tdStyle =
-                        "border-radius: 5px; padding: 5px 10px 5px 5px; width: 120px; color: white; " +
-                            "font-weight: bold; text-align:right;";
-                    final String typeValue;
-                    final String backgroundColor;
-                    final String bundle = "UpdateDialog";
-                    switch (modificationType) {
-                      case WARNING -> {
-                        typeValue = Translation.get(bundle, "warningType");
-                        backgroundColor = "background-color:#b56219;";
-                      }
-                      case IMPROVEMENT -> {
-                        typeValue = Translation.get(bundle, "improvementType");
-                        backgroundColor = "background-color:#4f73a5;";
-                      }
-                      case BUGFIX -> {
-                        typeValue = Translation.get(bundle, "fixType");
-                        backgroundColor = "background-color:#d36767;";
-                      }
-                      default -> {
-                        typeValue = Translation.get(bundle, "featureType");
-                        backgroundColor = "background-color:#439443;";
-                      }
-                    }
-                    return tr(
-                        td(
-                            span(typeValue)).withStyle(tdStyle + backgroundColor),
-                        td(message));
-                  })
-              )
-          )).attr("lang", Translation.getSelectedLocale().getLanguage());
+      final HtmlTag html = htmlService.prepareUpdateInfoHtmlPage(modifications);
 
       final String render = html.render();
       log.debug("Update page rendered: {}", render);
