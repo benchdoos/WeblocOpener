@@ -37,7 +37,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -248,32 +247,7 @@ class UpdateInfoDialog extends JDialog {
       legacyPanel.setVisible(false);
       updateInfoPanel.setVisible(true);
 
-      final List<ExtendedModificationInfo> modifications = new ArrayList<>();
-
-      if (CollectionUtils.isNotEmpty(updateInfo.warnings())) {
-        updateInfo.warnings().forEach(i -> modifications.add(
-            new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.WARNING, i)));
-      }
-
-
-      if (CollectionUtils.isNotEmpty(updateInfo.features())) {
-        updateInfo.features().forEach(i -> modifications.add(
-            new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.FEATURE, i)));
-      }
-
-      if (CollectionUtils.isNotEmpty(updateInfo.improvements())) {
-        updateInfo.improvements().forEach(i -> modifications.add(
-            new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.IMPROVEMENT, i)));
-      }
-
-      if (CollectionUtils.isNotEmpty(updateInfo.fixes())) {
-        updateInfo.fixes().forEach(i -> modifications.add(
-            new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.BUGFIX, i)));
-      }
-
-      log.debug("Formed modification list: {}", modifications);
-
-      final HtmlTag html = htmlService.prepareUpdateInfoHtmlPage(modifications);
+      final HtmlTag html = htmlService.prepareUpdateInfoHtmlPage(updateInfo);
 
       final String render = html.render();
       log.debug("Update page rendered: {}", render);

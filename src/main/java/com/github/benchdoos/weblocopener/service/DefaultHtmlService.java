@@ -1,20 +1,28 @@
 package com.github.benchdoos.weblocopener.service;
 
 import com.github.benchdoos.weblocopener.domain.ExtendedModificationInfo;
+import com.github.benchdoos.weblocopenercore.domain.version.UpdateInfo;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.LocaleSettings;
 import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 import j2html.TagCreator;
 import j2html.tags.specialized.HtmlTag;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+@Log4j2
 public class DefaultHtmlService implements Serializable, HtmlService {
   @Override
-  public HtmlTag prepareUpdateInfoHtmlPage(final List<ExtendedModificationInfo> modifications) {
+  public HtmlTag prepareUpdateInfoHtmlPage(final UpdateInfo updateInfo) {
+    final List<ExtendedModificationInfo> modifications = prepareRawList(updateInfo);
+
     final Locale locale = Translation.getSelectedLocale();
     return TagCreator.html(
         TagCreator.body(
@@ -63,4 +71,35 @@ public class DefaultHtmlService implements Serializable, HtmlService {
             )
         )).attr("lang", locale.getLanguage());
   }
+
+  @NotNull
+  private static List<ExtendedModificationInfo> prepareRawList(final UpdateInfo updateInfo) {
+    final List<ExtendedModificationInfo> modifications = new ArrayList<>();
+
+    if (CollectionUtils.isNotEmpty(updateInfo.warnings())) {
+      updateInfo.warnings().forEach(i -> modifications.add(
+          new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.WARNING, i)));
+    }
+
+
+    if (CollectionUtils.isNotEmpty(updateInfo.features())) {
+      modifications.addAll(updateInfo.features().stream().map(i ->
+          new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.FEATURE, i)).toList());
+    }
+
+    if (CollectionUtils.isNotEmpty(updateInfo.improvements())) {
+      modifications.addAll(updateInfo.improvements().stream().map(i ->
+          new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.IMPROVEMENT, i)).toList());
+    }
+
+    if (CollectionUtils.isNotEmpty(updateInfo.fixes())) {
+      modifications.addAll(updateInfo.fixes().stream().map(i ->
+          new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.BUGFIX, i)).toList());
+    }
+
+    log.debug("Formed modification list: {}", modifications);
+    return modifications;
+  }
+
+
 }

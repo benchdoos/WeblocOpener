@@ -1,17 +1,15 @@
 package com.github.benchdoos.weblocopener.service;
 
-import com.github.benchdoos.weblocopener.domain.ExtendedModificationInfo;
+import com.github.benchdoos.weblocopenercore.domain.version.UpdateInfo;
 import j2html.tags.specialized.HtmlTag;
-
-import java.util.List;
 
 public interface HtmlService {
 
   /**
    * Prepare html page by given update info
    *
-   * @param modifications list of modifications
+   * @param updateInfo update info
    * @return prepared html hierarchy
    */
-  HtmlTag prepareUpdateInfoHtmlPage(List<ExtendedModificationInfo> modifications);
+  HtmlTag prepareUpdateInfoHtmlPage(final UpdateInfo updateInfo);
 }
