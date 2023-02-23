@@ -15,7 +15,6 @@
 
 package com.github.benchdoos.weblocopener.gui;
 
-import com.github.benchdoos.weblocopener.domain.ExtendedModificationInfo;
 import com.github.benchdoos.weblocopener.service.DefaultHtmlService;
 import com.github.benchdoos.weblocopener.service.HtmlService;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
@@ -30,7 +29,6 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import j2html.tags.specialized.HtmlTag;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.collections.CollectionUtils;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -51,21 +49,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
-
-import static j2html.TagCreator.body;
-import static j2html.TagCreator.br;
-import static j2html.TagCreator.each;
-import static j2html.TagCreator.html;
-import static j2html.TagCreator.iff;
-import static j2html.TagCreator.iframe;
-import static j2html.TagCreator.span;
-import static j2html.TagCreator.table;
-import static j2html.TagCreator.td;
-import static j2html.TagCreator.tr;
-import static j2html.TagCreator.u;
 
 @Log4j2
 class UpdateInfoDialog extends JDialog {
@@ -227,8 +211,9 @@ class UpdateInfoDialog extends JDialog {
     buttonOK.addActionListener(e -> onOK());
 
 
-    setMinimumSize(new Dimension(550, 300));
-    setSize(550, 300);
+    final Dimension size = new Dimension(700, 400);
+    setMinimumSize(size);
+    setSize(size);
     pack();
 
     fillData();
