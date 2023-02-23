@@ -58,7 +58,7 @@ public class DefaultHtmlService implements Serializable, HtmlService {
                   return TagCreator.tr(
                       TagCreator.td(
                           TagCreator.span(typeValue)).withStyle(tdStyle + backgroundColor),
-                      TagCreator.td(message));
+                      TagCreator.td(TagCreator.rawHtml(message)));
                 })
             )
         )).attr("lang", locale.getLanguage());
