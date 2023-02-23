@@ -52,18 +52,19 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.github.benchdoos.weblocopener.core.ApplicationConstants.UPDATE_PATH_FILE;
 
 @SuppressWarnings({"ALL", "ResultOfMethodCallIgnored"})
 @Log4j2
 public class UpdateDialog extends JFrame implements Translatable {
-  private static volatile UpdateDialog instance = null;
+  private static AtomicReference<UpdateDialog> instance = new AtomicReference<>();
   private JProgressBar progressBar;
   private JButton buttonOK;
   private JButton buttonCancel;
-  private Timer messageTimer;
-  private Updater updater = null;
+
+  private Updater updater = UpdaterHelper.getUpdaterForCurrentOperatingSystem();
   private ApplicationVersion serverApplicationVersion;
   private JPanel contentPane;
   private JLabel currentVersionLabel;
@@ -87,12 +88,14 @@ public class UpdateDialog extends JFrame implements Translatable {
   }
 
   public static UpdateDialog getInstance() {
-    UpdateDialog localInstance = instance;
+    UpdateDialog localInstance = instance.get();
     if (localInstance == null) {
       synchronized (UpdateDialog.class) {
-        localInstance = instance;
+        localInstance = instance.get();
         if (localInstance == null) {
-          instance = localInstance = new UpdateDialog();
+          final UpdateDialog dialog = new UpdateDialog();
+          instance.set(dialog);
+          return dialog;
         }
       }
     }
@@ -390,7 +393,6 @@ public class UpdateDialog extends JFrame implements Translatable {
 
   public void checkForUpdates() {
     progressBar.setIndeterminate(true);
-    updater = UpdaterHelper.getUpdaterForCurrentOperatingSystem();
     log.debug("Provided updater: {}", updater);
     if (updater != null) {
       createDefaultActionListeners();
@@ -531,7 +533,6 @@ public class UpdateDialog extends JFrame implements Translatable {
             try {
               log.debug("Trying to open [" + updater.getLatestAppVersion().getDownloadUrl() + "]");
               url = new URL(updater.getLatestAppVersion().getDownloadUrl());
-              UrlValidator urlValidator = new UrlValidator();
               UrlsProceed.openUrl(url);
             } catch (MalformedURLException e1) {
               openWebsite(url);
@@ -554,12 +555,7 @@ public class UpdateDialog extends JFrame implements Translatable {
   }
 
   private void initUpdateInfoButton() {
-    updateInfoButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        onUpdateInfoButton();
-      }
-    });
+    updateInfoButton.addActionListener(e -> onUpdateInfoButton());
 
     updateInfoButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
   }
@@ -703,7 +699,7 @@ public class UpdateDialog extends JFrame implements Translatable {
 
   private void createUIComponents() {
     ImageIcon icon;
-    if (!new DarkModeActiveSettings().getValue()) {
+    if (Boolean.FALSE.equals(new DarkModeActiveSettings().getValue())) {
       icon = new ImageIcon(getClass().getResource("/images/updaterBackground.png"));
     } else {
       icon = new ImageIcon(getClass().getResource("/images/updaterBackgroundDark.png"));
