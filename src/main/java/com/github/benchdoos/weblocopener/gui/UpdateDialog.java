@@ -15,14 +15,18 @@
 
 package com.github.benchdoos.weblocopener.gui;
 
+import com.github.benchdoos.weblocopener.service.impl.DefaultUpdateInfoExtractor;
+import com.github.benchdoos.weblocopener.service.impl.DefaultUpdateService;
+import com.github.benchdoos.weblocopener.service.impl.UpdateInfoExtractor;
 import com.github.benchdoos.weblocopener.update.Updater;
-import com.github.benchdoos.weblocopener.update.UpdaterHelper;
-import com.github.benchdoos.weblocopener.update.impl.UnixUpdater;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
+import com.github.benchdoos.weblocopener.utils.UpdateHelperUtil;
 import com.github.benchdoos.weblocopenercore.constants.StringConstants;
 import com.github.benchdoos.weblocopenercore.domain.preferences.DevModeFeatureType;
-import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
+import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
 import com.github.benchdoos.weblocopenercore.domain.version.Beta;
+import com.github.benchdoos.weblocopenercore.domain.version.UpdateInfo;
+import com.github.benchdoos.weblocopenercore.exceptions.NoAvailableVersionException;
 import com.github.benchdoos.weblocopenercore.gui.Translatable;
 import com.github.benchdoos.weblocopenercore.gui.elements.ImagePanel;
 import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
@@ -33,25 +37,49 @@ import com.github.benchdoos.weblocopenercore.service.settings.impl.DarkModeActiv
 import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
 import com.github.benchdoos.weblocopenercore.utils.VersionUtils;
+import com.github.benchdoos.weblocopenercore.utils.system.OS;
 import com.github.benchdoos.weblocopenercore.utils.version.Version;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.validator.routines.UrlValidator;
+import org.bridj.Pointer;
+import org.bridj.PointerIO;
+import org.bridj.cpp.com.COMRuntime;
+import org.bridj.cpp.com.shell.ITaskbarList3;
+import org.bridj.jawt.JAWTUtils;
 
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.KeyStroke;
+import javax.swing.WindowConstants;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.github.benchdoos.weblocopener.core.ApplicationConstants.UPDATE_PATH_FILE;
@@ -64,8 +92,8 @@ public class UpdateDialog extends JFrame implements Translatable {
   private JButton buttonOK;
   private JButton buttonCancel;
 
-  private Updater updater = UpdaterHelper.getUpdaterForCurrentOperatingSystem();
-  private ApplicationVersion serverApplicationVersion;
+  private Updater updater = UpdateHelperUtil.getUpdaterForCurrentOS();
+  private AppVersion serverAppVersion;
   private JPanel contentPane;
   private JLabel currentVersionLabel;
   private JLabel availableVersionLabel;
@@ -79,12 +107,26 @@ public class UpdateDialog extends JFrame implements Translatable {
   private JLabel serverBetaLabel;
   private JLabel currentBetaLabel;
   private JPanel imagePanel;
+  private ITaskbarList3 taskBar = null;
+  private UpdateInfo updateInfo = null;
+
+  private UpdateInfoExtractor updateInfoExtractor;
 
   private UpdateDialog() {
     $$$setupUI$$$();
+    updateInfoExtractor = new DefaultUpdateInfoExtractor();
     iniGui();
     loadProperties();
 
+  }
+
+  private void prepareWindowsTaskBarHandling() {
+    try {
+      if (OS.isWindows()) {
+        log.debug("Initing task bar handling for Windows OS");
+        taskBar = COMRuntime.newInstance(ITaskbarList3.class);
+      }
+    } catch (ClassNotFoundException ignore) {/*WINDOWS<WINDOWS 7*/}
   }
 
   public static UpdateDialog getInstance() {
@@ -397,17 +439,17 @@ public class UpdateDialog extends JFrame implements Translatable {
     if (updater != null) {
       createDefaultActionListeners();
 
-      serverApplicationVersion = updater.getLatestAppVersion();
+      serverAppVersion = new DefaultUpdateService(updater).getLatest();
 
       initBetaLabel();
 
       progressBar.setIndeterminate(false);
-      final Version version = new Version(serverApplicationVersion);
+
+      final Version version = serverAppVersion.version();
       availableVersionLabel.setText(version.getMajor() + "." + version.getMinor() + "." + version.getPatch());
       setNewVersionSizeInfo();
 
-      updateInfoButton.setEnabled(true);
-
+      CompletableFuture.runAsync(this::getUpdateInfo);
 
       compareVersions();
     } else {
@@ -423,14 +465,24 @@ public class UpdateDialog extends JFrame implements Translatable {
     }
   }
 
+  private void getUpdateInfo() {
+    if (serverAppVersion != null) {
+      final UpdateInfo extract = updateInfoExtractor.extract(serverAppVersion);
+      if (extract != null) {
+        this.updateInfo = extract;
+      }
+      updateInfoButton.setEnabled(true);
+    }
+  }
+
   private void initBetaLabel() {
-    serverBetaLabel.setVisible(serverApplicationVersion.isBeta());
-    final Beta beta = serverApplicationVersion.getBeta();
+    serverBetaLabel.setVisible(serverAppVersion.getBeta().isBeta());
+    final Beta beta = serverAppVersion.getBeta();
     serverBetaLabel.setText("(beta." + beta.getVersion() + ")");
   }
 
   private void compareVersions() {
-    switch (VersionUtils.versionCompare(serverApplicationVersion)) {
+    switch (VersionUtils.versionCompare(serverAppVersion, CoreUtils.getCurrentAppVersion())) {
       case FIRST_VERSION_IS_NEWER:
         buttonOK.setEnabled(true);
         buttonOK.setText(Translation.get("UpdateDialogBundle", "buttonOk"));
@@ -466,10 +518,6 @@ public class UpdateDialog extends JFrame implements Translatable {
     buttonCancel.addActionListener(e -> onCancel());
   }
 
-  public ApplicationVersion getAppVersion() {
-    return serverApplicationVersion;
-  }
-
   public JButton getButtonCancel() {
     return buttonCancel;
   }
@@ -498,6 +546,7 @@ public class UpdateDialog extends JFrame implements Translatable {
 
     initWindowListeners();
 
+    prepareWindowsTaskBarHandling();
 
     translate();
 
@@ -529,14 +578,18 @@ public class UpdateDialog extends JFrame implements Translatable {
         log.debug("Calling to download setup manually");
         URL url = null;
         if (updater != null) {
-          if (updater.getLatestAppVersion() != null) {
+
+          if (serverAppVersion != null) {
             try {
-              log.debug("Trying to open [" + updater.getLatestAppVersion().getDownloadUrl() + "]");
-              url = new URL(updater.getLatestAppVersion().getDownloadUrl());
+              final AppVersion.Asset installerAsset = updater.getInstallerAsset(serverAppVersion);
+              log.debug("Trying to open [" + installerAsset + "]");
+              url = installerAsset.downloadUrl();
               UrlsProceed.openUrl(url);
-            } catch (MalformedURLException e1) {
-              openWebsite(url);
+            } catch (final NoAvailableVersionException e) {
+              log.warn("Could not get asset url, opening github page: {}", serverAppVersion.gitHubReleasePageUrl());
+              UrlsProceed.openUrl(serverAppVersion.gitHubReleasePageUrl());
             }
+
           } else {
             UrlsProceed.openUrl(StringConstants.UPDATE_WEB_URL);
           }
@@ -576,11 +629,11 @@ public class UpdateDialog extends JFrame implements Translatable {
   }
 
   private void initCurrentVersionInfo() {
-    final ApplicationVersion currentApplicationVersion = CoreUtils.getCurrentApplicationVersion();
+    final AppVersion currentApplicationVersion = CoreUtils.getCurrentAppVersion();
 
-    currentVersionLabel.setText(currentApplicationVersion.getVersion());
+    currentVersionLabel.setText(currentApplicationVersion.version().getSimpleVersionWithoutBeta());
 
-    currentBetaLabel.setVisible(currentApplicationVersion.isBeta());
+    currentBetaLabel.setVisible(currentApplicationVersion.getBeta().isBeta());
     final Beta beta = currentApplicationVersion.getBeta();
 
     currentBetaLabel.setText("(beta." + beta.getVersion() + ")");
@@ -609,23 +662,34 @@ public class UpdateDialog extends JFrame implements Translatable {
     buttonOK.setEnabled(false);
     if (!Thread.currentThread().isInterrupted()) {
       try {
-        updater.startUpdate(serverApplicationVersion);
-      } catch (IOException e) {
-        if (serverApplicationVersion.getDownloadUrl() != null) {
-          log.warn("Could not start update", e);
+        updater.addListener(i -> {
+          progressBar.setValue((int) i);
+          if (OS.isWindows()) {
+            updateWindowsProgressBar((int) i);
+          }
+        });
+        progressBar.setStringPainted(true);
+        updater.startUpdate(serverAppVersion);
+      } catch (IOException | NoAvailableVersionException e) {
+        try {
+          final AppVersion.Asset installerAsset = updater.getInstallerAsset(serverAppVersion);
+          if (installerAsset.downloadUrl() != null) {
+            log.warn("Could not start update", e);
 
-          Translation translation = new Translation("UpdateDialogBundle");
+            Translation translation = new Translation("UpdateDialogBundle");
 
-          NotificationManager.getForcedNotification(this).showErrorNotification(
-              translation.get("unableToUpdateTitle"),
-              translation.get("lostConnectionMessage"));
-        } else {
+            NotificationManager.getForcedNotification(this).showErrorNotification(
+                translation.get("unableToUpdateTitle"),
+                translation.get("lostConnectionMessage"));
+          }
+        } catch (NoAvailableVersionException ex) {
           log.warn("Could not start update, there is no available version for this system", e);
           Translation translation = new Translation("UpdateDialogBundle");
           NotificationManager.getForcedNotification(this).showErrorNotification(
               translation.get("unableToUpdateTitle"),
               translation.get("noAvailableVersion"));
         }
+
       }
       if (!Thread.currentThread().isInterrupted()) {
         dispose();
@@ -637,13 +701,22 @@ public class UpdateDialog extends JFrame implements Translatable {
 
   }
 
+  private void updateWindowsProgressBar(final int i) {
+    if (taskBar != null) {
+      long nativePeerHandle = JAWTUtils.getNativePeerHandle(this);
+      final Pointer<?> pointer = Pointer
+          .pointerToAddress(nativePeerHandle, PointerIO.getSizeTInstance().getTargetSize(), null);
+      taskBar.SetProgressValue((Pointer<Integer>) pointer, i, 100);
+    }
+  }
+
   private void onUpdateInfoButton() {
-    if (serverApplicationVersion != null) {
-      if (!serverApplicationVersion.getLegacyUpdateInfo().isEmpty()) {
+    if (serverAppVersion != null) {
+      if (!serverAppVersion.releaseInfo().isEmpty()) {
         new WindowLauncher<UpdateInfoDialog>() {
           @Override
           public UpdateInfoDialog initWindow() {
-            return new UpdateInfoDialog(serverApplicationVersion);
+            return new UpdateInfoDialog(serverAppVersion, updateInfo);
           }
         }.getWindow().setVisible(true);
       }
@@ -659,9 +732,10 @@ public class UpdateDialog extends JFrame implements Translatable {
   }
 
   private void runCleanInstallerFile() {
-    if (serverApplicationVersion != null) {
-      final String installerFilePath = UPDATE_PATH_FILE + StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME
-          + serverApplicationVersion.getVersion() + ".exe";
+    if (serverAppVersion != null) {
+      final String installerFilePath = UPDATE_PATH_FILE
+          + StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME
+          + serverAppVersion.version() + ".exe";
       log.info("Deleting file: " + installerFilePath);
       File installer = new File(installerFilePath);
       installer.deleteOnExit();
@@ -672,16 +746,21 @@ public class UpdateDialog extends JFrame implements Translatable {
 
 
   private void setNewVersionSizeInfo() {
-    if (serverApplicationVersion.getSize() > 1024 * 1024) {
-      double size = serverApplicationVersion.getSize() / 1024 / (double) 1024;
-      size = size * 100;
-      int i = (int) Math.round(size);
-      size = (double) i / 100;
-      newVersionSizeLabel.setText(Double.toString(size));
-      unitLabel.setText("MB");
-    } else {
-      newVersionSizeLabel.setText(serverApplicationVersion.getSize() / 1024 + "");
-      unitLabel.setText("KB");
+    try {
+      final AppVersion.Asset installerAsset = updater.getInstallerAsset(serverAppVersion);
+      if (installerAsset.size() > 1024 * 1024) {
+        double size = installerAsset.size() / 1024 / (double) 1024;
+        size = size * 100;
+        int i = (int) Math.round(size);
+        size = (double) i / 100;
+        newVersionSizeLabel.setText(Double.toString(size));
+        unitLabel.setText("MB");
+      } else {
+        newVersionSizeLabel.setText(installerAsset.size() / 1024 + "");
+        unitLabel.setText("KB");
+      }
+    } catch (final NoAvailableVersionException e) {
+      log.warn("Can not get available asset for size info", e);
     }
   }
 

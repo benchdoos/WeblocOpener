@@ -18,12 +18,11 @@ package com.github.benchdoos.weblocopener.gui;
 import com.github.benchdoos.weblocopener.service.DefaultHtmlService;
 import com.github.benchdoos.weblocopener.service.HtmlService;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
-import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
+import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
 import com.github.benchdoos.weblocopenercore.domain.version.UpdateInfo;
 import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DarkModeActiveSettings;
 import com.github.benchdoos.weblocopenercore.service.translation.Translation;
-import com.github.benchdoos.weblocopenercore.utils.version.Version;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -53,7 +52,8 @@ import java.util.ResourceBundle;
 
 @Log4j2
 class UpdateInfoDialog extends JDialog {
-  private ApplicationVersion applicationVersion;
+  private AppVersion applicationVersion;
+  private UpdateInfo updateInfo;
   private JPanel contentPane;
   private JButton buttonOK;
   private JTextPane textPane;
@@ -64,9 +64,11 @@ class UpdateInfoDialog extends JDialog {
   private JEditorPane updateInfoEditorPane;
   private HtmlService htmlService;
 
-  UpdateInfoDialog(ApplicationVersion applicationVersion) {
+  UpdateInfoDialog(AppVersion applicationVersion, UpdateInfo updateInfo) {
     this.applicationVersion = applicationVersion;
+    this.updateInfo = updateInfo;
     htmlService = new DefaultHtmlService();
+
 
     createGUI();
   }
@@ -196,7 +198,7 @@ class UpdateInfoDialog extends JDialog {
 
   private void createGUI() {
     setTitle(Translation.get("UpdateDialogBundle", "infoAboutUpdate") + " — " +
-        new Version(applicationVersion).getBeautifulVersionString());
+        applicationVersion.version().getBeautifulVersionString());
     setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateInfoDialog.class.getResource("/images/infoIcon16.png")));
 
 
@@ -223,7 +225,7 @@ class UpdateInfoDialog extends JDialog {
 
 
   private void fillData() {
-    UpdateInfo updateInfo = applicationVersion.getVersionInfo();
+
     if (updateInfo == null) {
       legacyPanel.setVisible(true);
       updateInfoPanel.setVisible(false);
@@ -242,8 +244,7 @@ class UpdateInfoDialog extends JDialog {
   }
 
   private void fillLegacyTextPane() {
-    textPane.setText(
-        generatePageForDisplay(applicationVersion.getUpdateTitle(), applicationVersion.getLegacyUpdateInfo()));
+    textPane.setText(generatePageForDisplay(applicationVersion.title(), applicationVersion.releaseInfo()));
 
     textPane.registerKeyboardAction(e -> onOK(), KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
         JComponent.WHEN_FOCUSED);

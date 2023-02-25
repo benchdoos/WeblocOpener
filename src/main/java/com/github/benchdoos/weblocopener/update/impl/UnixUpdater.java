@@ -16,101 +16,165 @@
 package com.github.benchdoos.weblocopener.update.impl;
 
 import com.github.benchdoos.weblocopener.core.ApplicationConstants;
-import com.github.benchdoos.weblocopener.gui.UpdateDialog;
+import com.github.benchdoos.weblocopener.service.UpdateService;
+import com.github.benchdoos.weblocopener.service.impl.DefaultUpdateService;
 import com.github.benchdoos.weblocopener.update.Updater;
-import com.github.benchdoos.weblocopener.update.UpdaterHelper;
-import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
+import com.github.benchdoos.weblocopener.utils.UpdateHelperUtil;
+import com.github.benchdoos.weblocopenercore.client.GitHubClient;
+import com.github.benchdoos.weblocopenercore.client.impl.DefaultGitHubClient;
+import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
+import com.github.benchdoos.weblocopenercore.exceptions.NoAvailableVersionException;
+import com.github.benchdoos.weblocopenercore.service.actions.ActionListener;
+import com.github.benchdoos.weblocopenercore.service.actions.ActionListenerSupport;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
 import org.assertj.core.util.Files;
 
-import javax.swing.JProgressBar;
 import javax.swing.Timer;
 import java.awt.Desktop;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Log4j2
-public class UnixUpdater implements Updater {
-    private static AtomicReference<ApplicationVersion> latestReleaseVersion = null;
-    private static AtomicReference<ApplicationVersion> latestBetaVersion = null;
+public class UnixUpdater implements Updater, ActionListenerSupport {
+    public static final String DEB_FILE_REGEX = "WeblocOpener.*\\.deb";
+    private static AtomicReference<AppVersion> latestReleaseVersion = null;
+    private static AtomicReference<AppVersion> latestBetaVersion = null;
 
     private static final Object RELEASE_MUTEX = new Object();
     private static final Object BETA_MUTEX = new Object();
 
-    private final UpdaterHelper updaterHelper;
+    final UpdateService updateService;
+
+    private final GitHubClient gitHubClient = new DefaultGitHubClient();
+
+    final List<ActionListener<Integer>> listeners = new CopyOnWriteArrayList<>();
 
     public UnixUpdater() {
-        updaterHelper = new UpdaterHelper();
+        updateService = new DefaultUpdateService(this);
     }
 
     @Override
-    public ApplicationVersion getLatestAppVersion() {
-        return updaterHelper.getLatestVersion(this);
+    public AppVersion getLatestAppVersion() {
+        return updateService.getLatest();
     }
 
     @Override
-    public ApplicationVersion getLatestReleaseAppVersion() {
+    public AppVersion getLatestRelease() {
         if (latestReleaseVersion != null) {
             return latestReleaseVersion.get();
         }
 
         synchronized (RELEASE_MUTEX) {
-            final ApplicationVersion version =
-                updaterHelper.getLatestReleaseVersion(ApplicationConstants.DEBIAN_SETUP_DEFAULT_NAME);
-            latestReleaseVersion = new AtomicReference<>(version);
+            final AppVersion latestRelease = gitHubClient.getLatestRelease();
+
+            log.info("New realization version: {}", latestRelease);
+
+            latestReleaseVersion = new AtomicReference<>(latestRelease);
 
             return latestReleaseVersion.get();
         }
     }
 
     @Override
-    public ApplicationVersion getLatestBetaAppVersion() {
+    public AppVersion getLatestBeta() {
         if (latestBetaVersion != null) {
             return latestBetaVersion.get();
         }
 
         synchronized (BETA_MUTEX) {
-            final ApplicationVersion version =
-                updaterHelper.getLatestBetaVersion(ApplicationConstants.DEBIAN_SETUP_DEFAULT_NAME);
-            latestBetaVersion = new AtomicReference<>(version);
+            final AppVersion latestBetaRelease = gitHubClient.getLatestBetaRelease();
+            latestBetaVersion = new AtomicReference<>(latestBetaRelease);
 
             return latestBetaVersion.get();
         }
     }
 
     @Override
-    public void startUpdate(ApplicationVersion applicationVersion) throws IOException {
-        log.info("Starting update for {}", applicationVersion.getVersion());
+    public AppVersion.Asset getInstallerAsset(final AppVersion appVersion) throws NoAvailableVersionException {
+
+        if (appVersion == null) {
+            throw new NoAvailableVersionException("Given AppVersion is null");
+        }
+
+        if (CollectionUtils.isNotEmpty(appVersion.assets())) {
+            return appVersion.assets().stream()
+                .filter(a -> a.contentType().equals("application/octet-stream") && a.name().matches(DEB_FILE_REGEX))
+                .findFirst()
+                .orElseThrow(() -> new NoAvailableVersionException("Needed installer file not found"));
+        }
+
+        throw new NoAvailableVersionException("Given AppVersion assets are empty");
+    }
+
+    @Override
+    public void startUpdate(AppVersion appVersion) throws IOException {
+        log.info("Starting update for {}", appVersion.version());
+
+        final AppVersion.Asset installerAsset = this.getInstallerAsset(appVersion);
+
         File installerFile = new File(
-                ApplicationConstants.UPDATE_PATH_FILE + ApplicationConstants.DEBIAN_SETUP_DEFAULT_NAME);
+            ApplicationConstants.UPDATE_PATH_FILE + installerAsset.name());
         if (!installerFile.exists()) {
-            updateAndInstall(applicationVersion, installerFile);
+            updateAndInstall(installerAsset, installerFile);
         } else {
-            if (applicationVersion.getSize() == installerFile.length()) {
-                updateProgressBar(applicationVersion, installerFile);
-                update(installerFile);
+            if (installerAsset.size() == installerFile.length()) {
+                final Timer notifierTimer =
+                    UpdateHelperUtil.createNotifierTimer(installerAsset, installerFile, listeners);
+                try {
+                    update(installerFile);
+                } finally {
+                    if (notifierTimer != null && notifierTimer.isRunning()) {
+                        log.debug("Stopping timer: {}", notifierTimer);
+                        notifierTimer.stop();
+                    }
+                }
             } else {
                 Files.delete(installerFile);
-                updateAndInstall(applicationVersion, installerFile);
+                updateAndInstall(installerAsset, installerFile);
             }
         }
     }
 
-    private void updateAndInstall(ApplicationVersion applicationVersion, File installerFile) throws IOException {
-        updateProgressBar(applicationVersion, installerFile);
+    @Override
+    public void addListener(final ActionListener actionListener) {
+        listeners.add(actionListener);
+    }
 
+    @Override
+    public void removeListener(final ActionListener actionListener) {
+        listeners.remove(actionListener);
+    }
+
+    @Override
+    public void removeAllListeners() {
+        listeners.clear();
+    }
+
+    private void updateAndInstall(final AppVersion.Asset installerAsset,
+                                  File installerFile) throws IOException {
+
+        final Timer notifierTimer = UpdateHelperUtil.createNotifierTimer(installerAsset, installerFile, listeners);
         try {
-            FileUtils.copyURLToFile(new URL(applicationVersion.getDownloadUrl()), installerFile, ApplicationConstants.CONNECTION_TIMEOUT, ApplicationConstants.CONNECTION_TIMEOUT);
+            FileUtils.copyURLToFile(installerAsset.downloadUrl(), installerFile,
+                ApplicationConstants.CONNECTION_TIMEOUT, ApplicationConstants.CONNECTION_TIMEOUT);
 
             update(installerFile);
         } catch (IOException e) {
-            log.warn("Can not download file: {} to {}", applicationVersion.getDownloadUrl(), installerFile, e);
+            log.warn("Can not download file: {} to {}", installerAsset.downloadUrl(), installerFile, e);
+
+            log.debug("Setting file: {} to be deleted on app exit", installerFile);
             installerFile.deleteOnExit();
             throw new IOException(e);
+        } finally {
+            if (notifierTimer != null && notifierTimer.isRunning()) {
+                log.debug("Stopping timer: {}", notifierTimer);
+                notifierTimer.stop();
+            }
         }
     }
 
@@ -120,34 +184,37 @@ public class UnixUpdater implements Updater {
     }
 
 
-    private void updateProgressBar(ApplicationVersion applicationVersion, File file) {
-        if (UpdateDialog.getInstance() != null) {
-            JProgressBar progressBar = UpdateDialog.getInstance().getProgressBar();
-
-            final long size = applicationVersion.getSize();
-            progressBar.setMaximum(Math.toIntExact(size));
-
-
-            Timer timer = new Timer(500, null);
-
-            final ActionListener actionListener = e -> {
-                progressBar.setValue(Math.toIntExact(file.length()));
-                if (file.length() == applicationVersion.getSize()) {
-                    timer.stop();
-                }
-            };
-            timer.addActionListener(actionListener);
-            timer.setRepeats(true);
-            timer.start();
-        }
-    }
+//    private Timer createNotifierTimer(final AppVersion.Asset asset, File file) {
+//
+//        if (CollectionUtils.isNotEmpty(listeners)) {
+//            final long totalSize = asset.size();
+//
+//            final Timer timer = new Timer(500, null);
+//
+//            timer.addActionListener(e -> {
+//                final int value = Math.toIntExact(file.length());
+//
+//                final Integer percent = (int) (((double) value / totalSize) * 100);
+//
+//                listeners.forEach(l -> l.actionPerformed(percent));
+//
+//                if (file.length() == asset.size()) {
+//                    timer.stop();
+//                }
+//            });
+//
+//            timer.setRepeats(true);
+//            timer.start();
+//            return timer;
+//        }
+//        return null;
+//    }
 
     @Override
     public String toString() {
         return "UnixUpdater [" +
-                "installerFile = " + ApplicationConstants.DEBIAN_SETUP_DEFAULT_NAME +
-                "]";
+            "installerFile = " + ApplicationConstants.DEBIAN_SETUP_DEFAULT_NAME +
+            "]";
     }
-
 
 }

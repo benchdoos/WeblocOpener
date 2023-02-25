@@ -15,29 +15,32 @@
 
 package com.github.benchdoos.weblocopener.update;
 
-import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
+import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
+import com.github.benchdoos.weblocopenercore.exceptions.NoAvailableVersionException;
+import com.github.benchdoos.weblocopenercore.service.actions.ActionListenerSupport;
 
 import java.io.IOException;
 
-public interface Updater {
+public interface Updater extends ActionListenerSupport {
 
     /**
-     * @return latest {@link ApplicationVersion}, giving Beta if
+     * @return latest {@link AppVersion}, giving Beta if
      * {@link com.github.benchdoos.weblocopenercore.service.settings.impl.InstallBetaUpdateSettings} is {@code true}
-     * and Release is older than Beta version,
-     * otherwise  will return Release version.
+     * and Release is older than Beta version, otherwise will return Release version.
      */
-    ApplicationVersion getLatestAppVersion();
+    AppVersion getLatestAppVersion();
 
     /**
-     * @return latest Release {@link ApplicationVersion}
+     * @return latest Release {@link AppVersion}
      */
-    ApplicationVersion getLatestReleaseAppVersion();
+    AppVersion getLatestRelease();
 
     /**
-     * @return latest Beta version {@link ApplicationVersion}
+     * @return latest Beta version {@link AppVersion}
      */
-    ApplicationVersion getLatestBetaAppVersion();
+    AppVersion getLatestBeta();
 
-    void startUpdate(ApplicationVersion applicationVersion) throws IOException;
+    AppVersion.Asset getInstallerAsset(AppVersion appVersion) throws NoAvailableVersionException;
+
+    void startUpdate(AppVersion applicationVersion) throws IOException;
 }
