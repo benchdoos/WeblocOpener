@@ -87,6 +87,7 @@ import static com.github.benchdoos.weblocopener.core.ApplicationConstants.UPDATE
 @SuppressWarnings({"ALL", "ResultOfMethodCallIgnored"})
 @Log4j2
 public class UpdateDialog extends JFrame implements Translatable {
+  public static final String UPDATE_DIALOG_BUNDLE = "UpdateDialogBundle";
   private static AtomicReference<UpdateDialog> instance = new AtomicReference<>();
   private JProgressBar progressBar;
   private JButton buttonOK;
@@ -457,7 +458,7 @@ public class UpdateDialog extends JFrame implements Translatable {
 
       progressBar.setIndeterminate(false);
       buttonOK.setEnabled(true);
-      buttonOK.setText(Translation.get("UpdateDialogBundle", "retryButton"));
+      buttonOK.setText(Translation.get(UPDATE_DIALOG_BUNDLE, "retryButton"));
       buttonOK.addActionListener(e1 -> {
         progressBar.setIndeterminate(true);
         checkForUpdates();
@@ -485,18 +486,18 @@ public class UpdateDialog extends JFrame implements Translatable {
     switch (VersionUtils.versionCompare(serverAppVersion, CoreUtils.getCurrentAppVersion())) {
       case FIRST_VERSION_IS_NEWER:
         buttonOK.setEnabled(true);
-        buttonOK.setText(Translation.get("UpdateDialogBundle", "buttonOk"));
+        buttonOK.setText(Translation.get(UPDATE_DIALOG_BUNDLE, "buttonOk"));
         break;
       case SECOND_VERSION_IS_NEWER:
         if (new DevModeFeatureCheck().isActive(DevModeFeatureType.UI_UPDATER_ENABLE_DEV_OPTIONS)) {
-          buttonOK.setText(Translation.get("UpdateDialogBundle", "buttonOkDev"));
+          buttonOK.setText(Translation.get(UPDATE_DIALOG_BUNDLE, "buttonOkDev"));
           buttonOK.setEnabled(true);
         } else {
-          buttonOK.setText(Translation.get("UpdateDialogBundle", "buttonOkUp2Date"));
+          buttonOK.setText(Translation.get(UPDATE_DIALOG_BUNDLE, "buttonOkUp2Date"));
         }
         break;
       case VERSIONS_ARE_EQUAL:
-        buttonOK.setText(Translation.get("UpdateDialogBundle", "buttonOkUp2Date"));
+        buttonOK.setText(Translation.get(UPDATE_DIALOG_BUNDLE, "buttonOkUp2Date"));
         break;
     }
   }
@@ -527,7 +528,7 @@ public class UpdateDialog extends JFrame implements Translatable {
   }
 
   private void iniGui() {
-    setTitle(Translation.get("UpdateDialogBundle", "windowTitle"));
+    setTitle(Translation.get(UPDATE_DIALOG_BUNDLE, "windowTitle"));
     setContentPane(contentPane);
     getRootPane().setDefaultButton(buttonOK);
     setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateDialog.class.getResource("/images/updateIconBlue256.png")));
@@ -618,7 +619,7 @@ public class UpdateDialog extends JFrame implements Translatable {
     initCurrentVersionInfo();
 
     availableVersionLabel.setText(
-        Translation.get("UpdateDialogBundle", "availableVersionLabelUnknown"));
+        Translation.get(UPDATE_DIALOG_BUNDLE, "availableVersionLabelUnknown"));
   }
 
   private void clearLabels() {
@@ -676,7 +677,7 @@ public class UpdateDialog extends JFrame implements Translatable {
           if (installerAsset.downloadUrl() != null) {
             log.warn("Could not start update", e);
 
-            Translation translation = new Translation("UpdateDialogBundle");
+            Translation translation = new Translation(UPDATE_DIALOG_BUNDLE);
 
             NotificationManager.getForcedNotification(this).showErrorNotification(
                 translation.get("unableToUpdateTitle"),
@@ -684,7 +685,7 @@ public class UpdateDialog extends JFrame implements Translatable {
           }
         } catch (NoAvailableVersionException ex) {
           log.warn("Could not start update, there is no available version for this system", e);
-          Translation translation = new Translation("UpdateDialogBundle");
+          Translation translation = new Translation(UPDATE_DIALOG_BUNDLE);
           NotificationManager.getForcedNotification(this).showErrorNotification(
               translation.get("unableToUpdateTitle"),
               translation.get("noAvailableVersion"));
@@ -766,7 +767,7 @@ public class UpdateDialog extends JFrame implements Translatable {
 
   @Override
   public void translate() {
-    Translation translation = new Translation("UpdateDialogBundle");
+    Translation translation = new Translation(UPDATE_DIALOG_BUNDLE);
     currentVersionStringLabel.setText(translation.get("currentVersionStringLabel"));
     availableVersionStringLabel.setText(translation.get("availableVersionStringLabel"));
     updateInfoButton.setToolTipText(translation.get("infoAboutUpdate"));
