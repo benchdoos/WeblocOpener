@@ -165,6 +165,7 @@ public class UnixUpdater implements Updater, ActionListenerSupport {
                     ApplicationConstants.CONNECTION_TIMEOUT, ApplicationConstants.CONNECTION_TIMEOUT);
             }
 
+            log.debug("Installer file: {} (size:{})", installerFile, installerFile.length());
             update(installerFile);
         } catch (IOException e) {
             log.warn("Can not download file: {} to {}", installerAsset.downloadUrl(), installerFile, e);
@@ -181,7 +182,9 @@ public class UnixUpdater implements Updater, ActionListenerSupport {
     }
 
     private void update(File installerFile) throws IOException {
+        log.debug("Starting update: [{}]", installerFile);
         Desktop.getDesktop().open(installerFile);
+        log.debug("Exiting app...");
         System.exit(0);
     }
 

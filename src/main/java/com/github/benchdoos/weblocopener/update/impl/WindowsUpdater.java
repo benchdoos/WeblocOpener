@@ -147,6 +147,7 @@ public class WindowsUpdater implements Updater {
                     ApplicationConstants.CONNECTION_TIMEOUT, ApplicationConstants.CONNECTION_TIMEOUT);
             }
 
+            log.debug("Installer file: {} (size:{})", installerFile, installerFile.length());
             update(installerFile);
         } catch (IOException e) {
             log.warn("Can not download file: {} to {}", installerAsset.downloadUrl(), installerFile, e);
