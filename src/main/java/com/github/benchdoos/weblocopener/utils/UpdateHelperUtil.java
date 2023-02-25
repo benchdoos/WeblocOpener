@@ -54,6 +54,8 @@ public class UpdateHelperUtil {
 
         final Integer percent = (int) (((double) value / totalSize) * 100);
 
+        log.debug("Downloaded: {}% ({} bites of total {} bites)", percent, value, totalSize);
+
         listeners.forEach(l -> l.actionPerformed(percent));
 
         if (file.length() == asset.size()) {

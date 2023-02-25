@@ -57,24 +57,27 @@ public class WindowsUpdater implements Updater {
 
     @Override
     public void addListener(
-        final com.github.benchdoos.weblocopenercore.service.actions.ActionListener<?> actionListener) {
-
+        final com.github.benchdoos.weblocopenercore.service.actions.ActionListener actionListener) {
+        listeners.add(actionListener);
     }
 
     @Override
     public void removeListener(
-        final com.github.benchdoos.weblocopenercore.service.actions.ActionListener<?> actionListener) {
-
+        final com.github.benchdoos.weblocopenercore.service.actions.ActionListener actionListener) {
+        listeners.remove(actionListener);
     }
 
     @Override
     public void removeAllListeners() {
-
+        listeners.clear();
     }
 
     private void update(File file) throws IOException {
-        Runtime runtime = Runtime.getRuntime();
-        runtime.exec(file.getAbsolutePath() + " " + ApplicationConstants.INSTALLER_SILENT_KEY);
+        final String command = file.getAbsolutePath() + " " + ApplicationConstants.INSTALLER_SILENT_KEY;
+        log.debug("Starting update with command: [{}]", command);
+
+        Runtime.getRuntime().exec(command);
+        log.debug("Exiting app...");
         System.exit(0);
     }
 
@@ -131,17 +134,18 @@ public class WindowsUpdater implements Updater {
     @Override
     public void startUpdate(AppVersion appVersion) throws IOException {
         log.info("Starting update for {}", appVersion.version());
-        File installerFile = new File(
-            ApplicationConstants.UPDATE_PATH_FILE + SETUP_NAME);
+        final File installerFile = new File(ApplicationConstants.UPDATE_PATH_FILE + SETUP_NAME);
+        log.debug("Installer file: {} exists: {}", installerFile, installerFile.exists());
 
         final AppVersion.Asset installerAsset = this.getInstallerAsset(appVersion);
-
 
         final Timer notifierTimer = UpdateHelperUtil.createNotifierTimer(installerAsset, installerFile, listeners);
 
         try {
-            FileUtils.copyURLToFile(installerAsset.downloadUrl(), installerFile,
-                ApplicationConstants.CONNECTION_TIMEOUT, ApplicationConstants.CONNECTION_TIMEOUT);
+            if (!installerFile.exists()) {
+                FileUtils.copyURLToFile(installerAsset.downloadUrl(), installerFile,
+                    ApplicationConstants.CONNECTION_TIMEOUT, ApplicationConstants.CONNECTION_TIMEOUT);
+            }
 
             update(installerFile);
         } catch (IOException e) {

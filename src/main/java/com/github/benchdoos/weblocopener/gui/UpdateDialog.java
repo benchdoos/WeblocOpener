@@ -655,14 +655,17 @@ public class UpdateDialog extends JFrame implements Translatable {
 
   private void onOK() {
     buttonOK.setEnabled(false);
+
+    final com.github.benchdoos.weblocopenercore.service.actions.ActionListener<Object> listener = i -> {
+      progressBar.setValue((int) i);
+      if (OS.isWindows()) {
+        updateWindowsProgressBar((int) i);
+      }
+    };
+
     if (!Thread.currentThread().isInterrupted()) {
       try {
-        updater.addListener(i -> {
-          progressBar.setValue((int) i);
-          if (OS.isWindows()) {
-            updateWindowsProgressBar((int) i);
-          }
-        });
+        updater.addListener(listener);
         progressBar.setStringPainted(true);
         updater.startUpdate(serverAppVersion);
       } catch (IOException | NoAvailableVersionException e) {
@@ -690,6 +693,7 @@ public class UpdateDialog extends JFrame implements Translatable {
         dispose();
       }
     } else {
+      updater.removeListener(listener);
       buttonOK.setEnabled(true);
       buttonCancel.setEnabled(true);
     }

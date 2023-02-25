@@ -160,8 +160,10 @@ public class UnixUpdater implements Updater, ActionListenerSupport {
 
         final Timer notifierTimer = UpdateHelperUtil.createNotifierTimer(installerAsset, installerFile, listeners);
         try {
-            FileUtils.copyURLToFile(installerAsset.downloadUrl(), installerFile,
-                ApplicationConstants.CONNECTION_TIMEOUT, ApplicationConstants.CONNECTION_TIMEOUT);
+            if (!installerFile.exists()) {
+                FileUtils.copyURLToFile(installerAsset.downloadUrl(), installerFile,
+                    ApplicationConstants.CONNECTION_TIMEOUT, ApplicationConstants.CONNECTION_TIMEOUT);
+            }
 
             update(installerFile);
         } catch (IOException e) {
@@ -182,33 +184,6 @@ public class UnixUpdater implements Updater, ActionListenerSupport {
         Desktop.getDesktop().open(installerFile);
         System.exit(0);
     }
-
-
-//    private Timer createNotifierTimer(final AppVersion.Asset asset, File file) {
-//
-//        if (CollectionUtils.isNotEmpty(listeners)) {
-//            final long totalSize = asset.size();
-//
-//            final Timer timer = new Timer(500, null);
-//
-//            timer.addActionListener(e -> {
-//                final int value = Math.toIntExact(file.length());
-//
-//                final Integer percent = (int) (((double) value / totalSize) * 100);
-//
-//                listeners.forEach(l -> l.actionPerformed(percent));
-//
-//                if (file.length() == asset.size()) {
-//                    timer.stop();
-//                }
-//            });
-//
-//            timer.setRepeats(true);
-//            timer.start();
-//            return timer;
-//        }
-//        return null;
-//    }
 
     @Override
     public String toString() {
