@@ -599,12 +599,6 @@ public class UpdateDialog extends JFrame implements Translatable {
           UrlsProceed.openUrl(StringConstants.UPDATE_WEB_URL);
         }
       }
-
-      private void openWebsite(URL url) {
-        log.warn("Could not open setup url: [" + url + "]\n" +
-            "Opening " + StringConstants.UPDATE_WEB_URL);
-        UrlsProceed.openUrl(StringConstants.UPDATE_WEB_URL);
-      }
     });
   }
 
