@@ -64,10 +64,10 @@ public class NonGuiUpdater {
             switch (VersionUtils.versionCompare(serverApplicationVersion, CoreUtils.getCurrentAppVersion())) {
                 case FIRST_VERSION_IS_NEWER -> onNewVersionAvailable();
                 case SECOND_VERSION_IS_NEWER -> log.info("Current version is newer! Current: {}, Server: {}",
-                    CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
+                    CoreUtils.getCurrentAppVersion(), serverApplicationVersion);
                 case VERSIONS_ARE_EQUAL ->
                     log.info("There are no updates available. Versions are equal! Current: {}, Server: {}",
-                        CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
+                        CoreUtils.getCurrentAppVersion(), serverApplicationVersion);
             }
         } else onNewVersionAvailable();
     }
@@ -78,7 +78,7 @@ public class NonGuiUpdater {
             final AppVersion.Asset asset = updater.getInstallerAsset(serverApplicationVersion);
             if (asset != null) {
                 log.info("Showing notification: New version is available! Current: {}, Server: {}",
-                    CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
+                    CoreUtils.getCurrentAppVersion(), serverApplicationVersion);
 
                 NotifyManager.getNotifierForSystem().notifyUser(serverApplicationVersion);
             } else {
