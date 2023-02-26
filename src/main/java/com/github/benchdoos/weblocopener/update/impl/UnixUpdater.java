@@ -42,7 +42,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Log4j2
 public class UnixUpdater implements Updater, ActionListenerSupport {
-    public static final String DEB_FILE_REGEX = "WeblocOpener.*\\.deb";
+    public static final String DEB_FILE_REGEX = ".*WeblocOpener.*\\.deb";
     private static AtomicReference<AppVersion> latestReleaseVersion = null;
     private static AtomicReference<AppVersion> latestBetaVersion = null;
 
@@ -122,7 +122,9 @@ public class UnixUpdater implements Updater, ActionListenerSupport {
 
         final AppVersion.Asset installerAsset = this.getInstallerAsset(appVersion);
 
-        installerFile = new File(ApplicationConstants.UPDATE_PATH_FILE + installerAsset.name());
+        installerFile = new File(ApplicationConstants.UPDATE_PATH_FILE
+            + UpdateHelperUtil.getUpdatePrefix(appVersion.version())
+            + installerAsset.name());
         if (!installerFile.exists()) {
             updateAndInstall(installerAsset, installerFile);
         } else {
@@ -196,12 +198,4 @@ public class UnixUpdater implements Updater, ActionListenerSupport {
         log.debug("Exiting app...");
         System.exit(0);
     }
-
-    @Override
-    public String toString() {
-        return "UnixUpdater [" +
-            "installerFile = " + ApplicationConstants.DEBIAN_SETUP_DEFAULT_NAME +
-            "]";
-    }
-
 }

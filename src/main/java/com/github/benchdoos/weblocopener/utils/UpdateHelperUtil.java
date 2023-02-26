@@ -8,6 +8,7 @@ import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
 import com.github.benchdoos.weblocopenercore.domain.version.UpdateInfo;
 import com.github.benchdoos.weblocopenercore.service.actions.ActionListener;
 import com.github.benchdoos.weblocopenercore.utils.system.OS;
+import com.github.benchdoos.weblocopenercore.utils.version.Version;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections.CollectionUtils;
@@ -69,6 +70,10 @@ public class UpdateHelperUtil {
       return timer;
     }
     return null;
+  }
+
+  public String getUpdatePrefix(Version version) {
+    return "V" + version.getSimpleVersion() + "_";
   }
 
 }

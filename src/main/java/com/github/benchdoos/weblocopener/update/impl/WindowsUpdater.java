@@ -21,6 +21,7 @@ import com.github.benchdoos.weblocopener.service.UpdateService;
 import com.github.benchdoos.weblocopener.service.impl.DefaultUpdateService;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.utils.FileDownloader;
+import com.github.benchdoos.weblocopener.utils.UpdateHelperUtil;
 import com.github.benchdoos.weblocopenercore.client.GitHubClient;
 import com.github.benchdoos.weblocopenercore.client.impl.DefaultGitHubClient;
 import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
@@ -37,13 +38,12 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Log4j2
 public class WindowsUpdater implements Updater {
-    private static final String WINDOWS_FILE_REGEX = "WeblocOpener.*\\.exe";
+    public static final String WINDOWS_FILE_REGEX = ".*WeblocOpener.*\\.exe";
     private static AtomicReference<AppVersion> latestReleaseVersion = null;
     private static AtomicReference<AppVersion> latestBetaVersion = null;
 
     private static final Object RELEASE_MUTEX = new Object();
     private static final Object BETA_MUTEX = new Object();
-    private static final String SETUP_NAME = ApplicationConstants.WINDOWS_SETUP_DEFAULT_NAME;
     private final GitHubClient gitHubClient = new DefaultGitHubClient();
 
     @Getter
@@ -137,10 +137,13 @@ public class WindowsUpdater implements Updater {
     @Override
     public void startUpdate(AppVersion appVersion) throws IOException {
         log.info("Starting update for {}", appVersion.version());
-        installerFile = new File(ApplicationConstants.UPDATE_PATH_FILE + SETUP_NAME);
+        final AppVersion.Asset installerAsset = this.getInstallerAsset(appVersion);
+
+        installerFile = new File(ApplicationConstants.UPDATE_PATH_FILE
+            + UpdateHelperUtil.getUpdatePrefix(appVersion.version())
+            + installerAsset.name());
         log.debug("Installer file: {} exists: {}", installerFile, installerFile.exists());
 
-        final AppVersion.Asset installerAsset = this.getInstallerAsset(appVersion);
         final FileDownloader fileDownloader = new FileDownloader(installerAsset.downloadUrl(), installerFile);
 
         try {

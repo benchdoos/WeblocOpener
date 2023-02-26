@@ -15,14 +15,19 @@
 
 package com.github.benchdoos.weblocopener.utils;
 
-import com.github.benchdoos.weblocopener.core.ApplicationConstants;
+import com.github.benchdoos.weblocopener.update.impl.UnixUpdater;
+import com.github.benchdoos.weblocopener.update.impl.WindowsUpdater;
+import com.github.benchdoos.weblocopenercore.utils.system.OS;
+import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
+import org.assertj.core.util.Files;
 
 import java.io.File;
 
 import static com.github.benchdoos.weblocopener.core.ApplicationConstants.UPDATE_PATH_FILE;
 
 
+@UtilityClass
 @Log4j2
 public class CleanManager {
     public static void clean() {
@@ -32,14 +37,25 @@ public class CleanManager {
             final File[] files = folder.listFiles();
             if (files != null) {
                 for (File file : files) {
-                    final boolean windows = file.getName().contains(ApplicationConstants.WINDOWS_SETUP_DEFAULT_NAME);
-                    final boolean debian = file.getName().contains(ApplicationConstants.DEBIAN_SETUP_DEFAULT_NAME);
-                    if (windows || debian) {
-                        final boolean delete = file.delete();
-                        log.info("Setup file was deleted ({}): {}", file, delete);
-                    }
+                    checkAndDeleteInstaller(file);
                 }
             }
+        }
+    }
+
+    private static void checkAndDeleteInstaller(final File file) {
+        boolean toDelete = false;
+        if (OS.isWindows()) {
+            toDelete = file.getName().matches(WindowsUpdater.WINDOWS_FILE_REGEX);
+        }
+
+        if (OS.isUnix()) {
+            toDelete = file.getName().matches(UnixUpdater.DEB_FILE_REGEX);
+        }
+
+        if (toDelete) {
+            Files.delete(file);
+            log.info("Setup file was deleted: {}", file);
         }
     }
 }
