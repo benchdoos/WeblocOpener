@@ -27,6 +27,7 @@ import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
 import com.github.benchdoos.weblocopenercore.exceptions.NoAvailableVersionException;
 import com.github.benchdoos.weblocopenercore.service.actions.ActionListener;
 import com.github.benchdoos.weblocopenercore.service.actions.ActionListenerSupport;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections.CollectionUtils;
 import org.assertj.core.util.Files;
@@ -54,9 +55,13 @@ public class UnixUpdater implements Updater, ActionListenerSupport {
 
     final List<ActionListener<Integer>> listeners = new CopyOnWriteArrayList<>();
 
+    @Getter
+    private File installerFile = null;
+
     public UnixUpdater() {
         updateService = new DefaultUpdateService(this);
     }
+
 
     @Override
     public AppVersion getLatestAppVersion() {
@@ -117,8 +122,7 @@ public class UnixUpdater implements Updater, ActionListenerSupport {
 
         final AppVersion.Asset installerAsset = this.getInstallerAsset(appVersion);
 
-        File installerFile = new File(
-            ApplicationConstants.UPDATE_PATH_FILE + installerAsset.name());
+        installerFile = new File(ApplicationConstants.UPDATE_PATH_FILE + installerAsset.name());
         if (!installerFile.exists()) {
             updateAndInstall(installerAsset, installerFile);
         } else {
@@ -155,21 +159,21 @@ public class UnixUpdater implements Updater, ActionListenerSupport {
         listeners.clear();
     }
 
+    @SuppressWarnings({"DuplicatedCode"})
     private void updateAndInstall(final AppVersion.Asset installerAsset,
                                   File installerFile) throws IOException {
 
-        final Timer notifierTimer = UpdateHelperUtil.createNotifierTimer(installerAsset, installerFile, listeners);
+        final FileDownloader fileDownloader = new FileDownloader(installerAsset.downloadUrl(), installerFile);
         try {
             if (!installerFile.exists() || installerFile.length() != installerAsset.size()) {
-                final FileDownloader fileDownloader = new FileDownloader();
-                fileDownloader.downloadFile(installerAsset.downloadUrl(), installerFile);
+                fileDownloader.setTotalFileSize(installerAsset.size());
+                listeners.forEach(fileDownloader::addListener);
+                fileDownloader.download();
             }
 
             if (!Thread.currentThread().isInterrupted()) {
                 log.debug("Installer file: {} (size:{})", installerFile, installerFile.length());
                 update(installerFile);
-            } else {
-                stopTimer(notifierTimer);
             }
         } catch (IOException e) {
             log.warn("Can not download file: {} to {}", installerAsset.downloadUrl(), installerFile, e);
@@ -179,20 +183,10 @@ public class UnixUpdater implements Updater, ActionListenerSupport {
             throw new IOException(e);
         } catch (InterruptedException e) {
             log.warn("Downloading file {} from {} was interrupted.", installerFile, installerAsset.downloadUrl(), e);
-            stopTimer(notifierTimer);
+            this.removeAllListeners();
             Thread.currentThread().interrupt();
         } finally {
-            if (notifierTimer != null && notifierTimer.isRunning()) {
-                log.debug("Stopping timer: {}", notifierTimer);
-                notifierTimer.stop();
-            }
-        }
-    }
-
-    private static void stopTimer(final Timer notifierTimer) {
-        log.trace("Stopping timer");
-        if (notifierTimer.isRunning()) {
-            notifierTimer.stop();
+            fileDownloader.removeAllListeners();
         }
     }
 

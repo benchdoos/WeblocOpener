@@ -21,15 +21,14 @@ import com.github.benchdoos.weblocopener.service.UpdateService;
 import com.github.benchdoos.weblocopener.service.impl.DefaultUpdateService;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopener.utils.FileDownloader;
-import com.github.benchdoos.weblocopener.utils.UpdateHelperUtil;
 import com.github.benchdoos.weblocopenercore.client.GitHubClient;
 import com.github.benchdoos.weblocopenercore.client.impl.DefaultGitHubClient;
 import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
 import com.github.benchdoos.weblocopenercore.exceptions.NoAvailableVersionException;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections.CollectionUtils;
 
-import javax.swing.Timer;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -46,6 +45,10 @@ public class WindowsUpdater implements Updater {
     private static final Object BETA_MUTEX = new Object();
     private static final String SETUP_NAME = ApplicationConstants.WINDOWS_SETUP_DEFAULT_NAME;
     private final GitHubClient gitHubClient = new DefaultGitHubClient();
+
+    @Getter
+    private File installerFile = null;
+
 
     final List<com.github.benchdoos.weblocopenercore.service.actions.ActionListener<Integer>>
         listeners = new CopyOnWriteArrayList<>();
@@ -134,24 +137,22 @@ public class WindowsUpdater implements Updater {
     @Override
     public void startUpdate(AppVersion appVersion) throws IOException {
         log.info("Starting update for {}", appVersion.version());
-        final File installerFile = new File(ApplicationConstants.UPDATE_PATH_FILE + SETUP_NAME);
+        installerFile = new File(ApplicationConstants.UPDATE_PATH_FILE + SETUP_NAME);
         log.debug("Installer file: {} exists: {}", installerFile, installerFile.exists());
 
         final AppVersion.Asset installerAsset = this.getInstallerAsset(appVersion);
-
-        final Timer notifierTimer = UpdateHelperUtil.createNotifierTimer(installerAsset, installerFile, listeners);
+        final FileDownloader fileDownloader = new FileDownloader(installerAsset.downloadUrl(), installerFile);
 
         try {
             if (!installerFile.exists() || installerFile.length() != installerAsset.size()) {
-                final FileDownloader fileDownloader = new FileDownloader();
-                fileDownloader.downloadFile(installerAsset.downloadUrl(), installerFile);
+                fileDownloader.setTotalFileSize(installerAsset.size());
+                listeners.forEach(fileDownloader::addListener);
+                fileDownloader.download();
             }
 
             if (!Thread.currentThread().isInterrupted()) {
                 log.debug("Installer file: {} (size:{})", installerFile, installerFile.length());
                 update(installerFile);
-            } else {
-                stopTimer(notifierTimer);
             }
         } catch (IOException e) {
             log.warn("Can not download file: {} to {}", installerAsset.downloadUrl(), installerFile, e);
@@ -161,20 +162,11 @@ public class WindowsUpdater implements Updater {
             throw new IOException(e);
         } catch (InterruptedException e) {
             log.warn("Downloading file {} from {} was interrupted.", installerFile, installerAsset.downloadUrl(), e);
-            stopTimer(notifierTimer);
+            this.removeAllListeners();
             Thread.currentThread().interrupt();
         } finally {
-            if (notifierTimer != null && notifierTimer.isRunning()) {
-                log.debug("Stopping timer: {}", notifierTimer);
-                notifierTimer.stop();
-            }
+            fileDownloader.removeAllListeners();
         }
     }
 
-    private static void stopTimer(final Timer notifierTimer) {
-        log.trace("Stopping timer");
-        if (notifierTimer.isRunning()) {
-            notifierTimer.stop();
-        }
-    }
 }

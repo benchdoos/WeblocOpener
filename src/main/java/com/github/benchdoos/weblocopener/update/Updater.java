@@ -19,9 +19,17 @@ import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
 import com.github.benchdoos.weblocopenercore.exceptions.NoAvailableVersionException;
 import com.github.benchdoos.weblocopenercore.service.actions.ActionListenerSupport;
 
+import java.io.File;
 import java.io.IOException;
 
 public interface Updater extends ActionListenerSupport {
+
+    /**
+     * Get installer file if downloading already started. Otherwise {@code null} will be returned.
+     *
+     * @return Installer file link
+     */
+    File getInstallerFile();
 
     /**
      * @return latest {@link AppVersion}, giving Beta if

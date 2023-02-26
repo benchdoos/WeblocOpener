@@ -82,8 +82,6 @@ import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.github.benchdoos.weblocopener.core.ApplicationConstants.UPDATE_PATH_FILE;
-
 @SuppressWarnings({"ALL", "ResultOfMethodCallIgnored"})
 @Log4j2
 public class UpdateDialog extends JFrame implements Translatable {
@@ -656,9 +654,10 @@ public class UpdateDialog extends JFrame implements Translatable {
   private void onOK() {
     buttonOK.setEnabled(false);
 
+    final boolean windows = OS.isWindows();
     final com.github.benchdoos.weblocopenercore.service.actions.ActionListener<Object> listener = i -> {
       progressBar.setValue((int) i);
-      if (OS.isWindows()) {
+      if (windows) {
         updateWindowsProgressBar((int) i);
       }
     };
@@ -731,13 +730,10 @@ public class UpdateDialog extends JFrame implements Translatable {
   }
 
   private void runCleanInstallerFile() {
-    if (serverAppVersion != null) {
-      final String installerFilePath = UPDATE_PATH_FILE
-          + StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME
-          + serverAppVersion.version().getSimpleVersionWithoutBeta() + ".exe";
-      log.info("Deleting file: " + installerFilePath);
-      File installer = new File(installerFilePath);
-      installer.deleteOnExit();
+    if (updater != null && updater.getInstallerFile() != null && serverAppVersion != null) {
+      final File installerFile = updater.getInstallerFile();
+      log.info("Marking to delete on app exit installer file: " + installerFile);
+      installerFile.deleteOnExit();
     } else {
       log.debug("No file to cleanup, serverApplicationVersion is null");
     }
