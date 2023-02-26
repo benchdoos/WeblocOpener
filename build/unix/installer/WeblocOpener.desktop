@@ -14,12 +14,14 @@ Comment[ru]=Открыть MacOs .webloc, Windows .url, Unix .desktop файлы
 GenericName=WeblocOpener
 X-GNOME-FullName=WeblocOpener
 
-Exec=java -jar "/opt/WeblocOpener/WeblocOpener.jar"
+Exec=java -jar "/opt/WeblocOpener/WeblocOpener.jar" %U
 Icon=/opt/WeblocOpener/icons/WeblocOpener.png
+
+MimeType=application/x-webarchive;
 
 Terminal=false
 Categories=Library;
-Keywords=Link;Ссылки;webloc;url;desktop;
+Keywords=Link;Ссылки;webloc;url;desktop;webarchive;
 StartupNotify=true
 X-Ubuntu-Gettext-Domain=weblocopener
 

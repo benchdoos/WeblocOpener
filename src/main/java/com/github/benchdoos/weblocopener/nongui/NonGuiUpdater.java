@@ -18,8 +18,9 @@ package com.github.benchdoos.weblocopener.nongui;
 import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.nongui.notify.NotifyManager;
 import com.github.benchdoos.weblocopener.update.Updater;
-import com.github.benchdoos.weblocopener.update.UpdaterHelper;
-import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
+import com.github.benchdoos.weblocopener.utils.UpdateHelperUtil;
+import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
+import com.github.benchdoos.weblocopenercore.exceptions.NoAvailableVersionException;
 import com.github.benchdoos.weblocopenercore.service.notification.NotificationManager;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DevModeSettings;
 import com.github.benchdoos.weblocopenercore.service.translation.Translation;
@@ -34,22 +35,23 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class NonGuiUpdater {
-    private ApplicationVersion serverApplicationVersion = null;
+    private AppVersion serverApplicationVersion;
+    private final Updater updater;
 
     public NonGuiUpdater() {
 
-        Updater updater = UpdaterHelper.getUpdaterForCurrentOperatingSystem();
+        updater = UpdateHelperUtil.getUpdaterForCurrentOS();
 
-        final ApplicationVersion latestApplicationVersion = updater.getLatestAppVersion();
-        if (latestApplicationVersion != null) {
-            serverApplicationVersion = latestApplicationVersion;
+        final AppVersion latestAppVersion = updater.getLatestAppVersion();
+        if (latestAppVersion != null) {
+            serverApplicationVersion = latestAppVersion;
             compareVersions();
         } else {
             log.warn("Can not get server version");
             if (Application.updateMode != Application.UPDATE_MODE.SILENT) {
                 Translation translation = new Translation("UpdaterBundle");
                 NotificationManager.getForcedNotification(null)
-                        .showErrorNotification(
+                    .showErrorNotification(
                         translation.get("canNotUpdateTitle"),
                         translation.get("canNotUpdateMessage"));
             }
@@ -59,25 +61,32 @@ public class NonGuiUpdater {
     private void compareVersions() {
 
         if (Boolean.FALSE.equals(new DevModeSettings().getValue())) {
-            switch (VersionUtils.versionCompare(serverApplicationVersion)) {
+            switch (VersionUtils.versionCompare(serverApplicationVersion, CoreUtils.getCurrentAppVersion())) {
                 case FIRST_VERSION_IS_NEWER -> onNewVersionAvailable();
                 case SECOND_VERSION_IS_NEWER -> log.info("Current version is newer! Current: {}, Server: {}",
-                    CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
+                    CoreUtils.getCurrentAppVersion(), serverApplicationVersion);
                 case VERSIONS_ARE_EQUAL ->
                     log.info("There are no updates available. Versions are equal! Current: {}, Server: {}",
-                        CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
+                        CoreUtils.getCurrentAppVersion(), serverApplicationVersion);
             }
         } else onNewVersionAvailable();
     }
 
     private void onNewVersionAvailable() {
-        if (serverApplicationVersion.getDownloadUrl() != null) {
-            log.info("Showing notification: New version is available! Current: {}, Server: {}",
-                    CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
 
-            NotifyManager.getNotifierForSystem().notifyUser(serverApplicationVersion);
-        } else {
-            log.warn("Update is available, but there is no version for current system: {}", serverApplicationVersion);
+        try {
+            final AppVersion.Asset asset = updater.getInstallerAsset(serverApplicationVersion);
+            if (asset != null) {
+                log.info("Showing notification: New version is available! Current: {}, Server: {}",
+                    CoreUtils.getCurrentAppVersion(), serverApplicationVersion);
+
+                NotifyManager.getNotifierForSystem().notifyUser(serverApplicationVersion);
+            } else {
+                log.warn("Update is available, but there is no version for current system: {}",
+                    serverApplicationVersion);
+            }
+        } catch (NoAvailableVersionException e) {
+            log.warn("No asset available for version: {}", serverApplicationVersion, e);
         }
     }
 }

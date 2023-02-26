@@ -15,29 +15,25 @@
 
 package com.github.benchdoos.weblocopener.gui;
 
-import com.github.benchdoos.weblocopener.domain.ExtendedModificationInfo;
+import com.github.benchdoos.weblocopener.service.DefaultHtmlService;
+import com.github.benchdoos.weblocopener.service.HtmlService;
 import com.github.benchdoos.weblocopener.utils.FrameUtils;
-import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
+import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
 import com.github.benchdoos.weblocopenercore.domain.version.UpdateInfo;
 import com.github.benchdoos.weblocopenercore.service.UrlsProceed;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DarkModeActiveSettings;
-import com.github.benchdoos.weblocopenercore.service.settings.impl.LocaleSettings;
 import com.github.benchdoos.weblocopenercore.service.translation.Translation;
-import com.github.benchdoos.weblocopenercore.utils.version.Version;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import j2html.tags.specialized.HtmlTag;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -52,28 +48,12 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.ResourceBundle;
-
-import static j2html.TagCreator.attrs;
-import static j2html.TagCreator.body;
-import static j2html.TagCreator.br;
-import static j2html.TagCreator.each;
-import static j2html.TagCreator.html;
-import static j2html.TagCreator.iff;
-import static j2html.TagCreator.iframe;
-import static j2html.TagCreator.span;
-import static j2html.TagCreator.table;
-import static j2html.TagCreator.td;
-import static j2html.TagCreator.tr;
-import static j2html.TagCreator.u;
 
 @Log4j2
 class UpdateInfoDialog extends JDialog {
-  private ApplicationVersion applicationVersion;
+  private AppVersion applicationVersion;
+  private UpdateInfo updateInfo;
   private JPanel contentPane;
   private JButton buttonOK;
   private JTextPane textPane;
@@ -81,11 +61,15 @@ class UpdateInfoDialog extends JDialog {
   @Deprecated(since = "2.1.0", forRemoval = true)
   private JPanel legacyPanel;
   private JPanel updateInfoPanel;
-  private JList<ExtendedModificationInfo> updateInfoJList;
   private JEditorPane updateInfoEditorPane;
+  private HtmlService htmlService;
 
-  UpdateInfoDialog(ApplicationVersion applicationVersion) {
+  UpdateInfoDialog(AppVersion applicationVersion, UpdateInfo updateInfo) {
     this.applicationVersion = applicationVersion;
+    this.updateInfo = updateInfo;
+    htmlService = new DefaultHtmlService();
+
+
     createGUI();
   }
 
@@ -214,7 +198,7 @@ class UpdateInfoDialog extends JDialog {
 
   private void createGUI() {
     setTitle(Translation.get("UpdateDialogBundle", "infoAboutUpdate") + " — " +
-        new Version(applicationVersion).getBeautifulVersionString());
+        applicationVersion.version().getBeautifulVersionString());
     setIconImage(Toolkit.getDefaultToolkit().getImage(UpdateInfoDialog.class.getResource("/images/infoIcon16.png")));
 
 
@@ -229,8 +213,9 @@ class UpdateInfoDialog extends JDialog {
     buttonOK.addActionListener(e -> onOK());
 
 
-    setMinimumSize(new Dimension(550, 300));
-    setSize(550, 300);
+    final Dimension size = new Dimension(700, 400);
+    setMinimumSize(size);
+    setSize(size);
     pack();
 
     fillData();
@@ -240,7 +225,7 @@ class UpdateInfoDialog extends JDialog {
 
 
   private void fillData() {
-    UpdateInfo updateInfo = applicationVersion.getVersionInfo();
+
     if (updateInfo == null) {
       legacyPanel.setVisible(true);
       updateInfoPanel.setVisible(false);
@@ -249,78 +234,7 @@ class UpdateInfoDialog extends JDialog {
       legacyPanel.setVisible(false);
       updateInfoPanel.setVisible(true);
 
-      final List<ExtendedModificationInfo> modifications = new ArrayList<>();
-
-      if (CollectionUtils.isNotEmpty(updateInfo.warnings())) {
-        updateInfo.warnings().forEach(i -> modifications.add(
-            new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.WARNING, i)));
-      }
-
-
-      if (CollectionUtils.isNotEmpty(updateInfo.features())) {
-        updateInfo.features().forEach(i -> modifications.add(
-            new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.FEATURE, i)));
-      }
-
-      if (CollectionUtils.isNotEmpty(updateInfo.improvements())) {
-        updateInfo.improvements().forEach(i -> modifications.add(
-            new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.IMPROVEMENT, i)));
-      }
-
-      if (CollectionUtils.isNotEmpty(updateInfo.fixes())) {
-        updateInfo.fixes().forEach(i -> modifications.add(
-            new ExtendedModificationInfo(ExtendedModificationInfo.ModificationType.BUGFIX, i)));
-      }
-
-      log.debug("Formed modification list: {}", modifications);
-
-      final HtmlTag html = html(
-          body(
-              table(
-                  each(modifications, value -> {
-                    final ExtendedModificationInfo.ModificationType modificationType = value.type();
-                    final Locale locale = new LocaleSettings().getValue();
-
-                    final Map<String, String> description = value.modification().description();
-                    final String srcMessage = description.get(locale.getLanguage().toLowerCase());
-                    final String message;
-                    if (StringUtils.isNotBlank(srcMessage)) {
-                      message = srcMessage;
-                    } else {
-                      message =
-                          description.get(LocaleSettings.getDefaultLocale().getLanguage().toLowerCase());
-                    }
-                    final String tdStyle =
-                        "border-radius: 5px; padding: 5px 10px 5px 5px; width: 120px; color: white; " +
-                            "font-weight: bold; text-align:right;";
-                    final String typeValue;
-                    final String backgroundColor;
-                    final String bundle = "UpdateDialog";
-                    switch (modificationType) {
-                      case WARNING -> {
-                        typeValue = Translation.get(bundle, "warningType");
-                        backgroundColor = "background-color:#b56219;";
-                      }
-                      case IMPROVEMENT -> {
-                        typeValue = Translation.get(bundle, "improvementType");
-                        backgroundColor = "background-color:#4f73a5;";
-                      }
-                      case BUGFIX -> {
-                        typeValue = Translation.get(bundle, "fixType");
-                        backgroundColor = "background-color:#d36767;";
-                      }
-                      default -> {
-                        typeValue = Translation.get(bundle, "featureType");
-                        backgroundColor = "background-color:#439443;";
-                      }
-                    }
-                    return tr(
-                        td(
-                            span(typeValue)).withStyle(tdStyle + backgroundColor),
-                        td(message));
-                  })
-              )
-          )).attr("lang", Translation.getSelectedLocale().getLanguage());
+      final HtmlTag html = htmlService.prepareUpdateInfoHtmlPage(updateInfo);
 
       final String render = html.render();
       log.debug("Update page rendered: {}", render);
@@ -330,8 +244,7 @@ class UpdateInfoDialog extends JDialog {
   }
 
   private void fillLegacyTextPane() {
-    textPane.setText(
-        generatePageForDisplay(applicationVersion.getUpdateTitle(), applicationVersion.getLegacyUpdateInfo()));
+    textPane.setText(generatePageForDisplay(applicationVersion.title(), applicationVersion.releaseInfo()));
 
     textPane.registerKeyboardAction(e -> onOK(), KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
         JComponent.WHEN_FOCUSED);

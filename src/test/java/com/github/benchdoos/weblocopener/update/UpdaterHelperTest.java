@@ -1,6 +1,7 @@
 package com.github.benchdoos.weblocopener.update;
 
 import com.github.benchdoos.weblocopener.config.BaseUnitTest;
+import com.github.benchdoos.weblocopener.utils.UpdateHelperUtil;
 import com.github.benchdoos.weblocopenercore.domain.version.UpdateInfo;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,10 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UpdaterHelperTest extends BaseUnitTest {
 
@@ -20,7 +24,7 @@ class UpdaterHelperTest extends BaseUnitTest {
 
     final URL url = getClass().getResource("/json/update-info.json");
 
-    final UpdateInfo updateInfo = assertDoesNotThrow(() -> new UpdaterHelper().getUpdateInfoFromUrl(url));
+    final UpdateInfo updateInfo = assertDoesNotThrow(() -> UpdateHelperUtil.getUpdateInfoFromUrl(url));
     assertNotNull(updateInfo);
     assertNotNull(updateInfo.features());
     assertTrue(CollectionUtils.isNotEmpty(updateInfo.features()));

@@ -17,131 +17,159 @@ package com.github.benchdoos.weblocopener.update.impl;
 
 
 import com.github.benchdoos.weblocopener.core.ApplicationConstants;
-import com.github.benchdoos.weblocopener.gui.UpdateDialog;
+import com.github.benchdoos.weblocopener.service.UpdateService;
+import com.github.benchdoos.weblocopener.service.impl.DefaultUpdateService;
 import com.github.benchdoos.weblocopener.update.Updater;
-import com.github.benchdoos.weblocopener.update.UpdaterHelper;
-import com.github.benchdoos.weblocopenercore.domain.version.ApplicationVersion;
+import com.github.benchdoos.weblocopener.utils.FileDownloader;
+import com.github.benchdoos.weblocopener.utils.UpdateHelperUtil;
+import com.github.benchdoos.weblocopenercore.client.GitHubClient;
+import com.github.benchdoos.weblocopenercore.client.impl.DefaultGitHubClient;
+import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
+import com.github.benchdoos.weblocopenercore.exceptions.NoAvailableVersionException;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.io.FileUtils;
-import org.bridj.Pointer;
-import org.bridj.PointerIO;
-import org.bridj.cpp.com.COMRuntime;
-import org.bridj.cpp.com.shell.ITaskbarList3;
-import org.bridj.jawt.JAWTUtils;
+import org.apache.commons.collections.CollectionUtils;
 
-import javax.swing.JProgressBar;
-import javax.swing.Timer;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Log4j2
 public class WindowsUpdater implements Updater {
-    private static AtomicReference<ApplicationVersion> latestReleaseVersion = null;
-    private static AtomicReference<ApplicationVersion> latestBetaVersion = null;
+    public static final String WINDOWS_FILE_REGEX = ".*WeblocOpener.*\\.exe";
+    private static AtomicReference<AppVersion> latestReleaseVersion = null;
+    private static AtomicReference<AppVersion> latestBetaVersion = null;
 
     private static final Object RELEASE_MUTEX = new Object();
     private static final Object BETA_MUTEX = new Object();
-    private static final String SETUP_NAME = ApplicationConstants.WINDOWS_SETUP_DEFAULT_NAME;
-    private final UpdaterHelper updaterHelper;
+    private final GitHubClient gitHubClient = new DefaultGitHubClient();
+
+    @Getter
+    private File installerFile = null;
+
+
+    final List<com.github.benchdoos.weblocopenercore.service.actions.ActionListener<Integer>>
+        listeners = new CopyOnWriteArrayList<>();
+    private final UpdateService updateService;
 
     public WindowsUpdater() {
-        updaterHelper = new UpdaterHelper();
+        updateService = new DefaultUpdateService(this);
+    }
+
+    @Override
+    public void addListener(
+        final com.github.benchdoos.weblocopenercore.service.actions.ActionListener actionListener) {
+        listeners.add(actionListener);
+    }
+
+    @Override
+    public void removeListener(
+        final com.github.benchdoos.weblocopenercore.service.actions.ActionListener actionListener) {
+        listeners.remove(actionListener);
+    }
+
+    @Override
+    public void removeAllListeners() {
+        listeners.clear();
     }
 
     private void update(File file) throws IOException {
-        Runtime runtime = Runtime.getRuntime();
-        runtime.exec(file.getAbsolutePath() + " " + ApplicationConstants.INSTALLER_SILENT_KEY);
+        final String command = file.getAbsolutePath() + " " + ApplicationConstants.INSTALLER_SILENT_KEY;
+        log.debug("Starting update with command: [{}]", command);
+
+        Runtime.getRuntime().exec(command);
+        log.debug("Exiting app...");
         System.exit(0);
     }
 
     @Override
-    public ApplicationVersion getLatestAppVersion() {
-        return updaterHelper.getLatestVersion(this);
+    public AppVersion getLatestAppVersion() {
+        return updateService.getLatest();
     }
 
     @Override
-    public ApplicationVersion getLatestReleaseAppVersion() {
+    public AppVersion getLatestRelease() {
         if (latestReleaseVersion != null) {
             return latestReleaseVersion.get();
         }
 
         synchronized (RELEASE_MUTEX) {
-            final ApplicationVersion version = updaterHelper.getLatestReleaseVersion(SETUP_NAME);
-            latestReleaseVersion = new AtomicReference<>(version);
+            final AppVersion latestRelease = gitHubClient.getLatestRelease();
+
+            latestReleaseVersion = new AtomicReference<>(latestRelease);
 
             return latestReleaseVersion.get();
         }
     }
 
     @Override
-    public ApplicationVersion getLatestBetaAppVersion() {
+    public AppVersion getLatestBeta() {
         if (latestBetaVersion != null) {
             return latestBetaVersion.get();
         }
 
 
         synchronized (BETA_MUTEX) {
-            final ApplicationVersion version = updaterHelper.getLatestBetaVersion(SETUP_NAME);
-            latestBetaVersion = new AtomicReference<>(version);
+            final AppVersion latestBetaRelease = gitHubClient.getLatestBetaRelease();
+            latestBetaVersion = new AtomicReference<>(latestBetaRelease);
 
             return latestBetaVersion.get();
         }
     }
 
     @Override
-    public void startUpdate(ApplicationVersion applicationVersion) throws IOException {
-        log.info("Starting update for {}", applicationVersion.getVersion());
-        File installerFile = new File(
-            ApplicationConstants.UPDATE_PATH_FILE + SETUP_NAME);
-        updateProgressBar(applicationVersion, installerFile);
+    public AppVersion.Asset getInstallerAsset(final AppVersion appVersion) throws NoAvailableVersionException {
+        if (appVersion == null) {
+            throw new NoAvailableVersionException("Given AppVersion is null");
+        }
+
+        if (CollectionUtils.isNotEmpty(appVersion.assets())) {
+            return appVersion.assets().stream()
+                .filter(a -> a.contentType().equals("application/octet-stream") && a.name().matches(WINDOWS_FILE_REGEX)).findFirst()
+                .orElseThrow(() -> new NoAvailableVersionException("Needed installer file not found"));
+        }
+
+        throw new NoAvailableVersionException("Given AppVersion assets are empty");
+    }
+
+    @Override
+    public void startUpdate(AppVersion appVersion) throws IOException {
+        log.info("Starting update for {}", appVersion.version());
+        final AppVersion.Asset installerAsset = this.getInstallerAsset(appVersion);
+
+        installerFile = new File(ApplicationConstants.UPDATE_PATH_FILE
+            + UpdateHelperUtil.getUpdatePrefix(appVersion.version())
+            + installerAsset.name());
+        log.debug("Installer file: {} exists: {}", installerFile, installerFile.exists());
+
+        final FileDownloader fileDownloader = new FileDownloader(installerAsset.downloadUrl(), installerFile);
 
         try {
-            FileUtils.copyURLToFile(new URL(applicationVersion.getDownloadUrl()), installerFile, ApplicationConstants.CONNECTION_TIMEOUT, ApplicationConstants.CONNECTION_TIMEOUT);
+            if (!installerFile.exists() || installerFile.length() != installerAsset.size()) {
+                fileDownloader.setTotalFileSize(installerAsset.size());
+                listeners.forEach(fileDownloader::addListener);
+                fileDownloader.download();
+            }
 
-            update(installerFile);
+            if (!Thread.currentThread().isInterrupted()) {
+                log.debug("Installer file: {} (size:{})", installerFile, installerFile.length());
+                update(installerFile);
+            }
         } catch (IOException e) {
-            log.warn("Can not download file: {} to {}", applicationVersion.getDownloadUrl(), installerFile, e);
+            log.warn("Can not download file: {} to {}", installerAsset.downloadUrl(), installerFile, e);
+
+            log.debug("Setting file: {} to be deleted on app exit", installerFile);
             installerFile.deleteOnExit();
             throw new IOException(e);
+        } catch (InterruptedException e) {
+            log.warn("Downloading file {} from {} was interrupted.", installerFile, installerAsset.downloadUrl(), e);
+            this.removeAllListeners();
+            Thread.currentThread().interrupt();
+        } finally {
+            fileDownloader.removeAllListeners();
         }
     }
 
-    private void updateProgressBar(ApplicationVersion applicationVersion, File file) {
-        if (UpdateDialog.getInstance() != null) {
-            JProgressBar progressBar = UpdateDialog.getInstance().getProgressBar();
-            ITaskbarList3 taskBar = null;
-            Pointer<?> pointer;
-
-            final long size = applicationVersion.getSize();
-            progressBar.setMaximum(Math.toIntExact(size));
-            progressBar.setStringPainted(true);
-
-
-            try {
-                taskBar = COMRuntime.newInstance(ITaskbarList3.class);
-            } catch (ClassNotFoundException ignore) {/*WINDOWS<WINDOWS 7*/}
-            long nativePeerHandle = JAWTUtils.getNativePeerHandle(UpdateDialog.getInstance());
-            pointer = Pointer.pointerToAddress(nativePeerHandle, PointerIO.getSizeTInstance().getTargetSize(), null);
-
-
-            Timer timer = new Timer(500, null);
-            ITaskbarList3 finalTaskBar = taskBar;
-            final ActionListener actionListener = e -> {
-                progressBar.setValue(Math.toIntExact(file.length()));
-                if (finalTaskBar != null) {
-                    finalTaskBar.SetProgressValue((Pointer<Integer>) pointer, progressBar.getValue(),
-                            progressBar.getMaximum());
-                }
-                if (file.length() == applicationVersion.getSize()) {
-                    timer.stop();
-                }
-            };
-            timer.addActionListener(actionListener);
-            timer.setRepeats(true);
-            timer.start();
-        }
-    }
 }
