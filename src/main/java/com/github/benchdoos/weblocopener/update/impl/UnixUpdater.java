@@ -19,6 +19,7 @@ import com.github.benchdoos.weblocopener.core.ApplicationConstants;
 import com.github.benchdoos.weblocopener.service.UpdateService;
 import com.github.benchdoos.weblocopener.service.impl.DefaultUpdateService;
 import com.github.benchdoos.weblocopener.update.Updater;
+import com.github.benchdoos.weblocopener.utils.FileDownloader;
 import com.github.benchdoos.weblocopener.utils.UpdateHelperUtil;
 import com.github.benchdoos.weblocopenercore.client.GitHubClient;
 import com.github.benchdoos.weblocopenercore.client.impl.DefaultGitHubClient;
@@ -28,7 +29,6 @@ import com.github.benchdoos.weblocopenercore.service.actions.ActionListener;
 import com.github.benchdoos.weblocopenercore.service.actions.ActionListenerSupport;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.io.FileUtils;
 import org.assertj.core.util.Files;
 
 import javax.swing.Timer;
@@ -160,24 +160,39 @@ public class UnixUpdater implements Updater, ActionListenerSupport {
 
         final Timer notifierTimer = UpdateHelperUtil.createNotifierTimer(installerAsset, installerFile, listeners);
         try {
-            if (!installerFile.exists()) {
-                FileUtils.copyURLToFile(installerAsset.downloadUrl(), installerFile,
-                    ApplicationConstants.CONNECTION_TIMEOUT, ApplicationConstants.CONNECTION_TIMEOUT);
+            if (!installerFile.exists() || installerFile.length() != installerAsset.size()) {
+                final FileDownloader fileDownloader = new FileDownloader();
+                fileDownloader.downloadFile(installerAsset.downloadUrl(), installerFile);
             }
 
-            log.debug("Installer file: {} (size:{})", installerFile, installerFile.length());
-            update(installerFile);
+            if (!Thread.currentThread().isInterrupted()) {
+                log.debug("Installer file: {} (size:{})", installerFile, installerFile.length());
+                update(installerFile);
+            } else {
+                stopTimer(notifierTimer);
+            }
         } catch (IOException e) {
             log.warn("Can not download file: {} to {}", installerAsset.downloadUrl(), installerFile, e);
 
             log.debug("Setting file: {} to be deleted on app exit", installerFile);
             installerFile.deleteOnExit();
             throw new IOException(e);
+        } catch (InterruptedException e) {
+            log.warn("Downloading file {} from {} was interrupted.", installerFile, installerAsset.downloadUrl(), e);
+            stopTimer(notifierTimer);
+            Thread.currentThread().interrupt();
         } finally {
             if (notifierTimer != null && notifierTimer.isRunning()) {
                 log.debug("Stopping timer: {}", notifierTimer);
                 notifierTimer.stop();
             }
+        }
+    }
+
+    private static void stopTimer(final Timer notifierTimer) {
+        log.trace("Stopping timer");
+        if (notifierTimer.isRunning()) {
+            notifierTimer.stop();
         }
     }
 

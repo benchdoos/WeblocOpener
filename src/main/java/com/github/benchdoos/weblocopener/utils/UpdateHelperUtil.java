@@ -42,7 +42,8 @@ public class UpdateHelperUtil {
   }
 
 
-  public Timer createNotifierTimer(final AppVersion.Asset asset, final File file, List<ActionListener<Integer>> listeners) {
+  public Timer createNotifierTimer(final AppVersion.Asset asset, final File file,
+                                   List<ActionListener<Integer>> listeners) {
 
     if (CollectionUtils.isNotEmpty(listeners)) {
       final long totalSize = asset.size();

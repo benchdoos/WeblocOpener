@@ -734,7 +734,7 @@ public class UpdateDialog extends JFrame implements Translatable {
     if (serverAppVersion != null) {
       final String installerFilePath = UPDATE_PATH_FILE
           + StringConstants.WINDOWS_WEBLOCOPENER_SETUP_NAME
-          + serverAppVersion.version() + ".exe";
+          + serverAppVersion.version().getSimpleVersionWithoutBeta() + ".exe";
       log.info("Deleting file: " + installerFilePath);
       File installer = new File(installerFilePath);
       installer.deleteOnExit();
