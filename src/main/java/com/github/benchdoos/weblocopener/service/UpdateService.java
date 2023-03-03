@@ -3,9 +3,7 @@ package com.github.benchdoos.weblocopener.service;
 import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.InstallBetaUpdateSettings;
 
-/**
- * Update service
- */
+/** Update service */
 public interface UpdateService {
 
   /**
@@ -16,5 +14,4 @@ public interface UpdateService {
   AppVersion getLatest();
 
   AppVersion.Asset getInstallerAsset(AppVersion version);
-
 }

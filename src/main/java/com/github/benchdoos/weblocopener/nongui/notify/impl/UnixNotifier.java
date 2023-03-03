@@ -21,13 +21,14 @@ import com.github.benchdoos.weblocopenercore.service.notification.NotificationMa
 import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 
 public class UnixNotifier implements Notifier {
-    @Override
-    public void notifyUser(AppVersion serverVersion) {
-        Translation translation = new Translation("UpdateDialogBundle");
-        final String windowTitle = translation.get("windowTitle");
-        final String windowMessage = translation.get("newVersionAvailableTrayNotification")
-                + ": " + serverVersion.version();
+  @Override
+  public void notifyUser(AppVersion serverVersion) {
+    Translation translation = new Translation("UpdateDialogBundle");
+    final String windowTitle = translation.get("windowTitle");
+    final String windowMessage =
+        translation.get("newVersionAvailableTrayNotification") + ": " + serverVersion.version();
 
-        NotificationManager.getNotificationForCurrentOS().showInfoNotification(windowTitle, windowMessage);
-    }
+    NotificationManager.getNotificationForCurrentOS()
+        .showInfoNotification(windowTitle, windowMessage);
+  }
 }

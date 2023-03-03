@@ -13,7 +13,6 @@ import lombok.extern.log4j.Log4j2;
 import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 
-
 @RequiredArgsConstructor
 @Log4j2
 public class DefaultUpdateService implements UpdateService {
@@ -37,7 +36,8 @@ public class DefaultUpdateService implements UpdateService {
         final AppVersion release = releaseFuture.get();
         final AppVersion beta = betaFuture.get();
 
-        final VersionUtils.VersionCompare versionCompare = VersionUtils.versionCompare(release, beta);
+        final VersionUtils.VersionCompare versionCompare =
+            VersionUtils.versionCompare(release, beta);
 
         switch (versionCompare) {
           case FIRST_VERSION_IS_NEWER -> {
@@ -47,7 +47,9 @@ public class DefaultUpdateService implements UpdateService {
             return beta;
           }
           default -> {
-            log.warn("This is unreachable, VersionCompare: {}, but returning value release: {}", versionCompare,
+            log.warn(
+                "This is unreachable, VersionCompare: {}, but returning value release: {}",
+                versionCompare,
                 release);
             return release;
           }
@@ -65,13 +67,12 @@ public class DefaultUpdateService implements UpdateService {
   }
 
   @Override
-  public AppVersion.Asset getInstallerAsset(final AppVersion version) throws NoAvailableVersionException {
+  public AppVersion.Asset getInstallerAsset(final AppVersion version)
+      throws NoAvailableVersionException {
     if (version == null) {
       throw new NoAvailableVersionException("Giver version is null");
     }
 
     return updater.getInstallerAsset(version);
   }
-
-
 }

@@ -28,66 +28,67 @@ import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
 import com.github.benchdoos.weblocopenercore.utils.VersionUtils;
 import lombok.extern.log4j.Log4j2;
 
-
-/**
- * Created by Eugene Zrazhevsky on 04.11.2016.
- */
-
+/** Created by Eugene Zrazhevsky on 04.11.2016. */
 @Log4j2
 public class NonGuiUpdater {
-    private AppVersion serverApplicationVersion;
-    private final Updater updater;
+  private final Updater updater;
+  private AppVersion serverApplicationVersion;
 
-    public NonGuiUpdater() {
+  public NonGuiUpdater() {
 
-        updater = UpdateHelperUtil.getUpdaterForCurrentOS();
+    updater = UpdateHelperUtil.getUpdaterForCurrentOS();
 
-        final AppVersion latestAppVersion = updater.getLatestAppVersion();
-        if (latestAppVersion != null) {
-            serverApplicationVersion = latestAppVersion;
-            compareVersions();
-        } else {
-            log.warn("Can not get server version");
-            if (Application.updateMode != Application.UPDATE_MODE.SILENT) {
-                Translation translation = new Translation("UpdaterBundle");
-                NotificationManager.getForcedNotification(null)
-                    .showErrorNotification(
-                        translation.get("canNotUpdateTitle"),
-                        translation.get("canNotUpdateMessage"));
-            }
-        }
+    final AppVersion latestAppVersion = updater.getLatestAppVersion();
+    if (latestAppVersion != null) {
+      serverApplicationVersion = latestAppVersion;
+      compareVersions();
+    } else {
+      log.warn("Can not get server version");
+      if (Application.updateMode != Application.UPDATE_MODE.SILENT) {
+        Translation translation = new Translation("UpdaterBundle");
+        NotificationManager.getForcedNotification(null)
+            .showErrorNotification(
+                translation.get("canNotUpdateTitle"), translation.get("canNotUpdateMessage"));
+      }
     }
+  }
 
-    private void compareVersions() {
+  private void compareVersions() {
 
-        if (Boolean.FALSE.equals(new DevModeSettings().getValue())) {
-            switch (VersionUtils.versionCompare(serverApplicationVersion, CoreUtils.getCurrentAppVersion())) {
-                case FIRST_VERSION_IS_NEWER -> onNewVersionAvailable();
-                case SECOND_VERSION_IS_NEWER -> log.info("Current version is newer! Current: {}, Server: {}",
-                    CoreUtils.getCurrentAppVersion(), serverApplicationVersion);
-                case VERSIONS_ARE_EQUAL ->
-                    log.info("There are no updates available. Versions are equal! Current: {}, Server: {}",
-                        CoreUtils.getCurrentAppVersion(), serverApplicationVersion);
-            }
-        } else onNewVersionAvailable();
+    if (Boolean.FALSE.equals(new DevModeSettings().getValue())) {
+      switch (VersionUtils.versionCompare(
+          serverApplicationVersion, CoreUtils.getCurrentAppVersion())) {
+        case FIRST_VERSION_IS_NEWER -> onNewVersionAvailable();
+        case SECOND_VERSION_IS_NEWER -> log.info(
+            "Current version is newer! Current: {}, Server: {}",
+            CoreUtils.getCurrentAppVersion(),
+            serverApplicationVersion);
+        case VERSIONS_ARE_EQUAL -> log.info(
+            "There are no updates available. Versions are equal! Current: {}, Server: {}",
+            CoreUtils.getCurrentAppVersion(),
+            serverApplicationVersion);
+      }
+    } else onNewVersionAvailable();
+  }
+
+  private void onNewVersionAvailable() {
+
+    try {
+      final AppVersion.Asset asset = updater.getInstallerAsset(serverApplicationVersion);
+      if (asset != null) {
+        log.info(
+            "Showing notification: New version is available! Current: {}, Server: {}",
+            CoreUtils.getCurrentAppVersion(),
+            serverApplicationVersion);
+
+        NotifyManager.getNotifierForSystem().notifyUser(serverApplicationVersion);
+      } else {
+        log.warn(
+            "Update is available, but there is no version for current system: {}",
+            serverApplicationVersion);
+      }
+    } catch (NoAvailableVersionException e) {
+      log.warn("No asset available for version: {}", serverApplicationVersion, e);
     }
-
-    private void onNewVersionAvailable() {
-
-        try {
-            final AppVersion.Asset asset = updater.getInstallerAsset(serverApplicationVersion);
-            if (asset != null) {
-                log.info("Showing notification: New version is available! Current: {}, Server: {}",
-                    CoreUtils.getCurrentAppVersion(), serverApplicationVersion);
-
-                NotifyManager.getNotifierForSystem().notifyUser(serverApplicationVersion);
-            } else {
-                log.warn("Update is available, but there is no version for current system: {}",
-                    serverApplicationVersion);
-            }
-        } catch (NoAvailableVersionException e) {
-            log.warn("No asset available for version: {}", serverApplicationVersion, e);
-        }
-    }
+  }
 }
-

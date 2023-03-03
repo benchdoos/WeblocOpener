@@ -17,26 +17,32 @@ package com.github.benchdoos.weblocopener.utils;
 
 import lombok.extern.log4j.Log4j2;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.awt.Window;
 
-
-/**
- * Created by Eugene Zrazhevsky on 30.10.2016.
- */
+/** Created by Eugene Zrazhevsky on 30.10.2016. */
 @Log4j2
 public class FrameUtils {
 
-    /**
-     * Returns the location of point of window, when it should be on center of the screen.
-     *
-     * @return Point of <code>Window</code> that is moved to center of the screen.
-     * @see Component#getLocation
-     */
-    public static Point getFrameOnCenterLocationPoint(Window window) {
-        final Dimension size = window.getSize();
-        int width = (int) ((Toolkit.getDefaultToolkit().getScreenSize().width / (double) 2) - (size.getWidth() / (double) 2));
-        int height = (int) ((Toolkit.getDefaultToolkit().getScreenSize().height / (double) 2) - (size.getHeight() / (double) 2));
-        return new Point(width, height);
-    }
-
+  /**
+   * Returns the location of point of window, when it should be on center of the screen.
+   *
+   * @return Point of <code>Window</code> that is moved to center of the screen.
+   * @see Component#getLocation
+   */
+  public static Point getFrameOnCenterLocationPoint(Window window) {
+    final Dimension size = window.getSize();
+    int width =
+        (int)
+            ((Toolkit.getDefaultToolkit().getScreenSize().width / (double) 2)
+                - (size.getWidth() / (double) 2));
+    int height =
+        (int)
+            ((Toolkit.getDefaultToolkit().getScreenSize().height / (double) 2)
+                - (size.getHeight() / (double) 2));
+    return new Point(width, height);
+  }
 }
