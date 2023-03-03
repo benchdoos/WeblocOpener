@@ -26,7 +26,7 @@ public class UnixNotifier implements Notifier {
         Translation translation = new Translation("UpdateDialogBundle");
         final String windowTitle = translation.get("windowTitle");
         final String windowMessage = translation.get("newVersionAvailableTrayNotification")
-                + ": " + serverVersion.version();
+                + ": " + serverVersion.version().getBeautifulVersionString();
 
         NotificationManager.getNotificationForCurrentOS().showInfoNotification(windowTitle, windowMessage);
     }

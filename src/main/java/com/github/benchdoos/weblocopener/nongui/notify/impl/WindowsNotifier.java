@@ -21,8 +21,6 @@ import com.github.benchdoos.weblocopener.nongui.notify.Notifier;
 import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.AutoUpdateSettings;
 import com.github.benchdoos.weblocopenercore.service.translation.Translation;
-import lombok.extern.log4j.Log4j2;
-
 import java.awt.AWTException;
 import java.awt.CheckboxMenuItem;
 import java.awt.MenuItem;
@@ -32,6 +30,7 @@ import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import lombok.extern.log4j.Log4j2;
 
 
 @Log4j2
@@ -124,7 +123,7 @@ public class WindowsNotifier implements Notifier {
         Translation translation = new Translation("UpdateDialogBundle");
         final String windowTitle = translation.get("windowTitle");
         final String windowMessage = translation.get("newVersionAvailableTrayNotification")
-                + ": " + serverApplicationVersion.version();
+                + ": " + serverApplicationVersion.version().getBeautifulVersionString();
         trayIcon.displayMessage(windowTitle, windowMessage, TrayIcon.MessageType.INFO);
     }
 
