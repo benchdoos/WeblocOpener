@@ -9,17 +9,16 @@ import com.github.benchdoos.weblocopenercore.domain.version.UpdateInfo;
 import com.github.benchdoos.weblocopenercore.service.actions.ActionListener;
 import com.github.benchdoos.weblocopenercore.utils.system.OS;
 import com.github.benchdoos.weblocopenercore.utils.version.Version;
-import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.io.IOUtils;
-
-import javax.swing.Timer;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import javax.swing.Timer;
+import lombok.experimental.UtilityClass;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.IOUtils;
 
 @UtilityClass
 @Log4j2
@@ -42,28 +41,28 @@ public class UpdateHelperUtil {
     return objectMapper.readValue(jsonSrc, UpdateInfo.class);
   }
 
-
-  public Timer createNotifierTimer(final AppVersion.Asset asset, final File file,
-                                   List<ActionListener<Integer>> listeners) {
+  public Timer createNotifierTimer(
+      final AppVersion.Asset asset, final File file, List<ActionListener<Integer>> listeners) {
 
     if (CollectionUtils.isNotEmpty(listeners)) {
       final long totalSize = asset.size();
 
       final Timer timer = new Timer(500, null);
 
-      timer.addActionListener(e -> {
-        final int value = Math.toIntExact(file.length());
+      timer.addActionListener(
+          e -> {
+            final int value = Math.toIntExact(file.length());
 
-        final Integer percent = (int) (((double) value / totalSize) * 100);
+            final Integer percent = (int) (((double) value / totalSize) * 100);
 
-        log.debug("Downloaded: {}% ({} bites of total {} bites)", percent, value, totalSize);
+            log.debug("Downloaded: {}% ({} bites of total {} bites)", percent, value, totalSize);
 
-        listeners.forEach(l -> l.actionPerformed(percent));
+            listeners.forEach(l -> l.actionPerformed(percent));
 
-        if (file.length() == asset.size()) {
-          timer.stop();
-        }
-      });
+            if (file.length() == asset.size()) {
+              timer.stop();
+            }
+          });
 
       timer.setRepeats(true);
       timer.start();
@@ -75,5 +74,4 @@ public class UpdateHelperUtil {
   public String getUpdatePrefix(Version version) {
     return "V" + version.getSimpleVersion() + "_";
   }
-
 }
