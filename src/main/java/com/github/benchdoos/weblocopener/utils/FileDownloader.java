@@ -2,11 +2,6 @@ package com.github.benchdoos.weblocopener.utils;
 
 import com.github.benchdoos.weblocopenercore.service.actions.ActionListener;
 import com.github.benchdoos.weblocopenercore.service.actions.ActionListenerSupport;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,6 +9,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Setter

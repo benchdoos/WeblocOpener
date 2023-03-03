@@ -7,16 +7,15 @@ import com.github.benchdoos.weblocopenercore.service.settings.impl.LocaleSetting
 import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 import j2html.TagCreator;
 import j2html.tags.specialized.HtmlTag;
-import lombok.extern.log4j.Log4j2;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 @Log4j2
 public class DefaultHtmlService implements Serializable, HtmlService {

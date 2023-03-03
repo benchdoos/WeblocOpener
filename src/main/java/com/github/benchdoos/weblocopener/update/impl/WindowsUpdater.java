@@ -25,15 +25,14 @@ import com.github.benchdoos.weblocopenercore.client.GitHubClient;
 import com.github.benchdoos.weblocopenercore.client.impl.DefaultGitHubClient;
 import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
 import com.github.benchdoos.weblocopenercore.exceptions.NoAvailableVersionException;
-import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
-import org.apache.commons.collections.CollectionUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
+import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.collections.CollectionUtils;
 
 @Log4j2
 public class WindowsUpdater implements Updater {

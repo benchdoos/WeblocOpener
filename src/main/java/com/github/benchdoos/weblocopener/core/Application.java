@@ -26,8 +26,6 @@ import com.github.benchdoos.weblocopenercore.service.WindowLauncher;
 import com.github.benchdoos.weblocopenercore.service.settings.dev_mode.DevModeFeatureCheck;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.AutoUpdateSettings;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.LatestUpdateCheckSettings;
-import lombok.extern.log4j.Log4j2;
-
 import java.io.File;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
@@ -36,6 +34,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class Application {

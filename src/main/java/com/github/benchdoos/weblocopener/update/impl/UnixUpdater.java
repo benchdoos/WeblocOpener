@@ -27,18 +27,17 @@ import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
 import com.github.benchdoos.weblocopenercore.exceptions.NoAvailableVersionException;
 import com.github.benchdoos.weblocopenercore.service.actions.ActionListener;
 import com.github.benchdoos.weblocopenercore.service.actions.ActionListenerSupport;
-import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
-import org.apache.commons.collections.CollectionUtils;
-import org.assertj.core.util.Files;
-
-import javax.swing.Timer;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
+import javax.swing.Timer;
+import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.collections.CollectionUtils;
+import org.assertj.core.util.Files;
 
 @Log4j2
 public class UnixUpdater implements Updater, ActionListenerSupport {

@@ -15,13 +15,12 @@
 
 package com.github.benchdoos.weblocopener.utils;
 
-import lombok.extern.log4j.Log4j2;
-
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
+import lombok.extern.log4j.Log4j2;
 
 /** Created by Eugene Zrazhevsky on 30.10.2016. */
 @Log4j2

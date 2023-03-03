@@ -1,11 +1,10 @@
 package com.github.benchdoos.weblocopener.core;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import static com.github.benchdoos.weblocopenercore.constants.ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
 
 import java.io.File;
-
-import static com.github.benchdoos.weblocopenercore.constants.ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApplicationConstants {

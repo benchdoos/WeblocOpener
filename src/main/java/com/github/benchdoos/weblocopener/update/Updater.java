@@ -18,7 +18,6 @@ package com.github.benchdoos.weblocopener.update;
 import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
 import com.github.benchdoos.weblocopenercore.exceptions.NoAvailableVersionException;
 import com.github.benchdoos.weblocopenercore.service.actions.ActionListenerSupport;
-
 import java.io.File;
 import java.io.IOException;
 

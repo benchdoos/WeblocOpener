@@ -7,11 +7,10 @@ import com.github.benchdoos.weblocopenercore.exceptions.NoAvailableVersionExcept
 import com.github.benchdoos.weblocopenercore.service.settings.impl.InstallBetaUpdateSettings;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.LatestUpdateCheckSettings;
 import com.github.benchdoos.weblocopenercore.utils.VersionUtils;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-
 import java.util.Date;
 import java.util.concurrent.CompletableFuture;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @RequiredArgsConstructor
 @Log4j2
