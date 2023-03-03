@@ -27,175 +27,178 @@ import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
 import com.github.benchdoos.weblocopenercore.exceptions.NoAvailableVersionException;
 import com.github.benchdoos.weblocopenercore.service.actions.ActionListener;
 import com.github.benchdoos.weblocopenercore.service.actions.ActionListenerSupport;
-import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
-import org.apache.commons.collections.CollectionUtils;
-import org.assertj.core.util.Files;
-
-import javax.swing.Timer;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
+import javax.swing.Timer;
+import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.collections.CollectionUtils;
+import org.assertj.core.util.Files;
 
 @Log4j2
 public class UnixUpdater implements Updater, ActionListenerSupport {
-    public static final String DEB_FILE_REGEX = ".*WeblocOpener.*\\.deb";
-    private static AtomicReference<AppVersion> latestReleaseVersion = null;
-    private static AtomicReference<AppVersion> latestBetaVersion = null;
+  public static final String DEB_FILE_REGEX = ".*WeblocOpener.*\\.deb";
+  private static final Object RELEASE_MUTEX = new Object();
+  private static final Object BETA_MUTEX = new Object();
+  private static AtomicReference<AppVersion> latestReleaseVersion = null;
+  private static AtomicReference<AppVersion> latestBetaVersion = null;
+  final UpdateService updateService;
+  final List<ActionListener<Integer>> listeners = new CopyOnWriteArrayList<>();
+  private final GitHubClient gitHubClient = new DefaultGitHubClient();
+  @Getter private File installerFile = null;
 
-    private static final Object RELEASE_MUTEX = new Object();
-    private static final Object BETA_MUTEX = new Object();
+  public UnixUpdater() {
+    updateService = new DefaultUpdateService(this);
+  }
 
-    final UpdateService updateService;
+  @Override
+  public AppVersion getLatestAppVersion() {
+    return updateService.getLatest();
+  }
 
-    private final GitHubClient gitHubClient = new DefaultGitHubClient();
-
-    final List<ActionListener<Integer>> listeners = new CopyOnWriteArrayList<>();
-
-    @Getter
-    private File installerFile = null;
-
-    public UnixUpdater() {
-        updateService = new DefaultUpdateService(this);
+  @Override
+  public AppVersion getLatestRelease() {
+    if (latestReleaseVersion != null) {
+      return latestReleaseVersion.get();
     }
 
+    synchronized (RELEASE_MUTEX) {
+      final AppVersion latestRelease = gitHubClient.getLatestRelease();
 
-    @Override
-    public AppVersion getLatestAppVersion() {
-        return updateService.getLatest();
+      log.info("New realization version: {}", latestRelease);
+
+      latestReleaseVersion = new AtomicReference<>(latestRelease);
+
+      return latestReleaseVersion.get();
+    }
+  }
+
+  @Override
+  public AppVersion getLatestBeta() {
+    if (latestBetaVersion != null) {
+      return latestBetaVersion.get();
     }
 
-    @Override
-    public AppVersion getLatestRelease() {
-        if (latestReleaseVersion != null) {
-            return latestReleaseVersion.get();
-        }
+    synchronized (BETA_MUTEX) {
+      final AppVersion latestBetaRelease = gitHubClient.getLatestBetaRelease();
+      latestBetaVersion = new AtomicReference<>(latestBetaRelease);
 
-        synchronized (RELEASE_MUTEX) {
-            final AppVersion latestRelease = gitHubClient.getLatestRelease();
+      return latestBetaVersion.get();
+    }
+  }
 
-            log.info("New realization version: {}", latestRelease);
+  @Override
+  public AppVersion.Asset getInstallerAsset(final AppVersion appVersion)
+      throws NoAvailableVersionException {
 
-            latestReleaseVersion = new AtomicReference<>(latestRelease);
-
-            return latestReleaseVersion.get();
-        }
+    if (appVersion == null) {
+      throw new NoAvailableVersionException("Given AppVersion is null");
     }
 
-    @Override
-    public AppVersion getLatestBeta() {
-        if (latestBetaVersion != null) {
-            return latestBetaVersion.get();
-        }
-
-        synchronized (BETA_MUTEX) {
-            final AppVersion latestBetaRelease = gitHubClient.getLatestBetaRelease();
-            latestBetaVersion = new AtomicReference<>(latestBetaRelease);
-
-            return latestBetaVersion.get();
-        }
+    if (CollectionUtils.isNotEmpty(appVersion.assets())) {
+      return appVersion.assets().stream()
+          .filter(
+              a ->
+                  a.contentType().equals("application/octet-stream")
+                      && a.name().matches(DEB_FILE_REGEX))
+          .findFirst()
+          .orElseThrow(() -> new NoAvailableVersionException("Needed installer file not found"));
     }
 
-    @Override
-    public AppVersion.Asset getInstallerAsset(final AppVersion appVersion) throws NoAvailableVersionException {
+    throw new NoAvailableVersionException("Given AppVersion assets are empty");
+  }
 
-        if (appVersion == null) {
-            throw new NoAvailableVersionException("Given AppVersion is null");
-        }
+  @Override
+  public void startUpdate(AppVersion appVersion) throws IOException {
+    log.info("Starting update for {}", appVersion.version());
 
-        if (CollectionUtils.isNotEmpty(appVersion.assets())) {
-            return appVersion.assets().stream()
-                .filter(a -> a.contentType().equals("application/octet-stream") && a.name().matches(DEB_FILE_REGEX))
-                .findFirst()
-                .orElseThrow(() -> new NoAvailableVersionException("Needed installer file not found"));
-        }
+    final AppVersion.Asset installerAsset = this.getInstallerAsset(appVersion);
 
-        throw new NoAvailableVersionException("Given AppVersion assets are empty");
-    }
-
-    @Override
-    public void startUpdate(AppVersion appVersion) throws IOException {
-        log.info("Starting update for {}", appVersion.version());
-
-        final AppVersion.Asset installerAsset = this.getInstallerAsset(appVersion);
-
-        installerFile = new File(ApplicationConstants.UPDATE_PATH_FILE
-            + UpdateHelperUtil.getUpdatePrefix(appVersion.version())
-            + installerAsset.name());
-        if (!installerFile.exists()) {
-            updateAndInstall(installerAsset, installerFile);
-        } else {
-            if (installerAsset.size() == installerFile.length()) {
-                final Timer notifierTimer =
-                    UpdateHelperUtil.createNotifierTimer(installerAsset, installerFile, listeners);
-                try {
-                    update(installerFile);
-                } finally {
-                    if (notifierTimer != null && notifierTimer.isRunning()) {
-                        log.debug("Stopping timer: {}", notifierTimer);
-                        notifierTimer.stop();
-                    }
-                }
-            } else {
-                Files.delete(installerFile);
-                updateAndInstall(installerAsset, installerFile);
-            }
-        }
-    }
-
-    @Override
-    public void addListener(final ActionListener actionListener) {
-        listeners.add(actionListener);
-    }
-
-    @Override
-    public void removeListener(final ActionListener actionListener) {
-        listeners.remove(actionListener);
-    }
-
-    @Override
-    public void removeAllListeners() {
-        listeners.clear();
-    }
-
-    @SuppressWarnings({"DuplicatedCode"})
-    private void updateAndInstall(final AppVersion.Asset installerAsset,
-                                  File installerFile) throws IOException {
-
-        final FileDownloader fileDownloader = new FileDownloader(installerAsset.downloadUrl(), installerFile);
+    installerFile =
+        new File(
+            ApplicationConstants.UPDATE_PATH_FILE
+                + UpdateHelperUtil.getUpdatePrefix(appVersion.version())
+                + installerAsset.name());
+    if (!installerFile.exists()) {
+      updateAndInstall(installerAsset, installerFile);
+    } else {
+      if (installerAsset.size() == installerFile.length()) {
+        final Timer notifierTimer =
+            UpdateHelperUtil.createNotifierTimer(installerAsset, installerFile, listeners);
         try {
-            if (!installerFile.exists() || installerFile.length() != installerAsset.size()) {
-                fileDownloader.setTotalFileSize(installerAsset.size());
-                listeners.forEach(fileDownloader::addListener);
-                fileDownloader.download();
-            }
-
-            if (!Thread.currentThread().isInterrupted()) {
-                log.debug("Installer file: {} (size:{})", installerFile, installerFile.length());
-                update(installerFile);
-            }
-        } catch (IOException e) {
-            log.warn("Can not download file: {} to {}", installerAsset.downloadUrl(), installerFile, e);
-
-            log.debug("Setting file: {} to be deleted on app exit", installerFile);
-            installerFile.deleteOnExit();
-            throw new IOException(e);
-        } catch (InterruptedException e) {
-            log.warn("Downloading file {} from {} was interrupted.", installerFile, installerAsset.downloadUrl(), e);
-            this.removeAllListeners();
-            Thread.currentThread().interrupt();
+          update(installerFile);
         } finally {
-            fileDownloader.removeAllListeners();
+          if (notifierTimer != null && notifierTimer.isRunning()) {
+            log.debug("Stopping timer: {}", notifierTimer);
+            notifierTimer.stop();
+          }
         }
+      } else {
+        Files.delete(installerFile);
+        updateAndInstall(installerAsset, installerFile);
+      }
     }
+  }
 
-    private void update(File installerFile) throws IOException {
-        log.debug("Starting update: [{}]", installerFile);
-        Desktop.getDesktop().open(installerFile);
-        log.debug("Exiting app...");
-        System.exit(0);
+  @Override
+  public void addListener(final ActionListener actionListener) {
+    listeners.add(actionListener);
+  }
+
+  @Override
+  public void removeListener(final ActionListener actionListener) {
+    listeners.remove(actionListener);
+  }
+
+  @Override
+  public void removeAllListeners() {
+    listeners.clear();
+  }
+
+  @SuppressWarnings({"DuplicatedCode"})
+  private void updateAndInstall(final AppVersion.Asset installerAsset, File installerFile)
+      throws IOException {
+
+    final FileDownloader fileDownloader =
+        new FileDownloader(installerAsset.downloadUrl(), installerFile);
+    try {
+      if (!installerFile.exists() || installerFile.length() != installerAsset.size()) {
+        fileDownloader.setTotalFileSize(installerAsset.size());
+        listeners.forEach(fileDownloader::addListener);
+        fileDownloader.download();
+      }
+
+      if (!Thread.currentThread().isInterrupted()) {
+        log.debug("Installer file: {} (size:{})", installerFile, installerFile.length());
+        update(installerFile);
+      }
+    } catch (IOException e) {
+      log.warn("Can not download file: {} to {}", installerAsset.downloadUrl(), installerFile, e);
+
+      log.debug("Setting file: {} to be deleted on app exit", installerFile);
+      installerFile.deleteOnExit();
+      throw new IOException(e);
+    } catch (InterruptedException e) {
+      log.warn(
+          "Downloading file {} from {} was interrupted.",
+          installerFile,
+          installerAsset.downloadUrl(),
+          e);
+      this.removeAllListeners();
+      Thread.currentThread().interrupt();
+    } finally {
+      fileDownloader.removeAllListeners();
     }
+  }
+
+  private void update(File installerFile) throws IOException {
+    log.debug("Starting update: [{}]", installerFile);
+    Desktop.getDesktop().open(installerFile);
+    log.debug("Exiting app...");
+    System.exit(0);
+  }
 }

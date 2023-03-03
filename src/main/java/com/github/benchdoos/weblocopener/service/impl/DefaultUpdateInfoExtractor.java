@@ -1,23 +1,23 @@
 package com.github.benchdoos.weblocopener.service.impl;
 
+import com.github.benchdoos.weblocopener.service.UpdateInfoExtractor;
 import com.github.benchdoos.weblocopener.utils.UpdateHelperUtil;
 import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
 import com.github.benchdoos.weblocopenercore.domain.version.UpdateInfo;
-import lombok.extern.log4j.Log4j2;
-
 import java.io.IOException;
 import java.util.Optional;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class DefaultUpdateInfoExtractor implements UpdateInfoExtractor {
 
-
   @Override
   public UpdateInfo extract(final AppVersion appVersion) {
-    final Optional<AppVersion.Asset> assetOptional = appVersion.assets().stream()
-        .filter(a -> a.contentType().equalsIgnoreCase("application/json"))
-        .filter(a -> a.name().startsWith("update-info") && a.name().endsWith(".json"))
-        .findFirst();
+    final Optional<AppVersion.Asset> assetOptional =
+        appVersion.assets().stream()
+            .filter(a -> a.contentType().equalsIgnoreCase("application/json"))
+            .filter(a -> a.name().startsWith("update-info") && a.name().endsWith(".json"))
+            .findFirst();
 
     if (assetOptional.isPresent()) {
       final AppVersion.Asset asset = assetOptional.get();

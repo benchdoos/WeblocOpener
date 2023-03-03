@@ -18,37 +18,36 @@ package com.github.benchdoos.weblocopener.update;
 import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
 import com.github.benchdoos.weblocopenercore.exceptions.NoAvailableVersionException;
 import com.github.benchdoos.weblocopenercore.service.actions.ActionListenerSupport;
-
 import java.io.File;
 import java.io.IOException;
 
 public interface Updater extends ActionListenerSupport {
 
-    /**
-     * Get installer file if downloading already started. Otherwise {@code null} will be returned.
-     *
-     * @return Installer file link
-     */
-    File getInstallerFile();
+  /**
+   * Get installer file if downloading already started. Otherwise {@code null} will be returned.
+   *
+   * @return Installer file link
+   */
+  File getInstallerFile();
 
-    /**
-     * @return latest {@link AppVersion}, giving Beta if
-     * {@link com.github.benchdoos.weblocopenercore.service.settings.impl.InstallBetaUpdateSettings} is {@code true}
-     * and Release is older than Beta version, otherwise will return Release version.
-     */
-    AppVersion getLatestAppVersion();
+  /**
+   * @return latest {@link AppVersion}, giving Beta if {@link
+   *     com.github.benchdoos.weblocopenercore.service.settings.impl.InstallBetaUpdateSettings} is
+   *     {@code true} and Release is older than Beta version, otherwise will return Release version.
+   */
+  AppVersion getLatestAppVersion();
 
-    /**
-     * @return latest Release {@link AppVersion}
-     */
-    AppVersion getLatestRelease();
+  /**
+   * @return latest Release {@link AppVersion}
+   */
+  AppVersion getLatestRelease();
 
-    /**
-     * @return latest Beta version {@link AppVersion}
-     */
-    AppVersion getLatestBeta();
+  /**
+   * @return latest Beta version {@link AppVersion}
+   */
+  AppVersion getLatestBeta();
 
-    AppVersion.Asset getInstallerAsset(AppVersion appVersion) throws NoAvailableVersionException;
+  AppVersion.Asset getInstallerAsset(AppVersion appVersion) throws NoAvailableVersionException;
 
-    void startUpdate(AppVersion applicationVersion) throws IOException;
+  void startUpdate(AppVersion applicationVersion) throws IOException;
 }

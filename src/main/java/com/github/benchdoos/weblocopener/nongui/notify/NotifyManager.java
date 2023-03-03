@@ -20,13 +20,13 @@ import com.github.benchdoos.weblocopener.nongui.notify.impl.WindowsNotifier;
 import com.github.benchdoos.weblocopenercore.utils.system.OS;
 
 public class NotifyManager {
-    private static final Notifier DEFAULT_NOTIFIER = new WindowsNotifier();
+  private static final Notifier DEFAULT_NOTIFIER = new WindowsNotifier();
 
-    public static Notifier getNotifierForSystem() {
-        if (OS.isWindows()) {
-            return new WindowsNotifier();
-        } else if (OS.isUnix()) {
-            return new UnixNotifier();
-        } else return DEFAULT_NOTIFIER;
-    }
+  public static Notifier getNotifierForSystem() {
+    if (OS.isWindows()) {
+      return new WindowsNotifier();
+    } else if (OS.isUnix()) {
+      return new UnixNotifier();
+    } else return DEFAULT_NOTIFIER;
+  }
 }
