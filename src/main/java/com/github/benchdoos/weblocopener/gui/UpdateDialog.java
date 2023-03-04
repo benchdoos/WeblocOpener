@@ -99,7 +99,7 @@ public class UpdateDialog extends JFrame implements Translatable {
   private JLabel currentVersionStringLabel;
   private JLabel availableVersionStringLabel;
   private JButton updateInfoButton;
-  private Thread updateThread;
+  private Thread updateThread = null;
   private JButton manualDownloadButton;
   private JLabel serverBetaLabel;
   private JLabel currentBetaLabel;
