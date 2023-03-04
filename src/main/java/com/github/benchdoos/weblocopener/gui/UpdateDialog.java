@@ -62,7 +62,6 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicReference;
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -87,11 +86,10 @@ import org.bridj.jawt.JAWTUtils;
 public class UpdateDialog extends JFrame implements Translatable {
 
   public static final String UPDATE_DIALOG_BUNDLE = "UpdateDialogBundle";
-  private static AtomicReference<UpdateDialog> instance = new AtomicReference<>();
   private JProgressBar progressBar;
   private JButton buttonOK;
   private JButton buttonCancel;
-  private Updater updater = UpdateHelperUtil.getUpdaterForCurrentOS();
+  private Updater updater;
   private AppVersion serverAppVersion;
   private JPanel contentPane;
   private JLabel currentVersionLabel;
@@ -110,9 +108,10 @@ public class UpdateDialog extends JFrame implements Translatable {
   private UpdateInfo updateInfo = null;
   private UpdateInfoExtractor updateInfoExtractor;
 
-  private UpdateDialog() {
+  public UpdateDialog() {
     $$$setupUI$$$();
     updateInfoExtractor = new DefaultUpdateInfoExtractor();
+    updater = UpdateHelperUtil.getUpdaterForCurrentOS();
     iniGui();
     loadProperties();
   }
@@ -130,8 +129,7 @@ public class UpdateDialog extends JFrame implements Translatable {
       progressBar.setIndeterminate(false);
 
       final Version version = serverAppVersion.version();
-      availableVersionLabel.setText(
-          version.getMajor() + "." + version.getMinor() + "." + version.getPatch());
+      availableVersionLabel.setText(version.getSimpleVersionWithoutBeta());
       setNewVersionSizeInfo();
 
       CompletableFuture.runAsync(this::getUpdateInfo);
@@ -169,21 +167,6 @@ public class UpdateDialog extends JFrame implements Translatable {
     manualDownloadButton.setText(translation.get("manualDownloadButtonText"));
     manualDownloadButton.setToolTipText(translation.get("manualDownloadButtonToolTip"));
     buttonCancel.setText(translation.get("buttonCancel"));
-  }
-
-  public static UpdateDialog getInstance() {
-    UpdateDialog localInstance = instance.get();
-    if (localInstance == null) {
-      synchronized (UpdateDialog.class) {
-        localInstance = instance.get();
-        if (localInstance == null) {
-          final UpdateDialog dialog = new UpdateDialog();
-          instance.set(dialog);
-          return dialog;
-        }
-      }
-    }
-    return localInstance;
   }
 
   private void prepareWindowsTaskBarHandling() {
@@ -541,9 +524,9 @@ public class UpdateDialog extends JFrame implements Translatable {
   }
 
   private void initBetaLabel() {
-    serverBetaLabel.setVisible(serverAppVersion.getBeta().isBeta());
-    final Beta beta = serverAppVersion.getBeta();
-    serverBetaLabel.setText("(beta." + beta.getVersion() + ")");
+    final Beta serverAppVersionBeta = serverAppVersion.getBeta();
+    serverBetaLabel.setVisible(serverAppVersionBeta.isBeta());
+    serverBetaLabel.setText(serverAppVersionBeta.getBeautifulBetaString());
   }
 
   private void compareVersions() {
@@ -575,8 +558,7 @@ public class UpdateDialog extends JFrame implements Translatable {
       buttonCancel.removeActionListener(actionListener);
     }
 
-    buttonOK.addActionListener(
-        e -> {
+    buttonOK.addActionListener(e -> {
           updateThread = new Thread(this::onOK);
           updateThread.start();
         });
@@ -693,7 +675,7 @@ public class UpdateDialog extends JFrame implements Translatable {
     currentBetaLabel.setVisible(currentApplicationVersion.getBeta().isBeta());
     final Beta beta = currentApplicationVersion.getBeta();
 
-    currentBetaLabel.setText("(beta." + beta.getVersion() + ")");
+    currentBetaLabel.setText(beta.getBeautifulBetaString());
   }
 
   private void onCancel() {
@@ -701,7 +683,6 @@ public class UpdateDialog extends JFrame implements Translatable {
       if (!updateThread.isInterrupted()) {
         updateThread.interrupt();
         log.info("Installation was interrupted: " + updateThread.isInterrupted());
-        updateThread = null;
         buttonOK.setEnabled(true);
         progressBar.setValue(0);
         runCleanInstallerFile();
@@ -798,7 +779,7 @@ public class UpdateDialog extends JFrame implements Translatable {
       log.info("Marking to delete on app exit installer file: " + installerFile);
       installerFile.deleteOnExit();
     } else {
-      log.debug("No file to cleanup, serverApplicationVersion is null");
+      log.debug("No file to cleanup, serverAppVersion is null");
     }
   }
 
