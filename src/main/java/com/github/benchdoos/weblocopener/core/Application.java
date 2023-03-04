@@ -71,7 +71,7 @@ public class Application {
         new WindowLauncher<UpdateDialog>() {
           @Override
           public UpdateDialog initWindow() {
-            return UpdateDialog.getInstance();
+            return new UpdateDialog();
           }
         }.getWindow();
 

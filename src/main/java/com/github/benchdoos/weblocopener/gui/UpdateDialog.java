@@ -62,7 +62,6 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicReference;
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -87,11 +86,10 @@ import org.bridj.jawt.JAWTUtils;
 public class UpdateDialog extends JFrame implements Translatable {
 
   public static final String UPDATE_DIALOG_BUNDLE = "UpdateDialogBundle";
-  private static AtomicReference<UpdateDialog> instance = new AtomicReference<>();
   private JProgressBar progressBar;
   private JButton buttonOK;
   private JButton buttonCancel;
-  private Updater updater = UpdateHelperUtil.getUpdaterForCurrentOS();
+  private Updater updater;
   private AppVersion serverAppVersion;
   private JPanel contentPane;
   private JLabel currentVersionLabel;
@@ -110,9 +108,10 @@ public class UpdateDialog extends JFrame implements Translatable {
   private UpdateInfo updateInfo = null;
   private UpdateInfoExtractor updateInfoExtractor;
 
-  private UpdateDialog() {
+  public UpdateDialog() {
     $$$setupUI$$$();
     updateInfoExtractor = new DefaultUpdateInfoExtractor();
+    updater = UpdateHelperUtil.getUpdaterForCurrentOS();
     iniGui();
     loadProperties();
   }
@@ -169,21 +168,6 @@ public class UpdateDialog extends JFrame implements Translatable {
     manualDownloadButton.setText(translation.get("manualDownloadButtonText"));
     manualDownloadButton.setToolTipText(translation.get("manualDownloadButtonToolTip"));
     buttonCancel.setText(translation.get("buttonCancel"));
-  }
-
-  public static UpdateDialog getInstance() {
-    UpdateDialog localInstance = instance.get();
-    if (localInstance == null) {
-      synchronized (UpdateDialog.class) {
-        localInstance = instance.get();
-        if (localInstance == null) {
-          final UpdateDialog dialog = new UpdateDialog();
-          instance.set(dialog);
-          return dialog;
-        }
-      }
-    }
-    return localInstance;
   }
 
   private void prepareWindowsTaskBarHandling() {
