@@ -24,6 +24,7 @@ public class DefaultHtmlService implements Serializable, HtmlService {
     final List<ExtendedModificationInfo> modifications = prepareRawList(updateInfo);
 
     final Locale locale = Translation.getSelectedLocale();
+    final String localeName = locale.getLanguage().toLowerCase();
     return TagCreator.html(
             TagCreator.body(
                 TagCreator.table(
@@ -35,8 +36,7 @@ public class DefaultHtmlService implements Serializable, HtmlService {
 
                           final Map<String, String> description =
                               value.modification().description();
-                          final String srcMessage =
-                              description.get(locale.getLanguage().toLowerCase());
+                          final String srcMessage = description.get(localeName);
                           final String message;
                           if (StringUtils.isNotBlank(srcMessage)) {
                             message = srcMessage;
