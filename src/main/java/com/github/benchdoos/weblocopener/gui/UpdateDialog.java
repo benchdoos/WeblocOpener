@@ -88,7 +88,6 @@ public class UpdateDialog extends JFrame implements Translatable {
 
   public static final String UPDATE_DIALOG_BUNDLE = "UpdateDialogBundle";
   private static AtomicReference<UpdateDialog> instance = new AtomicReference<>();
-  private static Method $$$cachedGetBundleMethod$$$ = null;
   private JProgressBar progressBar;
   private JButton buttonOK;
   private JButton buttonCancel;
@@ -116,13 +115,6 @@ public class UpdateDialog extends JFrame implements Translatable {
     updateInfoExtractor = new DefaultUpdateInfoExtractor();
     iniGui();
     loadProperties();
-  }
-
-  /**
-   * @noinspection ALL
-   */
-  public JComponent $$$getRootComponent$$$() {
-    return contentPane;
   }
 
   public void checkForUpdates() {
@@ -220,41 +212,18 @@ public class UpdateDialog extends JFrame implements Translatable {
     final JPanel panel1 = new JPanel();
     panel1.setLayout(new GridLayoutManager(1, 1, new Insets(0, 10, 10, 10), -1, -1));
     panel1.setOpaque(false);
-    imagePanel.add(
-        panel1,
-        new GridConstraints(
-            1,
-            0,
-            1,
-            1,
-            GridConstraints.ANCHOR_CENTER,
-            GridConstraints.FILL_BOTH,
-            GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-            1,
-            null,
-            null,
-            null,
-            0,
-            false));
+    imagePanel.add(panel1,
+        new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
+            GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, 1, null,
+            null, null, 0, false));
     final JPanel panel2 = new JPanel();
     panel2.setLayout(new GridLayoutManager(2, 3, new Insets(0, 0, 0, 0), -1, -1));
     panel2.setOpaque(false);
-    panel1.add(
-        panel2,
-        new GridConstraints(
-            0,
-            0,
-            1,
-            1,
-            GridConstraints.ANCHOR_CENTER,
-            GridConstraints.FILL_BOTH,
+    panel1.add(panel2,
+        new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
             GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-            GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-            null,
-            null,
-            null,
-            0,
-            false));
+            GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null,
+            null, 0, false));
     buttonOK = new JButton();
     buttonOK.setActionCommand(
         this.$$$getMessageFromBundle$$$("translations/UpdateDialogBundle_en_EN", "buttonOk"));
@@ -272,8 +241,7 @@ public class UpdateDialog extends JFrame implements Translatable {
     buttonCancel = new JButton();
     buttonCancel.setActionCommand(
         this.$$$getMessageFromBundle$$$("translations/UpdateDialogBundle_en_EN", "buttonCancel"));
-    this.$$$loadButtonText$$$(
-        buttonCancel,
+    this.$$$loadButtonText$$$(buttonCancel,
         this.$$$getMessageFromBundle$$$("translations/UpdateDialogBundle", "buttonCancel"));
     panel2.add(buttonCancel, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER,
         GridConstraints.FILL_HORIZONTAL,
@@ -286,31 +254,16 @@ public class UpdateDialog extends JFrame implements Translatable {
     manualDownloadButton.setMargin(new Insets(2, 2, 2, 8));
     manualDownloadButton.setOpaque(true);
     manualDownloadButton.setRequestFocusEnabled(false);
-    this.$$$loadButtonText$$$(
-        manualDownloadButton,
-        this.$$$getMessageFromBundle$$$(
-            "translations/UpdateDialogBundle",
+    this.$$$loadButtonText$$$(manualDownloadButton,
+        this.$$$getMessageFromBundle$$$("translations/UpdateDialogBundle",
             "manualDownloadButtonText"));
     manualDownloadButton.setToolTipText(
-        this.$$$getMessageFromBundle$$$(
-            "translations/UpdateDialogBundle",
+        this.$$$getMessageFromBundle$$$("translations/UpdateDialogBundle",
             "manualDownloadButtonToolTip"));
-    panel2.add(
-        manualDownloadButton,
-        new GridConstraints(
-            1,
-            1,
-            1,
-            1,
-            GridConstraints.ANCHOR_CENTER,
-            GridConstraints.FILL_NONE,
+    panel2.add(manualDownloadButton,
+        new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
             GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-            GridConstraints.SIZEPOLICY_FIXED,
-            null,
-            null,
-            null,
-            0,
-            false));
+            GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     final Spacer spacer1 = new Spacer();
     panel2.add(spacer1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER,
         GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null,
@@ -318,22 +271,11 @@ public class UpdateDialog extends JFrame implements Translatable {
     final JPanel panel3 = new JPanel();
     panel3.setLayout(new GridLayoutManager(2, 1, new Insets(10, 10, 0, 10), -1, -1));
     panel3.setOpaque(false);
-    imagePanel.add(
-        panel3,
-        new GridConstraints(
-            0,
-            0,
-            1,
-            1,
-            GridConstraints.ANCHOR_CENTER,
-            GridConstraints.FILL_BOTH,
+    imagePanel.add(panel3,
+        new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
             GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-            GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-            null,
-            null,
-            null,
-            0,
-            false));
+            GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null,
+            null, 0, false));
     final Spacer spacer2 = new Spacer();
     panel3.add(spacer2, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER,
         GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0,
@@ -353,112 +295,48 @@ public class UpdateDialog extends JFrame implements Translatable {
         GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     currentVersionStringLabel = new JLabel();
     currentVersionStringLabel.setForeground(new Color(-460552));
-    this.$$$loadLabelText$$$(
-        currentVersionStringLabel,
-        this.$$$getMessageFromBundle$$$(
-            "translations/UpdateDialogBundle",
+    this.$$$loadLabelText$$$(currentVersionStringLabel,
+        this.$$$getMessageFromBundle$$$("translations/UpdateDialogBundle",
             "currentVersionStringLabel"));
-    panel4.add(
-        currentVersionStringLabel,
-        new GridConstraints(
-            0,
-            0,
-            1,
-            1,
-            GridConstraints.ANCHOR_WEST,
-            GridConstraints.FILL_NONE,
-            GridConstraints.SIZEPOLICY_FIXED,
-            GridConstraints.SIZEPOLICY_FIXED,
-            null,
-            null,
-            null,
-            0,
+    panel4.add(currentVersionStringLabel,
+        new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
+            GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
             false));
     availableVersionStringLabel = new JLabel();
     availableVersionStringLabel.setForeground(new Color(-460552));
-    this.$$$loadLabelText$$$(
-        availableVersionStringLabel,
-        this.$$$getMessageFromBundle$$$(
-            "translations/UpdateDialogBundle",
+    this.$$$loadLabelText$$$(availableVersionStringLabel,
+        this.$$$getMessageFromBundle$$$("translations/UpdateDialogBundle",
             "availableVersionStringLabel"));
-    panel4.add(
-        availableVersionStringLabel,
-        new GridConstraints(
-            1,
-            0,
-            1,
-            1,
-            GridConstraints.ANCHOR_WEST,
-            GridConstraints.FILL_NONE,
-            GridConstraints.SIZEPOLICY_FIXED,
-            GridConstraints.SIZEPOLICY_FIXED,
-            null,
-            null,
-            null,
-            0,
+    panel4.add(availableVersionStringLabel,
+        new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
+            GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
             false));
     final JPanel panel5 = new JPanel();
     panel5.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
     panel5.setOpaque(false);
-    panel4.add(
-        panel5,
-        new GridConstraints(
-            0,
-            1,
-            1,
-            1,
-            GridConstraints.ANCHOR_CENTER,
-            GridConstraints.FILL_BOTH,
+    panel4.add(panel5,
+        new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
             GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-            GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-            null,
-            null,
-            null,
-            0,
-            false));
+            GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null,
+            null, 0, false));
     currentVersionLabel = new JLabel();
-    Font currentVersionLabelFont =
-        this.$$$getFont$$$(null, Font.BOLD, -1,
+    Font currentVersionLabelFont = this.$$$getFont$$$(null, Font.BOLD, -1,
         currentVersionLabel.getFont());
     if (currentVersionLabelFont != null) {
       currentVersionLabel.setFont(currentVersionLabelFont);
     }
     currentVersionLabel.setForeground(new Color(-460552));
     currentVersionLabel.setText("1.0.0");
-    panel5.add(
-        currentVersionLabel,
-        new GridConstraints(
-            0,
-            0,
-            1,
-            1,
-            GridConstraints.ANCHOR_WEST,
-            GridConstraints.FILL_NONE,
-            GridConstraints.SIZEPOLICY_FIXED,
-            GridConstraints.SIZEPOLICY_FIXED,
-            null,
-            null,
-            null,
-            0,
+    panel5.add(currentVersionLabel,
+        new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
+            GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
             false));
     currentBetaLabel = new JLabel();
     currentBetaLabel.setForeground(new Color(-460552));
     currentBetaLabel.setText("(beta)");
-    panel5.add(
-        currentBetaLabel,
-        new GridConstraints(
-            0,
-            1,
-            1,
-            1,
-            GridConstraints.ANCHOR_WEST,
-            GridConstraints.FILL_NONE,
-            GridConstraints.SIZEPOLICY_FIXED,
-            GridConstraints.SIZEPOLICY_FIXED,
-            null,
-            null,
-            null,
-            0,
+    panel5.add(currentBetaLabel,
+        new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
+            GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
             false));
     final Spacer spacer3 = new Spacer();
     panel5.add(spacer3, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER,
@@ -489,64 +367,30 @@ public class UpdateDialog extends JFrame implements Translatable {
     updateInfoButton.setText("");
     updateInfoButton.setToolTipText(
         this.$$$getMessageFromBundle$$$("translations/UpdateDialogBundle", "infoAboutUpdate"));
-    panel6.add(
-        updateInfoButton,
-        new GridConstraints(
-            0,
-            2,
-            1,
-            1,
-            GridConstraints.ANCHOR_CENTER,
-            GridConstraints.FILL_NONE,
+    panel6.add(updateInfoButton,
+        new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE,
             GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-            GridConstraints.SIZEPOLICY_FIXED,
-            new Dimension(18, 18),
-            new Dimension(18, 18),
-            new Dimension(18, 18),
-            0, false));
+            GridConstraints.SIZEPOLICY_FIXED, new Dimension(18, 18), new Dimension(18, 18),
+            new Dimension(18, 18), 0, false));
     final JPanel panel7 = new JPanel();
     panel7.setLayout(new GridLayoutManager(1, 5, new Insets(0, 0, 0, 0), -1, -1));
     panel7.setOpaque(false);
-    panel6.add(
-        panel7,
-        new GridConstraints(
-            0,
-            0,
-            1,
-            1,
-            GridConstraints.ANCHOR_CENTER,
-            GridConstraints.FILL_BOTH,
+    panel6.add(panel7,
+        new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH,
             GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-            GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW,
-            null,
-            null,
-            null,
-            0,
-            false));
+            GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null,
+            null, 0, false));
     availableVersionLabel = new JLabel();
-    Font availableVersionLabelFont =
-        this.$$$getFont$$$(null, Font.BOLD, -1,
+    Font availableVersionLabelFont = this.$$$getFont$$$(null, Font.BOLD, -1,
         availableVersionLabel.getFont());
     if (availableVersionLabelFont != null) {
       availableVersionLabel.setFont(availableVersionLabelFont);
     }
     availableVersionLabel.setForeground(new Color(-460552));
     availableVersionLabel.setText("1.0.0");
-    panel7.add(
-        availableVersionLabel,
-        new GridConstraints(
-            0,
-            0,
-            1,
-            1,
-            GridConstraints.ANCHOR_WEST,
-            GridConstraints.FILL_NONE,
-            GridConstraints.SIZEPOLICY_FIXED,
-            GridConstraints.SIZEPOLICY_FIXED,
-            null,
-            null,
-            null,
-            0,
+    panel7.add(availableVersionLabel,
+        new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
+            GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
             false));
     final Spacer spacer5 = new Spacer();
     panel7.add(spacer5, new GridConstraints(0, 4, 1, 1, GridConstraints.ANCHOR_CENTER,
@@ -555,59 +399,23 @@ public class UpdateDialog extends JFrame implements Translatable {
     serverBetaLabel = new JLabel();
     serverBetaLabel.setForeground(new Color(-460552));
     serverBetaLabel.setText("(beta)");
-    panel7.add(
-        serverBetaLabel,
-        new GridConstraints(
-            0,
-            1,
-            1,
-            1,
-            GridConstraints.ANCHOR_WEST,
-            GridConstraints.FILL_NONE,
-            GridConstraints.SIZEPOLICY_FIXED,
-            GridConstraints.SIZEPOLICY_FIXED,
-            null,
-            null,
-            null,
-            0,
+    panel7.add(serverBetaLabel,
+        new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
+            GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
             false));
     newVersionSizeLabel = new JLabel();
     newVersionSizeLabel.setForeground(new Color(-460552));
     newVersionSizeLabel.setText("10");
-    panel7.add(
-        newVersionSizeLabel,
-        new GridConstraints(
-            0,
-            2,
-            1,
-            1,
-            GridConstraints.ANCHOR_WEST,
-            GridConstraints.FILL_NONE,
-            GridConstraints.SIZEPOLICY_FIXED,
-            GridConstraints.SIZEPOLICY_FIXED,
-            null,
-            null,
-            null,
-            0,
+    panel7.add(newVersionSizeLabel,
+        new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
+            GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
             false));
     unitLabel = new JLabel();
     unitLabel.setForeground(new Color(-460552));
     unitLabel.setText("MB");
-    panel7.add(
-        unitLabel,
-        new GridConstraints(
-            0,
-            3,
-            1,
-            1,
-            GridConstraints.ANCHOR_WEST,
-            GridConstraints.FILL_NONE,
-            GridConstraints.SIZEPOLICY_FIXED,
-            GridConstraints.SIZEPOLICY_FIXED,
-            null,
-            null,
-            null,
-            0,
+    panel7.add(unitLabel,
+        new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE,
+            GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0,
             false));
   }
 
@@ -633,21 +441,21 @@ public class UpdateDialog extends JFrame implements Translatable {
         size >= 0 ? size : currentFont.getSize());
     boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
     Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize())
-            : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+        : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
     return fontWithFallback instanceof FontUIResource ? fontWithFallback
         : new FontUIResource(fontWithFallback);
   }
+
+  private static Method $$$cachedGetBundleMethod$$$ = null;
 
   private String $$$getMessageFromBundle$$$(String path, String key) {
     ResourceBundle bundle;
     try {
       Class<?> thisClass = this.getClass();
       if ($$$cachedGetBundleMethod$$$ == null) {
-        Class<?> dynamicBundleClass =
-            thisClass.getClassLoader()
+        Class<?> dynamicBundleClass = thisClass.getClassLoader()
             .loadClass("com.intellij.DynamicBundle");
-        $$$cachedGetBundleMethod$$$ =
-            dynamicBundleClass.getMethod("getBundle", String.class,
+        $$$cachedGetBundleMethod$$$ = dynamicBundleClass.getMethod("getBundle", String.class,
             Class.class);
       }
       bundle = (ResourceBundle) $$$cachedGetBundleMethod$$$.invoke(null, path, thisClass);
@@ -713,6 +521,13 @@ public class UpdateDialog extends JFrame implements Translatable {
       component.setMnemonic(mnemonic);
       component.setDisplayedMnemonicIndex(mnemonicIndex);
     }
+  }
+
+  /**
+   * @noinspection ALL
+   */
+  public JComponent $$$getRootComponent$$$() {
+    return contentPane;
   }
 
   private void getUpdateInfo() {
@@ -829,14 +644,14 @@ public class UpdateDialog extends JFrame implements Translatable {
               if (serverAppVersion != null) {
                 try {
                   final Asset installerAsset = updater.getInstallerAsset(serverAppVersion);
-              log.debug("Trying to open [" + installerAsset + "]");
-              url = installerAsset.downloadUrl();
-              UrlsProceed.openUrl(url);
-            } catch (final NoAvailableVersionException e) {
-              log.warn("Could not get asset url, opening github page: {}",
-                  serverAppVersion.gitHubReleasePageUrl());
-              UrlsProceed.openUrl(serverAppVersion.gitHubReleasePageUrl());
-            }
+                  log.debug("Trying to open [" + installerAsset + "]");
+                  url = installerAsset.downloadUrl();
+                  UrlsProceed.openUrl(url);
+                } catch (final NoAvailableVersionException e) {
+                  log.warn("Could not get asset url, opening github page: {}",
+                      serverAppVersion.gitHubReleasePageUrl());
+                  UrlsProceed.openUrl(serverAppVersion.gitHubReleasePageUrl());
+                }
 
               } else {
                 UrlsProceed.openUrl(StringConstants.UPDATE_WEB_URL);
