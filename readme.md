@@ -78,6 +78,10 @@ Also, you can convert `.webarchive` files into `.html` webpages.**
 | Create new                                           |   Yes   |  Yes | Coming soon |
 | Generate QR-Code                                     |   Yes   |  Yes | Coming soon |
 | Instant URL, QR-Code copy                            |   Yes   |  Yes | Coming soon |
+| `.webloc` support                                    |   Yes   |  Yes | Coming soon |
+| `.desktop` support                                   |   Yes   |  Yes | Coming soon |
+| `.url` support                                       |   No    |  Yes | Coming soon |
+| `.webarchive` support                                |   Yes   |  Yes | Coming soon |
 | Convert `.webloc`, `.url`, `.desktop`, `.webarchive` |   Yes   |  Yes | Coming soon |
 | Auto-update                                          |   Yes   |  Yes | Coming soon |
 | Open in not default browser                          |   Yes   |  Yes | Coming soon |
