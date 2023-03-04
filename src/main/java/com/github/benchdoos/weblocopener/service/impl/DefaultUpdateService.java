@@ -54,6 +54,10 @@ public class DefaultUpdateService implements UpdateService {
           }
         }
 
+      } catch (InterruptedException e) {
+        log.warn("Comparing was interrupted", e);
+        Thread.currentThread().interrupt();
+        return updater.getLatestRelease();
       } catch (Exception e) {
         log.warn("Could not get latest version", e);
         return updater.getLatestRelease();
