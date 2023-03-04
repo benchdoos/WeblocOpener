@@ -129,8 +129,7 @@ public class UpdateDialog extends JFrame implements Translatable {
       progressBar.setIndeterminate(false);
 
       final Version version = serverAppVersion.version();
-      availableVersionLabel.setText(
-          version.getMajor() + "." + version.getMinor() + "." + version.getPatch());
+      availableVersionLabel.setText(version.getSimpleVersionWithoutBeta());
       setNewVersionSizeInfo();
 
       CompletableFuture.runAsync(this::getUpdateInfo);
@@ -525,9 +524,9 @@ public class UpdateDialog extends JFrame implements Translatable {
   }
 
   private void initBetaLabel() {
-    serverBetaLabel.setVisible(serverAppVersion.getBeta().isBeta());
-    final Beta beta = serverAppVersion.getBeta();
-    serverBetaLabel.setText("(beta." + beta.getVersion() + ")");
+    final Beta serverAppVersionBeta = serverAppVersion.getBeta();
+    serverBetaLabel.setVisible(serverAppVersionBeta.isBeta());
+    serverBetaLabel.setText(serverAppVersionBeta.getBeautifulBetaString());
   }
 
   private void compareVersions() {
@@ -559,8 +558,7 @@ public class UpdateDialog extends JFrame implements Translatable {
       buttonCancel.removeActionListener(actionListener);
     }
 
-    buttonOK.addActionListener(
-        e -> {
+    buttonOK.addActionListener(e -> {
           updateThread = new Thread(this::onOK);
           updateThread.start();
         });
@@ -677,7 +675,7 @@ public class UpdateDialog extends JFrame implements Translatable {
     currentBetaLabel.setVisible(currentApplicationVersion.getBeta().isBeta());
     final Beta beta = currentApplicationVersion.getBeta();
 
-    currentBetaLabel.setText("(beta." + beta.getVersion() + ")");
+    currentBetaLabel.setText(beta.getBeautifulBetaString());
   }
 
   private void onCancel() {
@@ -685,7 +683,6 @@ public class UpdateDialog extends JFrame implements Translatable {
       if (!updateThread.isInterrupted()) {
         updateThread.interrupt();
         log.info("Installation was interrupted: " + updateThread.isInterrupted());
-        updateThread = null;
         buttonOK.setEnabled(true);
         progressBar.setValue(0);
         runCleanInstallerFile();
@@ -782,7 +779,7 @@ public class UpdateDialog extends JFrame implements Translatable {
       log.info("Marking to delete on app exit installer file: " + installerFile);
       installerFile.deleteOnExit();
     } else {
-      log.debug("No file to cleanup, serverApplicationVersion is null");
+      log.debug("No file to cleanup, serverAppVersion is null");
     }
   }
 
