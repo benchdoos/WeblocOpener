@@ -129,8 +129,7 @@ public class UpdateDialog extends JFrame implements Translatable {
       progressBar.setIndeterminate(false);
 
       final Version version = serverAppVersion.version();
-      availableVersionLabel.setText(
-          version.getMajor() + "." + version.getMinor() + "." + version.getPatch());
+      availableVersionLabel.setText(version.getSimpleVersionWithoutBeta());
       setNewVersionSizeInfo();
 
       CompletableFuture.runAsync(this::getUpdateInfo);
@@ -525,9 +524,9 @@ public class UpdateDialog extends JFrame implements Translatable {
   }
 
   private void initBetaLabel() {
-    serverBetaLabel.setVisible(serverAppVersion.getBeta().isBeta());
-    final Beta beta = serverAppVersion.getBeta();
-    serverBetaLabel.setText("(beta." + beta.getVersion() + ")");
+    final Beta serverAppVersionBeta = serverAppVersion.getBeta();
+    serverBetaLabel.setVisible(serverAppVersionBeta.isBeta());
+    serverBetaLabel.setText(serverAppVersionBeta.getBeautifulBetaString());
   }
 
   private void compareVersions() {
@@ -677,7 +676,7 @@ public class UpdateDialog extends JFrame implements Translatable {
     currentBetaLabel.setVisible(currentApplicationVersion.getBeta().isBeta());
     final Beta beta = currentApplicationVersion.getBeta();
 
-    currentBetaLabel.setText("(beta." + beta.getVersion() + ")");
+    currentBetaLabel.setText(beta.getBeautifulBetaString());
   }
 
   private void onCancel() {
