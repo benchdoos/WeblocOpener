@@ -781,7 +781,7 @@ public class UpdateDialog extends JFrame implements Translatable {
       log.info("Marking to delete on app exit installer file: " + installerFile);
       installerFile.deleteOnExit();
     } else {
-      log.debug("No file to cleanup, serverApplicationVersion is null");
+      log.debug("No file to cleanup, serverAppVersion is null");
     }
   }
 
