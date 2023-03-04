@@ -558,8 +558,7 @@ public class UpdateDialog extends JFrame implements Translatable {
       buttonCancel.removeActionListener(actionListener);
     }
 
-    buttonOK.addActionListener(
-        e -> {
+    buttonOK.addActionListener(e -> {
           updateThread = new Thread(this::onOK);
           updateThread.start();
         });
@@ -684,7 +683,7 @@ public class UpdateDialog extends JFrame implements Translatable {
       if (!updateThread.isInterrupted()) {
         updateThread.interrupt();
         log.info("Installation was interrupted: " + updateThread.isInterrupted());
-        updateThread = null;
+//        updateThread = null;
         buttonOK.setEnabled(true);
         progressBar.setValue(0);
         runCleanInstallerFile();
