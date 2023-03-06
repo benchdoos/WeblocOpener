@@ -15,6 +15,8 @@
 
 package com.github.benchdoos.weblocopener;
 
+import static com.github.benchdoos.weblocopenercore.constants.ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
+
 import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopenercore.constants.ApplicationArgument;
 import com.github.benchdoos.weblocopenercore.constants.PathConstants;
@@ -25,76 +27,77 @@ import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
 import com.github.benchdoos.weblocopenercore.utils.system.OS;
 import com.github.benchdoos.weblocopenercore.utils.system.SystemUtils;
-import lombok.extern.log4j.Log4j2;
-
 import java.util.Arrays;
-
-import static com.github.benchdoos.weblocopenercore.constants.ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class Main {
-    private static MODE currentMode;
+  private static MODE currentMode;
 
-    public Main(String[] args) {
-        log.info(WEBLOCOPENER_APPLICATION_NAME + " starting with args: " + Arrays.toString(args));
-        log.debug("Dev mode: {}", new DevModeSettings().getValue());
+  public static void main(String[] args) {
+    new Main(args);
+  }
 
-        currentMode = manageMode(args);
-        try {
-            log.info("Logging to: {}", PathConstants.APP_LOG_FOLDER_PATH);
-            CoreUtils.enableLookAndFeel();
+  public static MODE getCurrentMode() {
+    return currentMode;
+  }
 
-            log.info("Current mode: {}", currentMode);
-            SystemUtils.checkIfSystemIsSupported();
+  public Main(String[] args) {
+    log.info(WEBLOCOPENER_APPLICATION_NAME + " starting with args: " + Arrays.toString(args));
+    log.debug("Dev mode: {}", new DevModeSettings().getValue());
 
-            CoreUtils.initBrowserList();
+    currentMode = manageMode(args);
+    try {
+      log.info("Logging to: {}", PathConstants.APP_LOG_FOLDER_PATH);
+      CoreUtils.enableLookAndFeel();
 
-            new Application(args);
-        } catch (UnsupportedSystemException e) {
-            log.fatal("System not supported", e);
-            final String translatedString = Translation.get("CommonsBundle", "systemNotSupported");
-            final String message = translatedString + " " + OS.getCurrentOS().name();
+      log.info("Current mode: {}", currentMode);
+      SystemUtils.checkIfSystemIsSupported();
 
-            NotificationManager.getForcedNotification(null)
-                .setThrowable(e)
-                .showErrorNotification(message, message);
+      CoreUtils.initBrowserList();
 
-        } catch (com.github.benchdoos.weblocopenercore.exceptions.FileDoesNotExistException e) {
-            log.fatal("File not found for arguments: {}", Arrays.toString(args));
-            final Translation translation = new Translation("WeblocOpenerCommonsBundle");
-            String title = translation.get("unexpectedException");
-            String message = translation.get("fileNotFoundException");
-            NotificationManager.getForcedNotification(null)
-                .setThrowable(e)
-                .showErrorNotification(title, message);
-        } catch (Exception e) {
-            log.fatal("System exited with exception", e);
-            String message = Translation.get("WeblocOpenerCommonsBundle", "unexpectedException");
-            NotificationManager.getForcedNotification(null)
-                .setThrowable(e)
-                .showErrorNotification(message, message);
-        }
+      new Application(args);
+    } catch (UnsupportedSystemException e) {
+      log.fatal("System not supported", e);
+      final String translatedString = Translation.get("CommonsBundle", "systemNotSupported");
+      final String message = translatedString + " " + OS.getCurrentOS().name();
+
+      NotificationManager.getForcedNotification(null)
+          .setThrowable(e)
+          .showErrorNotification(message, message);
+
+    } catch (com.github.benchdoos.weblocopenercore.exceptions.FileDoesNotExistException e) {
+      log.fatal("File not found for arguments: {}", Arrays.toString(args));
+      final Translation translation = new Translation("WeblocOpenerCommonsBundle");
+      String title = translation.get("unexpectedException");
+      String message = translation.get("fileNotFoundException");
+      NotificationManager.getForcedNotification(null)
+          .setThrowable(e)
+          .showErrorNotification(title, message);
+    } catch (Exception e) {
+      log.fatal("System exited with exception", e);
+      String message = Translation.get("WeblocOpenerCommonsBundle", "unexpectedException");
+      NotificationManager.getForcedNotification(null)
+          .setThrowable(e)
+          .showErrorNotification(message, message);
     }
+  }
 
-    public static void main(String[] args) {
-        new Main(args);
+  private MODE manageMode(String[] args) {
+    if (args.length > 0) {
+      final String arg = args[0];
+
+      final boolean updateArg =
+          ApplicationArgument.OPENER_UPDATE_ARGUMENT.equals(ApplicationArgument.getByArgument(arg));
+      if (updateArg) {
+        return MODE.UPDATE;
+      }
     }
+    return MODE.WEBLOCOPENER;
+  }
 
-    public static MODE getCurrentMode() {
-        return currentMode;
-    }
-
-    private MODE manageMode(String[] args) {
-        if (args.length > 0) {
-            final String arg = args[0];
-
-            final boolean updateArg = ApplicationArgument.OPENER_UPDATE_ARGUMENT.equals(ApplicationArgument.getByArgument(arg));
-            if (updateArg) {
-                return MODE.UPDATE;
-            }
-        }
-        return MODE.WEBLOCOPENER;
-    }
-
-    enum MODE {WEBLOCOPENER, UPDATE}
+  enum MODE {
+    WEBLOCOPENER,
+    UPDATE
+  }
 }
