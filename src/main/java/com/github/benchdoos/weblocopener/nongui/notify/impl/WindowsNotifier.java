@@ -15,10 +15,13 @@
 
 package com.github.benchdoos.weblocopener.nongui.notify.impl;
 
+
 import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopener.nongui.NonGuiUpdater;
 import com.github.benchdoos.weblocopener.nongui.notify.Notifier;
 import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
+import com.github.benchdoos.weblocopenercore.service.application.ApplicationService;
+import com.github.benchdoos.weblocopenercore.service.application.impl.DefaultApplicationService;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.AutoUpdateSettings;
 import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 import java.awt.AWTException;
@@ -35,6 +38,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class WindowsNotifier implements Notifier {
   private static final SystemTray tray = SystemTray.getSystemTray();
+  private final ApplicationService defaultApplicationService = new DefaultApplicationService();
   private TrayIcon trayIcon;
 
   public WindowsNotifier() {
@@ -111,7 +115,7 @@ public class WindowsNotifier implements Notifier {
     settings.addActionListener(
         e -> {
           com.github.benchdoos.weblocopenercore.core.Application.runSettingsDialog(
-              Application.getApplicationPath());
+              defaultApplicationService.getApplicationFile().getAbsolutePath());
           tray.remove(trayIcon);
         });
     return settings;
