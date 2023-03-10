@@ -363,3 +363,4 @@ Webarchive=Archives Web
 Desktop=Lien .desktop
 Warning=Avertissement!
 Java17InstallWarning=Cette version de WeblocOpener nécessite Java 17 ! Souhaitez-vous pré-installer Java 17 depuis adoptium.net?
+ShowWelcomePage=Découvrez les mises à jour dans la nouvelle version de WeblocOpener

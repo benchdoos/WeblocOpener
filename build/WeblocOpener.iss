@@ -326,4 +326,4 @@ Filename: "schtasks"; \
 
 [Run]
 Filename: https://benchdoos.github.io/; Description: "{cm:ProgramOnTheWeb,{#MyAppName}}"; Flags: postinstall shellexec  unchecked
-Filename: {app}\{#MyAppExeName}; Parameters: "-welcome"; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall
+Filename: {app}\{#MyAppExeName}; Parameters: "-welcome"; Description: {cm:ShowWelcomePage}; Flags: nowait postinstall
