@@ -28,6 +28,7 @@ import com.github.benchdoos.weblocopenercore.service.application.impl.DefaultApp
 import com.github.benchdoos.weblocopenercore.service.settings.dev_mode.DevModeFeatureCheck;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.AutoUpdateSettings;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.LatestUpdateCheckSettings;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -141,8 +142,9 @@ public class Application {
 
   private void startSettingsWithUpdate() {
     checkIfUpdatesAvailable();
-    com.github.benchdoos.weblocopenercore.core.Application
-        .runSettingsDialog(applicationService.getApplicationFile().getAbsolutePath());
+    final File applicationFile = applicationService.getApplicationFile();
+    final String applicationPath = applicationFile != null ? applicationFile.getAbsolutePath() : null;
+    com.github.benchdoos.weblocopenercore.core.Application.runSettingsDialog(applicationPath);
   }
 
   public enum UPDATE_MODE {
