@@ -23,11 +23,12 @@ import com.github.benchdoos.weblocopenercore.constants.ApplicationArgument;
 import com.github.benchdoos.weblocopenercore.constants.ApplicationConstants;
 import com.github.benchdoos.weblocopenercore.domain.preferences.DevModeFeatureType;
 import com.github.benchdoos.weblocopenercore.service.WindowLauncher;
+import com.github.benchdoos.weblocopenercore.service.application.ApplicationService;
+import com.github.benchdoos.weblocopenercore.service.application.impl.DefaultApplicationService;
 import com.github.benchdoos.weblocopenercore.service.settings.dev_mode.DevModeFeatureCheck;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.AutoUpdateSettings;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.LatestUpdateCheckSettings;
 import java.io.File;
-import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
@@ -39,6 +40,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Application {
   public static UPDATE_MODE updateMode = UPDATE_MODE.NORMAL;
+  private final ApplicationService applicationService = new DefaultApplicationService();
 
   public Application(final String[] args) {
     log.info(
@@ -51,19 +53,6 @@ public class Application {
         Arrays.toString(args));
 
     manageArgumentsForNew(args);
-  }
-
-  public static String getApplicationPath() {
-    String canonicalPath = null;
-    try {
-      canonicalPath =
-          new File(Application.class.getProtectionDomain().getCodeSource().getLocation().toURI())
-              .getPath();
-      log.debug("Application path: {}", canonicalPath);
-    } catch (URISyntaxException e) {
-      log.debug("Can not get canonical path for settings", e);
-    }
-    return canonicalPath;
   }
 
   public static void runUpdateDialog() {
@@ -152,9 +141,10 @@ public class Application {
   }
 
   private void startSettingsWithUpdate() {
-    String canonicalPath = getApplicationPath();
     checkIfUpdatesAvailable();
-    com.github.benchdoos.weblocopenercore.core.Application.runSettingsDialog(canonicalPath);
+    final File applicationFile = applicationService.getApplicationFile();
+    final String applicationPath = applicationFile != null ? applicationFile.getAbsolutePath() : null;
+    com.github.benchdoos.weblocopenercore.core.Application.runSettingsDialog(applicationPath);
   }
 
   public enum UPDATE_MODE {

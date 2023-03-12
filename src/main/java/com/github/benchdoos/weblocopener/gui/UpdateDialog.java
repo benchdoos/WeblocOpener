@@ -530,7 +530,8 @@ public class UpdateDialog extends JFrame implements Translatable {
   }
 
   private void compareVersions() {
-    switch (VersionUtils.versionCompare(serverAppVersion, CoreUtils.getCurrentAppVersion())) {
+    switch (VersionUtils.versionCompare(serverAppVersion, CoreUtils.getCurrentAppVersion())
+        .getVersionCompare()) {
       case FIRST_VERSION_IS_NEWER:
         buttonOK.setEnabled(true);
         buttonOK.setText(Translation.get(UPDATE_DIALOG_BUNDLE, "buttonOk"));
@@ -559,9 +560,9 @@ public class UpdateDialog extends JFrame implements Translatable {
     }
 
     buttonOK.addActionListener(e -> {
-          updateThread = new Thread(this::onOK);
-          updateThread.start();
-        });
+      updateThread = new Thread(this::onOK);
+      updateThread.start();
+    });
 
     buttonCancel.addActionListener(e -> onCancel());
   }

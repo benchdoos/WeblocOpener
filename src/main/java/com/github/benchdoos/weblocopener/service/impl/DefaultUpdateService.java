@@ -3,6 +3,7 @@ package com.github.benchdoos.weblocopener.service.impl;
 import com.github.benchdoos.weblocopener.service.UpdateService;
 import com.github.benchdoos.weblocopener.update.Updater;
 import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
+import com.github.benchdoos.weblocopenercore.domain.version.VersionCompareInfo.VersionCompare;
 import com.github.benchdoos.weblocopenercore.exceptions.NoAvailableVersionException;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.InstallBetaUpdateSettings;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.LatestUpdateCheckSettings;
@@ -35,8 +36,8 @@ public class DefaultUpdateService implements UpdateService {
         final AppVersion release = releaseFuture.get();
         final AppVersion beta = betaFuture.get();
 
-        final VersionUtils.VersionCompare versionCompare =
-            VersionUtils.versionCompare(release, beta);
+        final VersionCompare versionCompare =
+            VersionUtils.versionCompare(release, beta).getVersionCompare();
 
         switch (versionCompare) {
           case FIRST_VERSION_IS_NEWER -> {

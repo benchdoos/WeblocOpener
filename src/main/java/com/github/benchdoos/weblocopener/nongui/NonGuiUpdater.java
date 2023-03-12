@@ -57,7 +57,8 @@ public class NonGuiUpdater {
 
     if (Boolean.FALSE.equals(new DevModeSettings().getValue())) {
       switch (VersionUtils.versionCompare(
-          serverApplicationVersion, CoreUtils.getCurrentAppVersion())) {
+              serverApplicationVersion, CoreUtils.getCurrentAppVersion())
+          .getVersionCompare()) {
         case FIRST_VERSION_IS_NEWER -> onNewVersionAvailable();
         case SECOND_VERSION_IS_NEWER -> log.info(
             "Current version is newer! Current: {}, Server: {}",
