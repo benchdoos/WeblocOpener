@@ -20,7 +20,9 @@ import static com.github.benchdoos.weblocopenercore.constants.ApplicationConstan
 import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopenercore.constants.ApplicationArgument;
 import com.github.benchdoos.weblocopenercore.constants.PathConstants;
+import com.github.benchdoos.weblocopenercore.exceptions.InstalledJavaVersionIsNotSupported;
 import com.github.benchdoos.weblocopenercore.exceptions.UnsupportedSystemException;
+import com.github.benchdoos.weblocopenercore.handlers.impl.InstalledJavaVersionIsNotSupportedExceptionHandler;
 import com.github.benchdoos.weblocopenercore.service.notification.NotificationManager;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.DevModeSettings;
 import com.github.benchdoos.weblocopenercore.service.translation.Translation;
@@ -65,7 +67,8 @@ public class Main {
       NotificationManager.getForcedNotification(null)
           .setThrowable(e)
           .showErrorNotification(message, message);
-
+    } catch (InstalledJavaVersionIsNotSupported e) {
+      new InstalledJavaVersionIsNotSupportedExceptionHandler().handle(e);
     } catch (com.github.benchdoos.weblocopenercore.exceptions.FileDoesNotExistException e) {
       log.fatal("File not found for arguments: {}", Arrays.toString(args));
       final Translation translation = new Translation("WeblocOpenerCommonsBundle");
