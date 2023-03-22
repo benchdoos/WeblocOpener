@@ -347,7 +347,7 @@
                     <language>ENGLISH_US</language>
                   </versionInfo>
                   <jre>
-                    <path>%JAVA_HOME%;%PATH%</path>
+                    <path>%JAVA_HOME%;%PATH%;jre</path>
                     <minVersion>1.17.0</minVersion>
                   </jre>
                 </configuration>
