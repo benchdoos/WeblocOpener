@@ -284,6 +284,8 @@ Source: "{#MyAppSourcePath}\target\lib\*"; DestDir: "{app}\lib"; Flags: ignoreve
 Source: "{#MyAppSourcePath}\build\Template.webloc"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#MyAppSourcePath}\build\Template.desktop"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#ImagesPath}\icons.icl"; DestDir: "{app}"; Flags: ignoreversion
+;https://stackoverflow.com/questions/6065364/how-to-get-inno-setup-to-unzip-a-file-it-installed-all-as-part-of-the-one-insta/6225118#6225118
+Source: "{#MyAppSourcePath}\build\installer\jre\OpenJDK17U-jre_x86-32_windows_hotspot_17.0.6_10.zip"; DestDir: "{tmp}"; Flags: deleteafterinstall
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
