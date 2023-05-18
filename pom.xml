@@ -386,6 +386,40 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>build-setup-windows</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.6.0</version>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <id>docker</id>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <executable>docker</executable>
+                  <workingDirectory>${project.basedir}\build</workingDirectory>
+                  <arguments>
+                    <argument>run</argument>
+                    <argument>--rm</argument>
+                    <argument>-i</argument>
+                    <argument>-v</argument>
+                    <argument>${project.basedir}/:/work</argument>
+                    <argument>amake/innosetup</argument>
+                    <argument>build/WeblocOpener.iss</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 
   <dependencies>
