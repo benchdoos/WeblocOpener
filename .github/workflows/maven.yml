@@ -40,6 +40,7 @@ jobs:
       id: create_release_tag
       run: | 
         release_tag="$CURRENT_BRANCH-$GITHUB_RUN_ID"
+        echo release tag: $release_tag
         echo "RELEASE_TAG=$release_tag" >> $GITHUB_ENV
     - name: Clone core
       uses: GuillaumeFalourd/clone-github-repo-action@v2.2
@@ -60,7 +61,7 @@ jobs:
       run: |
         gh release create $RELEASE_TAG target/WeblocOpener.deb target/WeblocOpenerSetup.exe --title "Build release: $RELEASE_TAG" --notes "Build: $RELEASE_TAG" --draft
       env:
-        GITHUB_TOKEN: ${{ secrets.WEBLOCOPENERCORE }}
+        GITHUB_TOKEN: ${{ secrets.WEBLOCOPENER_RELEASES }}
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
