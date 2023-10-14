@@ -27,12 +27,15 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+    - name: Show current branch
+      run: echo ${GITHUB_REF##*/}
     - name: Clone core
       uses: GuillaumeFalourd/clone-github-repo-action@v2.2
       with:
         owner: 'benchdoos'
         repository: 'weblocopenercore'
         access-token: ${{ secrets.WEBLOCOPENERCORE }}
+#        branch:
     - name: Build core
       run: |
         cd weblocopenercore 
