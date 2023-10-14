@@ -30,11 +30,17 @@ jobs:
     - name: Set Unique Build ID
       id: unique_id
       run: echo "BUILD_ID=$GITHUB_RUN_ID" >> $GITHUB_ENV
-
-    - name: Display Unique Build ID
-      run: echo "The unique build ID is $BUILD_ID"
     - name: Branch name
       run: echo running on branch ${GITHUB_REF##*/}
+    - name: Create and display release name
+      run: |
+        RELEASE_NAME=rc-${GITHUB_REF##*/}-$BUILD_ID
+        echo "The unique build ID is $BUILD_ID"
+    - name: Create Release Tag
+      id: create_release_tag
+      run: | 
+        release_tag="$CURRENT_BRANCH-$GITHUB_RUN_ID"
+        echo "RELEASE_TAG=$release_tag" >> $GITHUB_ENV
     - name: Clone core
       uses: GuillaumeFalourd/clone-github-repo-action@v2.2
       with:
@@ -49,6 +55,12 @@ jobs:
         mvn -B clean install -P enable-dev-mode,hide-ultimate-mode
     - name: Build with Maven
       run: mvn -B clean package -P build-setup,build-deb,build-exe --file pom.xml
+
+    - name: Create Draft Release
+      run: |
+        gh release create $RELEASE_TAG target/WeblocOpener.deb target/WeblocOpenerSetup.exe --title "Build release: $RELEASE_TAG" --notes "Build: $RELEASE_TAG" --draft
+      env:
+        GITHUB_TOKEN: ${{ secrets.WEBLOCOPENERCORE }}
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
