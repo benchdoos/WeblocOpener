@@ -27,6 +27,12 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+    - name: Set Unique Build ID
+      id: unique_id
+      run: echo "BUILD_ID=$GITHUB_RUN_ID" >> $GITHUB_ENV
+
+    - name: Display Unique Build ID
+      run: echo "The unique build ID is $BUILD_ID"
     - name: Branch name
       run: echo running on branch ${GITHUB_REF##*/}
     - name: Clone core
