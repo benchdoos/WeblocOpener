@@ -15,8 +15,6 @@
 
 package com.github.benchdoos.weblocopener;
 
-import static com.github.benchdoos.weblocopenercore.constants.ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
-
 import com.github.benchdoos.weblocopener.core.Application;
 import com.github.benchdoos.weblocopenercore.constants.ApplicationArgument;
 import com.github.benchdoos.weblocopenercore.constants.PathConstants;
@@ -29,8 +27,11 @@ import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
 import com.github.benchdoos.weblocopenercore.utils.system.OS;
 import com.github.benchdoos.weblocopenercore.utils.system.SystemUtils;
-import java.util.Arrays;
 import lombok.extern.log4j.Log4j2;
+
+import java.util.Arrays;
+
+import static com.github.benchdoos.weblocopenercore.constants.ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
 
 @Log4j2
 public class Main {
@@ -51,7 +52,7 @@ public class Main {
     currentMode = manageMode(args);
     try {
       log.info("Logging to: {}", PathConstants.APP_LOG_FOLDER_PATH);
-      CoreUtils.enableLookAndFeel();
+      new CoreUtils().enableLookAndFeel();
 
       log.info("Current mode: {}", currentMode);
       SystemUtils.checkIfSystemIsSupported();

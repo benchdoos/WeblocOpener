@@ -8,10 +8,11 @@ import com.github.benchdoos.weblocopenercore.exceptions.NoAvailableVersionExcept
 import com.github.benchdoos.weblocopenercore.service.settings.impl.InstallBetaUpdateSettings;
 import com.github.benchdoos.weblocopenercore.service.settings.impl.LatestUpdateCheckSettings;
 import com.github.benchdoos.weblocopenercore.utils.VersionUtils;
-import java.util.Date;
-import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+
+import java.util.Date;
+import java.util.concurrent.CompletableFuture;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -37,7 +38,7 @@ public class DefaultUpdateService implements UpdateService {
         final AppVersion beta = betaFuture.get();
 
         final VersionCompare versionCompare =
-            VersionUtils.versionCompare(release, beta).getVersionCompare();
+            new VersionUtils().versionCompare(release, beta).getVersionCompare();
 
         switch (versionCompare) {
           case FIRST_VERSION_IS_NEWER -> {
