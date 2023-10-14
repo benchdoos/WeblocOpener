@@ -33,7 +33,7 @@ jobs:
         cd WeblocOpenerCore
         mvn clean install
       env:
-        PAT: ${{ secrets.WEBLOCOPENERCORE }}
+        PAT: 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
 
     - name: Build with Maven
       run: mvn -B clean package --file pom.xml
