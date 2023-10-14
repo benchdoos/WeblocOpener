@@ -27,14 +27,17 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Build WeblocOpenerCore
-      env:
-        PAT: ${{ secrets.WEBLOCOPENER }}
+    - name: Clone core
+      uses: GuillaumeFalourd/clone-github-repo-action@v2.2
+      with:
+        owner: 'benchdoos'
+        repository: 'weblocopenercore'
+        access-token: ${{ secrets.WEBLOCOPENERCORE }}
+    - name: Build core
       run: |
-        git clone https://benchdoos:%PAT%@github.com/benchdoos/WeblocOpenerCore.git
-        cd WeblocOpenerCore
-        mvn clean install
-
+        cd weblocopenercore 
+        ls -a
+        mvn -B clean install -P enable-dev-mode,hide-ultimate-mode
     - name: Build with Maven
       run: mvn -B clean package --file pom.xml
 
