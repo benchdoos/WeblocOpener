@@ -28,12 +28,12 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build WeblocOpenerCore
+      env:
+        PAT: ${{ secrets.WEBLOCOPENER }}
       run: |
-        git clone https://github.com/benchdoos/WeblocOpenerCore.git
+        git clone https://benchdoos:%PAT%@github.com/benchdoos/WeblocOpenerCore.git
         cd WeblocOpenerCore
         mvn clean install
-      env:
-        PAT: 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
 
     - name: Build with Maven
       run: mvn -B clean package --file pom.xml
