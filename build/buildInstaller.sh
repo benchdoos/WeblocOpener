@@ -11,6 +11,9 @@ else
 fi
 
 echo "Working Location: $working_location"
+cd $working_location
+echo current location: $PWD
+ls -a
 
 #exec docker run --rm -i -v "$PWD:/work" amake/innosetup "$@"
 exec docker run --rm -i -v "$working_location/../:/work" amake/innosetup build/WeblocOpener.iss
