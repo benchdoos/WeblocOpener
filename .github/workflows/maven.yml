@@ -27,8 +27,8 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Show current branch
-      run: echo ${GITHUB_REF##*/}
+    - name: Branch name
+      run: echo running on branch ${GITHUB_REF##*/}
     - name: Clone core
       uses: GuillaumeFalourd/clone-github-repo-action@v2.2
       with:
