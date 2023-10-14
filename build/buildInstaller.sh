@@ -18,4 +18,4 @@ ls -a
 chmod 777 $working_location/target
 
 #exec docker run --rm -i -v "$PWD:/work" amake/innosetup "$@"
-exec docker run --rm -i -v "$working_location/../:/work" amake/innosetup build/WeblocOpener.iss
+exec docker run --rm -i -v "$working_location/WeblocOpener/../:/work" amake/innosetup build/WeblocOpener.iss
