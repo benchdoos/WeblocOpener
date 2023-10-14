@@ -35,7 +35,7 @@ jobs:
         owner: 'benchdoos'
         repository: 'weblocopenercore'
         access-token: ${{ secrets.WEBLOCOPENERCORE }}
-#        branch:
+        branch: ${GITHUB_REF##*/}
     - name: Build core
       run: |
         cd weblocopenercore 
