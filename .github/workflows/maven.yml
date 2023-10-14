@@ -32,8 +32,8 @@ jobs:
         git clone https://github.com/benchdoos/WeblocOpenerCore.git
         cd WeblocOpenerCore
         mvn clean install
-        env:
-        PAT: ${{ secrets.WEBLOCOPENERCORE_PAT_TOKEN }}
+      env:
+        PAT: ${{ secrets.WEBLOCOPENERCORE }}
 
     - name: Build with Maven
       run: mvn -B clean package --file pom.xml
