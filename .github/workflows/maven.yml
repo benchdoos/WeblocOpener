@@ -22,7 +22,8 @@ jobs:
       uses: actions/checkout@v2
     - name: Archive Source Code
       run: |
-        tar -czf source-code.tar.gz .
+        git archive --format=zip --output=source-code.zip HEAD
+        tar -czf source-code.tar.gz source-code.zip
       working-directory: ${{ github.workspace }}
   build-and-release:
     runs-on: ubuntu-latest
