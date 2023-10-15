@@ -37,6 +37,8 @@ jobs:
       with:
         name: source-code.tar.gz
         path: ${{ github.workspace }}/source-code.tar.gz
+
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -51,7 +53,9 @@ jobs:
       id: unique_id
       run: echo "BUILD_ID=$GITHUB_RUN_ID" >> $GITHUB_ENV
     - name: Branch name
-      run: echo running on branch ${GITHUB_REF##*/}
+      run: |
+        echo running on branch ${GITHUB_REF##*/}
+        echo running on branch: $(echo ${GITHUB_REF#refs/heads/})
       working-directory: ${{ github.workspace }}
     - name: Clone core
       uses: GuillaumeFalourd/clone-github-repo-action@v2.2
@@ -79,6 +83,7 @@ jobs:
       with:
         name: WeblocOpenerSetup.exe
         path: ${{ github.workspace }}/target/WeblocOpenerSetup.exe
+
 
   create-release:
     runs-on: ubuntu-latest
@@ -127,7 +132,9 @@ jobs:
           gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe source-code.tar.gz source-code.zip --title "Build release: $RELEASE_NAME" --notes "Build: $RELEASE_TAG" --draft
         env:
           GITHUB_TOKEN: ${{ secrets.WEBLOCOPENER_RELEASES }}
-      # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
+
+
+  # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
   dependency-graph:
     runs-on: ubuntu-latest
     steps:
