@@ -15,7 +15,7 @@ on:
     branches: [ "master", "v2.0.0" ]
 
 jobs:
-  build:
+  build-and-release:
     runs-on: ubuntu-latest
 
     steps:
@@ -46,10 +46,6 @@ jobs:
 
     - name: Build WeblocOpener
       run: mvn -B clean package -P build-setup,build-deb,build-exe --file pom.xml
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
     - name: Create Draft Release
       run: |
         echo current location: $PWD
@@ -63,6 +59,7 @@ jobs:
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
   dependency-graph:
     runs-on: ubuntu-latest
+    needs: build-and-release
     steps:
       - name: Update dependency graph
         uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
