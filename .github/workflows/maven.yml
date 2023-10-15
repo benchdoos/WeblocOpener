@@ -108,6 +108,8 @@ jobs:
         with:
           name: WeblocOpenerSetup.exe
           path: ${{ github.workspace }}/WeblocOpenerSetup.exe
+      - name: Watching
+        run: ls -a
       - name: Create Draft Release
         run: |
           echo current location: $PWD
