@@ -39,7 +39,6 @@ jobs:
         path: ${{ github.workspace }}/source-code.tar.gz
   build:
     runs-on: ubuntu-latest
-    needs: collect-source-code
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
