@@ -144,7 +144,7 @@ jobs:
           RELEASE_NAME=rc-${GITHUB_REF#refs/heads/}-build.$BUILD_ID
           RELEASE_TAG=${GITHUB_REF#refs/heads/}-build.$BUILD_ID
           echo Release name: $RELEASE_NAME
-          gh release create prerelease $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe source-code.tar.gz source-code.zip --title "Build release: $RELEASE_NAME" --notes "Build: $RELEASE_TAG" --draft
+          gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe source-code.tar.gz source-code.zip --title "Build release: $RELEASE_NAME" --notes "Build: $RELEASE_TAG" --draft --prerelease
         env:
           GITHUB_TOKEN: ${{ secrets.WEBLOCOPENER_RELEASES }}
 
