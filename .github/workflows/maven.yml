@@ -39,7 +39,7 @@ jobs:
     - name: Create Release Tag
       id: create_release_tag
       run: | 
-        release_tag=$RELEASE_NAME
+        release_tag="$RELEASE_NAME"
         echo release tag: $release_tag
         echo "RELEASE_TAG=$release_tag" >> $GITHUB_ENV
     - name: Clone core
