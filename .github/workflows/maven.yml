@@ -35,11 +35,11 @@ jobs:
     - name: Create and display release name
       run: |
         RELEASE_NAME=rc-${GITHUB_REF##*/}-$BUILD_ID
-        echo "The unique build ID is $BUILD_ID"
+        echo "The unique build ID is $RELEASE_NAME"
     - name: Create Release Tag
       id: create_release_tag
       run: | 
-        release_tag="$CURRENT_BRANCH-$GITHUB_RUN_ID"
+        release_tag=$RELEASE_NAME
         echo release tag: $release_tag
         echo "RELEASE_TAG=$release_tag" >> $GITHUB_ENV
     - name: Clone core
