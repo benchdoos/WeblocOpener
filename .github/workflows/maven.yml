@@ -46,14 +46,20 @@ jobs:
 
     - name: Build WeblocOpener
       run: mvn -B clean package -P build-setup,build-deb,build-exe --file pom.xml
+    - name: Archive Source Code
+      run: |
+        # Create a source code archive (e.g., a ZIP file) from your repository
+        git archive --format=zip --output=source-code.zip HEAD
+        tar -czf source-code.tar.gz .
+      working-directory: ${{ github.workspace }}
     - name: Create Draft Release
       run: |
         echo current location: $PWD
         ls -a
-        RELEASE_NAME=rc-${GITHUB_REF##*/}-$BUILD_ID
-        RELEASE_TAG=${GITHUB_REF##*/}.$BUILD_ID
+        RELEASE_NAME=rc-${GITHUB_REF##*/}-build.$BUILD_ID
+        RELEASE_TAG=${GITHUB_REF##*/}-build.$BUILD_ID
         echo Release name: $RELEASE_NAME
-        gh release create $RELEASE_TAG target/WeblocOpener.deb target/WeblocOpenerSetup.exe --title "Build release: $RELEASE_NAME" --notes "Build: $RELEASE_TAG" --draft
+        gh release create $RELEASE_TAG target/WeblocOpener.deb target/WeblocOpenerSetup.exe source-code.zip source-code.tar.gz --title "Build release: $RELEASE_NAME" --notes "Build: $RELEASE_TAG" --draft
       env:
         GITHUB_TOKEN: ${{ secrets.WEBLOCOPENER_RELEASES }}
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
