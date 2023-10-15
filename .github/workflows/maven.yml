@@ -48,7 +48,7 @@ jobs:
       run: |
         cd weblocopenercore 
         ls -a
-        mvn -B clean install -P enable-dev-mode,hide-ultimate-mode
+        mvn -B clean install -P hide-ultimate-mode
 
     - name: Build WeblocOpener
       run: mvn -B clean package -P build-setup,build-deb,build-exe --file pom.xml
