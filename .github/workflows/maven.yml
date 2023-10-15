@@ -15,9 +15,18 @@ on:
     branches: [ "master", "v2.0.0" ]
 
 jobs:
+  collect-source-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Archive Source Code
+        run: |
+          tar -czf source-code.tar.gz .
+        working-directory: ${{ github.workspace }}
   build-and-release:
     runs-on: ubuntu-latest
-
+    needs: collect-source-code
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -31,13 +40,13 @@ jobs:
       run: echo "BUILD_ID=$GITHUB_RUN_ID" >> $GITHUB_ENV
     - name: Branch name
       run: echo running on branch ${GITHUB_REF##*/}
-    - name: Archive Source Code
-      run: |
-        # Create a source code archive (e.g., a ZIP file) from your repository
-        echo current location: $PWD
-        ls -a
-        git archive --format=zip --output=source-code.zip HEAD
-        tar -czf source-code.tar.gz .
+#    - name: Archive Source Code
+#      run: |
+         Create a source code archive (e.g., a ZIP file) from your repository
+#        echo current location: $PWD
+#        ls -a
+#        git archive --format=zip --output=source-code.zip HEAD
+#        tar -czf source-code.tar.gz .
       working-directory: ${{ github.workspace }}
     - name: Clone core
       uses: GuillaumeFalourd/clone-github-repo-action@v2.2
@@ -61,7 +70,7 @@ jobs:
         RELEASE_NAME=rc-${GITHUB_REF##*/}-build.$BUILD_ID
         RELEASE_TAG=${GITHUB_REF##*/}-build.$BUILD_ID
         echo Release name: $RELEASE_NAME
-        gh release create $RELEASE_TAG target/WeblocOpener.deb target/WeblocOpenerSetup.exe source-code.zip source-code.tar.gz --title "Build release: $RELEASE_NAME" --notes "Build: $RELEASE_TAG" --draft
+        gh release create $RELEASE_TAG target/WeblocOpener.deb target/WeblocOpenerSetup.exe source-code.tar.gz --title "Build release: $RELEASE_NAME" --notes "Build: $RELEASE_TAG" --draft
       env:
         GITHUB_TOKEN: ${{ secrets.WEBLOCOPENER_RELEASES }}
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
