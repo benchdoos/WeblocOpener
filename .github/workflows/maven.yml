@@ -59,7 +59,7 @@ jobs:
 
     - name: Create Draft Release
       run: |
-        gh release create $RELEASE_TAG target/WeblocOpener.deb target/WeblocOpenerSetup.exe --title "Build release: $RELEASE_TAG" --notes "Build: $RELEASE_TAG" --draft
+        gh release create $RELEASE_TAG target/WeblocOpener.deb target/WeblocOpenerSetup.exe --title "Build release: $RELEASE_NAME" --notes "Build: $RELEASE_TAG" --draft
       env:
         GITHUB_TOKEN: ${{ secrets.WEBLOCOPENER_RELEASES }}
 
