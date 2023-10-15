@@ -92,22 +92,22 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: source-code.zip
-          path: ${{ github.workspace }}/source-code.zip
+          path: ${{ github.workspace }}
       - name: Download source-code.tar.gz
         uses: actions/download-artifact@v2
         with:
           name: source-code.tar.gz
-          path: ${{ github.workspace }}/source-code.tar.gz
+          path: ${{ github.workspace }}
       - name: Download WeblocOpener.deb
         uses: actions/download-artifact@v2
         with:
           name: WeblocOpener.deb
-          path: ${{ github.workspace }}/WeblocOpener.deb
+          path: ${{ github.workspace }}
       - name: Download source-code.tar.gz
         uses: actions/download-artifact@v2
         with:
           name: WeblocOpenerSetup.exe
-          path: ${{ github.workspace }}/WeblocOpenerSetup.exe
+          path: ${{ github.workspace }}
       - name: Watching
         run: |
           echo directories:
@@ -121,7 +121,7 @@ jobs:
           RELEASE_NAME=rc-${GITHUB_REF##*/}-build.$BUILD_ID
           RELEASE_TAG=${GITHUB_REF##*/}-build.$BUILD_ID
           echo Release name: $RELEASE_NAME
-          gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe source-code.zip --title "Build release: $RELEASE_NAME" --notes "Build: $RELEASE_TAG" --draft
+          gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe source-code.tar.gz source-code.zip --title "Build release: $RELEASE_NAME" --notes "Build: $RELEASE_TAG" --draft
         env:
           GITHUB_TOKEN: ${{ secrets.WEBLOCOPENER_RELEASES }}
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
