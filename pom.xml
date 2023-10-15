@@ -47,7 +47,7 @@
     <disable.dev_mode>true</disable.dev_mode>
     <ultimate_build>false</ultimate_build>
 
-    <application.version.beta.version>0</application.version.beta.version>
+    <application.version.beta.version>7</application.version.beta.version>
 
     <buildnumber-maven-plugin.version>1.4</buildnumber-maven-plugin.version>
 
