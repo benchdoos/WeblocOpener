@@ -48,15 +48,10 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
-    - name: Download Artifacts with sources
-      uses: actions/download-artifact@v2
-      with:
-        name: source-code.zip
-        path: ${{ github.workspace }}/source-code.zip ${{ github.workspace }}/source-code.tar.gz
     - name: Download source-code.zip
       uses: actions/download-artifact@v2
       with:
-        name: source-code.tar.gz
+        name: source-code.zip
         path: ${{ github.workspace }}/source-code.zip
     - name: Download source-code.tar.gz
       uses: actions/download-artifact@v2
