@@ -109,7 +109,11 @@ jobs:
           name: WeblocOpenerSetup.exe
           path: ${{ github.workspace }}/WeblocOpenerSetup.exe
       - name: Watching
-        run: ls -a
+        run: |
+          echo directories:
+          find . -type d -print
+          echo files:
+          find . -type f -print
       - name: Create Draft Release
         run: |
           echo current location: $PWD
@@ -117,7 +121,7 @@ jobs:
           RELEASE_NAME=rc-${GITHUB_REF##*/}-build.$BUILD_ID
           RELEASE_TAG=${GITHUB_REF##*/}-build.$BUILD_ID
           echo Release name: $RELEASE_NAME
-          gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe source-code.zip source-code.tar.gz --title "Build release: $RELEASE_NAME" --notes "Build: $RELEASE_TAG" --draft
+          gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe source-code.zip --title "Build release: $RELEASE_NAME" --notes "Build: $RELEASE_TAG" --draft
         env:
           GITHUB_TOKEN: ${{ secrets.WEBLOCOPENER_RELEASES }}
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
