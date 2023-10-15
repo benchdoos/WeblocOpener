@@ -31,6 +31,14 @@ jobs:
       run: echo "BUILD_ID=$GITHUB_RUN_ID" >> $GITHUB_ENV
     - name: Branch name
       run: echo running on branch ${GITHUB_REF##*/}
+    - name: Archive Source Code
+      run: |
+        # Create a source code archive (e.g., a ZIP file) from your repository
+        echo current location: $PWD
+        ls -a
+        git archive --format=zip --output=source-code.zip HEAD
+        tar -czf source-code.tar.gz .
+      working-directory: ${{ github.workspace }}
     - name: Clone core
       uses: GuillaumeFalourd/clone-github-repo-action@v2.2
       with:
@@ -46,12 +54,6 @@ jobs:
 
     - name: Build WeblocOpener
       run: mvn -B clean package -P build-setup,build-deb,build-exe --file pom.xml
-    - name: Archive Source Code
-      run: |
-        # Create a source code archive (e.g., a ZIP file) from your repository
-        git archive --format=zip --output=source-code.zip HEAD
-        tar -czf source-code.tar.gz .
-      working-directory: ${{ github.workspace }}
     - name: Create Draft Release
       run: |
         echo current location: $PWD
@@ -67,5 +69,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-and-release
     steps:
+      - uses: actions/checkout@v3
       - name: Update dependency graph
         uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
