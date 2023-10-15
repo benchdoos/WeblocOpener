@@ -42,7 +42,7 @@ jobs:
       run: echo running on branch ${GITHUB_REF##*/}
 #    - name: Archive Source Code
 #      run: |
-         Create a source code archive (e.g., a ZIP file) from your repository
+#         Create a source code archive (e.g., a ZIP file) from your repository
 #        echo current location: $PWD
 #        ls -a
 #        git archive --format=zip --output=source-code.zip HEAD
