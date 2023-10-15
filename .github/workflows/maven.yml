@@ -52,6 +52,7 @@ jobs:
     steps:
     - name: Create Draft Release
       run: |
+        echo current location: $PWD
         ls -a
         RELEASE_NAME=rc-${GITHUB_REF##*/}-$BUILD_ID
         RELEASE_TAG=${GITHUB_REF##*/}.$BUILD_ID
