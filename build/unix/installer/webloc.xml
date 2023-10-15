@@ -15,7 +15,7 @@
   -->
 
 <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
-    <mime-type type="application/webloce">
+    <mime-type type="application/webloc">
         <comment>MacOs .webloc link</comment>
         <comment xml:lang="ru">Ссылка MacOs .webloc</comment>
         <comment xml:lang="fr">MacOS .webloc lien</comment>

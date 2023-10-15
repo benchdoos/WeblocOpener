@@ -1,0 +1,26 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=WeblocOpener Helper
+Name[de]=WeblocOpener-Helfer
+Name[fr]=WeblocOpener Helper
+Name[it]=Assistente WeblocOpener
+Name[ru]=Помощник WeblocOpener
+Comment=Open MacOs .webloc, Windows .url, Unix .desktop files on Unix.
+Comment[de]=Öffne MacOs .webloc, Windows .url, Unix .desktop-Dateien unter Unix.
+Comment[fr]=Ouvrez les fichiers MacOs .webloc, Windows .url, Unix .desktop sous Unix.
+Comment[it]=Apri i file .webloc di MacOs , .url di Windows, .desktop di Unix su Unix.
+Comment[ru]=Открыть MacOs .webloc, Windows .url, Unix .desktop файлы на Unix.
+GenericName=WeblocOpener Helper
+X-GNOME-FullName=WeblocOpener Helper
+
+Exec=java -jar "/opt/WeblocOpener/WeblocOpener.jar" -unix-switch-mode %U
+Icon=/opt/WeblocOpener/icons/WeblocOpener.png
+
+MimeType=application/webloc;application/xml;wwwserver/redirection;application/internet-shortcut;application/x-mswinurl;application/x-url;message/external-body;text/url;text/x-url;application/x-desktop;application/x-webarchive;
+
+Terminal=false
+Categories=Library;
+Keywords=Link;Ссылки;webloc;url;desktop;webarchive;
+StartupNotify=true
+X-Ubuntu-Gettext-Domain=weblocopener

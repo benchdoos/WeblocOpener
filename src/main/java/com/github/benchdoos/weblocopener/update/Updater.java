@@ -15,33 +15,39 @@
 
 package com.github.benchdoos.weblocopener.update;
 
-import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
-import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
-
+import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
+import com.github.benchdoos.weblocopenercore.exceptions.NoAvailableVersionException;
+import com.github.benchdoos.weblocopenercore.service.actions.ActionListenerSupport;
+import java.io.File;
 import java.io.IOException;
 
-public interface Updater {
-    String WINDOWS_SETUP_DEFAULT_NAME = "WeblocOpenerSetup.exe";
-    String DEBIAN_SETUP_DEFAULT_NAME = "WeblocOpener.deb";
-    int CONNECTION_TIMEOUT = 5000;
+public interface Updater extends ActionListenerSupport {
 
-    /**
-     * @return latest {@link ApplicationVersion}, giving Beta if
-     * {@link PreferencesManager#isBetaUpdateInstalling()} is {@code true}
-     * and Release is older then Beta version,
-     * otherwise  will return Release version.
-     */
-    ApplicationVersion getLatestAppVersion();
+  /**
+   * Get installer file if downloading already started. Otherwise {@code null} will be returned.
+   *
+   * @return Installer file link
+   */
+  File getInstallerFile();
 
-    /**
-     * @return latest Release {@link ApplicationVersion}
-     */
-    ApplicationVersion getLatestReleaseAppVersion();
+  /**
+   * @return latest {@link AppVersion}, giving Beta if {@link
+   *     com.github.benchdoos.weblocopenercore.service.settings.impl.InstallBetaUpdateSettings} is
+   *     {@code true} and Release is older than Beta version, otherwise will return Release version.
+   */
+  AppVersion getLatestAppVersion();
 
-    /**
-     * @return latest Beta version {@link ApplicationVersion}
-     */
-    ApplicationVersion getLatestBetaAppVersion();
+  /**
+   * @return latest Release {@link AppVersion}
+   */
+  AppVersion getLatestRelease();
 
-    void startUpdate(ApplicationVersion applicationVersion) throws IOException;
+  /**
+   * @return latest Beta version {@link AppVersion}
+   */
+  AppVersion getLatestBeta();
+
+  AppVersion.Asset getInstallerAsset(AppVersion appVersion) throws NoAvailableVersionException;
+
+  void startUpdate(AppVersion applicationVersion) throws IOException;
 }

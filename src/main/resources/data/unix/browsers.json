@@ -1,39 +1,42 @@
-{
-  "browsers": [
-    {
-      "browser": {
-        "name": "Chromium",
-        "call": "chromium %site",
-        "incognito": "chromium %site --incognito"
-      }
-    },
-    {
-      "browser": {
-        "name": "Google Chrome",
-        "call": "google-chrome %site",
-        "incognito": "google-chrome %site --incognito"
-      }
-    },
-    {
-      "browser": {
-        "name": "Firefox",
-        "call": "firefox %site",
-        "incognito": "firefox --private-window %site"
-      }
-    },
-    {
-      "browser": {
-        "name": "Opera",
-        "call": "opera %site",
-        "incognito": "opera --private %site"
-      }
-    },
-    {
-      "browser": {
-        "name": "Yandex",
-        "call": "yandex-browser %site",
-        "incognito": "yandex-browser -incognito %site"
-      }
-    }
-  ]
-}
+[
+  {
+    "name": "Firefox",
+    "internalName": "firefox",
+    "call": "firefox, %site",
+    "file_call": "firefox, %file",
+    "fileIncognitoCall": "firefox, --private-window, %file",
+    "incognito": "firefox, --private-window, %site"
+  },
+  {
+    "name": "Chromium",
+    "internalName": "chromium",
+    "call": "chromium, %site",
+    "file_call": "chromium, %file",
+    "fileIncognitoCall": "chromium, %file, --incognito",
+    "incognito": "chromium, %site, --incognito"
+  },
+  {
+    "name": "Google Chrome",
+    "internalName": "chrome",
+    "call": "google-chrome, %site",
+    "file_call": "google-chrome, %file",
+    "fileIncognitoCall": "google-chrome, %file, --incognito",
+    "incognito": "google-chrome, %site, --incognito"
+  },
+  {
+    "name": "Opera",
+    "internalName": "opera",
+    "call": "opera, %site",
+    "file_call": "opera, %file",
+    "fileIncognitoCall": "opera, --private, %file",
+    "incognito": "opera, --private, %site"
+  },
+  {
+    "name": "Yandex",
+    "internalName": "yandex",
+    "call": "yandex-browser, %site",
+    "file_call": "yandex-browser, %file",
+    "fileIncognitoCall": "yandex-browser, -incognito, %file",
+    "incognito": "yandex-browser, -incognito, %site"
+  }
+]

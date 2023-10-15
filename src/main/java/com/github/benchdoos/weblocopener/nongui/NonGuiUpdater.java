@@ -16,73 +16,80 @@
 package com.github.benchdoos.weblocopener.nongui;
 
 import com.github.benchdoos.weblocopener.core.Application;
-import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.nongui.notify.NotifyManager;
-import com.github.benchdoos.weblocopener.preferences.PreferencesManager;
 import com.github.benchdoos.weblocopener.update.Updater;
-import com.github.benchdoos.weblocopener.update.UpdaterManager;
-import com.github.benchdoos.weblocopener.utils.CoreUtils;
-import com.github.benchdoos.weblocopener.utils.Internal;
-import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
-import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
+import com.github.benchdoos.weblocopener.utils.UpdateHelperUtil;
+import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
+import com.github.benchdoos.weblocopenercore.exceptions.NoAvailableVersionException;
+import com.github.benchdoos.weblocopenercore.service.notification.NotificationManager;
+import com.github.benchdoos.weblocopenercore.service.settings.impl.DevModeSettings;
+import com.github.benchdoos.weblocopenercore.service.translation.Translation;
+import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
+import com.github.benchdoos.weblocopenercore.utils.VersionUtils;
 import lombok.extern.log4j.Log4j2;
 
-/**
- * Created by Eugene Zrazhevsky on 04.11.2016.
- */
-
+/** Created by Eugene Zrazhevsky on 04.11.2016. */
 @Log4j2
 public class NonGuiUpdater {
-    private ApplicationVersion serverApplicationVersion = null;
+  private final Updater updater;
+  private AppVersion serverApplicationVersion;
 
-    public NonGuiUpdater() {
+  public NonGuiUpdater() {
 
-        Updater updater;
-        updater = UpdaterManager.getUpdaterForCurrentOperatingSystem();
+    updater = UpdateHelperUtil.getUpdaterForCurrentOS();
 
-        final ApplicationVersion latestApplicationVersion = updater.getLatestAppVersion();
-        if (latestApplicationVersion != null) {
-            serverApplicationVersion = latestApplicationVersion;
-            compareVersions();
-        } else {
-            log.warn("Can not get server version");
-            if (Application.updateMode != Application.UPDATE_MODE.SILENT) {
-                Translation translation = new Translation("UpdaterBundle");
-                NotificationManager.getForcedNotification(null).showErrorNotification(
-                        translation.getTranslatedString("canNotUpdateTitle"),
-                        translation.getTranslatedString("canNotUpdateMessage"));
-            }
-        }
+    final AppVersion latestAppVersion = updater.getLatestAppVersion();
+    if (latestAppVersion != null) {
+      serverApplicationVersion = latestAppVersion;
+      compareVersions();
+    } else {
+      log.warn("Can not get server version");
+      if (Application.updateMode != Application.UPDATE_MODE.SILENT) {
+        Translation translation = new Translation("UpdaterBundle");
+        NotificationManager.getForcedNotification(null)
+            .showErrorNotification(
+                translation.get("canNotUpdateTitle"), translation.get("canNotUpdateMessage"));
+      }
     }
+  }
 
-    private void compareVersions() {
+  private void compareVersions() {
 
-        if (!PreferencesManager.isDevMode()) {
-            switch (Internal.versionCompare(serverApplicationVersion)) {
-                case SERVER_VERSION_IS_NEWER:
-                    onNewVersionAvailable();
-                    break;
-                case CURRENT_VERSION_IS_NEWER:
-                    log.info("Current version is newer! Current: {}, Server: {}",
-                            CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
-                    break;
-                case VERSIONS_ARE_EQUAL:
-                    log.info("There are no updates available. Versions are equal! Current: {}, Server: {}",
-                            CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
-                    break;
-            }
-        } else onNewVersionAvailable();
+    if (Boolean.FALSE.equals(new DevModeSettings().getValue())) {
+      switch (new VersionUtils().versionCompare(
+              serverApplicationVersion, new CoreUtils().getCurrentAppVersion())
+          .getVersionCompare()) {
+        case FIRST_VERSION_IS_NEWER -> onNewVersionAvailable();
+        case SECOND_VERSION_IS_NEWER -> log.info(
+            "Current version is newer! Current: {}, Server: {}",
+            new CoreUtils().getCurrentAppVersion(),
+            serverApplicationVersion);
+        case VERSIONS_ARE_EQUAL -> log.info(
+            "There are no updates available. Versions are equal! Current: {}, Server: {}",
+            new CoreUtils().getCurrentAppVersion(),
+            serverApplicationVersion);
+      }
+    } else onNewVersionAvailable();
+  }
+
+  private void onNewVersionAvailable() {
+
+    try {
+      final AppVersion.Asset asset = updater.getInstallerAsset(serverApplicationVersion);
+      if (asset != null) {
+        log.info(
+            "Showing notification: New version is available! Current: {}, Server: {}",
+            new CoreUtils().getCurrentAppVersion(),
+            serverApplicationVersion);
+
+        NotifyManager.getNotifierForSystem().notifyUser(serverApplicationVersion);
+      } else {
+        log.warn(
+            "Update is available, but there is no version for current system: {}",
+            serverApplicationVersion);
+      }
+    } catch (NoAvailableVersionException e) {
+      log.warn("No asset available for version: {}", serverApplicationVersion, e);
     }
-
-    private void onNewVersionAvailable() {
-        if (serverApplicationVersion.getDownloadUrl() != null) {
-            log.info("Showing notification: New version is available! Current: {}, Server: {}",
-                    CoreUtils.getCurrentApplicationVersion(), serverApplicationVersion);
-
-            NotifyManager.getNotifierForSystem().notifyUser(serverApplicationVersion);
-        } else {
-            log.warn("Update is available, but there is no version for current system: {}", serverApplicationVersion);
-        }
-    }
+  }
 }
-

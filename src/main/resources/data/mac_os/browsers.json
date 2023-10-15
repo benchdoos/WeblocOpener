@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Safari",
+    "internalName": "safari",
+    "call": "open, -a, Safari, %site",
+    "file_call": "open -a Safari \"%file\""
+  },
+  {
+    "name": "Google Chrome",
+    "internalName": "chrome",
+    "call": "open, -na, Google Chrome, %site",
+    "file_call": "open, -na, Google Chrome, %file",
+    "fileIncognitoCall": "open, -na, Google Chrome, --args, --incognito, %file",
+    "incognito": "open, -na, Google Chrome, --args, --incognito, %site"
+  }
+]

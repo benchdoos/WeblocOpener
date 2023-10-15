@@ -16,74 +16,92 @@
 package com.github.benchdoos.weblocopener;
 
 import com.github.benchdoos.weblocopener.core.Application;
-import com.github.benchdoos.weblocopener.core.Translation;
-import com.github.benchdoos.weblocopener.core.constants.ArgumentConstants;
-import com.github.benchdoos.weblocopener.utils.Logging;
-import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
-import com.github.benchdoos.weblocopener.utils.system.SystemUtils;
-import com.github.benchdoos.weblocopener.utils.system.UnsupportedSystemException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.github.benchdoos.weblocopenercore.constants.ApplicationArgument;
+import com.github.benchdoos.weblocopenercore.constants.PathConstants;
+import com.github.benchdoos.weblocopenercore.exceptions.InstalledJavaVersionIsNotSupported;
+import com.github.benchdoos.weblocopenercore.exceptions.UnsupportedSystemException;
+import com.github.benchdoos.weblocopenercore.handlers.impl.InstalledJavaVersionIsNotSupportedExceptionHandler;
+import com.github.benchdoos.weblocopenercore.service.notification.NotificationManager;
+import com.github.benchdoos.weblocopenercore.service.settings.impl.DevModeSettings;
+import com.github.benchdoos.weblocopenercore.service.translation.Translation;
+import com.github.benchdoos.weblocopenercore.utils.CoreUtils;
+import com.github.benchdoos.weblocopenercore.utils.system.OS;
+import com.github.benchdoos.weblocopenercore.utils.system.SystemUtils;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.Arrays;
 
-import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.UPDATER_APPLICATION_NAME;
-import static com.github.benchdoos.weblocopener.core.constants.ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
+import static com.github.benchdoos.weblocopenercore.constants.ApplicationConstants.WEBLOCOPENER_APPLICATION_NAME;
 
+@Log4j2
 public class Main {
-    private static MODE currentMode;
-    private static Logger log;
+  private static MODE currentMode;
 
+  public static void main(String[] args) {
+    new Main(args);
+  }
 
-    public Main(String[] args) {
-        System.out.println("WeblocOpener starting with args: " + Arrays.toString(args));
+  public static MODE getCurrentMode() {
+    return currentMode;
+  }
 
-        currentMode = manageMode(args);
-        initLogging(currentMode);
-        try {
-            SystemUtils.checkIfSystemIsSupported();
+  public Main(String[] args) {
+    log.info(WEBLOCOPENER_APPLICATION_NAME + " starting with args: " + Arrays.toString(args));
+    log.debug("Dev mode: {}", new DevModeSettings().getValue());
 
-            new Application(args);
-        } catch (UnsupportedSystemException e) {
-            log.fatal("System not supported", e);
-            final String translatedString = Translation.getTranslatedString("CommonsBundle", "systemNotSupported");
-            final String message = translatedString + " " + SystemUtils.getCurrentOS().name();
+    currentMode = manageMode(args);
+    try {
+      log.info("Logging to: {}", PathConstants.APP_LOG_FOLDER_PATH);
+      new CoreUtils().enableLookAndFeel();
 
-            NotificationManager.getForcedNotification(null).showErrorNotification(message, message);
-        } catch (Exception e) {
-            log.fatal("System exited with exception", e);
-        }
+      log.info("Current mode: {}", currentMode);
+      SystemUtils.checkIfSystemIsSupported();
+
+      CoreUtils.initBrowserList();
+
+      new Application(args);
+    } catch (UnsupportedSystemException e) {
+      log.fatal("System not supported", e);
+      final String translatedString = Translation.get("CommonsBundle", "systemNotSupported");
+      final String message = translatedString + " " + OS.getCurrentOS().name();
+
+      NotificationManager.getForcedNotification(null)
+          .setThrowable(e)
+          .showErrorNotification(message, message);
+    } catch (InstalledJavaVersionIsNotSupported e) {
+      new InstalledJavaVersionIsNotSupportedExceptionHandler().handle(e);
+    } catch (com.github.benchdoos.weblocopenercore.exceptions.FileDoesNotExistException e) {
+      log.fatal("File not found for arguments: {}", Arrays.toString(args));
+      final Translation translation = new Translation("WeblocOpenerCommonsBundle");
+      String title = translation.get("unexpectedException");
+      String message = translation.get("fileNotFoundException");
+      NotificationManager.getForcedNotification(null)
+          .setThrowable(e)
+          .showErrorNotification(title, message);
+    } catch (Exception e) {
+      log.fatal("System exited with exception", e);
+      String message = Translation.get("WeblocOpenerCommonsBundle", "unexpectedException");
+      NotificationManager.getForcedNotification(null)
+          .setThrowable(e)
+          .showErrorNotification(message, message);
     }
+  }
 
+  private MODE manageMode(String[] args) {
+    if (args.length > 0) {
+      final String arg = args[0];
 
-    private static void initLogging(MODE mode) {
-        switch (mode) {
-            case WEBLOCOPENER:
-                new Logging(WEBLOCOPENER_APPLICATION_NAME);
-                break;
-            case UPDATE:
-                new Logging(UPDATER_APPLICATION_NAME);
-                break;
-        }
-        log = LogManager.getLogger(Logging.getCurrentClassName());
+      final boolean updateArg =
+          ApplicationArgument.OPENER_UPDATE_ARGUMENT.equals(ApplicationArgument.getByArgument(arg));
+      if (updateArg) {
+        return MODE.UPDATE;
+      }
     }
+    return MODE.WEBLOCOPENER;
+  }
 
-    public static void main(String[] args) {
-        new Main(args);
-    }
-
-    public static MODE getCurrentMode() {
-        return currentMode;
-    }
-
-    private MODE manageMode(String[] args) {
-        if (args.length > 0) {
-            if (args[0].equalsIgnoreCase(ArgumentConstants.OPENER_UPDATE_ARGUMENT)) {
-                return MODE.UPDATE;
-            }
-        }
-        return MODE.WEBLOCOPENER;
-    }
-
-    enum MODE {WEBLOCOPENER, UPDATE}
+  enum MODE {
+    WEBLOCOPENER,
+    UPDATE
+  }
 }

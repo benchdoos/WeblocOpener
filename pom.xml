@@ -15,421 +15,481 @@
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.benchdoos</groupId>
-    <artifactId>WeblocOpener</artifactId>
-    <version>1.11.1</version>
-    <packaging>jar</packaging>
+  <groupId>com.github.benchdoos</groupId>
+  <artifactId>WeblocOpener</artifactId>
+  <version>${weblocopener.core.version}</version>
+  <packaging>jar</packaging>
 
-    <name>WeblocOpener</name>
-    <description>
-        WeblocOpener is a simple way to open, edit, create MacOS Safari .webloc files on Windows and Debian GNU/Linux.
-    </description>
+  <name>WeblocOpener</name>
+  <description>
+    WeblocOpener is a simple way to open, edit, create MacOS Safari .webloc files on Windows and
+    Debian GNU/Linux.
+  </description>
+  <organization>
+    <name>Eugene Zrazhevsky</name>
+    <url>https://github.com/benchdoos/WeblocOpener</url>
+  </organization>
+  <inceptionYear>2016</inceptionYear>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-        <copyright>Copyright © 2016-2019 Eugene Zrazhevsky</copyright>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>17</java.version>
+    <weblocopener.core.version>2.0.0</weblocopener.core.version>
+    <copyright>Copyright © 2016-2023 Eugene Zrazhevsky</copyright>
+    <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
+    <lombok.version>1.18.26</lombok.version>
 
-        <application.version.beta.version>0</application.version.beta.version>
-    </properties>
+    <disable.dev_mode>true</disable.dev_mode>
+    <ultimate_build>false</ultimate_build>
 
-    <scm>
-        <connection>scm:git:https://github.com/benchdoos/WeblocOpener.git
-        </connection>
-        <developerConnection>scm:git:https://github.com/benchdoos/WeblocOpener.git
-        </developerConnection>
-        <tag>HEAD</tag>
-        <url>https://github.com/benchdoos/WeblocOpener.git
-        </url>
-    </scm>
+    <application.version.beta.version>0</application.version.beta.version>
 
-    <!--
-    Build JAR:
-    clean compile package
-    Build JAR+EXE:
-    clean compile package launch4j:launch4j -X
-    Build JAR+EXE+SETUP:
-    clean compile package launch4j:launch4j exec:exec@unix
-    clean compile package launch4j:launch4j exec:exec@windows
-    -->
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources/</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
+    <buildnumber-maven-plugin.version>1.4</buildnumber-maven-plugin.version>
 
+    <application.mainClass>com.github.benchdoos.weblocopener.Main</application.mainClass>
+    <log4j.version>2.17.2</log4j.version>
+  </properties>
+
+  <scm>
+    <connection>scm:git:https://github.com/benchdoos/WeblocOpener.git
+    </connection>
+    <developerConnection>scm:git:https://github.com/benchdoos/WeblocOpener.git
+    </developerConnection>
+    <tag>HEAD</tag>
+    <url>https://github.com/benchdoos/WeblocOpener.git
+    </url>
+  </scm>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources/</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.7.0</version>
+        <configuration>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.projectlombok</groupId>
+              <artifactId>lombok</artifactId>
+              <version>${lombok.version}</version>
+            </path>
+            <path>
+              <groupId>org.mapstruct</groupId>
+              <artifactId>mapstruct-processor</artifactId>
+              <version>${org.mapstruct.version}</version>
+            </path>
+          </annotationProcessorPaths>
+          <release>${java.version}</release>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.20.1</version>
+        <configuration>
+          <skipTests>true</skipTests>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>buildnumber-maven-plugin</artifactId>
+        <version>${buildnumber-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>create</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <doCheck>false</doCheck>
+          <doUpdate>false</doUpdate>
+          <revisionOnScmFailure>true</revisionOnScmFailure>
+          <items>
+            <item>buildNumber</item>
+          </items>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+              <overWriteReleases>false</overWriteReleases>
+              <overWriteSnapshots>false</overWriteSnapshots>
+              <overWriteIfNewer>true</overWriteIfNewer>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <outputDirectory>${project.build.directory}</outputDirectory>
+          <finalName>${project.name}</finalName>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>lib/</classpathPrefix>
+              <mainClass>${application.mainClass}</mainClass>
+            </manifest>
+            <manifestEntries>
+              <Class-Path>lib/</Class-Path>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>enable-dev-mode</id>
+      <properties>
+        <disable.dev_mode>false</disable.dev_mode>
+      </properties>
+    </profile>
+    <profile>
+      <id>ultimate-build</id>
+      <properties>
+        <ultimate_build>true</ultimate_build>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>build-deb</id>
+      <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
+          <plugin>
+            <groupId>org.vafer</groupId>
+            <artifactId>jdeb</artifactId>
+            <version>1.10</version>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>jdeb</goal>
+                </goals>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                  <deb>${project.build.directory}/${project.name}.deb</deb>
+
+                  <dataSet>
+                    <data>
+                      <!--jar file-->
+                      <type>file</type>
+                      <src>${project.build.directory}/${project.name}.jar
+                      </src>
+                      <dst>/opt/${project.name}/${project.name}.jar</dst>
+                    </data>
+                    <data>
+                      <!--Webloc file template-->
+                      <type>file</type>
+                      <src>${project.basedir}/build/Template.webloc</src>
+                      <dst>/opt/${project.name}/Template.webloc</dst>
+                    </data>
+                    <data>
+                      <!--WeblocOpener link-->
+                      <type>file</type>
+                      <src>
+                        ${project.basedir}/build/unix/installer/WeblocOpener.desktop
+                      </src>
+                      <dst>/usr/share/applications/WeblocOpener.desktop</dst>
+                    </data>
+                    <data>
+                      <!--WeblocOpenerHelper link-->
+                      <type>file</type>
+                      <src>
+                        ${project.basedir}/build/unix/installer/WeblocOpenerHelper.desktop
+                      </src>
+                      <dst>
+                        /usr/share/applications/WeblocOpenerHelper.desktop
+                      </dst>
+                    </data>
+                    <data>
+                      <!--Mime type webloc-->
+                      <type>file</type>
+                      <src>
+                        ${project.basedir}/build/unix/installer/webloc.xml
+                      </src>
+                      <dst>/usr/share/mime/packages/webloc.xml</dst>
+                    </data>
+                    <data>
+                      <!--Mime type webarchive-->
+                      <type>file</type>
+                      <src>
+                        ${project.basedir}/build/unix/installer/webarchive.xml
+                      </src>
+                      <dst>/usr/share/mime/packages/webarchive.xml</dst>
+                    </data>
+                    <data>
+                      <!--Mime type icons-->
+                      <type>directory</type>
+                      <src>
+                        ${project.basedir}/build/unix/installer/icons/hicolor/
+                      </src>
+                      <mapper>
+                        <type>perm</type>
+                        <prefix>/usr/share/icons/hicolor/</prefix>
+                        <user>loader</user>
+                        <group>loader</group>
+                      </mapper>
+                    </data>
+                    <data>
+                      <!--Icons needed-->
+                      <type>files</type>
+                      <paths>
+                        <path>
+                          ${project.basedir}/build/unix/installer/icons/WeblocOpener.png
+                        </path>
+                      </paths>
+                      <dst>/opt/${project.name}/icons</dst>
+                    </data>
+                    <data>
+                      <!--Libraries (dependencies)-->
+                      <src>${project.build.directory}/lib</src>
+                      <type>directory</type>
+                      <mapper>
+                        <type>perm</type>
+                        <prefix>/opt/${project.name}/lib</prefix>
+                        <user>loader</user>
+                        <group>loader</group>
+                      </mapper>
+                    </data>
+                  </dataSet>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.20.1</version>
-                <configuration>
-                    <skipTests>true</skipTests>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>buildnumber-maven-plugin</artifactId>
-                <version>1.4</version>
-                <executions>
-                    <execution>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>create</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <doCheck>false</doCheck>
-                    <doUpdate>false</doUpdate>
-                    <revisionOnScmFailure>true</revisionOnScmFailure>
-                    <shortRevisionLength>10</shortRevisionLength>
-                    <format>{0}</format>
-                    <items>
-                        <item>buildNumber</item>
-                    </items>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.6.0</version>
-                <executions>
-                    <execution>
-                        <id>unix</id>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <!--<executable>bash</executable>-->
-                            <executable>wine</executable>
-                            <workingDirectory>${project.basedir}/build</workingDirectory>
-                            <arguments>
-                                <!--<argument>wine</argument>-->
-                                <argument>${user.home}/.wine/drive_c/Program Files (x86)/Inno Setup 6/ISCC.exe
-                                </argument>
-                                <!--<argument>${project.basedir}/build/unix/WeblocOpener.iss</argument>-->
-                                <argument>Z:${project.basedir}/build/unix/WeblocOpener.iss</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>windows</id>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>C:\Program Files (x86)\Inno Setup 5\ISCC.exe</executable>
-                            <workingDirectory>${project.basedir}\build</workingDirectory>
-                            <arguments>
-                                <argument>WeblocOpener.iss</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.0.2</version>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                    <finalName>${project.name}</finalName>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.github.benchdoos.weblocopener.Main</mainClass>
-                        </manifest>
-                        <manifestEntries>
-                            <Class-Path>lib/</Class-Path>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>com.akathist.maven.plugins.launch4j</groupId>
-                <artifactId>launch4j-maven-plugin</artifactId>
-                <version>1.7.24</version>
-                <configuration>
-                    <dontWrapJar>false</dontWrapJar>
-                    <headerType>gui</headerType>
-                    <jar>${project.build.directory}/${project.name}.jar</jar>
-                    <outfile>${project.basedir}/build/${project.name}.exe</outfile>
-                    <!--<errTitle></errTitle>-->
-                    <!--<cmdLine></cmdLine>-->
-                    <chdir>.</chdir>
-                    <priority>normal</priority>
-                    <downloadUrl>http://java.com/download</downloadUrl>
-                    <supportUrl>https://github.com/benchdoos/WeblocOpener/issues</supportUrl>
-                    <stayAlive>false</stayAlive>
-                    <restartOnCrash>false</restartOnCrash>
-                    <!--<manifest></manifest>-->
-                    <icon>${project.basedir}/build/installer/images/balloonIcon256.ico</icon>
-                    <classPath>
-                        <mainClass>com.github.benchdoos.weblocopener.Main</mainClass>
-                        <addDependencies>true</addDependencies>
-                    </classPath>
-                    <versionInfo>
-                        <fileVersion>${project.version}.${buildNumber}</fileVersion>
-                        <txtFileVersion>${project.version}.${buildNumber}</txtFileVersion>
-                        <fileDescription>WeblocOpener</fileDescription>
-                        <copyright>${copyright}</copyright>
-                        <productVersion>${project.version}.${buildNumber}</productVersion>
-                        <txtProductVersion>${project.version}.${buildNumber}</txtProductVersion>
-                        <productName>WeblocOpener</productName>
-                        <companyName>Eugene Zrazhevsky</companyName>
-                        <internalName>WeblocOpener</internalName>
-                        <originalFilename>WeblocOpener.exe</originalFilename>
-                        <trademarks>Eugene Zrazhevsky</trademarks>
-                        <language>ENGLISH_US</language>
-                    </versionInfo>
-                    <jre>
-                        <!--<path></path>-->
-                        <bundledJre64Bit>false</bundledJre64Bit>
-                        <bundledJreAsFallback>false</bundledJreAsFallback>
-                        <minVersion>1.8.0</minVersion>
-                        <!--<maxVersion></maxVersion>-->
-                        <jdkPreference>preferJre</jdkPreference>
-                        <runtimeBits>64/32</runtimeBits>
-                    </jre>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>l4j-clui</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>launch4j</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.vafer</groupId>
-                <artifactId>jdeb</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jdeb</goal>
-                        </goals>
-                        <configuration>
-                            <deb>${project.build.directory}/${project.name}.deb</deb>
-
-                            <dataSet>
-                                <data>
-                                    <!--jar file-->
-                                    <type>file</type>
-                                    <src>${project.build.directory}/${project.name}.jar</src>
-                                    <dst>/opt/${project.name}/${project.name}.jar</dst>
-                                </data>
-                                <data>
-                                    <!--Webloc file template-->
-                                    <type>file</type>
-                                    <src>${project.basedir}/build/Template.webloc</src>
-                                    <dst>/opt/${project.name}/Template.webloc</dst>
-                                </data>
-                                <data>
-                                    <!--WeblocOpener link-->
-                                    <type>file</type>
-                                    <src>${project.basedir}/build/unix/installer/WeblocOpener.desktop</src>
-                                    <dst>/usr/share/applications/WeblocOpener.desktop</dst>
-                                </data>
-                                <data>
-                                    <!--Mime type-->
-                                    <type>file</type>
-                                    <src>${project.basedir}/build/unix/installer/webloc.xml</src>
-                                    <dst>/usr/share/mime/packages/webloc.xml</dst>
-                                </data>
-                                <data>
-                                    <!--Mime type icons-->
-                                    <type>directory</type>
-                                    <src>${project.basedir}/build/unix/installer/icons/hicolor/</src>
-                                    <mapper>
-                                        <type>perm</type>
-                                        <prefix>/usr/share/icons/hicolor/</prefix>
-                                        <user>loader</user>
-                                        <group>loader</group>
-                                    </mapper>
-                                </data>
-                                <data>
-                                    <!--Icons needed-->
-                                    <type>files</type>
-                                    <paths>
-                                        <path>${project.basedir}/build/unix/installer/icons/WeblocOpener.png</path>
-                                    </paths>
-                                    <dst>/opt/${project.name}/icons</dst>
-                                </data>
-                                <data>
-                                    <!--Libraries (dependencies)-->
-                                    <src>${project.build.directory}/lib</src>
-                                    <type>directory</type>
-                                    <mapper>
-                                        <type>perm</type>
-                                        <prefix>/opt/${project.name}/lib</prefix>
-                                        <user>loader</user>
-                                        <group>loader</group>
-                                    </mapper>
-                                </data>
-                            </dataSet>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+              </execution>
+            </executions>
+          </plugin>
         </plugins>
-    </build>
+      </build>
+    </profile>
 
-    <dependencies>
-        <!--Intellij Forms-->
-        <dependency>
-            <groupId>com.intellij</groupId>
-            <artifactId>forms_rt</artifactId>
-            <version>7.0.3</version>
-        </dependency>
+    <profile>
+      <id>build-exe</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.akathist.maven.plugins.launch4j</groupId>
+            <artifactId>launch4j-maven-plugin</artifactId>
+            <version>2.3.2</version>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>launch4j</goal>
+                </goals>
+                <configuration>
+                  <dontWrapJar>false</dontWrapJar>
+                  <headerType>gui</headerType>
+                  <jar>${project.build.directory}/${project.name}.jar</jar>
+                  <outfile>${project.build.directory}/${project.name}.exe
+                  </outfile>
+                  <chdir>.</chdir>
+                  <priority>normal</priority>
+                  <downloadUrl>https://adoptium.net/temurin/releases/
+                  </downloadUrl>
+                  <supportUrl>https://github.com/benchdoos/WeblocOpener/issues
+                  </supportUrl>
+                  <stayAlive>false</stayAlive>
+                  <restartOnCrash>false</restartOnCrash>
+                  <icon>
+                    ${project.basedir}/build/installer/images/balloonIcon512.ico
+                  </icon>
+                  <classPath>
+                    <mainClass>${application.mainClass}</mainClass>
+                    <addDependencies>true</addDependencies>
+                  </classPath>
+                  <versionInfo>
+                    <fileVersion>
+                      ${project.version}.${application.version.beta.version}
+                    </fileVersion>
+                    <txtFileVersion>${project.version}.${buildNumber}
+                    </txtFileVersion>
+                    <fileDescription>${project.name}</fileDescription>
+                    <copyright>${copyright}</copyright>
+                    <productVersion>
+                      ${project.version}.${application.version.beta.version}
+                    </productVersion>
+                    <txtProductVersion>
+                      ${project.version}.${application.version.beta.version}
+                    </txtProductVersion>
+                    <productName>${project.name}</productName>
+                    <companyName>${project.organization.name}</companyName>
+                    <internalName>${project.name}</internalName>
+                    <originalFilename>${project.name}.exe</originalFilename>
+                    <trademarks>${project.organization.name}</trademarks>
+                    <language>ENGLISH_US</language>
+                  </versionInfo>
+                  <jre>
+                    <path>%JAVA_HOME%;%PATH%</path>
+                    <minVersion>1.17.0</minVersion>
+                  </jre>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
 
-        <!--Logging-->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.11.0</version>
-        </dependency>
+    <profile>
+      <id>build-setup</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.6.0</version>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <id>docker</id>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <executable>bash</executable>
+                  <workingDirectory>${project.basedir}\build</workingDirectory>
+                  <arguments>
+                    <argument>buildInstaller.sh</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>build-setup-windows</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.6.0</version>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <id>docker</id>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <executable>docker</executable>
+                  <workingDirectory>${project.basedir}\build</workingDirectory>
+                  <arguments>
+                    <argument>run</argument>
+                    <argument>--rm</argument>
+                    <argument>-i</argument>
+                    <argument>-v</argument>
+                    <argument>${project.basedir}/:/work</argument>
+                    <argument>amake/innosetup</argument>
+                    <argument>build/WeblocOpener.iss</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
-        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.11.0</version>
-        </dependency>
+  <dependencies>
+    <dependency>
+      <groupId>com.github.benchdoos</groupId>
+      <artifactId>WeblocOpenerCore</artifactId>
+      <version>${weblocopener.core.version}</version>
+    </dependency>
 
-        <!-- Working with plist -->
-        <dependency>
-            <groupId>com.googlecode.plist</groupId>
-            <artifactId>dd-plist</artifactId>
-            <version>1.21</version>
-        </dependency>
+    <!--Intellij Forms-->
+    <dependency>
+      <groupId>com.intellij</groupId>
+      <artifactId>forms_rt</artifactId>
+      <version>7.0.3</version>
+    </dependency>
 
-        <!-- https://mvnrepository.com/artifact/commons-validator/commons-validator -->
-        <dependency>
-            <groupId>commons-validator</groupId>
-            <artifactId>commons-validator</artifactId>
-            <version>1.6</version>
-        </dependency>
+    <!--Logging-->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>${log4j.version}</version>
+    </dependency>
 
-        <dependency>
-            <groupId>com.google.zxing</groupId>
-            <artifactId>core</artifactId>
-            <version>3.3.0</version>
-        </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>${log4j.version}</version>
+    </dependency>
 
-        <dependency>
-            <groupId>com.google.zxing</groupId>
-            <artifactId>javase</artifactId>
-            <version>3.3.0</version>
-        </dependency>
+    <!-- https://mvnrepository.com/artifact/com.nativelibs4java/bridj -->
+    <dependency>
+      <groupId>com.nativelibs4java</groupId>
+      <artifactId>bridj</artifactId>
+      <version>0.7.0</version>
+    </dependency>
 
-        <dependency>
-            <groupId>net.java.balloontip</groupId>
-            <artifactId>balloontip</artifactId>
-            <version>1.2.4.1</version>
-        </dependency>
+    <dependency>
+      <groupId>org.jetbrains</groupId>
+      <artifactId>annotations</artifactId>
+      <version>23.0.0</version>
+      <scope>compile</scope>
+    </dependency>
 
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.5</version>
-        </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.24</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+      <version>1.7</version>
+    </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.nativelibs4java/bridj -->
-        <dependency>
-            <groupId>com.nativelibs4java</groupId>
-            <artifactId>bridj</artifactId>
-            <version>0.7.0</version>
-        </dependency>
+    <dependency>
+      <groupId>com.j2html</groupId>
+      <artifactId>j2html</artifactId>
+      <version>1.6.0</version>
+    </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.8.2</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/me.xdrop/fuzzywuzzy -->
-        <dependency>
-            <groupId>me.xdrop</groupId>
-            <artifactId>fuzzywuzzy</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.benchdoos</groupId>
-            <artifactId>JColorful</artifactId>
-            <version>1.1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.kohsuke</groupId>
-            <artifactId>github-api</artifactId>
-            <version>1.95</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.8</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+    <!--Tests-->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.9.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
 
 </project>

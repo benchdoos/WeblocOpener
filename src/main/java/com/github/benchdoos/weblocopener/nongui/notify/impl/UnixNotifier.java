@@ -15,19 +15,20 @@
 
 package com.github.benchdoos.weblocopener.nongui.notify.impl;
 
-import com.github.benchdoos.weblocopener.core.Translation;
 import com.github.benchdoos.weblocopener.nongui.notify.Notifier;
-import com.github.benchdoos.weblocopener.utils.notification.NotificationManager;
-import com.github.benchdoos.weblocopener.utils.version.ApplicationVersion;
+import com.github.benchdoos.weblocopenercore.domain.version.AppVersion;
+import com.github.benchdoos.weblocopenercore.service.notification.NotificationManager;
+import com.github.benchdoos.weblocopenercore.service.translation.Translation;
 
 public class UnixNotifier implements Notifier {
-    @Override
-    public void notifyUser(ApplicationVersion serverVersion) {
-        Translation translation = new Translation("UpdateDialogBundle");
-        final String windowTitle = translation.getTranslatedString("windowTitle");
-        final String windowMessage = translation.getTranslatedString("newVersionAvailableTrayNotification")
-                + ": " + serverVersion.getVersion();
+  @Override
+  public void notifyUser(AppVersion serverVersion) {
+    Translation translation = new Translation("UpdateDialogBundle");
+    final String windowTitle = translation.get("windowTitle");
+    final String windowMessage =
+        translation.get("newVersionAvailableTrayNotification") + ": " + serverVersion.version().getBeautifulVersionString();
 
-        NotificationManager.getNotificationForCurrentOS().showInfoNotification(windowTitle, windowMessage);
-    }
+    NotificationManager.getNotificationForCurrentOS()
+        .showInfoNotification(windowTitle, windowMessage);
+  }
 }
