@@ -48,6 +48,7 @@ jobs:
       run: mvn -B clean package -P build-setup,build-deb,build-exe --file pom.xml
   deploy:
     runs-on: ubuntu-latest
+    needs: build
     steps:
     - name: Create Draft Release
       run: |
