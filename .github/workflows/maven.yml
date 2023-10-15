@@ -18,12 +18,12 @@ jobs:
   collect-source-code:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Archive Source Code
-        run: |
-          tar -czf source-code.tar.gz .
-        working-directory: ${{ github.workspace }}
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Archive Source Code
+      run: |
+        tar -czf source-code.tar.gz .
+      working-directory: ${{ github.workspace }}
   build-and-release:
     runs-on: ubuntu-latest
     needs: collect-source-code
