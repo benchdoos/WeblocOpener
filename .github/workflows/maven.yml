@@ -69,6 +69,17 @@ jobs:
     - name: Build WeblocOpener
       run: mvn -B clean package -P build-setup,build-deb,build-exe --file pom.xml
 
+    - name: Upload WeblocOpener.deb
+      uses: actions/upload-artifact@v2
+      with:
+        name: WeblocOpener.deb
+        path: ${{ github.workspace }}/target/WeblocOpener.deb
+    - name: Upload WeblocOpenerSetup.exe
+      uses: actions/upload-artifact@v2
+      with:
+        name: WeblocOpenerSetup.exe
+        path: ${{ github.workspace }}/target/WeblocOpenerSetup.exe
+
   create-release:
     runs-on: ubuntu-latest
     needs:
@@ -85,6 +96,16 @@ jobs:
         with:
           name: source-code.tar.gz
           path: ${{ github.workspace }}/source-code.tar.gz
+      - name: Download WeblocOpener.deb
+        uses: actions/download-artifact@v2
+        with:
+          name: WeblocOpener.deb
+          path: ${{ github.workspace }}/WeblocOpener.deb
+      - name: Download source-code.tar.gz
+        uses: actions/download-artifact@v2
+        with:
+          name: WeblocOpenerSetup.exe
+          path: ${{ github.workspace }}/WeblocOpenerSetup.exe
       - name: Create Draft Release
         run: |
           echo current location: $PWD
@@ -92,7 +113,7 @@ jobs:
           RELEASE_NAME=rc-${GITHUB_REF##*/}-build.$BUILD_ID
           RELEASE_TAG=${GITHUB_REF##*/}-build.$BUILD_ID
           echo Release name: $RELEASE_NAME
-          gh release create $RELEASE_TAG target/WeblocOpener.deb target/WeblocOpenerSetup.exe source-code.zip source-code.tar.gz --title "Build release: $RELEASE_NAME" --notes "Build: $RELEASE_TAG" --draft
+          gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe source-code.zip source-code.tar.gz --title "Build release: $RELEASE_NAME" --notes "Build: $RELEASE_TAG" --draft
         env:
           GITHUB_TOKEN: ${{ secrets.WEBLOCOPENER_RELEASES }}
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
