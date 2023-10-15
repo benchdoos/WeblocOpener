@@ -27,11 +27,16 @@ jobs:
         echo current location: $PWD
         ls -a
       working-directory: ${{ github.workspace }}
-    - name: Upload sources to artifacts
+    - name: Upload source-code.zip
       uses: actions/upload-artifact@v2
       with:
-        name: my-artifacts
-        path: ${{ github.workspace }}/source-code.zip ${{ github.workspace }}/source-code.tar.gz
+        name: source-code.zip
+        path: ${{ github.workspace }}/source-code.zip
+    - name: Upload source-code.tar.gz
+      uses: actions/upload-artifact@v2
+      with:
+        name: source-code.tar.gz
+        path: ${{ github.workspace }}/source-code.tar.gz
   build-and-release:
     runs-on: ubuntu-latest
     needs: collect-source-code
@@ -48,6 +53,16 @@ jobs:
       with:
         name: my-artifacts
         path: ${{ github.workspace }}/source-code.zip ${{ github.workspace }}/source-code.tar.gz
+    - name: Download source-code.zip
+      uses: actions/download-artifact@v2
+      with:
+        name: source-code.zip
+        path: ${{ github.workspace }}/source-code.zip
+    - name: Download source-code.tar.gz
+      uses: actions/download-artifact@v2
+      with:
+        name: source-code.tar.gz
+        path: ${{ github.workspace }}/source-code.tar.gz
     - name: Set Unique Build ID
       id: unique_id
       run: echo "BUILD_ID=$GITHUB_RUN_ID" >> $GITHUB_ENV
