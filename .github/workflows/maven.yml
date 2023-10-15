@@ -20,6 +20,7 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
+
     - name: Archive Source Code
       run: |
         git archive --format=zip --output=source-code.zip HEAD
@@ -27,11 +28,13 @@ jobs:
         echo current location: $PWD
         ls -a
       working-directory: ${{ github.workspace }}
+
     - name: Upload source-code.zip
       uses: actions/upload-artifact@v2
       with:
         name: source-code.zip
         path: ${{ github.workspace }}/source-code.zip
+
     - name: Upload source-code.tar.gz
       uses: actions/upload-artifact@v2
       with:
@@ -49,21 +52,25 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: maven
+
     - name: Set Unique Build ID
       id: unique_id
       run: echo "BUILD_ID=$GITHUB_RUN_ID" >> $GITHUB_ENV
+
     - name: Branch name
       run: |
         echo running on branch ${GITHUB_REF##*/}
-        echo running on branch: $(echo ${GITHUB_REF#refs/heads/})
+        echo running on branch: ${GITHUB_REF#refs/heads/}
       working-directory: ${{ github.workspace }}
+
     - name: Clone core
       uses: GuillaumeFalourd/clone-github-repo-action@v2.2
       with:
         owner: 'benchdoos'
         repository: 'weblocopenercore'
         access-token: ${{ secrets.WEBLOCOPENERCORE }}
-        branch: ${GITHUB_REF##*/}
+        branch: ${GITHUB_REF#refs/heads/}
+
     - name: Build WeblocOpener core
       run: |
         cd weblocopenercore 
@@ -78,6 +85,7 @@ jobs:
       with:
         name: WeblocOpener.deb
         path: ${{ github.workspace }}/target/WeblocOpener.deb
+
     - name: Upload WeblocOpenerSetup.exe
       uses: actions/upload-artifact@v2
       with:
@@ -93,41 +101,48 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Set Unique Build ID
         id: unique_id
         run: echo "BUILD_ID=$GITHUB_RUN_ID" >> $GITHUB_ENV
+
       - name: Download source-code.zip
         uses: actions/download-artifact@v2
         with:
           name: source-code.zip
           path: ${{ github.workspace }}
+
       - name: Download source-code.tar.gz
         uses: actions/download-artifact@v2
         with:
           name: source-code.tar.gz
           path: ${{ github.workspace }}
+
       - name: Download WeblocOpener.deb
         uses: actions/download-artifact@v2
         with:
           name: WeblocOpener.deb
           path: ${{ github.workspace }}
+
       - name: Download source-code.tar.gz
         uses: actions/download-artifact@v2
         with:
           name: WeblocOpenerSetup.exe
           path: ${{ github.workspace }}
+
       - name: Watching
         run: |
           echo directories:
           find . -type d -print
           echo files:
           find . -type f -print
+
       - name: Create Draft Release
         run: |
           echo current location: $PWD
           ls -a
-          RELEASE_NAME=rc-${GITHUB_REF##*/}-build.$BUILD_ID
-          RELEASE_TAG=${GITHUB_REF##*/}-build.$BUILD_ID
+          RELEASE_NAME=rc-${GITHUB_REF#refs/heads/}-build.$BUILD_ID
+          RELEASE_TAG=${GITHUB_REF#refs/heads/}-build.$BUILD_ID
           echo Release name: $RELEASE_NAME
           gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe source-code.tar.gz source-code.zip --title "Build release: $RELEASE_NAME" --notes "Build: $RELEASE_TAG" --draft
         env:
