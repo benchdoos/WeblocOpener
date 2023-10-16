@@ -11,8 +11,9 @@ name: WeblocOpener release build
 on:
   push:
     branches: [ "master", "rc/*"]
-  pull_request:
-    branches: [ "master", "rc/*"]
+#  Disabled: pull requests branches differ with WeblocOpenerCore
+#  pull_request:
+#    branches: [ "master", "rc/*"]
 
 jobs:
   build:
