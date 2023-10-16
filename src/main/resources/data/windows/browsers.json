@@ -48,11 +48,17 @@
     "incognito": "start vivaldi -incognito \"%site\""
   },
   {
-    "name": "Brave Browser",
+    "name": "Brave",
     "internalName": "brave",
     "call": "start brave \"%site\"",
     "file_call": "start brave \"%file\"",
     "fileIncognitoCall": "start brave -incognito \"%file\"",
     "incognito": "start brave -incognito \"%site\""
+  },
+  {
+    "name": "DuckDuckGo",
+    "internalName": "duckduckgo",
+    "call": "start duckduckgo \"%site\"",
+    "file_call": "start duckduckgo \"%file\""
   }
 ]
