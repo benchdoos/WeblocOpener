@@ -12,5 +12,21 @@
     "file_call": "open, -na, Google Chrome, %file",
     "fileIncognitoCall": "open, -na, Google Chrome, --args, --incognito, %file",
     "incognito": "open, -na, Google Chrome, --args, --incognito, %site"
+  },
+  {
+    "name": "Microsoft Edge",
+    "internalName": "edge",
+    "call": "open, -na, Microsoft Edge, %site",
+    "file_call": "open, -na, Microsoft Edge, %file",
+    "fileIncognitoCall": "open, -na, Microsoft Edge, --args, -inprivate, %file",
+    "incognito": "open, -na, Microsoft Edge, --args, -inprivate, %site"
+  },
+  {
+    "name": "Brave Browser",
+    "internalName": "brave",
+    "call": "open, -na, Brave Browser, %site",
+    "file_call": "open, -na, Brave Browser, %file",
+    "fileIncognitoCall": "open, -na, Brave Browser, --args, --incognito, %file",
+    "incognito": "open, -na, Brave Browser, --args, --incognito, %site"
   }
 ]
