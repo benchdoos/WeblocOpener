@@ -5,7 +5,7 @@
 [![DOWNLOADS_TOTAL](https://img.shields.io/github/downloads/benchdoos/WeblocOpener/total.svg?style=for-the-badge)](https://github.com/benchdoos/WeblocOpener/releases)
 [![LATEST_RELEASE_VERSION](https://img.shields.io/github/release/benchdoos/WeblocOpener.svg?style=for-the-badge)](https://github.com/benchdoos/WeblocOpener/releases/latest)
 [![LATEST_RELEASE_DOWNLOADS](https://img.shields.io/github/downloads/benchdoos/WeblocOpener/latest/total.svg?style=for-the-badge)](https://github.com/benchdoos/WeblocOpener/releases/latest)
-[![COMMITS_PER_YEAR](https://img.shields.io/github/commit-activity/y/benchdoos/WeblocOpener.svg?style=for-the-badge)](https://github.com/benchdoos/JColorful/commits/master)
+[![COMMITS_PER_YEAR](https://img.shields.io/github/commit-activity/y/benchdoos/WeblocOpener.svg?style=for-the-badge)](https://github.com/benchdoos/WeblocOpener/commits/master)
 [![LICENSE](https://img.shields.io/github/license/benchdoos/WeblocOpener.svg?style=for-the-badge)](https://github.com/benchdoos/WeblocOpener/blob/master/LICENSE)
 [![WeblocOpener release build](https://github.com/benchdoos/WeblocOpener/actions/workflows/maven.yml/badge.svg?branch=master)](https://github.com/benchdoos/WeblocOpener/actions/workflows/maven.yml)
 
