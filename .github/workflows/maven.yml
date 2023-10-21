@@ -18,6 +18,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      WeblocOpenerCoreHash: WeblocOpenerCoreHashTest
+      WeblocOpenerHash: WeblocOpenerHashTest
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -53,17 +56,14 @@ jobs:
 
     - name: Get commit hash for WeblocOpenerCore
       id: weblocopenercore_hash
-      run: |
-        echo "WEBLOCOPENER_CORE_COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV
-        echo "::set-output name=WeblocOpenerCoreHash::${WEBLOCOPENER_CORE_COMMIT}"
+      run: echo "WeblocOpenerCoreHash=$(git rev-parse HEAD) >> $GITHUB_OUTPUT"
 
     - name: Build WeblocOpener
       run: mvn -B clean package -P build-setup,build-deb,build-exe --file pom.xml
 
     - name: Get commit hash for WeblocOpener
       id: weblocopener_hash
-      run: |
-        echo "WEBLOCOPENER_COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV
+      run: echo "WeblocOpenerHash=$(git rev-parse HEAD) >> $GITHUB_OUTPUT"
 
     - name: Upload WeblocOpener.deb
       uses: actions/upload-artifact@v2
@@ -76,10 +76,6 @@ jobs:
       with:
         name: WeblocOpenerSetup.exe
         path: ${{ github.workspace }}/target/WeblocOpenerSetup.exe
-
-    outputs:
-      WeblocOpenerCoreHash: ${{steps.weblocopenercore_hash.outputs.WeblocOpenerCoreHash}}
-      WeblocOpenerHash: ${{steps.weblocopener_hash.outputs.WeblocOpenerHash}}
 
 
   create-release:
