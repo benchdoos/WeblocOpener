@@ -113,7 +113,7 @@ jobs:
           RELEASE_NAME=rc-${GITHUB_REF#refs/heads/}-build.$BUILD_ID
           RELEASE_TAG=${GITHUB_REF#refs/heads/}-build.$BUILD_ID
           echo Release name: $RELEASE_NAME
-          gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe --title "Build release: $RELEASE_NAME" --notes "Build: $RELEASE_TAG <br><br> WeblocOpener: $WEBLOCOPENER_COMMIT <br> WeblocOpenerCore: $WEBLOCOPENER_CORE_COMMIT" --draft --prerelease
+          gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe --title "Build release: $RELEASE_NAME" --notes "Build: $(date +'%Y-%m-%d %H:%M:%S') ($RELEASE_TAG) <br><br> WeblocOpener: $WEBLOCOPENER_COMMIT <br> WeblocOpenerCore: $WEBLOCOPENER_CORE_COMMIT" --draft --prerelease
         env:
           GITHUB_TOKEN: ${{ secrets.WEBLOCOPENER_RELEASES }}
 
