@@ -53,16 +53,14 @@ jobs:
 
     - name: Get commit hash for WeblocOpenerCore
       run: |
-        export WEBLOCOPENER_CORE_COMMIT=$(git rev-parse HEAD)
-        echo "WEBLOCOPENER_CORE_COMMIT=$WEBLOCOPENER_CORE_COMMIT" >> $GITHUB_ENV
+        echo "WEBLOCOPENER_CORE_COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
     - name: Build WeblocOpener
       run: mvn -B clean package -P build-setup,build-deb,build-exe --file pom.xml
 
     - name: Get commit hash for WeblocOpener
       run: |
-        export WEBLOCOPENER_COMMIT=$(git rev-parse HEAD)
-        echo "WEBLOCOPENER_COMMIT=$WEBLOCOPENER_COMMIT" >> $GITHUB_ENV
+        echo "WEBLOCOPENER_COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
     - name: Upload WeblocOpener.deb
       uses: actions/upload-artifact@v2
