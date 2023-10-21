@@ -103,7 +103,7 @@ begin
       if MsgBox(ExpandConstant('{cm:Warning}' #13#13 '{cm:Java17InstallWarning}'), mbConfirmation, MB_YESNO) = idYes then
         begin
           Result := false;
-          ShellExec('open', 'https://adoptium.net', '', '', SW_SHOWNORMAL, ewNoWait, ResultCode);
+          ShellExec('open', 'https://adoptium.net/marketplace/?arch=any&package=jre&version=17', '', '', SW_SHOWNORMAL, ewNoWait, ResultCode);
         end;
     end
   else
