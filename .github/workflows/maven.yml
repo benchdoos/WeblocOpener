@@ -52,13 +52,16 @@ jobs:
         mvn -B clean install -P hide-ultimate-mode
 
     - name: Get commit hash for WeblocOpenerCore
+      id: weblocopenercore_hash
       run: |
         echo "WEBLOCOPENER_CORE_COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV
+        echo "::set-output name=WeblocOpenerCoreHash::${WEBLOCOPENER_CORE_COMMIT}"
 
     - name: Build WeblocOpener
       run: mvn -B clean package -P build-setup,build-deb,build-exe --file pom.xml
 
     - name: Get commit hash for WeblocOpener
+      id: weblocopener_hash
       run: |
         echo "WEBLOCOPENER_COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
@@ -73,6 +76,10 @@ jobs:
       with:
         name: WeblocOpenerSetup.exe
         path: ${{ github.workspace }}/target/WeblocOpenerSetup.exe
+
+    outputs:
+      WeblocOpenerCoreHash: ${{steps.weblocopenercore_hash.outputs.WeblocOpenerCoreHash}}
+      WeblocOpenerHash: ${{steps.weblocopener_hash.outputs.WeblocOpenerHash}}
 
 
   create-release:
@@ -112,8 +119,12 @@ jobs:
           ls -a
           RELEASE_NAME=rc-${GITHUB_REF#refs/heads/}-build.$BUILD_ID
           RELEASE_TAG=${GITHUB_REF#refs/heads/}-build.$BUILD_ID
+          WEBLOCOPENERCORE_HASH=${{needs.build.outputs.WeblocOpenerCoreHash}}
+          WEBLOCOPENER_HASH=${{needs.build.outputs.WeblocOpenerHash}}
+          echo WeblocOpenerCore hash: $WEBLOCOPENERCORE_HASH
+          echo WeblocOpener hash: $WEBLOCOPENER_HASH
           echo Release name: $RELEASE_NAME
-          gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe --title "Build release: $RELEASE_NAME" --notes "Build: $(date +'%Y-%m-%d %H:%M:%S') ($RELEASE_TAG) <br><br> WeblocOpener: $WEBLOCOPENER_COMMIT <br> WeblocOpenerCore: $WEBLOCOPENER_CORE_COMMIT" --draft --prerelease
+          gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe --title "Build release: $RELEASE_NAME" --notes "Build: $(date +'%Y-%m-%d %H:%M:%S') ($RELEASE_TAG) <br><br> WeblocOpener: $WEBLOCOPENER_HASH <br> WeblocOpenerCore: $WEBLOCOPENERCORE_HASH" --draft --prerelease
         env:
           GITHUB_TOKEN: ${{ secrets.WEBLOCOPENER_RELEASES }}
 
