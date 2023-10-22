@@ -3,6 +3,7 @@ package com.github.benchdoos.weblocopener.utils;
 import com.github.benchdoos.weblocopener.base.WiremockBaseUnitTest;
 import com.github.benchdoos.weblocopenercore.service.actions.ActionListener;
 import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -13,6 +14,8 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Objects;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -23,8 +26,14 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 
 class FileDownloaderTest extends WiremockBaseUnitTest {
 
+    @AfterEach
+    void fileCleanUp() {
+        //noinspection ResultOfMethodCallIgnored
+        Arrays.stream(Objects.requireNonNull(tempDir.toFile().listFiles())).forEach(File::delete);
+    }
+
     @Test
-    void downloadMustSucceed() throws IOException, URISyntaxException {
+    void downloadMustSucceed() throws IOException {
 
         final String url = "1.txt";
 
@@ -87,7 +96,7 @@ class FileDownloaderTest extends WiremockBaseUnitTest {
 
 
     @Test
-    void downloadMustFail() throws IOException, URISyntaxException {
+    void downloadMustFail() throws IOException {
 
         final String url = "1.txt";
 
