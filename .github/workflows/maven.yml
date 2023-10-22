@@ -63,11 +63,7 @@ jobs:
 
     - name: Get commit hash for WeblocOpener
       id: weblocopener_hash
-      run: |
-        echo "WEBLOCOPENER_HASH=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
-        echo ${{steps.weblocopenercore_hash.outputs.WEBLOCOPENERCORE_HASH}}
-        echo "::set-output name=WEBLOCOPENER_HASH::$(git rev-parse HEAD)"
-        echo $GITHUB_OUTPUT
+      run: echo "WEBLOCOPENER_HASH=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
     - name: Upload WeblocOpener.deb
       uses: actions/upload-artifact@v2
@@ -122,11 +118,9 @@ jobs:
           ls -a
           RELEASE_NAME=rc-${GITHUB_REF#refs/heads/}-build.$BUILD_ID
           RELEASE_TAG=${GITHUB_REF#refs/heads/}-build.$BUILD_ID
-          WEBLOCOPENERCORE_HASH=${{needs.build.outputs.WEBLOCOPENERCORE_HASH}}
-          WEBLOCOPENER_HASH=${{needs.build.outputs.WEBLOCOPENER_HASH}}
           echo Just from outputs: ${{needs.build.outputs.WEBLOCOPENERCORE_HASH}} | ${{ needs.build.outputs.WEBLOCOPENER_HASH }}
-          echo WeblocOpenerCore hash: $WEBLOCOPENERCORE_HASH
-          echo WeblocOpener hash: $WEBLOCOPENER_HASH
+          echo WeblocOpenerCore hash: ${{needs.build.outputs.WEBLOCOPENERCORE_HASH}}
+          echo WeblocOpener hash: ${{ needs.build.outputs.WEBLOCOPENER_HASH }}
           echo Release name: $RELEASE_NAME
           gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe --title "Build release: $RELEASE_NAME" --notes "Build: $(date +'%Y-%m-%d %H:%M:%S') ($RELEASE_TAG) <br><br> WeblocOpener: $WEBLOCOPENER_HASH <br> WeblocOpenerCore: $WEBLOCOPENERCORE_HASH" --draft --prerelease
         env:
