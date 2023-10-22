@@ -19,8 +19,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      WEBLOCOPENERCORE_HASH: test_WEBLOCOPENERCORE_HASH
-      WEBLOCOPENER_HASH: test_WEBLOCOPENER_HASH
+      WEBLOCOPENERCORE_HASH: ${{ steps.weblocopenercore_hash.outputs.WEBLOCOPENERCORE_HASH }}
+      WEBLOCOPENER_HASH: ${{ steps.weblocopener_hash.outputs.WEBLOCOPENER_HASH }}
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -66,6 +66,7 @@ jobs:
       run: |
         echo "WEBLOCOPENER_HASH=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
         echo ${{steps.weblocopenercore_hash.outputs.WEBLOCOPENERCORE_HASH}}
+        echo "::set-output name=WEBLOCOPENER_HASH::$(git rev-parse HEAD)"
         echo $GITHUB_OUTPUT
 
     - name: Upload WeblocOpener.deb
@@ -123,7 +124,7 @@ jobs:
           RELEASE_TAG=${GITHUB_REF#refs/heads/}-build.$BUILD_ID
           WEBLOCOPENERCORE_HASH=${{needs.build.outputs.WEBLOCOPENERCORE_HASH}}
           WEBLOCOPENER_HASH=${{needs.build.outputs.WEBLOCOPENER_HASH}}
-          echo Just from outputs: ${{needs.build.outputs.WEBLOCOPENERCORE_HASH}} | ${{needs.build.outputs.WEBLOCOPENER_HASH}}
+          echo Just from outputs: ${{needs.build.outputs.WEBLOCOPENERCORE_HASH}} | ${{ needs.build.outputs.WEBLOCOPENER_HASH }}
           echo WeblocOpenerCore hash: $WEBLOCOPENERCORE_HASH
           echo WeblocOpener hash: $WEBLOCOPENER_HASH
           echo Release name: $RELEASE_NAME
