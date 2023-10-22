@@ -18,6 +18,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      WEBLOCOPENERCORE_HASH: test_WEBLOCOPENERCORE_HASH
+      WEBLOCOPENER_HASH: test_WEBLOCOPENER_HASH
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -62,6 +65,7 @@ jobs:
       id: weblocopener_hash
       run: |
         echo "WEBLOCOPENER_HASH=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+        echo ${{steps.weblocopenercore_hash.outputs.WEBLOCOPENERCORE_HASH}}
         echo $GITHUB_OUTPUT
 
     - name: Upload WeblocOpener.deb
