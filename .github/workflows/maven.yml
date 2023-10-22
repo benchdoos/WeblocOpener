@@ -118,8 +118,8 @@ jobs:
           ls -a
           RELEASE_NAME=rc-${GITHUB_REF#refs/heads/}-build.$BUILD_ID
           RELEASE_TAG=${GITHUB_REF#refs/heads/}-build.$BUILD_ID
-          echo Just from outputs: ${{needs.build.outputs.WEBLOCOPENERCORE_HASH}} | ${{ needs.build.outputs.WEBLOCOPENER_HASH }}
-          echo WeblocOpenerCore hash: ${{needs.build.outputs.WEBLOCOPENERCORE_HASH}}
+          echo Just from outputs: "${{ needs.build.outputs.WEBLOCOPENERCORE_HASH }} | ${{ needs.build.outputs.WEBLOCOPENER_HASH }}"
+          echo WeblocOpenerCore hash: ${{ needs.build.outputs.WEBLOCOPENERCORE_HASH }}
           echo WeblocOpener hash: ${{ needs.build.outputs.WEBLOCOPENER_HASH }}
           echo Release name: $RELEASE_NAME
           gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe --title "Build release: $RELEASE_NAME" --notes "Build: $(date +'%Y-%m-%d %H:%M:%S') ($RELEASE_TAG) <br><br> WeblocOpener: $WEBLOCOPENER_HASH <br> WeblocOpenerCore: $WEBLOCOPENERCORE_HASH" --draft --prerelease
