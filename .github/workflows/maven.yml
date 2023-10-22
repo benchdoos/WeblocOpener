@@ -124,6 +124,7 @@ jobs:
         run: |
           echo WeblocOpenerCore hash: ${{ needs.build.outputs.WEBLOCOPENERCORE_HASH }}
           echo WeblocOpener hash: ${{ needs.build.outputs.WEBLOCOPENER_HASH }}
+          RELEASE_TAG=${GITHUB_REF#refs/heads/}-build.$BUILD_ID
           gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe --title "Build release: $RELEASE_NAME" --notes "Build: $(date +'%Y-%m-%d %H:%M:%S') ($RELEASE_TAG) <br><br> WeblocOpener: ${{ needs.build.outputs.WEBLOCOPENER_HASH }} <br> WeblocOpenerCore: ${{ needs.build.outputs.WEBLOCOPENERCORE_HASH }}" --draft --prerelease
         env:
           GITHUB_TOKEN: ${{ secrets.WEBLOCOPENER_RELEASES }}
