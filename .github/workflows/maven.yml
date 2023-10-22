@@ -127,11 +127,14 @@ jobs:
 
       - name: Create Draft Release
         run: |
-          echo WeblocOpenerCore hash: ${{ needs.build.outputs.WEBLOCOPENERCORE_HASH }}
-          echo WeblocOpener hash: ${{ needs.build.outputs.WEBLOCOPENER_HASH }}
-          RELEASE_NAME=rc-${GITHUB_REF#refs/heads/}-build.$BUILD_ID
-          RELEASE_TAG=${GITHUB_REF#refs/heads/}-build.$BUILD_ID
-          gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe --title "Build release: $RELEASE_NAME" --notes "Build: $(date +'%Y-%m-%d %H:%M:%S') ($RELEASE_TAG) <br><br> WeblocOpener: ${{ needs.build.outputs.WEBLOCOPENER_HASH }} <br> WeblocOpenerCore: ${{ needs.build.outputs.WEBLOCOPENERCORE_HASH }}" --draft --prerelease
+          WEBLOCOPENERCORE_HASH=${{ needs.build.outputs.WEBLOCOPENERCORE_HASH }}
+          WEBLOCOPENER_HASH=${{ needs.build.outputs.WEBLOCOPENER_HASH }}
+          echo "WeblocOpenerCore hash: $WEBLOCOPENERCORE_HASH"
+          echo "WeblocOpener hash: $WEBLOCOPENER_HASH" 
+          RELEASE_DATE=$(date +'%Y-%m-%d %H:%M:%S')
+          RELEASE_NAME="WeblocOpener ${GITHUB_REF#refs/heads/}-build.$WEBLOCOPENER_HASH"
+          RELEASE_TAG=${GITHUB_REF#refs/heads/}-build.$WEBLOCOPENER_HASH
+          gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe --title "$RELEASE_NAME" --notes "Build: $RELEASE_TAG (github build: $BUILD_ID) <br><br><br> WeblocOpener: ${{ needs.build.outputs.WEBLOCOPENER_HASH }} <br> WeblocOpenerCore: https://github.com/benchdoos/WeblocOpenerCore/commit/${{ needs.build.outputs.WEBLOCOPENERCORE_HASH }}" --draft --prerelease
         env:
           GITHUB_TOKEN: ${{ secrets.WEBLOCOPENER_RELEASES }}
 
