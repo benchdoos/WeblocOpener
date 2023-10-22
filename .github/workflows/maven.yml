@@ -112,7 +112,7 @@ jobs:
       - name: Echo files
         run: |
           echo current location: $PWD
-          ls-a
+          ls -a
       - name: Echo variables
         run: |
           RELEASE_NAME=rc-${GITHUB_REF#refs/heads/}-build.$BUILD_ID
