@@ -2,17 +2,18 @@ package com.github.benchdoos.weblocopener.utils;
 
 import com.github.benchdoos.weblocopenercore.service.actions.ActionListener;
 import com.github.benchdoos.weblocopenercore.service.actions.ActionListenerSupport;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 @Log4j2
 @Setter
@@ -22,7 +23,7 @@ public class FileDownloader implements ActionListenerSupport {
 
   /** Initial buffer size. */
   private static final int BUFFER_SIZE = 8192;
-  final List<ActionListener<Integer>> listeners = new CopyOnWriteArrayList<>();
+  final Set<ActionListener<Integer>> listeners = new CopyOnWriteArraySet<>();
   private final URL link;
   private final File file;
   private Long totalFileSize;
@@ -35,8 +36,8 @@ public class FileDownloader implements ActionListenerSupport {
 
     log.debug("Starting downloading: {} to {}", link, file);
 
-    try (BufferedInputStream in = new BufferedInputStream(link.openStream());
-        FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+    try (final BufferedInputStream in = new BufferedInputStream(link.openStream());
+         final FileOutputStream fileOutputStream = new FileOutputStream(file)) {
       final byte[] dataBuffer = new byte[BUFFER_SIZE];
       int bytesRead;
       int prevStep = 0;
@@ -68,7 +69,11 @@ public class FileDownloader implements ActionListenerSupport {
 
   @Override
   public void addListener(final ActionListener actionListener) {
-    listeners.add(actionListener);
+    if (!listeners.contains(actionListener)) {
+      listeners.add(actionListener);
+      return;
+    }
+    log.warn("ActionListener already registered for this FileDownloader");
   }
 
   @Override
