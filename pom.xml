@@ -56,6 +56,7 @@
     <wiremock.version>3.0.1</wiremock.version>
     <mockito-junit-jupiter.version>4.5.1</mockito-junit-jupiter.version>
     <junit-jupiter.version>5.9.2</junit-jupiter.version>
+    <easy-random.version>5.0.0</easy-random.version>
   </properties>
 
   <scm>
@@ -504,6 +505,14 @@
       <version>${wiremock.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.jeasy</groupId>
+      <artifactId>easy-random-core</artifactId>
+      <version>${easy-random.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+
   </dependencies>
 
 

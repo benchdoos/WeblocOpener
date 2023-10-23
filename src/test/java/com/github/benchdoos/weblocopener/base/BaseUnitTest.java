@@ -3,6 +3,7 @@ package com.github.benchdoos.weblocopener.base;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import org.jeasy.random.EasyRandom;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.api.io.TempDir;
@@ -25,6 +26,9 @@ public abstract class BaseUnitTest {
     public static WireMockExtension wireMockServer = WireMockExtension.newInstance()
             .options(wiremockConfig)
             .build();
+
+    public final EasyRandom easyRandom = new EasyRandom();
+
 
     static {
         WireMock.configureFor(new WireMock(wireMockServer));
