@@ -121,7 +121,7 @@ public class WindowsUpdater implements Updater {
   }
 
   @Override
-  public void startUpdate(AppVersion appVersion) throws IOException {
+  public void startUpdate(final AppVersion appVersion) throws IOException {
     log.info("Starting update for {}", appVersion.version());
     final AppVersion.Asset installerAsset = this.getInstallerAsset(appVersion);
 
@@ -146,7 +146,7 @@ public class WindowsUpdater implements Updater {
         log.debug("Installer file: {} (size:{})", installerFile, installerFile.length());
         update(installerFile);
       }
-    } catch (IOException e) {
+    } catch (final IOException e) {
       log.warn("Can not download file: {} to {}", installerAsset.downloadUrl(), installerFile, e);
 
       log.debug("Setting file: {} to be deleted on app exit", installerFile);

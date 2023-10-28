@@ -31,8 +31,10 @@ public class FileDownloader implements ActionListenerSupport {
   public void download() throws IOException, InterruptedException {
     if (link == null || file == null) {
       throw new IllegalArgumentException(
-          "Link or file are not specified! Link: " + link + ", file: " + file);
+              "Link or file are not specified! Link: " + link + ", file: " + file);
     }
+
+    createFolderIfNotExist(file);
 
     log.debug("Starting downloading: {} to {}", link, file);
 
@@ -61,10 +63,19 @@ public class FileDownloader implements ActionListenerSupport {
           }
         } else {
           throw new InterruptedException(
-              String.format("File download from: %s to %s was interrupted", link, file));
+                  String.format("File download from: %s to %s was interrupted", link, file));
         }
       }
     }
+  }
+
+  private void createFolderIfNotExist(final File file) {
+    final File parent = file.getParentFile();
+    if (!parent.exists()) {
+      boolean mkdirs = parent.mkdirs();
+      log.debug("Dirs created for {}: {}", parent, mkdirs);
+    }
+    log.debug("Parent file {} exists: {}", parent, parent.exists());
   }
 
   @Override
