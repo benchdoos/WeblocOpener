@@ -39,7 +39,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>17</java.version>
-    <weblocopener.core.version>2.0.1</weblocopener.core.version>
+    <weblocopener.core.version>2.0.2</weblocopener.core.version>
     <copyright>Copyright © 2016-2023 Eugene Zrazhevsky</copyright>
     <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
     <lombok.version>1.18.26</lombok.version>
@@ -53,6 +53,10 @@
 
     <application.mainClass>com.github.benchdoos.weblocopener.Main</application.mainClass>
     <log4j.version>2.17.2</log4j.version>
+    <wiremock.version>3.0.1</wiremock.version>
+    <mockito-junit-jupiter.version>4.5.1</mockito-junit-jupiter.version>
+    <junit-jupiter.version>5.9.2</junit-jupiter.version>
+    <easy-random.version>5.0.0</easy-random.version>
   </properties>
 
   <scm>
@@ -486,9 +490,29 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>5.9.2</version>
+      <version>${junit-jupiter.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>${mockito-junit-jupiter.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.tomakehurst</groupId>
+      <artifactId>wiremock</artifactId>
+      <version>${wiremock.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jeasy</groupId>
+      <artifactId>easy-random-core</artifactId>
+      <version>${easy-random.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+
   </dependencies>
 
 
