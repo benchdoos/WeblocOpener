@@ -84,10 +84,10 @@ begin
   { extract major }
   if Copy(S, 1, 2) = '1.' then
   begin
-    Delete(S, 1, 2)
+    Delete(S, 1, 2);
   end;
   P := Pos('.', S);
-  SetLength(S, P - 1);
+  SetLength(S, P - 2);
   Log(Format('Major version: %s', [S]));
 
   Result := StrToIntDef(S, 0);
