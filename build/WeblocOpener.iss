@@ -51,35 +51,6 @@ DisableDirPage=no
 
 ;https://github.com/HeliumProject/InnoSetup/blob/master/Examples/CodeExample1.iss
 [Code]
-function GetSecondPartIfContainsPeriod(input: string): string;
-var
-  parts: TArrayOfString;
-begin
-  // Check if the input string contains a period
-  if Pos('.', input) > 0 then
-  begin
-    // Split the string by the period
-    parts := StringSplit(input, '.');
-
-    // Ensure there are at least two parts
-    if Length(parts) >= 2 then
-    begin
-      // Return the second part
-      Result := parts[1];
-    end
-    else
-    begin
-      // There is only one part, return the original string
-      Result := input;
-    end;
-  end
-  else
-  begin
-    // No period found, return the original string
-    Result := input;
-  end;
-end;
-
 function GetJavaMajorVersion(): integer;
 var
   TempFile: string;
@@ -111,15 +82,12 @@ begin
   Log(Format('Extracted version: %s', [S]));
 
   { extract major }
-
-  S := GetSecondPartIfContainsPeriod(S);
-
-  //if Copy(S, 1, 2) = '1.' then
-  //begin
-  //  Delete(S, 1, 2);
-  //end;
-  //P := Pos('.', S);
-  //SetLength(S, P - 2);
+  if Copy(S, 1, 2) = '1.' then
+  begin
+    Delete(S, 1, 2)
+  end;
+  P := Pos('.', S);
+  SetLength(S, P - 1);
   Log(Format('Major version: %s', [S]));
 
   Result := StrToIntDef(S, 0);
