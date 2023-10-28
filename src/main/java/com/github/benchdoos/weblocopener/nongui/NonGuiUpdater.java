@@ -69,7 +69,10 @@ public class NonGuiUpdater {
             new CoreUtils().getCurrentAppVersion(),
             serverApplicationVersion);
       }
-    } else onNewVersionAvailable();
+    } else {
+      log.warn("Dev mode is active, showing message, new version is available");
+      onNewVersionAvailable();
+    }
   }
 
   private void onNewVersionAvailable() {
