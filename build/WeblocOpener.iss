@@ -88,7 +88,7 @@ begin
     end;
 
     P := Pos('.', S);
-    if P != 0 then
+    if (not P = 0) then
     begin
         SetLength(S, P - 1);
     end;
