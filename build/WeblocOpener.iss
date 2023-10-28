@@ -88,7 +88,8 @@ begin
     end;
 
     P := Pos('.', S);
-    if (not P = 0) then
+    Log(Format('Dot position: %s', [P]));
+    if (P <> 0) then
     begin
         SetLength(S, P - 1);
     end;
