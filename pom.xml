@@ -42,7 +42,7 @@
     <weblocopener.core.version>2.0.2</weblocopener.core.version>
     <copyright>Copyright © 2016-2023 Eugene Zrazhevsky</copyright>
     <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
-    <lombok.version>1.18.26</lombok.version>
+    <lombok.version>1.18.30</lombok.version>
 
     <disable.dev_mode>true</disable.dev_mode>
     <ultimate_build>false</ultimate_build>
@@ -60,6 +60,13 @@
     <assertj-core.version>3.24.2</assertj-core.version>
     <jackson-databind.version>2.15.3</jackson-databind.version>
     <commons-lang3.version>3.13.0</commons-lang3.version>
+    <j2html.version>1.6.0</j2html.version>
+    <commons-collections4.version>4.4</commons-collections4.version>
+    <commons-validator.version>1.7</commons-validator.version>
+    <annotations.version>23.0.0</annotations.version>
+    <bridj.version>0.7.0</bridj.version>
+    <forms_rt.version>7.0.3</forms_rt.version>
+    <jdom2.version>2.0.6.1</jdom2.version>
   </properties>
 
   <scm>
@@ -491,12 +498,12 @@
     <dependency>
       <groupId>org.jdom</groupId>
       <artifactId>jdom2</artifactId>
-      <version>2.0.6.1</version>
+      <version>${jdom2.version}</version>
     </dependency>
     <dependency>
       <groupId>com.intellij</groupId>
       <artifactId>forms_rt</artifactId>
-      <version>7.0.3</version>
+      <version>${forms_rt.version}</version>
       <exclusions>
         <exclusion>
           <groupId>jdom</groupId>
@@ -523,31 +530,31 @@
     <dependency>
       <groupId>com.nativelibs4java</groupId>
       <artifactId>bridj</artifactId>
-      <version>0.7.0</version>
+      <version>${bridj.version}</version>
     </dependency>
 
     <dependency>
       <groupId>org.jetbrains</groupId>
       <artifactId>annotations</artifactId>
-      <version>23.0.0</version>
+      <version>${annotations.version}</version>
       <scope>compile</scope>
     </dependency>
 
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.24</version>
+      <version>${lombok.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-collections4</artifactId>
-      <version>4.4</version>
+      <version>${commons-collections4.version}</version>
     </dependency>
     <dependency>
       <groupId>commons-validator</groupId>
       <artifactId>commons-validator</artifactId>
-      <version>1.7</version>
+      <version>${commons-validator.version}</version>
       <exclusions>
         <exclusion>
           <groupId>commons-collections</groupId>
@@ -559,7 +566,8 @@
     <dependency>
       <groupId>com.j2html</groupId>
       <artifactId>j2html</artifactId>
-      <version>1.6.0</version>
+      <version>${j2html.version}</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
