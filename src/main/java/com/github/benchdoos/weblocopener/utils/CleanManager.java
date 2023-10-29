@@ -15,15 +15,17 @@
 
 package com.github.benchdoos.weblocopener.utils;
 
-import static com.github.benchdoos.weblocopener.core.ApplicationConstants.UPDATE_PATH_FILE;
-
 import com.github.benchdoos.weblocopener.update.impl.UnixUpdater;
 import com.github.benchdoos.weblocopener.update.impl.WindowsUpdater;
 import com.github.benchdoos.weblocopenercore.utils.system.OS;
-import java.io.File;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
-import org.assertj.core.util.Files;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
+import static com.github.benchdoos.weblocopener.core.ApplicationConstants.UPDATE_PATH_FILE;
 
 @UtilityClass
 @Log4j2
@@ -52,8 +54,12 @@ public class CleanManager {
     }
 
     if (toDelete) {
-      Files.delete(file);
-      log.info("Setup file was deleted: {}", file);
+      try {
+        Files.delete(file.toPath());
+        log.info("Setup file was deleted: {}", file);
+      } catch (final IOException e) {
+        log.error("Could not delete file: {}", file, e);
+      }
     }
   }
 }
