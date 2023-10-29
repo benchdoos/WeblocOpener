@@ -52,7 +52,7 @@ jobs:
       run: |
         cd weblocopenercore 
         ls -a
-        mvn -B clean install -P hide-ultimate-mode
+        mvn -B clean install -P hide-ultimate-mode,check-dependencies
 
     - name: Get commit hash for WeblocOpenerCore
       id: weblocopenercore_hash
@@ -62,7 +62,7 @@ jobs:
         echo WeblocOpenerCore hash: $WEBLOCOPENER_HASH
 
     - name: Build WeblocOpener
-      run: mvn -B clean package -P build-setup,build-deb,build-exe --file pom.xml
+      run: mvn -B clean package -P build-setup,build-deb,build-exe,check-dependencies --file pom.xml
 
     - name: Get commit hash for WeblocOpener
       id: weblocopener_hash
