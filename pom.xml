@@ -328,10 +328,10 @@
                   </outfile>
                   <chdir>.</chdir>
                   <priority>normal</priority>
-                  <downloadUrl>https://adoptium.net/temurin/releases/
+                  <downloadUrl>
+                    https://adoptium.net/marketplace/?arch=any&amp;package=jre&amp;version=17
                   </downloadUrl>
-                  <supportUrl>https://github.com/benchdoos/WeblocOpener/issues
-                  </supportUrl>
+                  <supportUrl>https://github.com/benchdoos/WeblocOpener/issues</supportUrl>
                   <stayAlive>false</stayAlive>
                   <restartOnCrash>false</restartOnCrash>
                   <icon>
