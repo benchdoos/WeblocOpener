@@ -29,13 +29,13 @@ import com.github.benchdoos.weblocopenercore.service.actions.ActionListener;
 import com.github.benchdoos.weblocopenercore.service.actions.ActionListenerSupport;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.collections.CollectionUtils;
-import org.assertj.core.util.Files;
+import org.apache.commons.collections4.CollectionUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
@@ -136,7 +136,7 @@ public class UnixUpdater implements Updater, ActionListenerSupport {
           }
         }
       } else {
-        Files.delete(installerFile);
+        Files.delete(installerFile.toPath());
         updateAndInstall(installerAsset, installerFile);
       }
     }

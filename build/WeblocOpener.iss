@@ -82,13 +82,19 @@ begin
   Log(Format('Extracted version: %s', [S]));
 
   { extract major }
-  if Copy(S, 1, 2) = '1.' then
-  begin
+    if Copy(S, 1, 2) = '1.' then
+    begin
     Delete(S, 1, 2)
-  end;
-  P := Pos('.', S);
-  SetLength(S, P - 1);
-  Log(Format('Major version: %s', [S]));
+    end;
+
+    P := Pos('.', S);
+    Log(Format('Dot position: %d', [P]));
+    if (P <> 0) then
+    begin
+        SetLength(S, P - 1);
+    end;
+
+    Log(Format('Major version: %s', [S]));
 
   Result := StrToIntDef(S, 0);
 end;

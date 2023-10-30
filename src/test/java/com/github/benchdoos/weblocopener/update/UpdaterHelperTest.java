@@ -1,9 +1,9 @@
 package com.github.benchdoos.weblocopener.update;
 
-import com.github.benchdoos.weblocopener.config.BaseUnitTest;
+import com.github.benchdoos.weblocopener.base.BaseUnitTest;
 import com.github.benchdoos.weblocopener.utils.UpdateHelperUtil;
 import com.github.benchdoos.weblocopenercore.domain.version.UpdateInfo;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.util.StringUtils;
 
