@@ -135,7 +135,7 @@ jobs:
           RELEASE_NAME="WeblocOpener ${GITHUB_REF#refs/heads/}-build.$BUILD_ID"
           RELEASE_TAG=${GITHUB_REF#refs/heads/}-build.$WEBLOCOPENER_HASH
           RELEASE_HUMAN_TAG="${GITHUB_REF#refs/heads/} ($WEBLOCOPENER_HASH | $BUILD_ID)"
-          gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe --title "$RELEASE_NAME" --notes "<br>Build: $RELEASE_HUMAN_TAG <br> WeblocOpener: $WEBLOCOPENER_HASH (core: https://github.com/benchdoos/WeblocOpenerCore/commit/$WEBLOCOPENERCORE_HASH)" --draft --prerelease
+          gh release create $RELEASE_TAG WeblocOpener.deb WeblocOpenerSetup.exe --title "$RELEASE_NAME" --notes "<br>Build at: $(date +"%Y-%m-%d %H:%M:%S")<br>Build: $RELEASE_HUMAN_TAG <br> WeblocOpener: $WEBLOCOPENER_HASH (core: https://github.com/benchdoos/WeblocOpenerCore/commit/$WEBLOCOPENERCORE_HASH)" --draft --prerelease
         env:
           GITHUB_TOKEN: ${{ secrets.WEBLOCOPENER_RELEASES }}
 
