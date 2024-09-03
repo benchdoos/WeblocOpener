@@ -96,13 +96,13 @@ jobs:
         run: echo "BUILD_ID=$GITHUB_RUN_ID" >> $GITHUB_ENV
 
       - name: Download WeblocOpener.deb
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4.1.7
         with:
           name: WeblocOpener.deb
           path: ${{ github.workspace }}
 
       - name: Download WeblocOpenerSetup.exe
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4.1.7
         with:
           name: WeblocOpenerSetup.exe
           path: ${{ github.workspace }}
