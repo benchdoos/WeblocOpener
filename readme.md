@@ -17,7 +17,7 @@ Subscribe on telegram [channel](https://vk.cc/6wK7k1)
 
 Download [Latest version](https://vk.cc/7Flxoe)
 
-## Breaking News
+## Breaking News ⚠️
 Hello everyone!
 Today I have an announcement for you.
 I’m happy to announce that [@WeblocOpenerBot](https://t.me/WeblocOpenerBot) for telegram is now available!
