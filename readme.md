@@ -17,6 +17,19 @@ Subscribe on telegram [channel](https://vk.cc/6wK7k1)
 
 Download [Latest version](https://vk.cc/7Flxoe)
 
+## Breaking News
+Hello everyone!
+Today I have an announcement for you.
+I’m happy to announce that [@WeblocOpenerBot](https://t.me/WeblocOpenerBot) for telegram is now available!
+
+There will be no need to install desktop version of WeblocOpener if you have to convert only some links.
+
+Bot still being in development for that time trial plan is active for everyone!
+
+It is expected to have at least 1 premium payed plan with less restrictions for converting. 
+Other users will be available to convert some links for free. For most of users it will be enough, 
+if you’re not using it commercially or you want to support the project.
+
 ## Introduction:
 WeblocOpener is a simple way to open, edit, create MacOS Safari `.webloc` files on Windows and Debian GNU/Linux.
 
