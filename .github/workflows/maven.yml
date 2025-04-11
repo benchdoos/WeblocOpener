@@ -71,13 +71,13 @@ jobs:
         echo WeblocOpener hash: $WEBLOCOPENER_HASH
 
     - name: Upload WeblocOpener.deb
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: WeblocOpener.deb
         path: ${{ github.workspace }}/target/WeblocOpener.deb
 
     - name: Upload WeblocOpenerSetup.exe
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: WeblocOpenerSetup.exe
         path: ${{ github.workspace }}/target/WeblocOpenerSetup.exe
