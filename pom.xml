@@ -39,34 +39,35 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>17</java.version>
-    <weblocopener.core.version>2.0.2</weblocopener.core.version>
-    <copyright>Copyright © 2016-2023 Eugene Zrazhevsky</copyright>
+    <weblocopener.core.version>2.0.3</weblocopener.core.version>
+    <copyright>Copyright © 2016-2025 Eugene Zrazhevsky</copyright>
     <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
-    <lombok.version>1.18.30</lombok.version>
+    <lombok.version>1.18.34</lombok.version>
 
     <disable.dev_mode>true</disable.dev_mode>
     <ultimate_build>false</ultimate_build>
 
     <application.version.beta.version>0</application.version.beta.version>
 
-    <buildnumber-maven-plugin.version>1.4</buildnumber-maven-plugin.version>
+    <buildnumber-maven-plugin.version>3.2.0</buildnumber-maven-plugin.version>
 
     <application.mainClass>com.github.benchdoos.weblocopener.Main</application.mainClass>
-    <log4j.version>2.17.2</log4j.version>
+    <log4j.version>2.24.1</log4j.version>
     <wiremock.version>3.0.1</wiremock.version>
-    <mockito-junit-jupiter.version>4.5.1</mockito-junit-jupiter.version>
+    <mockito-junit-jupiter.version>5.14.2</mockito-junit-jupiter.version>
     <junit-jupiter.version>5.9.2</junit-jupiter.version>
     <easy-random.version>5.0.0</easy-random.version>
-    <assertj-core.version>3.24.2</assertj-core.version>
-    <jackson-databind.version>2.15.3</jackson-databind.version>
-    <commons-lang3.version>3.13.0</commons-lang3.version>
+    <assertj-core.version>3.26.3</assertj-core.version>
+    <jackson-databind.version>2.17.0</jackson-databind.version>
+    <commons-lang3.version>3.17.0</commons-lang3.version>
     <j2html.version>1.6.0</j2html.version>
     <commons-collections4.version>4.4</commons-collections4.version>
     <commons-validator.version>1.7</commons-validator.version>
-    <annotations.version>23.0.0</annotations.version>
+    <annotations.version>26.0.1</annotations.version>
     <bridj.version>0.7.0</bridj.version>
     <forms_rt.version>7.0.3</forms_rt.version>
     <jdom2.version>2.0.6.1</jdom2.version>
+    <classgraph.version>4.8.177</classgraph.version>
   </properties>
 
   <scm>
@@ -91,7 +92,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.7.0</version>
+        <version>3.13.0</version>
         <configuration>
           <annotationProcessorPaths>
             <path>
@@ -619,6 +620,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>io.github.classgraph</groupId>
+      <artifactId>classgraph</artifactId>
+      <version>${classgraph.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.jeasy</groupId>
       <artifactId>easy-random-core</artifactId>
       <version>${easy-random.version}</version>
@@ -630,9 +637,6 @@
       <version>${assertj-core.version}</version>
       <scope>test</scope>
     </dependency>
-
-
   </dependencies>
-
 
 </project>
