@@ -59,7 +59,7 @@
     <easy-random.version>5.0.0</easy-random.version>
     <assertj-core.version>3.24.2</assertj-core.version>
     <jackson-databind.version>2.15.3</jackson-databind.version>
-    <commons-lang3.version>3.13.0</commons-lang3.version>
+    <commons-lang3.version>3.18.0</commons-lang3.version>
     <j2html.version>1.6.0</j2html.version>
     <commons-collections4.version>4.4</commons-collections4.version>
     <commons-validator.version>1.7</commons-validator.version>
