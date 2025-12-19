@@ -52,7 +52,7 @@
     <buildnumber-maven-plugin.version>1.4</buildnumber-maven-plugin.version>
 
     <application.mainClass>com.github.benchdoos.weblocopener.Main</application.mainClass>
-    <log4j.version>2.17.2</log4j.version>
+    <log4j.version>2.25.3</log4j.version>
     <wiremock.version>3.0.1</wiremock.version>
     <mockito-junit-jupiter.version>4.5.1</mockito-junit-jupiter.version>
     <junit-jupiter.version>5.9.2</junit-jupiter.version>
