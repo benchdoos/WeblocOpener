@@ -57,7 +57,7 @@
     <mockito-junit-jupiter.version>4.5.1</mockito-junit-jupiter.version>
     <junit-jupiter.version>5.9.2</junit-jupiter.version>
     <easy-random.version>5.0.0</easy-random.version>
-    <assertj-core.version>3.24.2</assertj-core.version>
+    <assertj-core.version>3.27.7</assertj-core.version>
     <jackson-databind.version>2.15.3</jackson-databind.version>
     <commons-lang3.version>3.13.0</commons-lang3.version>
     <j2html.version>1.6.0</j2html.version>
